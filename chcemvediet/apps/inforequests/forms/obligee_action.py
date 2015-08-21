@@ -403,7 +403,7 @@ class IsExtensionStep(ObligeeActionStep):
             label=_(u'inforequests:obligee_action:IsExtensionStep:deadline:label'),
             initial=Action.DEFAULT_DEADLINES.EXTENSION,
             min_value=2,
-            max_value=100,
+            max_value=15,
             widget=forms.NumberInput(attrs={
                 u'placeholder': _(u'inforequests:obligee_action:IsExtensionStep:deadline:placeholder'),
                 u'class': u'visible-if-extension',
