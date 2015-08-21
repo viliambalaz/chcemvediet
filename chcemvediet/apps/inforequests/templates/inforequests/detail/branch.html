@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango :#}
+{% load trans from i18n %}
 
 {% comment %}
  %
@@ -9,7 +10,7 @@
 {% endcomment %}
 
 {% for action in branch.actions %}
-  <div id="action-{{ action.pk }}" class="anchor">
+  <div id="a{{ action.pk }}" class="anchor">
     {% include "inforequests/detail/action.html" %}
   </div>
 {% endfor %}

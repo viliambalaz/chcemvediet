@@ -480,7 +480,7 @@ class Inforequest(models.Model):
         self.save(update_fields=[u'last_undecided_email_reminder'])
 
     def send_obligee_deadline_reminder(self, action):
-        self._send_notification(u'inforequests/mails/obligee_deadline_reminder', u'#action-%s' % action.pk, {
+        self._send_notification(u'inforequests/mails/obligee_deadline_reminder', u'#a%s' % action.pk, {
                 u'action': action,
                 })
 
@@ -488,7 +488,7 @@ class Inforequest(models.Model):
         action.save(update_fields=[u'last_deadline_reminder'])
 
     def send_applicant_deadline_reminder(self, action):
-        self._send_notification(u'inforequests/mails/applicant_deadline_reminder', u'#action-%s' % action.pk, {
+        self._send_notification(u'inforequests/mails/applicant_deadline_reminder', u'#a%s' % action.pk, {
                 u'action': action,
                 })
 

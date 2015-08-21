@@ -371,7 +371,7 @@ class Action(models.Model):
         super(Action, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return self.branch.inforequest.get_absolute_url(u'#action-%d' % self.pk)
+        return self.branch.inforequest.get_absolute_url(u'#a%d' % self.pk)
 
     def days_passed_at(self, at):
         return workdays.between(self.effective_date, at)
