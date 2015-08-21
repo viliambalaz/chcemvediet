@@ -1,11 +1,10 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django import forms
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from django.utils.functional import lazy
 
 from poleno.utils.forms import PrefixedForm
+from poleno.utils.template import lazy_render_to_string
 
 
 class ExtendDeadlineForm(PrefixedForm):
@@ -20,7 +19,7 @@ class ExtendDeadlineForm(PrefixedForm):
                 u'placeholder': _(u'inforequests:ExtendDeadlineForm:extension:placeholder'),
                 u'class': u'with-tooltip',
                 u'data-toggle': u'tooltip',
-                u'title': lazy(render_to_string, unicode)(u'inforequests/modals/tooltips/extend_deadline.txt'),
+                u'title': lazy_render_to_string(u'inforequests/modals/tooltips/extend_deadline.txt'),
                 }),
             )
 

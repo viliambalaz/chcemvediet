@@ -29,6 +29,11 @@
       <div class="controls">
         {{ field }}
         <span class="help-inline">{{ field.errors|join:" " }}</span>
+        {% if field.field.help_text %}
+          <span class="help-block">
+            {{ field.field.help_text }}
+          </span>
+        {% endif %}
       </div>
       {% block after_field %}{% endblock %}
     </div>

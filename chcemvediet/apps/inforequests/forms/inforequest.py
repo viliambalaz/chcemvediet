@@ -4,7 +4,6 @@ from django import forms
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
 
 from poleno.attachments.forms import AttachmentsField
@@ -14,17 +13,17 @@ from poleno.utils.forms import CompositeTextField, PrefixedForm
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
 from chcemvediet.apps.inforequests.models import Branch, Action
 
+from poleno.utils.template import lazy_render_to_string
+
 
 class InforequestForm(PrefixedForm):
     obligee = ObligeeAutocompleteField(
             label=_(u'inforequests:InforequestForm:obligee:label'),
+            help_text=lazy_render_to_string(u'inforequests/create/tooltips/obligee.txt'),
             widget=ObligeeWithAddressInput(attrs={
                 u'placeholder': _(u'inforequests:InforequestForm:obligee:placeholder'),
-                u'class': u'with-tooltip span5',
-                u'data-toggle': u'tooltip',
-                u'data-placement': u'right',
+                u'class': u'span5',
                 u'data-container': u'body',
-                u'title': lazy(render_to_string, unicode)(u'inforequests/create/tooltips/obligee.txt'),
                 }),
             )
     subject = CompositeTextField(

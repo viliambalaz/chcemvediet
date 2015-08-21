@@ -13,11 +13,11 @@ from django.utils.translation import get_language
 from .lazy import lazy_decorator
 from .misc import squeeze
 
-@lazy_decorator
+@lazy_decorator(unicode)
 def lazy_render_to_string(*args, **kwargs):
     return render_to_string(*args, **kwargs)
 
-@lazy_decorator
+@lazy_decorator(unicode)
 def lazy_squeeze_render_to_string(*args, **kwargs):
     return squeeze(render_to_string(*args, **kwargs))
 
