@@ -85,8 +85,8 @@ class ClarificationResponseWizard(Wizard):
         self.branch = branch
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:clarification_response',
-                args=[self.branch.inforequest.pk, self.branch.pk, step.index]) + anchor
+        return reverse(u'inforequests:clarification_response', args=[
+            self.branch.inforequest.slug, self.branch.inforequest.pk, self.branch.pk, step.index]) + anchor
 
     def context(self, extra=None):
         res = super(ClarificationResponseWizard, self).context(extra)

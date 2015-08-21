@@ -63,12 +63,12 @@
         {% for draft in drafts %}
           <tr>
             {% if draft.obligee %}
-              <td><a href="{% url 'inforequests:create_from_draft' draft.pk %}">{{ draft.obligee.name }}</a></td>
+              <td><a href="{% url 'inforequests:create' draft.pk %}">{{ draft.obligee.name }}</a></td>
             {% else %}
-              <td><a href="{% url 'inforequests:create_from_draft' draft.pk %}">{% trans 'inforequests:index:drafts:empty_obligee' %}</a></td>
+              <td><a href="{% url 'inforequests:create' draft.pk %}">{% trans 'inforequests:index:drafts:empty_obligee' %}</a></td>
             {% endif %}
             <td class="text-right">
-              <a class="btn" href="{% url 'inforequests:create_from_draft' draft.pk %}"><i class="icon-edit"></i> {% trans 'inforequests:index:drafts:create_from_draft' %}</a>
+              <a class="btn" href="{% url 'inforequests:create' draft.pk %}"><i class="icon-edit"></i> {% trans 'inforequests:index:drafts:create_from_draft' %}</a>
               <a class="btn post confirm" href="{% url 'inforequests:delete_draft' draft.pk %}" data-post-csrfmiddlewaretoken="{{ csrf_token }}"
                  data-confirm="{% trans 'inforequests:index:draft:delete:confirm' %}"><i class="icon-trash"></i> {% trans 'inforequests:index:draft:delete' %}</a>
             </td>

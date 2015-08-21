@@ -9,16 +9,17 @@ from django.template import TemplateSyntaxError, TemplateDoesNotExist
 from django.template.base import parse_bits
 from django.template.loader import BaseLoader, find_template_loader, render_to_string
 from django.utils.translation import get_language
-from django.utils.functional import lazy
 
+from .lazy import lazy_decorator
 from .misc import squeeze
 
-
+@lazy_decorator
 def lazy_render_to_string(*args, **kwargs):
-    return lazy(render_to_string, unicode)(*args, **kwargs)
+    return render_to_string(*args, **kwargs)
 
+@lazy_decorator
 def lazy_squeeze_render_to_string(*args, **kwargs):
-    return lazy(squeeze, unicode)(lazy_render_to_string(*args, **kwargs))
+    return squeeze(render_to_string(*args, **kwargs))
 
 
 class TranslationLoader(BaseLoader):

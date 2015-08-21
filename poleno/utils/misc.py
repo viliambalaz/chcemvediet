@@ -3,11 +3,13 @@
 import sys
 import random
 import string
+import re
 import mimetypes
 import contextlib
 import collections
 from functools import wraps
 from StringIO import StringIO
+from unidecode import unidecode
 
 from django.utils.decorators import available_attrs
 
@@ -90,6 +92,14 @@ def norm_new_lines(s):
     if s is None:
         return None
     return s.replace('\r\n','\n').replace('\r','\n')
+
+def slugify(s):
+    u"""
+    This slugify transliretares all supported non-latin characters to latin. For instance it
+    transliterates german "ẞ" to "ss". It's better than django.utils.text.slugify which throws away
+    all non-latin characters.
+    """
+    return u'-'.join(w for w in re.split(r'[^a-z0-9]+', unidecode(s).lower()) if w)
 
 def flatten(l):
     u"""

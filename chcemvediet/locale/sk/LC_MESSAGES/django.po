@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-19 16:21+0200\n"
+"POT-Creation-Date: 2015-08-21 16:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,9 +73,6 @@ msgstr "Spravovať e-maily"
 
 msgid "accounts:profile:manage_connections"
 msgstr "Spravovať pripojenia"
-
-msgid "^profile/$"
-msgstr ""
 
 msgid "inforequests:ExtendDeadlineForm:extension:label"
 msgstr "Predĺženie lehoty"
@@ -410,6 +407,9 @@ msgstr "Požadovaná informácia je predmetom utajovanej skutočnosti "
 msgid "inforequests:Action:refusal_reason:OTHER_REASON"
 msgstr "Iná príčina"
 
+msgid "inforequests:Inforequest:fallback_slug"
+msgstr "ziadost"
+
 msgid "inforequests:InforequestEmail:type:APPLICANT_ACTION"
 msgstr "Úkon žiadateľa"
 
@@ -626,26 +626,26 @@ msgstr "Nový e-mail od inštitúcie"
 msgid "inforequests:obligee_action:smail:heading"
 msgstr "Nová pošta od inštitúcie"
 
-msgid "^create/$"
-msgstr ""
+msgid "inforequests:urls:create"
+msgstr "nova-ziadost"
 
-msgid "^create/(?P<draft_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:delete_draft"
+msgstr "zmazat-draft"
 
-msgid "^detail/(?P<inforequest_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:obligee_action"
+msgstr "prisla-posta"
 
-msgid "^delete-draft/(?P<draft_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:clarification_response"
+msgstr "doplnenie"
 
-msgid "^extend-deadline/(?P<inforequest_pk>\\d+)/(?P<branch_pk>\\d+)/(?P<action_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:appeal"
+msgstr "odvolanie"
 
-msgid "^attachments/$"
-msgstr ""
+msgid "inforequests:urls:extend_deadline"
+msgstr "predlzenie-lehoty"
 
-msgid "^attachments/(?P<attachment_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:attachments"
+msgstr "prilohy"
 
 msgid "obligees:ObligeeAutocompleteField:invalid_obligee_name"
 msgstr "Neplatný názov inštitúcie, zvoľte z menu."
@@ -953,8 +953,11 @@ msgstr "Prihlásiť sa"
 msgid "socialaccount:signup:submit"
 msgstr "Prihlásiť sa"
 
-msgid "^obligees/"
-msgstr ""
+msgid "main:urls:obligees"
+msgstr "institucie"
 
-msgid "^inforequests/"
-msgstr ""
+msgid "main:urls:inforequests"
+msgstr "infoziadosti"
+
+msgid "main:urls:invitations"
+msgstr "pozvanky"

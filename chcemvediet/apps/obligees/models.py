@@ -1,7 +1,5 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-import re
-from unidecode import unidecode
 from email.utils import formataddr, getaddresses
 
 from django.db import models
@@ -11,7 +9,7 @@ from django.utils.html import escape
 from poleno.utils.models import FieldChoices, QuerySet
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
-from poleno.utils.misc import squeeze, decorate
+from poleno.utils.misc import squeeze, decorate, slugify
 
 class ObligeeQuerySet(QuerySet):
     def pending(self):
@@ -88,10 +86,7 @@ class Obligee(models.Model):
 
         # Generate and save slug if saving name
         if update_fields is None or u'name' in update_fields:
-            name = unidecode(self.name).lower()
-            words = (w for w in re.split(r'[^a-z0-9]+', name) if w)
-            self.slug = u'-%s-' % u'-'.join(words)
-
+            self.slug = u'-%s-' % slugify(self.name)
             if update_fields is not None:
                 update_fields.append(u'slug')
 

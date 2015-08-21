@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-19 16:21+0200\n"
+"POT-Creation-Date: 2015-08-21 16:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,9 +73,6 @@ msgstr "Manage E-mails"
 
 msgid "accounts:profile:manage_connections"
 msgstr "Manage Connections"
-
-msgid "^profile/$"
-msgstr ""
 
 msgid "inforequests:ExtendDeadlineForm:extension:label"
 msgstr "Deadline Extension"
@@ -410,6 +407,9 @@ msgstr "Confidential Information"
 msgid "inforequests:Action:refusal_reason:OTHER_REASON"
 msgstr "Other Reason"
 
+msgid "inforequests:Inforequest:fallback_slug"
+msgstr "request"
+
 msgid "inforequests:InforequestEmail:type:APPLICANT_ACTION"
 msgstr "Applicant Action"
 
@@ -626,26 +626,26 @@ msgstr "Nový e-mail od inštitúcie"
 msgid "inforequests:obligee_action:smail:heading"
 msgstr "Nová pošta od inštitúcie"
 
-msgid "^create/$"
-msgstr ""
+msgid "inforequests:urls:create"
+msgstr "new-request"
 
-msgid "^create/(?P<draft_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:delete_draft"
+msgstr "delete-draft"
 
-msgid "^detail/(?P<inforequest_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:obligee_action"
+msgstr "received-mail"
 
-msgid "^delete-draft/(?P<draft_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:clarification_response"
+msgstr "completion"
 
-msgid "^extend-deadline/(?P<inforequest_pk>\\d+)/(?P<branch_pk>\\d+)/(?P<action_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:appeal"
+msgstr "appeal"
 
-msgid "^attachments/$"
-msgstr ""
+msgid "inforequests:urls:extend_deadline"
+msgstr "extend-deadline"
 
-msgid "^attachments/(?P<attachment_pk>\\d+)/$"
-msgstr ""
+msgid "inforequests:urls:attachments"
+msgstr "attachments"
 
 msgid "obligees:ObligeeAutocompleteField:invalid_obligee_name"
 msgstr "Invalid obligee name. Select one form the menu."
@@ -953,8 +953,11 @@ msgstr "Sign Up"
 msgid "socialaccount:signup:submit"
 msgstr "Sign Up"
 
-msgid "^obligees/"
-msgstr ""
+msgid "main:urls:obligees"
+msgstr "obligees"
 
-msgid "^inforequests/"
-msgstr ""
+msgid "main:urls:inforequests"
+msgstr "inforequests"
+
+msgid "main:urls:invitations"
+msgstr "invitations"

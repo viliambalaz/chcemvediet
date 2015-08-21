@@ -86,8 +86,12 @@ def inforequest_create(request, draft_pk=None):
 
 @require_http_methods([u'HEAD', u'GET'])
 @login_required
-def inforequest_detail(request, inforequest_pk):
+def inforequest_detail(request, inforequest_slug, inforequest_pk):
     inforequest = Inforequest.objects.owned_by(request.user).prefetch_detail().get_or_404(pk=inforequest_pk)
+
+    if inforequest_slug != inforequest.slug:
+        return HttpResponseRedirect(reverse(u'inforequests:detail', args=[inforequest.slug, inforequest.pk]))
+
     return render(request, u'inforequests/detail/detail.html', {
             u'inforequest': inforequest,
             u'devtools': u'inforequests/detail/devtools.html',

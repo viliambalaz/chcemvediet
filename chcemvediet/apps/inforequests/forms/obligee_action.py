@@ -685,7 +685,7 @@ class ObligeeActionWizard(Wizard):
 
     def get_step_url(self, step, anchor=u''):
         return reverse(u'inforequests:obligee_action',
-                args=[self.inforequest.pk, step.index]) + anchor
+                args=[self.inforequest.slug, self.inforequest.pk, step.index]) + anchor
 
     def context(self, extra=None):
         res = super(ObligeeActionWizard, self).context(extra)

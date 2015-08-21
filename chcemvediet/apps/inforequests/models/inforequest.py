@@ -5,6 +5,7 @@ from django.db import models, IntegrityError, transaction, connection
 from django.db.models import Q, Prefetch
 from django.conf import settings
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from aggregate_if import Count
 
@@ -14,7 +15,7 @@ from poleno.utils.models import QuerySet, join_lookup
 from poleno.utils.views import complete_url
 from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
-from poleno.utils.misc import random_readable_string, squeeze, decorate
+from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify
 
 from .inforequestemail import InforequestEmail
 from .branch import Branch
@@ -139,6 +140,10 @@ class Inforequest(models.Model):
                 # [u'applicant'] -- ForeignKey defines index by default
                 # [u'unique_email'] -- defined on field
                 ]
+
+    @cached_property
+    def slug(self):
+        return slugify(self.subject) or _(u'inforequests:Inforequest:fallback_slug')
 
     @staticmethod
     def prefetch_branches(path=None, queryset=None):
@@ -450,7 +455,7 @@ class Inforequest(models.Model):
         super(Inforequest, self).save(*args, **kwargs)
 
     def get_absolute_url(self, anchor=u''):
-        return reverse(u'inforequests:detail', args=[self.pk]) + anchor
+        return reverse(u'inforequests:detail', args=[self.slug, self.pk]) + anchor
 
     def _send_notification(self, template, anchor, dictionary):
         dictionary.update({
