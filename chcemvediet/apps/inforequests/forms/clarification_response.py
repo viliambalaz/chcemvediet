@@ -3,13 +3,13 @@
 from collections import OrderedDict
 
 from django import forms
-from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze

@@ -1,7 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django import forms
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.conf.urls import patterns, url
 from django.utils.html import format_html
@@ -9,6 +8,7 @@ from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes import generic
 
+from poleno.utils.views import reverse
 from poleno.utils.misc import filesize, decorate, try_except
 from poleno.utils.admin import admin_obj_format, live_field, AdminLiveFieldsMixin
 

@@ -4,7 +4,6 @@ import datetime
 from functools import partial
 
 from django import forms
-from django.core.urlresolvers import reverse
 from django.db.models import ManyToManyRel
 from django.utils.formats import get_format
 from django.contrib import admin
@@ -16,6 +15,7 @@ from poleno.attachments.admin import AttachmentInline
 from poleno.mail.models import Message
 from poleno.workdays import workdays
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.date import local_today
 from poleno.utils.misc import try_except, decorate, squeeze
 from poleno.utils.admin import simple_list_filter_factory, admin_obj_format, admin_obj_format_join

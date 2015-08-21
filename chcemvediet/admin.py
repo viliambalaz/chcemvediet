@@ -1,14 +1,13 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils.http import urlencode
 from django.utils.html import format_html
-
 from admin_tools.menu import items, Menu
 from admin_tools.dashboard import modules, Dashboard, AppIndexDashboard
 
 from poleno.mail.models import Message
+from poleno.utils.views import reverse
 from chcemvediet.apps.inforequests.models import InforequestEmail
 
 ADMIN_LINKS = [

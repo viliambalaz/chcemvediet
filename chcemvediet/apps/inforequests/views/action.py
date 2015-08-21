@@ -1,11 +1,10 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 
-from poleno.utils.views import require_ajax, login_required
+from poleno.utils.views import require_ajax, login_required, reverse
 from chcemvediet.apps.wizards.views import wizard_view
 from chcemvediet.apps.inforequests.forms import ExtendDeadlineForm
 from chcemvediet.apps.inforequests.forms import AppealWizards, ClarificationResponseWizard, ObligeeActionWizard
@@ -24,8 +23,7 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
 
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:obligee_action',
-                args=[inforequest.slug, inforequest.pk] if step_idx is None else
-                     [inforequest.slug, inforequest.pk, step_idx]))
+                args=[inforequest.slug, inforequest.pk, step_idx]))
 
     def finish(wizard):
         result = wizard.values[u'result']
@@ -52,8 +50,7 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
 
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
-                args=[inforequest.slug, inforequest.pk] if step_idx is None else
-                     [inforequest.slug, inforequest.pk, step_idx]))
+                args=[inforequest.slug, inforequest.pk, step_idx]))
 
     if not branch.can_add_clarification_response:
         return HttpResponseNotFound()
@@ -76,8 +73,7 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
 
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:appeal',
-                args=[inforequest.slug, inforequest.pk] if step_idx is None else
-                     [inforequest.slug, inforequest.pk, step_idx]))
+                args=[inforequest.slug, inforequest.pk, step_idx]))
 
     if not branch.can_add_appeal:
         return HttpResponseNotFound()

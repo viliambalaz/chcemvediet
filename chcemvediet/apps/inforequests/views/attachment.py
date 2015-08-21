@@ -1,6 +1,5 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
@@ -10,7 +9,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments import views as attachments_views
 from poleno.attachments.models import Attachment
 from poleno.mail.models import Message
-from poleno.utils.views import require_ajax, login_required
+from poleno.utils.views import require_ajax, login_required, reverse
 
 from chcemvediet.apps.inforequests.models import InforequestDraft, Action
 

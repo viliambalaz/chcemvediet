@@ -5,7 +5,6 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import smart_text
 from django.contrib.sessions.models import Session
@@ -13,6 +12,7 @@ from multiselectfield import MultiSelectFormField
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.forms import AutoSuppressedSelect
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Wizard, WizardStep

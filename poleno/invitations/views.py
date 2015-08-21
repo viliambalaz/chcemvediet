@@ -1,6 +1,5 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import redirect, render
@@ -8,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from allauth.account.adapter import get_adapter
 
+from poleno.utils.views import reverse
 from poleno.utils.messages import render_message
 
 from . import forms, UserMayNotInvite

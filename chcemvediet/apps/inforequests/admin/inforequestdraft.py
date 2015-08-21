@@ -3,7 +3,6 @@
 from functools import partial
 
 from django import forms
-from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
@@ -11,6 +10,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments.forms import AttachmentsField
 from poleno.attachments.admin import AttachmentInline
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.misc import decorate
 from poleno.utils.admin import (admin_obj_format, live_field, AdminLiveFieldsMixin,
         ADMIN_FIELD_INDENT)

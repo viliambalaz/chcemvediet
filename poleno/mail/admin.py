@@ -4,7 +4,6 @@ from functools import partial
 from email.utils import parseaddr, getaddresses
 
 from django import forms
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.utils import formats
 from django.utils.http import urlencode
@@ -15,6 +14,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments.forms import AttachmentsField
 from poleno.attachments.admin import AttachmentInline
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.forms import validate_formatted_email, validate_comma_separated_emails
 from poleno.utils.misc import decorate, squeeze
 from poleno.utils.admin import simple_list_filter_factory, admin_obj_format

@@ -5,12 +5,13 @@ from functools import partial
 
 from django.template import Library
 from django.template.defaultfilters import stringfilter
-from django.core.urlresolvers import resolve, reverse
+from django.core.urlresolvers import resolve
 from django.conf import settings
 from django.contrib.webdesign.lorem_ipsum import paragraphs
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 
+from poleno.utils.views import reverse
 from poleno.utils.misc import squeeze as squeeze_func
 from poleno.utils.date import utc_date as utc_date_func, local_date as local_date_func
 from poleno.utils.translation import translation

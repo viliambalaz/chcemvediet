@@ -1,11 +1,11 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import admin
 
+from poleno.utils.views import reverse
 from poleno.utils.forms import clean_button
 
 from . import forms

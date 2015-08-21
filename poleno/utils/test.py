@@ -3,9 +3,10 @@
 import mock
 import contextlib
 
-from django.core.urlresolvers import reverse
 from django.utils.http import urlencode
 from django.test import TestCase
+
+from poleno.utils.views import reverse
 
 @contextlib.contextmanager
 def override_signals(*signals):

@@ -3,12 +3,26 @@
 from functools import wraps
 
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse as django_reverse
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.sites.models import Site
 from django.utils.decorators import available_attrs
+
+def reverse(viewname, urlconf=None, args=None, kwargs=None, prefix=None, current_app=None):
+    u"""
+    Django resolver may populate some arguments with None when parsing certain urls, but Django
+    ``reverse`` fails to reconstuct them if given the same arguments. It breaks on None values.
+    None usually means the argument is optional and missing in the url. So we filter out any
+    arguments equal to None before calling ``reverse``.
+    """
+    if args is not None:
+        while args and args[-1] is None:
+            args = args[:-1]
+    if kwargs is not None:
+        kwargs = dict((k, v) for k, v in kwargs.iteritems() if v is not None)
+    return django_reverse(viewname, urlconf, args, kwargs, prefix, current_app)
 
 def complete_url(path, secure=False):
     u"""

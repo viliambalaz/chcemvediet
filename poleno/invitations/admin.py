@@ -6,7 +6,7 @@ from email.utils import getaddresses
 
 from django import forms
 from django.core.validators import validate_email
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import NoReverseMatch
 from django.db import transaction
 from django.conf.urls import patterns, url
 from django.shortcuts import render
@@ -15,6 +15,7 @@ from django.utils.html import format_html
 from django.contrib import admin
 from django.contrib.auth.models import User
 
+from poleno.utils.views import reverse
 from poleno.utils.forms import ValidatorChain, validate_comma_separated_emails
 from poleno.utils.misc import decorate, squeeze
 from poleno.utils.admin import (simple_list_filter_factory, admin_obj_format, extend_model_admin,

@@ -3,7 +3,7 @@
 import json
 from functools import wraps
 
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import NoReverseMatch
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf.urls import patterns, url
 from django.db import models
@@ -13,6 +13,8 @@ from django.utils.html import format_html, format_html_join, conditional_escape
 from django.utils.decorators import available_attrs
 from django.utils.safestring import mark_safe
 from django.contrib import admin
+
+from poleno.utils.views import reverse
 
 ADMIN_FIELD_INDENT = u'    • '
 

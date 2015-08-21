@@ -3,7 +3,6 @@
 import datetime
 
 from django import forms
-from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.core.files.uploadedfile import UploadedFile
 from django.conf import settings
@@ -12,6 +11,7 @@ from django.utils.html import format_html, format_html_join
 from django.utils.formats import date_format
 from django.contrib.staticfiles.storage import staticfiles_storage
 
+from poleno.utils.views import reverse
 from poleno.utils.misc import Bunch, norm_new_lines
 from poleno.utils.translation import translation
 

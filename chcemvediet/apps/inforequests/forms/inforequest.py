@@ -1,7 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django import forms
-from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -10,6 +9,7 @@ from django.utils.safestring import mark_safe
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
+from poleno.utils.views import reverse
 from poleno.utils.forms import CompositeTextField, PrefixedForm
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
 from chcemvediet.apps.inforequests.models import Branch, Action

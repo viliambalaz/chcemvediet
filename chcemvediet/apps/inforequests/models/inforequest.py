@@ -1,6 +1,5 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.db import models, IntegrityError, transaction, connection
 from django.db.models import Q, Prefetch
 from django.conf import settings
@@ -12,7 +11,7 @@ from aggregate_if import Count
 from poleno import datacheck
 from poleno.mail.models import Message
 from poleno.utils.models import QuerySet, join_lookup
-from poleno.utils.views import complete_url
+from poleno.utils.views import complete_url, reverse
 from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
 from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify

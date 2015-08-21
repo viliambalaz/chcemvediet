@@ -1,6 +1,5 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -8,7 +7,7 @@ from django.contrib.sessions.models import Session
 from django.shortcuts import render
 from allauth.account.decorators import verified_email_required
 
-from poleno.utils.views import login_required
+from poleno.utils.views import login_required, reverse
 from poleno.utils.forms import clean_button
 from chcemvediet.apps.inforequests.forms import InforequestForm
 from chcemvediet.apps.inforequests.models import InforequestDraft, Inforequest, Branch
