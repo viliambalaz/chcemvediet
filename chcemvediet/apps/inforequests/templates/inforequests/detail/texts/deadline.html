@@ -1,0 +1,30 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- action: chcemvediet.apps.inforequests.models.Action
+ %
+{% endcomment %}
+
+{% spaceless %}
+  {{ action.deadline }} pracovných dni od {{ action.deadline_base_date }}
+  {% if action.has_obligee_deadline %}
+    na odpoveď od inštitúcie
+  {% elif branch.can_add_clarification_response  %}
+    na doplnenie žiadosti
+  {% elif branch.can_add_appeal %}
+    na podanie odvolania
+  {% endif %}
+{% endspaceless %}{% spaceless %}
+  {% if action.extension %}
+    , predĺžená o {{ action.extension }} pracovných dni
+  {% endif %}
+{% endspaceless %}
+&mdash;
+{% if action.deadline_missed %}
+  Lehota uplynula.
+{% else %}
+  Lehota uplynie o {{ action.deadline_remaining }} pracovných dni.
+{% endif %}

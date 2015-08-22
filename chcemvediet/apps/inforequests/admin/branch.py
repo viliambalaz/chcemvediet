@@ -22,7 +22,7 @@ class BranchAdminActionInline(admin.TabularInline):
             u'action_field',
             u'email_field',
             u'type',
-            u'effective_date',
+            u'legal_date',
             u'deadline_details_field',
             ]
     readonly_fields = fields
@@ -81,7 +81,7 @@ class BranchAdminAddForm(forms.ModelForm):
         def deferred(branch):
             action = Action(
                     branch=branch,
-                    effective_date=self.cleaned_data[u'advanced_by'].effective_date,
+                    legal_date=self.cleaned_data[u'advanced_by'].legal_date,
                     type=Action.TYPES.ADVANCED_REQUEST,
                     )
             action.save()

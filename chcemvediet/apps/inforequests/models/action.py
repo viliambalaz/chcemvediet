@@ -15,7 +15,7 @@ from poleno import datacheck
 from poleno.attachments.models import Attachment
 from poleno.workdays import workdays
 from poleno.utils.models import FieldChoices, QuerySet, join_lookup
-from poleno.utils.date import local_today
+from poleno.utils.date import utc_now, local_today
 from poleno.utils.misc import Bunch, squeeze, decorate
 
 from .inforequestemail import InforequestEmail
@@ -70,8 +70,8 @@ class ActionQuerySet(QuerySet):
         return self.filter(email__isnull=True)
     def order_by_pk(self):
         return self.order_by(u'pk')
-    def order_by_effective_date(self):
-        return self.order_by(u'effective_date', u'pk')
+    def order_by_created(self):
+        return self.order_by(u'created', u'pk')
 
 class Action(models.Model):
     # May NOT be NULL
@@ -155,14 +155,6 @@ class Action(models.Model):
     # May be empty
     attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
 
-    # May NOT be NULL
-    effective_date = models.DateField(
-            help_text=squeeze(u"""
-                The date at which the action was sent or received. If the action was sent/received
-                by e‑mail it's set automatically. If it was sent/received by s‑mail it's filled by
-                the applicant.
-                """))
-
     # May be empty for obligee actions; Should be empty for other actions
     file_number = models.CharField(blank=True, max_length=255,
             help_text=squeeze(u"""
@@ -171,33 +163,44 @@ class Action(models.Model):
                 action, we should keep it here as well. The file number is not mandatory.
                 """))
 
-    # May NOT be NULL for actions that set deadline; Must be NULL otherwise. Default value is
-    # determined and automaticly set in save() when creating a new object. All actions that set
-    # deadlines except CLARIFICATION_REQUEST, DISCLOSURE and REFUSAL set the deadline for the
-    # obligee. CLARIFICATION_REQUEST, DISCLOSURE and REFUSAL set the deadline for the applicant.
-    # DISCLOSURE sets the deadline only if not FULL.
-    DEFAULT_DEADLINES = Bunch(
-            # Applicant actions
-            REQUEST=8,
-            CLARIFICATION_RESPONSE=8,
-            APPEAL=30,
-            # Obligee actions
-            CONFIRMATION=8,
-            EXTENSION=10,
-            ADVANCEMENT=30,
-            CLARIFICATION_REQUEST=7, # Deadline for the applicant
-            DISCLOSURE=(lambda a: 15 # Deadline for the applicant if not full disclosure
-                    if a.disclosure_level != a.DISCLOSURE_LEVELS.FULL
-                    else None),
-            REFUSAL=15,              # Deadline for the applicant
-            AFFIRMATION=None,
-            REVERSION=None,
-            REMANDMENT=13,
-            # Implicit actions
-            ADVANCED_REQUEST=13,
-            EXPIRATION=30,
-            APPEAL_EXPIRATION=None,
-            )
+    # May NOT be NULL
+    created = models.DateTimeField(default=utc_now,
+            help_text=squeeze(u"""
+                Point in time used to order branch actions chronologically. By default it's the
+                datetime the action was created. The admin may set the value manually to change
+                actions order in the branch.
+                """))
+
+    # May NOT be NULL for applicant actions; May be NULL for obligee actions; NULL otherwise
+    sent_date = models.DateField(blank=True, null=True,
+            help_text=squeeze(u"""
+                The date the action was sent by the applicant or the obligee. It is mandatory for
+                applicant actions, optional for obligee actions and should be NULL for implicit
+                actions.
+                """))
+
+    # May be NULL for applicant actions; May NOT be NULL for obligee actions; NULL otherwise
+    delivered_date = models.DateField(blank=True, null=True,
+            help_text=squeeze(u"""
+                The date the action was delivered to the applicant or the obligee. It is optional
+                for applicant actions, mandatory for obligee actions and should be NULL for
+                implicit actions.
+                """))
+
+    # May NOT be NULL
+    legal_date = models.DateField(
+            help_text=squeeze(u"""
+                The date the action legally occured. Mandatory for every action.
+                """))
+
+    # May NOT be NULL for actions that set a deadline; NULL otherwise
+    deadline_base_date = models.DateField(blank=True, null=True,
+            help_text=squeeze(u"""
+                The date the action deadline is relative to. Mandatory for actions that set
+                a deadline. Should be NULL otherwise.
+                """))
+
+    # May NOT be NULL for actions that set deadline; Must be NULL otherwise.
     SETTING_APPLICANT_DEADLINE_TYPES = (
             # Applicant actions
             # Obligee actions
@@ -224,7 +227,7 @@ class Action(models.Model):
             help_text=squeeze(u"""
                 The deadline that apply after the action, if the action sets a deadline, NULL
                 otherwise. The deadline is expressed in a number of working days (WD) counting
-                since the effective date. It may apply to the applicant or to the obligee,
+                since ``deadline_base_date``. It may apply to the applicant or to the obligee,
                 depending on the action type.
                 """))
 
@@ -288,7 +291,7 @@ class Action(models.Model):
 
     class Meta:
         index_together = [
-                [u'effective_date', u'id'],
+                [u'created', u'id'],
                 # [u'branch'] -- ForeignKey defines index by default
                 # [u'email'] -- OneToOneField defines index by default
                 ]
@@ -344,7 +347,7 @@ class Action(models.Model):
         if self.deadline is None:
             return None
         deadline = self.deadline + (self.extension or 0)
-        return workdays.advance(self.effective_date, deadline)
+        return workdays.advance(self.deadline_base_date, deadline)
 
     @cached_property
     def has_deadline(self):
@@ -358,23 +361,11 @@ class Action(models.Model):
     def has_obligee_deadline(self):
         return self.deadline is not None and self.type in self.SETTING_OBLIGEE_DEADLINE_TYPES
 
-    @decorate(prevent_bulk_create=True)
-    def save(self, *args, **kwargs):
-        if self.pk is None: # Creating a new object
-
-            assert self.type is not None, u'%s.type is mandatory' % self.__class__.__name__
-            if self.deadline is None:
-                type_name = self.TYPES._inverse[self.type]
-                deadline = getattr(self.DEFAULT_DEADLINES, type_name)
-                self.deadline = deadline(self) if callable(deadline) else deadline
-
-        super(Action, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         return self.branch.inforequest.get_absolute_url(u'#a%d' % self.pk)
 
     def days_passed_at(self, at):
-        return workdays.between(self.effective_date, at)
+        return workdays.between(self.deadline_base_date, at)
 
     def deadline_remaining_at(self, at):
         if self.deadline is None:

@@ -81,17 +81,16 @@ class Branch(models.Model):
         """
         if queryset is None:
             queryset = Action.objects.get_queryset()
-        queryset = queryset.order_by_effective_date()
+        queryset = queryset.order_by_created()
         return Prefetch(join_lookup(path, u'action_set'), queryset, to_attr=u'actions')
 
     @cached_property
     def actions(self):
         u"""
-        Cached list of all branch actions ordered by ``effective_date``. The list should not be
-        empty. May be prefetched with ``prefetch_related(Branch.prefetch_actions())`` queryset
-        method.
+        Cached list of all branch actions ordered by ``created``. The list should not be empty. May
+        be prefetched with ``prefetch_related(Branch.prefetch_actions())`` queryset method.
         """
-        return list(self.action_set.order_by_effective_date())
+        return list(self.action_set.order_by_created())
 
     @staticmethod
     def prefetch_actions_by_email(path=None, queryset=None):
@@ -101,20 +100,20 @@ class Branch(models.Model):
         if queryset is None:
             queryset = Action.objects.get_queryset()
         queryset = queryset.by_email()
-        queryset = queryset.order_by_effective_date()
+        queryset = queryset.order_by_created()
         return Prefetch(join_lookup(path, u'action_set'), queryset, to_attr=u'actions_by_email')
 
     @cached_property
     def actions_by_email(self):
         u"""
-        Cached list of all branch actions sent by email ordered by ``effective_date``. May be
-        prefetched with ``prefetch_related(Branch.prefetch_actions_by_email())`` queryset method.
-        Takes advantage of ``Branch.actions`` if it is fetched already.
+        Cached list of all branch actions sent by email ordered by ``created``. May be prefetched
+        with ``prefetch_related(Branch.prefetch_actions_by_email())`` queryset method. Takes
+        advantage of ``Branch.actions`` if it is fetched already.
         """
         if u'actions' in self.__dict__:
             return list(a for a in self.actions if a.is_by_email)
         else:
-            return list(self.action_set.by_email().order_by_effective_date())
+            return list(self.action_set.by_email().order_by_created())
 
     @staticmethod
     def prefetch_last_action(path=None, queryset=None):
@@ -130,13 +129,13 @@ class Branch(models.Model):
                 u'SELECT p.{pk} '
                 u'FROM {action} p '
                 u'WHERE p.{branch} = {action}.{branch} '
-                u'ORDER BY p.{effective_date} DESC, p.{pk} DESC '
+                u'ORDER BY p.{created} DESC, p.{pk} DESC '
                 u'LIMIT 1'
             u')'.format(
                 action = quote_name(Action._meta.db_table),
                 pk = quote_name(Action._meta.pk.column),
                 branch = quote_name(Action._meta.get_field(u'branch').column),
-                effective_date = quote_name(Action._meta.get_field(u'effective_date').column),
+                created = quote_name(Action._meta.get_field(u'created').column),
                 )
             ])
         return Prefetch(join_lookup(path, u'action_set'), queryset, to_attr=u'_last_action')
@@ -159,7 +158,7 @@ class Branch(models.Model):
             except IndexError:
                 return None
         else:
-            return self.action_set.order_by_effective_date().last()
+            return self.action_set.order_by_created().last()
 
     @cached_property
     def can_add_request(self):
@@ -292,12 +291,22 @@ class Branch(models.Model):
 
     def add_expiration_if_expired(self):
         if self.last_action.has_obligee_deadline and self.last_action.deadline_missed:
-            expiration = Action(
-                    branch=self,
-                    type=(Action.TYPES.APPEAL_EXPIRATION if self.last_action.type == Action.TYPES.APPEAL else Action.TYPES.EXPIRATION),
-                    effective_date=self.last_action.deadline_date,
-                    )
-            expiration.save()
+            if self.last_action.type == Action.TYPES.APPEAL:
+                expiration = Action(
+                        branch=self,
+                        type=Action.TYPES.APPEAL_EXPIRATION,
+                        legal_date=self.last_action.deadline_date,
+                        )
+                expiration.save()
+            else:
+                expiration = Action(
+                        branch=self,
+                        type=Action.TYPES.EXPIRATION,
+                        legal_date=self.last_action.deadline_date,
+                        deadline_base_date=self.last_action.deadline_date,
+                        deadline=15,
+                        )
+                expiration.save()
 
     def collect_obligee_emails(self):
         res = {}

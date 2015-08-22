@@ -15,7 +15,7 @@
 {% endcomment %}
 
 {% paragraph before=2 editable=True %}
-  Dňa {{ last_action.effective_date|date:"d.m.Y" }} mi povinná osoba doručila rozhodnutie
+  Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi povinná osoba doručila rozhodnutie
   o sprístupnení
   informácie{% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif%},
   ktoré však nebolo

@@ -104,7 +104,7 @@ class ActionAdminAddForm(forms.ModelForm):
                 type=self.cleaned_data[u'type'],
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
-                effective_date=self.cleaned_data[u'effective_date'],
+                legal_date=self.cleaned_data[u'legal_date'],
                 deadline=self.cleaned_data[u'deadline'],
                 extension=self.cleaned_data[u'extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
@@ -126,7 +126,7 @@ class ActionAdminAddForm(forms.ModelForm):
                 sub_action = Action(
                         branch=sub_branch,
                         type=Action.TYPES.ADVANCED_REQUEST,
-                        effective_date=action.effective_date,
+                        legal_date=action.legal_date,
                         )
                 sub_action.save()
 
@@ -178,11 +178,11 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             u'branch_obligee_column',
             u'email_column',
             u'type',
-            u'effective_date',
+            u'legal_date',
             ]
     list_filter = [
             u'type',
-            u'effective_date',
+            u'legal_date',
             simple_list_filter_factory(u'E-mail', u'email', [
                 (u'1', u'Yes', lambda qs: qs.by_email()),
                 (u'0', u'No',  lambda qs: qs.by_smail()),
@@ -199,7 +199,7 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             u'branch__obligee__name',
             u'=email__pk',
             ]
-    ordering = [u'-effective_date', u'-pk']
+    ordering = [u'-legal_date', u'-pk']
 
     @decorate(short_description=u'Action')
     @decorate(admin_order_field=u'pk')
@@ -264,7 +264,7 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'type_details_live',
                     u'subject',
                     u'content',
-                    u'effective_date',
+                    u'legal_date',
                     u'deadline',
                     u'extension',
                     u'deadline_details_live',
@@ -294,7 +294,7 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'subject',
                     u'content',
                     u'attachments',
-                    u'effective_date',
+                    u'legal_date',
                     u'deadline',
                     u'extension',
                     u'deadline_details_live',
@@ -408,12 +408,12 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             return u'--'
 
     @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
-    @live_field(u'effective_date', u'deadline', u'extension')
-    def deadline_details_live(self, effective_date, deadline, extension):
-        return ActionAdmin.deadline_details_live_aux(effective_date, deadline, extension)
+    @live_field(u'legal_date', u'deadline', u'extension')
+    def deadline_details_live(self, legal_date, deadline, extension):
+        return ActionAdmin.deadline_details_live_aux(legal_date, deadline, extension)
 
     @classmethod
-    def deadline_details_live_aux(cls, effective_date, deadline, extension):
+    def deadline_details_live_aux(cls, legal_date, deadline, extension):
         try:
             deadline = int(deadline)
             extension = int(extension or '0')
@@ -422,14 +422,14 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
 
         for format in get_format(u'DATE_INPUT_FORMATS'):
             try:
-                effective_date = datetime.datetime.strptime(effective_date, format).date()
+                legal_date = datetime.datetime.strptime(legal_date, format).date()
                 break
             except (ValueError, TypeError):
                 continue
         else:
             return u'--'
 
-        days_passed = workdays.between(effective_date, local_today())
+        days_passed = workdays.between(legal_date, local_today())
         deadline_remaining = deadline + extension - days_passed
         deadline_missed = (deadline_remaining < 0)
 

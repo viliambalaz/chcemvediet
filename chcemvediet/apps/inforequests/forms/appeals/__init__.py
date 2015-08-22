@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from poleno.workdays import workdays
 from poleno.utils.views import reverse
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze
@@ -30,12 +31,12 @@ class AppealPaperStep(AppealStep, WizardPaperStep):
     subject_template = u'inforequests/appeals/papers/subject.txt'
     content_template = u'inforequests/appeals/papers/base.html'
 
-    effective_date = PaperDateField(
+    legal_date = PaperDateField(
             localize=True,
             initial=local_today,
             final_format=u'd.m.Y',
             widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:AppealPaperStep:effective_date:placeholder'),
+                u'placeholder': _('inforequests:AppealPaperStep:legal_date:placeholder'),
                 u'class': u'datepicker',
                 }),
             )
@@ -44,17 +45,17 @@ class AppealPaperStep(AppealStep, WizardPaperStep):
         cleaned_data = super(AppealPaperStep, self).clean()
 
         branch = self.wizard.branch
-        effective_date = cleaned_data.get(u'effective_date', None)
-        if effective_date:
+        legal_date = cleaned_data.get(u'legal_date', None)
+        if legal_date is not None:
             try:
-                if effective_date < branch.last_action.effective_date:
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:effective_date:older_than_last_action_error'))
-                if effective_date < local_today():
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:effective_date:from_past_error'))
-                if effective_date > local_today() + relativedelta(days=5):
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:effective_date:too_far_from_future_error'))
+                if legal_date < branch.last_action.legal_date:
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:older_than_last_action_error'))
+                if legal_date < local_today():
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:from_past_error'))
+                if legal_date > local_today() + relativedelta(days=5):
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:too_far_from_future_error'))
             except ValidationError as e:
-                self.add_error(u'effective_date', e)
+                self.add_error(u'legal_date', e)
 
         return cleaned_data
 
@@ -76,13 +77,13 @@ class AppealFinalStep(AppealStep, WizardPrintStep):
         res = super(AppealFinalStep, self).context(extra)
 
         last_action = self.wizard.branch.last_action
-        effective_date = self.wizard.values[u'effective_date']
+        legal_date = self.wizard.values[u'legal_date']
         if last_action.has_applicant_deadline:
             res.update({
                     u'deadline_missed_at_today': last_action.deadline_missed,
                     u'deadline_remaining_at_today': last_action.deadline_remaining,
-                    u'deadline_missed_at_effective_date': last_action.deadline_missed_at(effective_date),
-                    u'deadline_remaining_at_effective_date': last_action.deadline_remaining_at(effective_date),
+                    u'deadline_missed_at_legal_date': last_action.deadline_missed_at(legal_date),
+                    u'deadline_remaining_at_legal_date': last_action.deadline_remaining_at(legal_date),
                     })
 
         return res
@@ -175,7 +176,10 @@ class AppealWizard(Wizard):
         appeal.subject = self.values[u'subject']
         appeal.content = self.values[u'content']
         appeal.content_type = Action.CONTENT_TYPES.HTML
-        appeal.effective_date = self.values[u'effective_date']
+        appeal.sent_date = self.values[u'legal_date']
+        appeal.legal_date = self.values[u'legal_date']
+        appeal.deadline_base_date = workdays.advance(appeal.sent_date, 2)
+        appeal.deadline = 15
 
 
 # Must be after ``AppealWizard`` to break cyclic dependency

@@ -16,7 +16,7 @@
 {% endcomment %}
 
 {% paragraph before=2 %}
-  Dňa {{ last_action.effective_date|date:"d.m.Y" }} mi povinná osoba doručila oznámenie
+  Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi povinná osoba doručila oznámenie
   {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif%}
   o postúpeni žiadosti
   {% for subbranch in last_action.advanced_to_set.all %}

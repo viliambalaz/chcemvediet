@@ -27,10 +27,10 @@ dňa {{ inforequest.submission_date|date:"d.m.Y" }} som formou emailu požiadal
 {% obligee_declension inforequest.main_branch.historicalobligee "accusative" %}
 o poskytnutie informácie: {{ inforequest.subject }}.
 {% if not branch.is_main %}
-  Dňa {{ branch.advanced_by.effective_date|date:"d.m.Y" }} bola žiadosť postúpená
-  {% obligee_declension branch.historicalobligee "dative" %}.
+  Dňa {{ branch.advanced_by.delivered_date|date:"d.m.Y" }} mi bolo doručené oznámenie o postúpení
+  žiadosti {% obligee_declension branch.historicalobligee "dative" %}.
 {% endif %}
-Dňa {{ last_action.effective_date|date:"d.m.Y" }} mi
+Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi
 {% obligee_declension branch.obligee "nominative" %}
 {% obligee_gender branch.obligee "doručil" "doručila" "doručilo" "doručili" %}
 výzvu {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif %}

@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 
 from poleno.attachments.forms import AttachmentsField
+from poleno.workdays import workdays
 from poleno.utils.models import after_saved
 from poleno.utils.views import reverse
 from poleno.utils.forms import CompositeTextField, PrefixedForm
@@ -94,10 +95,13 @@ class InforequestForm(PrefixedForm):
                 ))
             action = Action(
                     branch=branch,
+                    type=Action.TYPES.REQUEST,
                     subject=subject,
                     content=content,
-                    effective_date=inforequest.submission_date,
-                    type=Action.TYPES.REQUEST,
+                    sent_date=inforequest.submission_date,
+                    legal_date=inforequest.submission_date,
+                    deadline_base_date=workdays.advance(inforequest.submission_date, 1),
+                    deadline=8,
                     )
             action.save()
 

@@ -19,7 +19,7 @@
 
 {% block reasoning %}
   {% paragraph before=0 %}
-    Dňa {{ last_action.effective_date|date:"d.m.Y" }} mi povinná osoba doručila rozhodnutie
+    Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi povinná osoba doručila rozhodnutie
     o nesprístupnení informácie{% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif%}.
     V rozhodnutí nebolo uvedené riadne odôvodnenie. Podľa § 18 ods. 2 a 3 zákona o slobode
     informácií, <em>„ak povinná osoba žiadosti nevyhovie hoci len sčasti, vydá o tom v zákonom

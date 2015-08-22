@@ -12,20 +12,21 @@
 
 {% autoescape off %}
 {% filter squeeze %}
-{{ action.branch.historicalobligee.name }} deadline after {{ action.get_type_display }} has expired.
-{{ action.get_type_display }} set a deadline of {{ action.deadline }} working days since {{ action.effective_date }}.
-{% if action.extension %}
-  You have already extended this deadline by another {{ action.extension }} working days.
-{% endif %}
-Already {{ action.days_passed }} working days passed since {{ action.effective_date }}.
+  {{ action.branch.historicalobligee.name }} deadline after {{ action.get_type_display }} has
+  expired. {{ action.get_type_display }} set a deadline of {{ action.deadline }} working days since
+  {{ action.deadline_base_date }}.
+  {% if action.extension %}
+    You have already extended this deadline by another {{ action.extension }} working days.
+  {% endif %}
+  Already {{ action.days_passed }} working days passed since {{ action.deadline_base_date }}.
 {% endfilter %}
 
 {% filter squeeze %}
-{% if action.type == action.TYPES.APPEAL %}
-  You may extend the deadline and wait a little longer.
-{% else %}
-  You may extend the deadline and wait a little longer, or send an appeal.
-{% endif %}
-To see the details, go to {{ url }}
+  {% if action.type == action.TYPES.APPEAL %}
+    You may extend the deadline and wait a little longer.
+  {% else %}
+    You may extend the deadline and wait a little longer, or send an appeal.
+  {% endif %}
+  To see the details, go to {{ url }}
 {% endfilter %}
 {% endautoescape %}

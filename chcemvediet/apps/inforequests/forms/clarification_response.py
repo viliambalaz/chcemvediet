@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
 from poleno.attachments.forms import AttachmentsField
+from poleno.workdays import workdays
 from poleno.utils.models import after_saved
 from poleno.utils.views import reverse
 from poleno.utils.date import local_today
@@ -101,7 +102,10 @@ class ClarificationResponseWizard(Wizard):
         action.branch = self.branch
         action.subject = self.values[u'subject']
         action.content = self.values[u'content']
-        action.effective_date = local_today()
+        action.sent_date = local_today()
+        action.legal_date = action.sent_date
+        action.deadline_base_date = workdays.advance(action.sent_date, 1)
+        action.deadline = 8
 
         @after_saved(action)
         def deferred(action):

@@ -11,6 +11,7 @@ from django.contrib.sessions.models import Session
 from multiselectfield import MultiSelectFormField
 
 from poleno.attachments.forms import AttachmentsField
+from poleno.workdays import workdays
 from poleno.utils.models import after_saved
 from poleno.utils.views import reverse
 from poleno.utils.forms import AutoSuppressedSelect
@@ -78,11 +79,19 @@ class BasicsStep(ObligeeActionStep):
                     u'class': u'suppressed-control',
                     }),
             )
-    effective_date = forms.DateField(
-            label=_(u'inforequests:obligee_action:BasicsStep:effective_date:label'),
+    legal_date = forms.DateField(
+            label=_(u'inforequests:obligee_action:BasicsStep:legal_date:label'),
             localize=True,
             widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:obligee_action:BasicsStep:effective_date:placeholder'),
+                u'placeholder': _('inforequests:obligee_action:BasicsStep:legal_date:placeholder'),
+                u'class': u'datepicker',
+                }),
+            )
+    delivered_date = forms.DateField(
+            label=_(u'inforequests:obligee_action:BasicsStep:delivered_date:label'),
+            localize=True,
+            widget=forms.DateInput(attrs={
+                u'placeholder': _('inforequests:obligee_action:BasicsStep:delivered_date:placeholder'),
                 u'class': u'datepicker',
                 }),
             )
@@ -118,9 +127,9 @@ class BasicsStep(ObligeeActionStep):
             raise ValueError
         field.coerce = coerce
 
-        # effective_date
+        # delivered_date
         if self.wizard.email:
-            del self.fields[u'effective_date']
+            del self.fields[u'delivered_date']
 
         # attachments
         if self.wizard.email:
@@ -134,17 +143,28 @@ class BasicsStep(ObligeeActionStep):
         cleaned_data = super(BasicsStep, self).clean()
 
         branch = cleaned_data.get(u'branch', None)
-        effective_date = cleaned_data.get(u'effective_date', None)
-        if effective_date is not None:
+        legal_date = cleaned_data.get(u'legal_date', None)
+        delivered_date = cleaned_data.get(u'delivered_date', None)
+        if legal_date is not None:
             try:
-                if branch and effective_date < branch.last_action.effective_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:effective_date:older_than_previous_error'))
-                if effective_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:effective_date:from_future_error'))
-                if effective_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:effective_date:older_than_month_error'))
+                if branch and legal_date < branch.last_action.legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:older_than_previous_error'))
+                if legal_date > local_today():
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:from_future_error'))
+                if legal_date < local_today() - relativedelta(months=1):
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:older_than_month_error'))
             except ValidationError as e:
-                self.add_error(u'effective_date', e)
+                self.add_error(u'legal_date', e)
+        if delivered_date is not None:
+            try:
+                if legal_date and delivered_date < legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_legal_date'))
+                if delivered_date > local_today():
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:from_future_error'))
+                if delivered_date < local_today() - relativedelta(months=1):
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_month_error'))
+            except ValidationError as e:
+                self.add_error(u'delivered_date', e)
 
         return cleaned_data
 
@@ -160,7 +180,8 @@ class BasicsStep(ObligeeActionStep):
     def values(self):
         res = super(BasicsStep, self).values()
         res[u'result_branch'] = self.cleaned_data[u'branch']
-        res[u'result_effective_date'] = self.cleaned_data[u'effective_date'] if not self.wizard.email else None
+        res[u'result_legal_date'] = self.cleaned_data[u'legal_date']
+        res[u'result_delivered_date'] = self.cleaned_data[u'delivered_date'] if not self.wizard.email else local_date(self.wizard.email.processed)
         res[u'result_file_number'] = self.cleaned_data[u'file_number']
         res[u'result_attachments'] = self.cleaned_data[u'attachments'] if not self.wizard.email else None
         return res
@@ -191,6 +212,8 @@ class IsQuestionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_question']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.CLARIFICATION_REQUEST
+            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
+            res[u'result_deadline'] = 7
         return res
 
 class IsConfirmationStep(ObligeeActionStep):
@@ -217,6 +240,9 @@ class IsConfirmationStep(ObligeeActionStep):
         if self.cleaned_data[u'is_confirmation']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.CONFIRMATION
+            res[u'result_deadline_base_date'] = self.wizard.values[u'result_branch'].last_action.deadline_base_date
+            res[u'result_deadline'] = self.wizard.values[u'result_branch'].last_action.deadline
+            res[u'result_extension'] = self.wizard.values[u'result_branch'].last_action.extension
         return res
 
 class IsOnTopicStep(ObligeeActionStep):
@@ -292,6 +318,8 @@ class IsDecisionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_decision']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REFUSAL
+            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
+            res[u'result_deadline'] = 15
         return res
 
 class RefusalReasonsStep(ReasonsMixin, ObligeeActionStep):
@@ -401,7 +429,7 @@ class IsExtensionStep(ObligeeActionStep):
             )
     deadline = forms.IntegerField(
             label=_(u'inforequests:obligee_action:IsExtensionStep:deadline:label'),
-            initial=Action.DEFAULT_DEADLINES.EXTENSION,
+            initial=8,
             min_value=2,
             max_value=15,
             widget=forms.NumberInput(attrs={
@@ -433,7 +461,8 @@ class IsExtensionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_extension']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.EXTENSION
-            res[u'result_deadline'] = self.cleaned_data[u'deadline']
+            res[u'result_deadline_base_date'] = self.wizard.values[u'result_branch'].last_action.deadline_base_date
+            res[u'result_deadline'] = self.wizard.values[u'result_branch'].last_action.deadline + self.cleaned_data[u'deadline']
         return res
 
 class DisclosureReasonsStep(ReasonsMixin, ObligeeActionStep):
@@ -450,6 +479,8 @@ class DisclosureReasonsStep(ReasonsMixin, ObligeeActionStep):
         res = super(DisclosureReasonsStep, self).values()
         res[u'result'] = u'action'
         res[u'result_action'] = Action.TYPES.DISCLOSURE
+        res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
+        res[u'result_deadline'] = 15
         return res
 
 # Post Appeal
@@ -551,6 +582,8 @@ class WasReturnedStep(ObligeeActionStep):
         if self.cleaned_data[u'was_returned']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REMANDMENT
+            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
+            res[u'result_deadline'] = 13
         elif self.wizard.values[u'result_disclosure_level'] != Action.DISCLOSURE_LEVELS.NONE:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REVERSION
@@ -701,18 +734,21 @@ class ObligeeActionWizard(Wizard):
         assert not self.email or self.values[u'result_action'] in Action.OBLIGEE_EMAIL_ACTION_TYPES
         assert self.values[u'result_branch'].can_add_action(self.values[u'result_action'])
 
-        action = Action(type=self.values[u'result_action'])
-        action.branch = self.values[u'result_branch']
-        action.email = self.email if self.email else None
-        action.subject = self.email.subject if self.email else u''
-        action.content = self.email.text if self.email else u''
-        action.effective_date = (
-                local_date(self.email.processed) if self.email else
-                self.values[u'result_effective_date'])
-        action.file_number = self.values.get(u'result_file_number', u'')
-        action.deadline = self.values.get(u'result_deadline', None)
-        action.disclosure_level = self.values.get(u'result_disclosure_level', None)
-        action.refusal_reason = self.values.get(u'result_refusal_reason', None)
+        action = Action(
+                branch=self.values[u'result_branch'],
+                type=self.values[u'result_action'],
+                email=self.email if self.email else None,
+                subject=self.email.subject if self.email else u'',
+                content=self.email.text if self.email else u'',
+                file_number=self.values.get(u'result_file_number', u''),
+                delivered_date=self.values[u'result_delivered_date'],
+                legal_date=self.values[u'result_legal_date'],
+                deadline_base_date=self.values.get(u'result_deadline_base_date', None),
+                deadline=self.values.get(u'result_deadline', None),
+                extension=self.values.get(u'result_extension', None),
+                disclosure_level=self.values.get(u'result_disclosure_level', None),
+                refusal_reason=self.values.get(u'result_refusal_reason', None),
+                )
         action.save()
 
         if self.email:
@@ -733,8 +769,10 @@ class ObligeeActionWizard(Wizard):
 
                 sub_action = Action(
                         branch=sub_branch,
-                        effective_date=action.effective_date,
                         type=Action.TYPES.ADVANCED_REQUEST,
+                        legal_date=self.values[u'result_legal_date'],
+                        deadline_base_date=workdays.advance(self.values[u'result_legal_date'], 5),
+                        deadline=20,
                         )
                 sub_action.save()
 

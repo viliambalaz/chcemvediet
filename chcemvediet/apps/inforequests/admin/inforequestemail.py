@@ -95,7 +95,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
             upload_url_func=(lambda: reverse(u'admin:attachments_attachment_upload')),
             download_url_func=(lambda a: reverse(u'admin:attachments_attachment_download', args=(a.pk,))),
             )
-    effective_date = Action._meta.get_field(u'effective_date').formfield(
+    legal_date = Action._meta.get_field(u'legal_date').formfield(
             widget=admin.widgets.AdminDateWidget(),
             )
     deadline = Action._meta.get_field(u'deadline').formfield(
@@ -130,7 +130,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
         self.fields[u'content'].initial = self.instance.email.text
         self.fields[u'attachments'].initial = self.instance.email.attachment_set.order_by_pk()
         self.fields[u'attachments'].attached_to = [self.instance.email, attached_to]
-        self.fields[u'effective_date'].initial = local_date(self.instance.email.processed)
+        self.fields[u'legal_date'].initial = local_date(self.instance.email.processed)
 
     def save(self, commit=True):
         assert self.is_valid()
@@ -141,7 +141,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
                 type=self.cleaned_data[u'type'],
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
-                effective_date=self.cleaned_data[u'effective_date'],
+                legal_date=self.cleaned_data[u'legal_date'],
                 deadline=self.cleaned_data[u'deadline'],
                 extension=self.cleaned_data[u'extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
@@ -170,7 +170,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
                 sub_action = Action(
                         branch=sub_branch,
                         type=Action.TYPES.ADVANCED_REQUEST,
-                        effective_date=action.effective_date,
+                        legal_date=action.legal_date,
                         )
                 sub_action.save()
 
@@ -296,7 +296,7 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'subject',
                     u'content',
                     u'attachments',
-                    u'effective_date',
+                    u'legal_date',
                     u'deadline',
                     u'extension',
                     u'deadline_details_live',
@@ -433,9 +433,9 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
         return admin_obj_format(obligee, u'{tag}\n{obj.name}')
 
     @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
-    @live_field(u'effective_date', u'deadline', u'extension')
-    def deadline_details_live(self, effective_date, deadline, extension):
-        return ActionAdmin.deadline_details_live_aux(effective_date, deadline, extension)
+    @live_field(u'legal_date', u'deadline', u'extension')
+    def deadline_details_live(self, legal_date, deadline, extension):
+        return ActionAdmin.deadline_details_live_aux(legal_date, deadline, extension)
 
     @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
     @live_field(u'obligee_set')

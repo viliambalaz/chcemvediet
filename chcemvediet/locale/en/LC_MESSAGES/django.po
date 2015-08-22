@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 16:55+0200\n"
+"POT-Creation-Date: 2015-08-22 16:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,16 +80,16 @@ msgstr "Deadline Extension"
 msgid "inforequests:ExtendDeadlineForm:extension:placeholder"
 msgstr "Working Days"
 
-msgid "inforequests:AppealPaperStep:effective_date:placeholder"
+msgid "inforequests:AppealPaperStep:legal_date:placeholder"
 msgstr "mm/dd/yyyy"
 
-msgid "inforequests:AppealPaperStep:effective_date:older_than_last_action_error"
+msgid "inforequests:AppealPaperStep:legal_date:older_than_last_action_error"
 msgstr "May not be older than the previous action."
 
-msgid "inforequests:AppealPaperStep:effective_date:from_past_error"
+msgid "inforequests:AppealPaperStep:legal_date:from_past_error"
 msgstr "May not be from the past."
 
-msgid "inforequests:AppealPaperStep:effective_date:too_far_from_future_error"
+msgid "inforequests:AppealPaperStep:legal_date:too_far_from_future_error"
 msgstr "May not be more than 5 days from the future."
 
 msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:yes"
@@ -182,10 +182,16 @@ msgstr "V texte sa nespomínajú žiadne dôvody"
 msgid "inforequests:obligee_action:BasicsStep:branch:label"
 msgstr "Obligee"
 
-msgid "inforequests:obligee_action:BasicsStep:effective_date:label"
-msgstr "Effective Date"
+msgid "inforequests:obligee_action:BasicsStep:legal_date:label"
+msgstr "Legal Date"
 
-msgid "inforequests:obligee_action:BasicsStep:effective_date:placeholder"
+msgid "inforequests:obligee_action:BasicsStep:legal_date:placeholder"
+msgstr "mm/dd/yyyy"
+
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:label"
+msgstr "Delivered Date"
+
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:placeholder"
 msgstr "mm/dd/yyyy"
 
 msgid "inforequests:obligee_action:BasicsStep:file_number:label"
@@ -197,13 +203,22 @@ msgstr "File Number"
 msgid "inforequests:obligee_action:BasicsStep:attachments:label"
 msgstr "Attachments"
 
-msgid "inforequests:obligee_action:BasicsStep:effective_date:older_than_previous_error"
+msgid "inforequests:obligee_action:BasicsStep:legal_date:older_than_previous_error"
 msgstr "May not be older than previous action."
 
-msgid "inforequests:obligee_action:BasicsStep:effective_date:from_future_error"
+msgid "inforequests:obligee_action:BasicsStep:legal_date:from_future_error"
 msgstr "May not be from future."
 
-msgid "inforequests:obligee_action:BasicsStep:effective_date:older_than_month_error"
+msgid "inforequests:obligee_action:BasicsStep:legal_date:older_than_month_error"
+msgstr "May not be older than one month."
+
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_legal_date"
+msgstr "May not be older than legal date."
+
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:from_future_error"
+msgstr "May not be from future."
+
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_month_error"
 msgstr "May not be older than one month."
 
 msgid "inforequests:obligee_action:IsQuestionStep:yes"
@@ -467,8 +482,17 @@ msgstr "Save as Draft"
 msgid "inforequests:create:cancel"
 msgstr "Cancel"
 
-msgid "inforequests:detail:action:effective_date"
-msgstr "Effective Date"
+msgid "inforequests:detail:action:legal_date"
+msgstr "Legal Date"
+
+msgid "inforequests:detail:action:sent_date"
+msgstr "Sent Date"
+
+msgid "inforequests:detail:action:delivered_date"
+msgstr "Delivered Date"
+
+msgid "inforequests:detail:action:deadline"
+msgstr "Deadline"
 
 msgid "inforequests:detail:action:file_number"
 msgstr "File Number"

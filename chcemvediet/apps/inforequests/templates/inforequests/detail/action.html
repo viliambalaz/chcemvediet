@@ -14,18 +14,30 @@
 
 <div class="well">
   <h4>{{ action.get_type_display }}</h4>
-  <div class="row-fluid">
-    <p class="span2 text-right">{% trans 'inforequests:detail:action:effective_date' %}:</p>
-    <p class="span10">{{ action.effective_date }}
-      {% if forloop.last and action.deadline %}&mdash;
-        <span class="with-tooltip" data-toggle="tooltip" data-placement="right"
-              title="{% spaceless %}{% include "inforequests/detail/tooltips/deadline.txt" %}{% endspaceless %}">
-          {% include "inforequests/detail/texts/deadline.html" %}
-          <i class="icon-question-sign"></i>
-        </span>
-      {% endif %}
-    </p>
-  </div>
+  {% if action.legal_date %}
+    <div class="row-fluid">
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:legal_date' %}:</p>
+      <p class="span10">{{ action.legal_date }}</p>
+    </div>
+  {% endif %}
+  {% if action.sent_date %}
+    <div class="row-fluid">
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:sent_date' %}:</p>
+      <p class="span10">{{ action.sent_date }}</p>
+    </div>
+  {% endif %}
+  {% if action.delivered_date %}
+    <div class="row-fluid">
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:delivered_date' %}:</p>
+      <p class="span10">{{ action.delivered_date }}</p>
+    </div>
+  {% endif %}
+  {% if forloop.last and action.has_deadline  %}
+    <div class="row-fluid">
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:deadline' %}:</p>
+      <p class="span10">{% include "inforequests/detail/texts/deadline.html" %}</p>
+    </div>
+  {% endif %}
   {% if action.file_number %}
     <div class="row-fluid">
       <p class="span2 text-right">{% trans 'inforequests:detail:action:file_number' %}:</p>

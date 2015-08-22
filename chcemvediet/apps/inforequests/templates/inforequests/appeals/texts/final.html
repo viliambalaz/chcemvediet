@@ -8,8 +8,8 @@
  %  -- step: chcemvediet.apps.inforequests.forms.appeals.AppealFinalStep
  %  -- deadline_missed_at_today: bool | undefined
  %  -- deadline_remaining_at_today: int | undefined
- %  -- deadline_missed_at_effective_date: bool | undefined
- %  -- deadline_remaining_at_effective_date: int | undefined
+ %  -- deadline_missed_at_legal_date: bool | undefined
+ %  -- deadline_remaining_at_legal_date: int | undefined
  %
 {% endcomment %}
 
@@ -23,13 +23,13 @@
     dnami.
     </p>
   </div>
-{% elif deadline_missed_at_effective_date %}
+{% elif deadline_missed_at_legal_date %}
   <div class="alert alert-block">
     <h4>Dátum po termíne</h4>
     <p>
-    Zadaný dátum odvolania {{ wizard.values.effective_date }} je
-    {{ deadline_remaining_at_effective_date|negate }} pracovných dní po termíne na podanie
-    odvolanie.
+    Zadaný dátum odvolania {{ wizard.values.legal_date }} je
+    {{ deadline_remaining_at_legal_date|negate }} pracovných dní po termíne na podanie
+    odvolania.
     </p>
   </div>
 {% endif %}

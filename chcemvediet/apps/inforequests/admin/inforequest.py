@@ -147,7 +147,7 @@ class InforequestAdminAddForm(forms.ModelForm):
                     type=Action.TYPES.REQUEST,
                     subject=self.cleaned_data[u'subject'],
                     content=self.cleaned_data[u'content'],
-                    effective_date=inforequest.submission_date,
+                    legal_date=inforequest.submission_date,
                     )
             action.save()
             action.attachment_set = self.cleaned_data[u'attachments']
@@ -224,6 +224,8 @@ class InforequestAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'applicant_name',
                     (u'applicant_street', u'applicant_city', u'applicant_zip'),
                     u'unique_email',
+                    u'subject',
+                    u'content',
                     u'submission_date',
                     u'closed',
                     u'undecided_emails_field',
