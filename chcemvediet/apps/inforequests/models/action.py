@@ -204,7 +204,6 @@ class Action(models.Model):
     SETTING_APPLICANT_DEADLINE_TYPES = (
             # Applicant actions
             # Obligee actions
-            TYPES.ADVANCEMENT,
             TYPES.CLARIFICATION_REQUEST,
             TYPES.DISCLOSURE,
             TYPES.REFUSAL,

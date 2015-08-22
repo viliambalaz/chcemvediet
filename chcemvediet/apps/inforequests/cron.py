@@ -130,9 +130,6 @@ def applicant_deadline_reminder():
                 try:
                     if not branch.last_action.has_applicant_deadline:
                         continue
-                    # Although Advancement has an applicant deadline, we don't send reminders for it.
-                    if branch.last_action.type == Action.TYPES.ADVANCEMENT:
-                        continue
                     # The reminder is sent 2 WDs before the deadline is missed.
                     if branch.last_action.deadline_remaining > 2:
                         continue
