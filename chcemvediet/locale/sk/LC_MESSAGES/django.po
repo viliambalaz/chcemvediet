@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-22 16:25+0200\n"
+"POT-Creation-Date: 2015-08-23 20:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,10 +74,10 @@ msgstr "Spravovať e-maily"
 msgid "accounts:profile:manage_connections"
 msgstr "Spravovať pripojenia"
 
-msgid "inforequests:ExtendDeadlineForm:extension:label"
+msgid "inforequests:ExtendDeadlineForm:applicant_extension:label"
 msgstr "Predĺženie lehoty"
 
-msgid "inforequests:ExtendDeadlineForm:extension:placeholder"
+msgid "inforequests:ExtendDeadlineForm:applicant_extension:placeholder"
 msgstr "pracovných dní"
 
 msgid "inforequests:AppealPaperStep:legal_date:placeholder"
@@ -290,11 +290,11 @@ msgstr "Áno, spomína sa"
 msgid "inforequests:obligee_action:IsExtensionStep:no"
 msgstr "Nie, nespomína sa"
 
-msgid "inforequests:obligee_action:IsExtensionStep:deadline:label"
-msgstr "Nová lehota"
+msgid "inforequests:obligee_action:IsExtensionStep:obligee_extension:label"
+msgstr "Predĺženie lehoty"
 
-msgid "inforequests:obligee_action:IsExtensionStep:deadline:placeholder"
-msgstr "Lehota"
+msgid "inforequests:obligee_action:IsExtensionStep:obligee_extension:placeholder"
+msgstr "Kalendárne dni"
 
 msgid "inforequests:obligee_action:IsAppealDecisionStep:yes"
 msgstr "Áno, má"
@@ -490,6 +490,9 @@ msgstr "Dátum odoslania"
 
 msgid "inforequests:detail:action:delivered_date"
 msgstr "Dátum doručenia"
+
+msgid "inforequests:detail:action:obligee_extension"
+msgstr "Predĺženie lehoty"
 
 msgid "inforequests:detail:action:deadline"
 msgstr "Lehota"

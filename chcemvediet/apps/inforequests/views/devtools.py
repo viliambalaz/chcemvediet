@@ -93,7 +93,6 @@ def devtools_push_history(request, inforequest_pk):
                 sent_date=F(u'sent_date') - delta,
                 delivered_date=F(u'delivered_date') - delta,
                 legal_date=F(u'legal_date') - delta,
-                deadline_base_date=F(u'deadline_base_date') - delta,
                 last_deadline_reminder=F(u'last_deadline_reminder') - delta,
                 )
         messages.success(request, u'The inforequest was pushed in history by %s days.' % days)

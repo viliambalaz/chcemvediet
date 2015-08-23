@@ -10,5 +10,9 @@
 {% endcomment %}
 
 {% autoescape off %}
-Your Deadline Reminder
+{% if action.deadline.is_deadline_missed %}
+  Vaša lehota uplynula
+{% else %}
+  Vaša lehota čoskoro uplynie
+{% endif %}
 {% endautoescape %}

@@ -105,8 +105,7 @@ class ActionAdminAddForm(forms.ModelForm):
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
                 legal_date=self.cleaned_data[u'legal_date'],
-                deadline=self.cleaned_data[u'deadline'],
-                extension=self.cleaned_data[u'extension'],
+                applicant_extension=self.cleaned_data[u'applicant_extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
                 refusal_reason=self.cleaned_data[u'refusal_reason'],
                 )
@@ -265,9 +264,7 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'subject',
                     u'content',
                     u'legal_date',
-                    u'deadline',
-                    u'extension',
-                    u'deadline_details_live',
+                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     ],
@@ -295,9 +292,7 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'content',
                     u'attachments',
                     u'legal_date',
-                    u'deadline',
-                    u'extension',
-                    u'deadline_details_live',
+                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     u'obligee_set',
@@ -321,7 +316,6 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             u'email_from_live',
             u'email_subject_live',
             u'type_details_live',
-            u'deadline_details_live',
             u'obligee_set_details_live',
             ]
     readonly_fields = live_fields + [
@@ -406,37 +400,6 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             return u'Implicit Action'
         else:
             return u'--'
-
-    @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
-    @live_field(u'legal_date', u'deadline', u'extension')
-    def deadline_details_live(self, legal_date, deadline, extension):
-        return ActionAdmin.deadline_details_live_aux(legal_date, deadline, extension)
-
-    @classmethod
-    def deadline_details_live_aux(cls, legal_date, deadline, extension):
-        try:
-            deadline = int(deadline)
-            extension = int(extension or '0')
-        except (ValueError, TypeError):
-            return u'--'
-
-        for format in get_format(u'DATE_INPUT_FORMATS'):
-            try:
-                legal_date = datetime.datetime.strptime(legal_date, format).date()
-                break
-            except (ValueError, TypeError):
-                continue
-        else:
-            return u'--'
-
-        days_passed = workdays.between(legal_date, local_today())
-        deadline_remaining = deadline + extension - days_passed
-        deadline_missed = (deadline_remaining < 0)
-
-        if deadline_missed:
-            return u'Deadline was missed {days} working days ago.'.format(days=-deadline_remaining)
-        else:
-            return u'Deadline will be missed in {days} working days.'.format(days=deadline_remaining)
 
     @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
     @live_field(u'obligee_set')

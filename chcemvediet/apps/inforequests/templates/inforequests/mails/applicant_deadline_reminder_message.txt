@@ -12,19 +12,26 @@
 
 {% autoescape off %}
 {% filter squeeze %}
-{% if action.deadline_missed %}
-  Your deadline after {{ action.get_type_display }} was missed {{ action.deadline_remaining|negate }} working days ago.
-{% else %}
-  Your deadline after {{ action.get_type_display }} is about to be missed in {{ action.deadline_remaining }} working days.
-{% endif %}
-{% if action.branch.can_add_clarification_response %}
-  You should send a Clarification Response as soon as possible.
-{% elif action.branch.can_add_appeal %}
-  You should make an Appeal as soon as possible if you want to make one.
-{% endif %}
+  {% if action.branch.can_add_clarification_response  %}
+    Vaša lehota na doplnenie žiadosti
+  {% elif action.branch.can_add_appeal %}
+    Vaša lehota na podanie odvolania
+  {% else %}
+    Vaša lehota
+  {% endif %}
+  {% if action.deadline.is_deadline_missed %}
+    uplynula pred {{ action.deadline.calendar_days_remaining|negate }} kalendárnymi dňami.
+  {% else %}
+    uplynie o {{ action.deadline.calendar_days_remaining }} kalendárnych dni.
+  {% endif %}
+  {% if action.branch.can_add_clarification_response  %}
+    Žiadosť by ste mali inštitúcii doplniť čo najskôr ako je to možné.
+  {% elif action.branch.can_add_appeal %}
+    Ak chcete odvolanie podať, mali by ste tak spraviť čo najskôr ako je to možné.
+  {% endif %}
 {% endfilter %}
 
 {% filter squeeze %}
-To see the details, go to {{ url }}
+  Viac informácií nájdete pri Vašej žiadosti: {{ url }}
 {% endfilter %}
 {% endautoescape %}

@@ -6,29 +6,29 @@
  % Context:
  %  -- wizard: chcemvediet.apps.inforequests.forms.appeals.AppealWizard
  %  -- step: chcemvediet.apps.inforequests.forms.appeals.AppealFinalStep
- %  -- deadline_missed_at_today: bool | undefined
- %  -- deadline_remaining_at_today: int | undefined
- %  -- deadline_missed_at_legal_date: bool | undefined
- %  -- deadline_remaining_at_legal_date: int | undefined
+ %  -- is_deadline_missed_at_today: bool | undefined
+ %  -- calendar_days_remaining_at_today: int | undefined
+ %  -- is_deadline_missed_at_legal_date: bool | undefined
+ %  -- calendar_days_remaining_at_legal_date: int | undefined
  %
 {% endcomment %}
 
 <p>Skontrolujte, vytlacte a dokoncite odvolanie.</p>
 
-{% if deadline_missed_at_today %}
+{% if is_deadline_missed_at_today %}
   <div class="alert alert-block">
     <h4>Zmeškaný termin</h4>
     <p>
-    Termin na podanie odvolania vypršal pred {{ deadline_remaining_at_today|negate }} pracovnými
-    dnami.
+    Termin na podanie odvolania vypršal pred {{ calendar_days_remaining_at_today|negate }}
+    kalendárnymi dnami.
     </p>
   </div>
-{% elif deadline_missed_at_legal_date %}
+{% elif is_deadline_missed_at_legal_date %}
   <div class="alert alert-block">
     <h4>Dátum po termíne</h4>
     <p>
     Zadaný dátum odvolania {{ wizard.values.legal_date }} je
-    {{ deadline_remaining_at_legal_date|negate }} pracovných dní po termíne na podanie
+    {{ calendar_days_remaining_at_legal_date|negate }} kalendárnych dni po termíne na podanie
     odvolania.
     </p>
   </div>

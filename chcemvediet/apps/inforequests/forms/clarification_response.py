@@ -104,8 +104,6 @@ class ClarificationResponseWizard(Wizard):
         action.content = self.values[u'content']
         action.sent_date = local_today()
         action.legal_date = action.sent_date
-        action.deadline_base_date = workdays.advance(action.sent_date, 1)
-        action.deadline = 8
 
         @after_saved(action)
         def deferred(action):

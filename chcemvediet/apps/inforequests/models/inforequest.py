@@ -36,7 +36,8 @@ class InforequestQuerySet(QuerySet):
         Use to select ``Inforequest.undecided_emails_count``. Redundant if
         ``prefetch_related(Inforequest.prefetch_undecided_emails())`` is already used.
         """
-        return self.annotate(undecided_emails_count=Count(u'inforequestemail', only=Q(inforequestemail__type=InforequestEmail.TYPES.UNDECIDED)))
+        return self.annotate(undecided_emails_count=Count(u'inforequestemail',
+                only=Q(inforequestemail__type=InforequestEmail.TYPES.UNDECIDED)))
     def order_by_pk(self):
         return self.order_by(u'pk')
     def order_by_submission_date(self):

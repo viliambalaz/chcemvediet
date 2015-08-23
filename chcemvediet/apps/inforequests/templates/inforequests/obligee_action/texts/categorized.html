@@ -14,8 +14,8 @@
 <p>
   <span style="color: red;">FIXME</span>
   Odpoveď sa zaradí ako: 
-  {% with TYPES=wizard.inforequest.main_branch.last_action.TYPES %}
-    {% with DISCLOSURE_LEVELS=wizard.inforequest.main_branch.last_action.DISCLOSURE_LEVELS %}
+  {% with TYPES=inforequest.main_branch.last_action.TYPES %}
+    {% with DISCLOSURE_LEVELS=inforequest.main_branch.last_action.DISCLOSURE_LEVELS %}
       {% if wizard.values.result_action == TYPES.ADVANCEMENT %}
         postúpenie žiadosti.
       {% elif wizard.values.result_action == TYPES.AFFIRMATION %}

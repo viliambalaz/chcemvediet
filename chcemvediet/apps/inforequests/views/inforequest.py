@@ -40,7 +40,6 @@ def inforequest_index(request):
             u'closed_inforequests': closed_inforequests,
             })
 
-
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @transaction.atomic
 @verified_email_required
@@ -82,7 +81,6 @@ def inforequest_create(request, draft_pk=None):
 
     return HttpResponseBadRequest()
 
-
 @require_http_methods([u'HEAD', u'GET'])
 @login_required
 def inforequest_detail(request, inforequest_slug, inforequest_pk):
@@ -95,7 +93,6 @@ def inforequest_detail(request, inforequest_slug, inforequest_pk):
             u'inforequest': inforequest,
             u'devtools': u'inforequests/detail/devtools.html',
             })
-
 
 @require_http_methods([u'POST'])
 @transaction.atomic

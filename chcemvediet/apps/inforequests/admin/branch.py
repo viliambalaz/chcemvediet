@@ -39,16 +39,16 @@ class BranchAdminActionInline(admin.TabularInline):
 
     @decorate(short_description=u'Deadline')
     def deadline_details_field(self, action):
-        if action.has_applicant_deadline:
-            if action.deadline_missed:
-                return u'Applicant deadline was missed {days} working days ago.'.format(days=-action.deadline_remaining)
+        if action.deadline and action.deadline.is_applicant_deadline:
+            if action.deadline.is_deadline_missed:
+                return u'Applicant deadline was missed {days} calendar days ago.'.format(days=-action.deadline.calendar_days_remaining)
             else:
-                return u'Applicant deadline will be missed in {days} working days.'.format(days=action.deadline_remaining)
-        elif action.has_obligee_deadline:
-            if action.deadline_missed:
-                return u'Obligee deadline was missed {days} working days ago.'.format(days=-action.deadline_remaining)
+                return u'Applicant deadline will be missed in {days} calendar days.'.format(days=action.deadline.calendar_days_remaining)
+        elif action.deadline and action.deadline.is_obligee_deadline:
+            if action.deadline.is_deadline_missed:
+                return u'Obligee deadline was missed {days} calendar days ago.'.format(days=-action.deadline.calendar_days_remaining)
             else:
-                return u'Obligee deadline will be missed in {days} working days.'.format(days=action.deadline_remaining)
+                return u'Obligee deadline will be missed in {days} calendar days.'.format(days=action.deadline.calendar_days_remaining)
         else:
             return u'Action has no deadline.'
 

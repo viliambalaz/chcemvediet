@@ -10,5 +10,5 @@
 {% endcomment %}
 
 {% autoescape off %}
-Obligee Deadline Reminder
+Lehota na odpoveď od inštitúcie uplynula
 {% endautoescape %}

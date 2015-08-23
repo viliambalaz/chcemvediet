@@ -78,12 +78,12 @@ class AppealFinalStep(AppealStep, WizardPrintStep):
 
         last_action = self.wizard.branch.last_action
         legal_date = self.wizard.values[u'legal_date']
-        if last_action.has_applicant_deadline:
+        if last_action.deadline and last_action.deadline.is_applicant_deadline:
             res.update({
-                    u'deadline_missed_at_today': last_action.deadline_missed,
-                    u'deadline_remaining_at_today': last_action.deadline_remaining,
-                    u'deadline_missed_at_legal_date': last_action.deadline_missed_at(legal_date),
-                    u'deadline_remaining_at_legal_date': last_action.deadline_remaining_at(legal_date),
+                    u'is_deadline_missed_at_today': last_action.deadline.is_deadline_missed,
+                    u'calendar_days_remaining_at_today': last_action.deadline.calendar_days_remaining,
+                    u'is_deadline_missed_at_legal_date': last_action.deadline.is_deadline_missed_at(legal_date),
+                    u'calendar_days_remaining_at_legal_date': last_action.deadline.calendar_days_remaining_at(legal_date),
                     })
 
         return res
@@ -178,8 +178,6 @@ class AppealWizard(Wizard):
         appeal.content_type = Action.CONTENT_TYPES.HTML
         appeal.sent_date = self.values[u'legal_date']
         appeal.legal_date = self.values[u'legal_date']
-        appeal.deadline_base_date = workdays.advance(appeal.sent_date, 2)
-        appeal.deadline = 15
 
 
 # Must be after ``AppealWizard`` to break cyclic dependency

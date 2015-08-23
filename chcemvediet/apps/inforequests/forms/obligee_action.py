@@ -212,8 +212,6 @@ class IsQuestionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_question']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.CLARIFICATION_REQUEST
-            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
-            res[u'result_deadline'] = 7
         return res
 
 class IsConfirmationStep(ObligeeActionStep):
@@ -240,9 +238,6 @@ class IsConfirmationStep(ObligeeActionStep):
         if self.cleaned_data[u'is_confirmation']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.CONFIRMATION
-            res[u'result_deadline_base_date'] = self.wizard.values[u'result_branch'].last_action.deadline_base_date
-            res[u'result_deadline'] = self.wizard.values[u'result_branch'].last_action.deadline
-            res[u'result_extension'] = self.wizard.values[u'result_branch'].last_action.extension
         return res
 
 class IsOnTopicStep(ObligeeActionStep):
@@ -318,8 +313,6 @@ class IsDecisionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_decision']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REFUSAL
-            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
-            res[u'result_deadline'] = 15
         return res
 
 class RefusalReasonsStep(ReasonsMixin, ObligeeActionStep):
@@ -427,13 +420,13 @@ class IsExtensionStep(ObligeeActionStep):
                 u'data-target-1': u'.control-group:has(.visible-if-extension)',
                 }),
             )
-    deadline = forms.IntegerField(
-            label=_(u'inforequests:obligee_action:IsExtensionStep:deadline:label'),
+    obligee_extension = forms.IntegerField(
+            label=_(u'inforequests:obligee_action:IsExtensionStep:obligee_extension:label'),
             initial=8,
             min_value=2,
             max_value=15,
             widget=forms.NumberInput(attrs={
-                u'placeholder': _(u'inforequests:obligee_action:IsExtensionStep:deadline:placeholder'),
+                u'placeholder': _(u'inforequests:obligee_action:IsExtensionStep:obligee_extension:placeholder'),
                 u'class': u'visible-if-extension',
                 }),
             )
@@ -449,10 +442,10 @@ class IsExtensionStep(ObligeeActionStep):
         cleaned_data = super(IsExtensionStep, self).clean()
 
         is_extension = cleaned_data.get(u'is_extension', None)
-        deadline = cleaned_data.get(u'deadline', None)
-        if not is_extension and not deadline:
-            msg = self.fields[u'deadline'].error_messages[u'required']
-            self.add_error(u'deadline', msg)
+        obligee_extension = cleaned_data.get(u'obligee_extension', None)
+        if not is_extension and not obligee_extension:
+            msg = self.fields[u'obligee_extension'].error_messages[u'required']
+            self.add_error(u'obligee_extension', msg)
 
         return cleaned_data
 
@@ -461,8 +454,7 @@ class IsExtensionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_extension']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.EXTENSION
-            res[u'result_deadline_base_date'] = self.wizard.values[u'result_branch'].last_action.deadline_base_date
-            res[u'result_deadline'] = self.wizard.values[u'result_branch'].last_action.deadline + self.cleaned_data[u'deadline']
+            res[u'result_obligee_extension'] = self.cleaned_data[u'obligee_extension']
         return res
 
 class DisclosureReasonsStep(ReasonsMixin, ObligeeActionStep):
@@ -479,8 +471,6 @@ class DisclosureReasonsStep(ReasonsMixin, ObligeeActionStep):
         res = super(DisclosureReasonsStep, self).values()
         res[u'result'] = u'action'
         res[u'result_action'] = Action.TYPES.DISCLOSURE
-        res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
-        res[u'result_deadline'] = 15
         return res
 
 # Post Appeal
@@ -582,8 +572,6 @@ class WasReturnedStep(ObligeeActionStep):
         if self.cleaned_data[u'was_returned']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REMANDMENT
-            res[u'result_deadline_base_date'] = self.wizard.values[u'result_delivered_date']
-            res[u'result_deadline'] = 13
         elif self.wizard.values[u'result_disclosure_level'] != Action.DISCLOSURE_LEVELS.NONE:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.REVERSION
@@ -743,9 +731,7 @@ class ObligeeActionWizard(Wizard):
                 file_number=self.values.get(u'result_file_number', u''),
                 delivered_date=self.values[u'result_delivered_date'],
                 legal_date=self.values[u'result_legal_date'],
-                deadline_base_date=self.values.get(u'result_deadline_base_date', None),
-                deadline=self.values.get(u'result_deadline', None),
-                extension=self.values.get(u'result_extension', None),
+                obligee_extension=self.values.get(u'result_obligee_extension', None),
                 disclosure_level=self.values.get(u'result_disclosure_level', None),
                 refusal_reason=self.values.get(u'result_refusal_reason', None),
                 )
@@ -771,8 +757,6 @@ class ObligeeActionWizard(Wizard):
                         branch=sub_branch,
                         type=Action.TYPES.ADVANCED_REQUEST,
                         legal_date=self.values[u'result_legal_date'],
-                        deadline_base_date=workdays.advance(self.values[u'result_legal_date'], 5),
-                        deadline=20,
                         )
                 sub_action.save()
 

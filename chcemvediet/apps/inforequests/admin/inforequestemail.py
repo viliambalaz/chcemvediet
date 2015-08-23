@@ -98,10 +98,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
     legal_date = Action._meta.get_field(u'legal_date').formfield(
             widget=admin.widgets.AdminDateWidget(),
             )
-    deadline = Action._meta.get_field(u'deadline').formfield(
-            widget=admin.widgets.AdminIntegerFieldWidget(),
-            )
-    extension = Action._meta.get_field(u'extension').formfield(
+    applicant_extension = Action._meta.get_field(u'applicant_extension').formfield(
             widget=admin.widgets.AdminIntegerFieldWidget(),
             )
     disclosure_level = Action._meta.get_field(u'disclosure_level').formfield(
@@ -142,8 +139,7 @@ class InforequestEmailAdminDecideForm(forms.Form):
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
                 legal_date=self.cleaned_data[u'legal_date'],
-                deadline=self.cleaned_data[u'deadline'],
-                extension=self.cleaned_data[u'extension'],
+                applicant_extension=self.cleaned_data[u'applicant_extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
                 refusal_reason=self.cleaned_data[u'refusal_reason'],
                 )
@@ -297,9 +293,7 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'content',
                     u'attachments',
                     u'legal_date',
-                    u'deadline',
-                    u'extension',
-                    u'deadline_details_live',
+                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     u'obligee_set',
@@ -322,7 +316,6 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
             u'branch_details_live',
             u'branch_inforequest_live',
             u'branch_obligee_live',
-            u'deadline_details_live',
             u'obligee_set_details_live',
             ]
     readonly_fields = live_fields + [
@@ -431,11 +424,6 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
         branch = try_except(lambda: Branch.objects.get(pk=branch_pk), None)
         obligee = branch.obligee if branch else None
         return admin_obj_format(obligee, u'{tag}\n{obj.name}')
-
-    @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
-    @live_field(u'legal_date', u'deadline', u'extension')
-    def deadline_details_live(self, legal_date, deadline, extension):
-        return ActionAdmin.deadline_details_live_aux(legal_date, deadline, extension)
 
     @decorate(short_description=u'%s%s' % (ADMIN_FIELD_INDENT, u'Details'))
     @live_field(u'obligee_set')

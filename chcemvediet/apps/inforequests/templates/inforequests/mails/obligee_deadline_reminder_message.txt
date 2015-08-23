@@ -12,21 +12,33 @@
 
 {% autoescape off %}
 {% filter squeeze %}
-  {{ action.branch.historicalobligee.name }} deadline after {{ action.get_type_display }} has
-  expired. {{ action.get_type_display }} set a deadline of {{ action.deadline }} working days since
-  {{ action.deadline_base_date }}.
-  {% if action.extension %}
-    You have already extended this deadline by another {{ action.extension }} working days.
+  {% if action.branch.is_main %}
+    Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
+    {{ action.branch.historicalobligee.name }} uplynula.
+  {% else %}
+    Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
+    {{ inforequest.main_branch.historicalobligee.name }}
+    postúpenej {{ action.branch.historicalobligee.name }} uplynula.
   {% endif %}
-  Already {{ action.days_passed }} working days passed since {{ action.deadline_base_date }}.
+  {% if action.deadline.is_in_calendar_days %}
+    Pôvodná lehota bola {{ action.deadline.value }} kalendárnych dni od
+    {{ action.deadline.base_date }}.
+  {% else %}
+    Pôvodná lehota bola {{ action.deadline.value }} pracovných dni od
+    {{ action.deadline.base_date }}.
+  {% endif %}
+  {% if action.deadline.applicant_extension %}
+    Túto lehotu ste už o {{ action.deadline.applicant_extension }} kalendárnych dni predĺžili.
+  {% endif %}
+  Do dnes uplynulo {{ action.deadline.calendar_days_passed }} kalendárnych dni.
 {% endfilter %}
 
 {% filter squeeze %}
-  {% if action.type == action.TYPES.APPEAL %}
-    You may extend the deadline and wait a little longer.
+  {% if action.branch.can_add_appeal %}
+    Lehotu môžete predĺžiť a počkať trochu dlhšie, alebo môžete podať odvolanie.
   {% else %}
-    You may extend the deadline and wait a little longer, or send an appeal.
+    Lehotu môžete predĺžiť a počkať trochu dlhšie.
   {% endif %}
-  To see the details, go to {{ url }}
+  Viac informácií nájdete pri Vašej žiadosti: {{ url }}
 {% endfilter %}
 {% endautoescape %}

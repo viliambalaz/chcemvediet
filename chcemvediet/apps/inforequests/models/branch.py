@@ -180,7 +180,7 @@ class Branch(models.Model):
                 Action.TYPES.REMANDMENT,
                 Action.TYPES.ADVANCED_REQUEST,
                 ]:
-            return self.last_action.deadline_missed
+            return self.last_action.deadline and self.last_action.deadline.is_deadline_missed
         return self.last_action.type in [
                 Action.TYPES.REFUSAL,
                 Action.TYPES.ADVANCEMENT,
@@ -290,23 +290,16 @@ class Branch(models.Model):
         super(Branch, self).save(*args, **kwargs)
 
     def add_expiration_if_expired(self):
-        if self.last_action.has_obligee_deadline and self.last_action.deadline_missed:
-            if self.last_action.type == Action.TYPES.APPEAL:
-                expiration = Action(
-                        branch=self,
-                        type=Action.TYPES.APPEAL_EXPIRATION,
-                        legal_date=self.last_action.deadline_date,
-                        )
-                expiration.save()
-            else:
-                expiration = Action(
-                        branch=self,
-                        type=Action.TYPES.EXPIRATION,
-                        legal_date=self.last_action.deadline_date,
-                        deadline_base_date=self.last_action.deadline_date,
-                        deadline=15,
-                        )
-                expiration.save()
+        deadline = self.last_action.deadline
+        if not deadline or not deadline.is_obligee_deadline or not deadline.is_deadline_missed:
+            return
+        action_type = Action.TYPES.APPEAL_EXPIRATION if self.last_action.type == Action.TYPES.APPEAL else Action.TYPES.EXPIRATION
+        expiration = Action(
+                branch=self,
+                type=action_type,
+                legal_date=deadline.deadline_date,
+                )
+        expiration.save()
 
     def collect_obligee_emails(self):
         res = {}

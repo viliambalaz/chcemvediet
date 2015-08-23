@@ -30,6 +30,7 @@ def paper_field(context, field):
 
 @register.simple_pair_tag(takes_context=True)
 def paragraph(content, context, before=1, after=1, editable=False, style=None):
+    before, after = int(before), int(after)
     try:
         status = context[u'_paragraph_status']
     except KeyError:

@@ -18,6 +18,7 @@ from poleno.utils.models import FieldChoices, QuerySet, join_lookup
 from poleno.utils.date import utc_now, local_today
 from poleno.utils.misc import Bunch, squeeze, decorate
 
+from .deadline import Deadline
 from .inforequestemail import InforequestEmail
 
 class ActionQuerySet(QuerySet):
@@ -72,15 +73,19 @@ class ActionQuerySet(QuerySet):
         return self.order_by(u'pk')
     def order_by_created(self):
         return self.order_by(u'created', u'pk')
+    def before(self, other):
+        return self.filter(Q(created__lt=other.created) | Q(created=other.created, pk__lt=other.pk))
+    def after(self, other):
+        return self.filter(Q(created__gt=other.created) | Q(created=other.created, pk__gt=other.pk))
 
 class Action(models.Model):
-    # May NOT be NULL
+    # NOT NULL
     branch = models.ForeignKey(u'Branch')
 
     # NOT NULL for actions sent or received by email; NULL otherwise
     email = models.OneToOneField(u'mail.Message', blank=True, null=True, on_delete=models.SET_NULL)
 
-    # May NOT be NULL
+    # NOT NULL
     TYPES = FieldChoices(
             # Applicant actions
             (u'REQUEST',                 1, _(u'inforequests:Action:type:REQUEST')),
@@ -147,23 +152,24 @@ class Action(models.Model):
             )
     content_type = models.SmallIntegerField(choices=CONTENT_TYPES._choices, default=CONTENT_TYPES.PLAIN_TEXT,
             help_text=squeeze(u"""
-                Mandatory choice action content type. Supported formats are plain text and html
+                Mandatory choice for action content type. Supported formats are plain text and html
                 code. The html code is assumed to be safe. It is passed to the client without
                 sanitizing. It must be sanitized before saving it here.
                 """))
 
     # May be empty
-    attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
+    attachment_set = generic.GenericRelation(u'attachments.Attachment',
+            content_type_field=u'generic_type', object_id_field=u'generic_id')
 
-    # May be empty for obligee actions; Should be empty for other actions
+    # May be empty
     file_number = models.CharField(blank=True, max_length=255,
             help_text=squeeze(u"""
                 A file number assigned to the action by the obligee. Usually only obligee actions
                 have it. However, if we know tha obligee assigned a file number to an applicant
-                action, we should keep it here as well. The file number is not mandatory.
+                action, we should keep it here as well. The file number is optional.
                 """))
 
-    # May NOT be NULL
+    # NOT NULL
     created = models.DateTimeField(default=utc_now,
             help_text=squeeze(u"""
                 Point in time used to order branch actions chronologically. By default it's the
@@ -171,7 +177,7 @@ class Action(models.Model):
                 actions order in the branch.
                 """))
 
-    # May NOT be NULL for applicant actions; May be NULL for obligee actions; NULL otherwise
+    # NOT NULL for applicant actions; May be NULL for obligee actions; NULL otherwise
     sent_date = models.DateField(blank=True, null=True,
             help_text=squeeze(u"""
                 The date the action was sent by the applicant or the obligee. It is mandatory for
@@ -179,7 +185,7 @@ class Action(models.Model):
                 actions.
                 """))
 
-    # May be NULL for applicant actions; May NOT be NULL for obligee actions; NULL otherwise
+    # May be NULL for applicant actions; NOT NULL for obligee actions; NULL otherwise
     delivered_date = models.DateField(blank=True, null=True,
             help_text=squeeze(u"""
                 The date the action was delivered to the applicant or the obligee. It is optional
@@ -187,59 +193,29 @@ class Action(models.Model):
                 implicit actions.
                 """))
 
-    # May NOT be NULL
+    # NOT NULL
     legal_date = models.DateField(
             help_text=squeeze(u"""
                 The date the action legally occured. Mandatory for every action.
                 """))
 
-    # May NOT be NULL for actions that set a deadline; NULL otherwise
-    deadline_base_date = models.DateField(blank=True, null=True,
+    # NOT NULL for EXTENSION; NULL otherwise
+    obligee_extension = models.IntegerField(blank=True, null=True,
             help_text=squeeze(u"""
-                The date the action deadline is relative to. Mandatory for actions that set
-                a deadline. Should be NULL otherwise.
+                Obligee extension to the original deadline. Applicable only to extension actions.
+                Ignored for all other actions.
                 """))
 
-    # May NOT be NULL for actions that set deadline; Must be NULL otherwise.
-    SETTING_APPLICANT_DEADLINE_TYPES = (
-            # Applicant actions
-            # Obligee actions
-            TYPES.CLARIFICATION_REQUEST,
-            TYPES.DISCLOSURE,
-            TYPES.REFUSAL,
-            # Implicit actions
-            TYPES.EXPIRATION,
-            )
-    SETTING_OBLIGEE_DEADLINE_TYPES = (
-            # Applicant actions
-            TYPES.REQUEST,
-            TYPES.CLARIFICATION_RESPONSE,
-            TYPES.APPEAL,
-            # Obligee actions
-            TYPES.CONFIRMATION,
-            TYPES.EXTENSION,
-            TYPES.REMANDMENT,
-            # Implicit actions
-            TYPES.ADVANCED_REQUEST,
-            )
-    deadline = models.IntegerField(blank=True, null=True,
-            help_text=squeeze(u"""
-                The deadline that apply after the action, if the action sets a deadline, NULL
-                otherwise. The deadline is expressed in a number of working days (WD) counting
-                since ``deadline_base_date``. It may apply to the applicant or to the obligee,
-                depending on the action type.
-                """))
-
-    # May be NULL
-    extension = models.IntegerField(blank=True, null=True,
+    # May be NULL for actions with obligee deadline; NULL otherwise
+    applicant_extension = models.IntegerField(blank=True, null=True,
             help_text=squeeze(u"""
                 Applicant extension to the deadline, if the action sets an obligee deadline. The
                 applicant may extend the deadline after it is missed in order to be patient and
-                wait a little longer. He may extend it multiple times. Applicant deadlines may not
-                be extended.
+                wait a little longer. He may extend it multiple times. Ignored for applicant
+                deadlines, as they may not be extended.
                 """))
 
-    # NOT NULL for ADVANCEMENT, DISCLOSURE, REVERSION and REMANDMENT; NULL otherwise
+    # NOT NULL for obligee actions that may disclose the information; NULL otherwise
     DISCLOSURE_LEVELS = FieldChoices(
             (u'NONE',    1, _(u'inforequests:Action:disclosure_level:NONE')),
             (u'PARTIAL', 2, _(u'inforequests:Action:disclosure_level:PARTIAL')),
@@ -247,12 +223,12 @@ class Action(models.Model):
             )
     disclosure_level = models.SmallIntegerField(choices=DISCLOSURE_LEVELS._choices, blank=True, null=True,
             help_text=squeeze(u"""
-                Mandatory choice for advancement, disclosure, reversion and remandment actions,
-                NULL otherwise. Specifies if the obligee disclosed any requested information by
-                this action.
+                Mandatory choice for obligee actions that may disclose the information, NULL
+                otherwise. Specifies if the obligee disclosed any requested information by this
+                action.
                 """))
 
-    # NOT NULL for REFUSAL and AFFIRMATION; NULL otherwise
+    # May be empty for obligee actions that may provide a reason; Empty otherwise
     REFUSAL_REASONS = FieldChoices(
             (u'DOES_NOT_HAVE',    u'3', _(u'inforequests:Action:refusal_reason:DOES_NOT_HAVE')),
             (u'DOES_NOT_PROVIDE', u'4', _(u'inforequests:Action:refusal_reason:DOES_NOT_PROVIDE')),
@@ -265,9 +241,10 @@ class Action(models.Model):
             )
     refusal_reason = MultiSelectField(choices=REFUSAL_REASONS._choices, blank=True,
             help_text=squeeze(u"""
-                Optional multichoice for refusal and affirmation actions, NULL otherwise. Specifies
-                the reason why the obligee refused to disclose the information. Empty value
-                means that the obligee refused to disclose it with no reason.
+                Optional multichoice for obligee actions that may provide a reason for not
+                disclosing the information, Should be empty for all other actions. Specifies the
+                reason why the obligee refused to disclose the information. An empty value means
+                that the obligee did not provide any reason.
                 """))
 
     # May be NULL; Used by ``cron.obligee_deadline_reminder`` and ``cron.applicant_deadline_reminder``
@@ -314,6 +291,14 @@ class Action(models.Model):
         return list(self.attachment_set.order_by_pk())
 
     @cached_property
+    def previous_action(self):
+        return self.branch.action_set.order_by_created().before(self).last()
+
+    @cached_property
+    def next_action(self):
+        return self.branch.action_set.order_by_created().after(self).first()
+
+    @cached_property
     def is_applicant_action(self):
         return self.type in self.APPLICANT_ACTION_TYPES
 
@@ -330,52 +315,82 @@ class Action(models.Model):
         return self.email_id is not None
 
     @cached_property
-    def days_passed(self):
-        return self.days_passed_at(local_today())
+    def deadline(self):
 
-    @cached_property
-    def deadline_remaining(self):
-        return self.deadline_remaining_at(local_today())
+        # Applicant actions
+        if self.type == self.TYPES.REQUEST:
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    self.delivered_date or workdays.advance(self.sent_date, 1),
+                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
 
-    @cached_property
-    def deadline_missed(self):
-        return self.deadline_missed_at(local_today())
+        elif self.type == self.TYPES.CLARIFICATION_RESPONSE:
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    self.delivered_date or workdays.advance(self.sent_date, 1),
+                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
 
-    @cached_property
-    def deadline_date(self):
-        if self.deadline is None:
+        elif self.type == self.TYPES.APPEAL:
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    self.delivered_date or workdays.advance(self.sent_date, 3),
+                    15, Deadline.UNITS.CALENDAR_DAYS, self.applicant_extension)
+
+        # Obligee actions
+        elif self.type == self.TYPES.CONFIRMATION:
+            previous = self.previous_action.deadline
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    previous.base_date, previous.value, previous.unit,
+                    self.applicant_extension or previous.applicant_extension)
+
+        elif self.type == self.TYPES.EXTENSION:
+            previous = self.previous_action.deadline
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    previous.base_date, previous.value + self.obligee_extension, previous.unit,
+                    self.applicant_extension or previous.applicant_extension)
+
+        elif self.type == self.TYPES.ADVANCEMENT:
             return None
-        deadline = self.deadline + (self.extension or 0)
-        return workdays.advance(self.deadline_base_date, deadline)
 
-    @cached_property
-    def has_deadline(self):
-        return self.deadline is not None
+        elif self.type == self.TYPES.CLARIFICATION_REQUEST:
+            return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,
+                    self.delivered_date, 7, Deadline.UNITS.CALENDAR_DAYS, 0)
 
-    @cached_property
-    def has_applicant_deadline(self):
-        return self.deadline is not None and self.type in self.SETTING_APPLICANT_DEADLINE_TYPES
+        elif self.type == self.TYPES.DISCLOSURE:
+            if self.disclosure_level == self.DISCLOSURE_LEVELS.FULL:
+                return None
+            return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,
+                    self.delivered_date, 15, Deadline.UNITS.CALENDAR_DAYS, 0)
 
-    @cached_property
-    def has_obligee_deadline(self):
-        return self.deadline is not None and self.type in self.SETTING_OBLIGEE_DEADLINE_TYPES
+        elif self.type == self.TYPES.REFUSAL:
+            return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,
+                    self.delivered_date, 15, Deadline.UNITS.CALENDAR_DAYS, 0)
+
+        elif self.type == self.TYPES.AFFIRMATION:
+            return None
+
+        elif self.type == self.TYPES.REVERSION:
+            return None
+
+        elif self.type == self.TYPES.REMANDMENT:
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    workdays.advance(self.legal_date, 3),
+                    13, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+
+        # Implicit actions
+        elif self.type == self.TYPES.ADVANCED_REQUEST:
+            return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
+                    workdays.advance(self.legal_date, 3),
+                    20, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+
+        elif self.type == self.TYPES.EXPIRATION:
+            return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,
+                    self.legal_date, 15, Deadline.UNITS.CALENDAR_DAYS, 0)
+
+        elif self.type == self.TYPES.APPEAL_EXPIRATION:
+            return None
+
+        raise ValueError(u'Invalid action type: %d' % self.type)
 
     def get_absolute_url(self):
         return self.branch.inforequest.get_absolute_url(u'#a%d' % self.pk)
-
-    def days_passed_at(self, at):
-        return workdays.between(self.deadline_base_date, at)
-
-    def deadline_remaining_at(self, at):
-        if self.deadline is None:
-            return None
-        deadline = self.deadline + (self.extension or 0)
-        return deadline - self.days_passed_at(at)
-
-    def deadline_missed_at(self, at):
-        # self.deadline_remaining is 0 on the last day of deadline
-        remaining = self.deadline_remaining_at(at)
-        return remaining is not None and remaining < 0
 
     def send_by_email(self):
         if not self.is_applicant_action:

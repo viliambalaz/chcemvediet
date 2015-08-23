@@ -48,7 +48,8 @@
   {% block appeal-subtitle %}
     <div style="text-align: center;">
       {% if fiktivne %}
-        <small>voči fiktívnemu rozhodnutiu o neposkytnutí informácie (§ 18 ods. 3 zák. 211/2000 Z. z.)</small>
+        <small>voči fiktívnemu rozhodnutiu o neposkytnutí informácie
+          (§ 18 ods. 3 zák. 211/2000 Z. z.)</small>
       {% else %}
         <small>voči rozhodnutiu o neposkytnutí informácie</small>
       {% endif %}
@@ -69,7 +70,8 @@
         ktorým došlo k
         {% if not_at_all %}nesprístupneniu{% else %}len čiastočnému sprístupneniu{% endif%}
       {% endif %}
-      informácie v zmysle mojej žiadosti o informácie zo dňa {{ inforequest.submission_date|date:"d.m.Y" }} (ďalej len „žiadosť”).
+      informácie v zmysle mojej žiadosti o informácie zo dňa
+      {{ inforequest.submission_date|date:"d.m.Y" }} (ďalej len „žiadosť”).
     {% endparagraph %}
   {% endblock %}
 

@@ -45,7 +45,9 @@
       <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:attachments' %}:</p>
       <p class="span10">
         {% for attachment in email.attachments %}
-          <a href="{% url 'inforequests:download_attachment' attachment.pk %}"><span class="label label-info">{{ attachment.name }}</span></a>
+          <a href="{% url 'inforequests:download_attachment' attachment.pk %}">
+            <span class="label label-info">{{ attachment.name }}</span>
+          </a>
         {% endfor %}
       </p>
     </div>

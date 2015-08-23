@@ -102,9 +102,9 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
 
     if action.pk != Action._meta.pk.to_python(action_pk):
         return HttpResponseNotFound()
-    if not action.has_obligee_deadline:
+    if not action.deadline or not action.deadline.is_obligee_deadline:
         return HttpResponseNotFound()
-    if not action.deadline_missed:
+    if not action.deadline.is_extended_deadline_missed:
         return HttpResponseNotFound()
     if inforequest.has_undecided_emails:
         return HttpResponseNotFound()
@@ -118,7 +118,7 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
         return json_form(request, form, inforequest=inforequest, branch=branch, action=action)
 
     form.save(action)
-    action.save(update_fields=[u'extension'])
+    action.save(update_fields=[u'applicant_extension'])
 
     # The inforequest was changed, we need to refetch it
     inforequest = Inforequest.objects.prefetch_detail().get(pk=inforequest.pk)

@@ -16,7 +16,7 @@
 {% block content %}
   <h1>{% trans 'inforequests:index:heading' %}</h1>
   {% if inforequests %}
-    {% include "inforequests/index/texts/submitted_list.html" with inforequests=inforequests drafts=drafts closed_inforequests=closed_inforequests %}
+    {% include "inforequests/index/texts/submitted_list.html" %}
     <table class="table table-striped">
       <thead>
         <tr>
@@ -33,7 +33,8 @@
             <td><a href="{{ inforequest.get_absolute_url }}">{{ inforequest.subject }}</a></td>
             <td>
               {% if inforequest.has_undecided_emails %}
-                <span class="with-tooltip" data-toggle="tooltip" data-placement="right" title="{% spaceless %}{% include "inforequests/index/tooltips/new_mail.txt" %}{% endspaceless %}">
+                <span class="with-tooltip" data-toggle="tooltip" data-placement="right"
+                      title="{% spaceless %}{% include "inforequests/index/tooltips/new_mail.txt" %}{% endspaceless %}">
                   <i class="icon-envelope"></i> {% trans 'inforequests:index:new_mail' %}
                 </span>
               {% endif %}
@@ -44,14 +45,16 @@
       </tbody>
     </table>
   {% else %}
-    {% include "inforequests/index/texts/submitted_empty.html" with inforequests=inforequests drafts=drafts closed_inforequests=closed_inforequests %}
+    {% include "inforequests/index/texts/submitted_empty.html" %}
   {% endif %}
   <div class="clearfix">
-    <a class="btn btn-primary btn-large pull-right" href="{% url 'inforequests:create' %}"><i class="icon-plus icon-white"></i> {% trans 'inforequests:index:create' %}</a>
+    <a class="btn btn-primary btn-large pull-right" href="{% url 'inforequests:create' %}">
+      <i class="icon-plus icon-white"></i> {% trans 'inforequests:index:create' %}
+    </a>
   </div>
   {% if drafts %}
     <h2>{% trans 'inforequests:index:drafts:heading' %}</h1>
-    {% include "inforequests/index/texts/drafts.html" with inforequests=inforequests drafts=drafts closed_inforequests=closed_inforequests %}
+    {% include "inforequests/index/texts/drafts.html" %}
     <table class="table table-striped">
       <thead>
         <tr>
@@ -62,15 +65,24 @@
       <tbody>
         {% for draft in drafts %}
           <tr>
-            {% if draft.obligee %}
-              <td><a href="{% url 'inforequests:create' draft.pk %}">{{ draft.obligee.name }}</a></td>
-            {% else %}
-              <td><a href="{% url 'inforequests:create' draft.pk %}">{% trans 'inforequests:index:drafts:empty_obligee' %}</a></td>
-            {% endif %}
+            <td>
+              <a href="{% url 'inforequests:create' draft.pk %}">
+                {% if draft.obligee %}
+                  {{ draft.obligee.name }}
+                {% else %}
+                  {% trans 'inforequests:index:drafts:empty_obligee' %}
+                {% endif %}
+              </a>
+            </td>
             <td class="text-right">
-              <a class="btn" href="{% url 'inforequests:create' draft.pk %}"><i class="icon-edit"></i> {% trans 'inforequests:index:drafts:create_from_draft' %}</a>
-              <a class="btn post confirm" href="{% url 'inforequests:delete_draft' draft.pk %}" data-post-csrfmiddlewaretoken="{{ csrf_token }}"
-                 data-confirm="{% trans 'inforequests:index:draft:delete:confirm' %}"><i class="icon-trash"></i> {% trans 'inforequests:index:draft:delete' %}</a>
+              <a class="btn" href="{% url 'inforequests:create' draft.pk %}">
+                <i class="icon-edit"></i> {% trans 'inforequests:index:drafts:create_from_draft' %}
+              </a>
+              <a class="btn post confirm" href="{% url 'inforequests:delete_draft' draft.pk %}"
+                 data-post-csrfmiddlewaretoken="{{ csrf_token }}"
+                 data-confirm="{% trans 'inforequests:index:draft:delete:confirm' %}">
+                <i class="icon-trash"></i> {% trans 'inforequests:index:draft:delete' %}
+              </a>
             </td>
           </tr>
         {% endfor %}
@@ -79,7 +91,7 @@
   {% endif %}
   {% if closed_inforequests %}
     <h2>{% trans 'inforequests:index:closed:heading' %}</h1>
-    {% include "inforequests/index/texts/closed.html" with inforequests=inforequests drafts=drafts closed_inforequests=closed_inforequests %}
+    {% include "inforequests/index/texts/closed.html" %}
     <table class="table table-striped">
       <thead>
         <tr>

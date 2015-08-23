@@ -1,0 +1,38 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- action: chcemvediet.apps.inforequests.models.Action
+ %
+{% endcomment %}
+
+<p>
+Môžete predĺžiť lehotu, keď vás chcemvediet.sk znova upozorní. Niekedy to je vhodné, ak viete, že
+inštitúcia je pomalá alebo dúfate, že ešte vám stále môže prísť požadovaná informácia.
+</p>
+<p>
+{% if branch.is_main %}
+  Predĺžte lehotu na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
+  {{ branch.historicalobligee.name }}.
+{% else %}
+  Predĺžte lehotu na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
+  {{ inforequest.main_branch.historicalobligee.name }}
+  postúpenej {{ branch.historicalobligee.name }}.
+{% endif %}
+</p>
+<p>
+{% if action.deadline.is_in_calendar_days %}
+  Pôvodná lehota bola {{ action.deadline.value }} kalendárnych dni od
+  {{ action.deadline.base_date }}.
+{% else %}
+  Pôvodná lehota bola {{ action.deadline.value }} pracovných dni od
+  {{ action.deadline.base_date }}.
+{% endif %}
+{% if action.deadline.applicant_extension %}
+  Túto lehotu ste už o {{ action.deadline.applicant_extension }} kalendárnych dni predĺžili.
+{% endif %}
+Do dnes uplynulo {{ action.deadline.calendar_days_passed }} kalendárnych dni.
+</p>

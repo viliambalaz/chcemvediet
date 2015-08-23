@@ -65,7 +65,8 @@ class InforequestForm(PrefixedForm):
         super(InforequestForm, self).__init__(*args, **kwargs)
 
         unique_email = settings.INFOREQUEST_UNIQUE_EMAIL.format(token=u'xxxx')
-        unique_email = mark_safe(render_to_string(u'inforequests/create/content_unique_email.html', dict(unique_email=unique_email)).strip())
+        unique_email = mark_safe(render_to_string(u'inforequests/create/content_unique_email.html',
+                dict(unique_email=unique_email)).strip())
         self.fields[u'content'].widget.context[u'user'] = self.user
         self.fields[u'content'].widget.context[u'unique_email'] = unique_email
         self.fields[u'attachments'].attached_to = self.attached_to
@@ -100,8 +101,6 @@ class InforequestForm(PrefixedForm):
                     content=content,
                     sent_date=inforequest.submission_date,
                     legal_date=inforequest.submission_date,
-                    deadline_base_date=workdays.advance(inforequest.submission_date, 1),
-                    deadline=8,
                     )
             action.save()
 

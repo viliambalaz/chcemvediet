@@ -32,7 +32,13 @@
       <p class="span10">{{ action.delivered_date }}</p>
     </div>
   {% endif %}
-  {% if forloop.last and action.has_deadline  %}
+  {% if action.type == action.TYPES.EXTENSION %}
+    <div class="row-fluid">
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:obligee_extension' %}:</p>
+      <p class="span10">{% include "inforequests/detail/texts/obligee_extension.html" %}</p>
+    </div>
+  {% endif %}
+  {% if forloop.last and action.deadline  %}
     <div class="row-fluid">
       <p class="span2 text-right">{% trans 'inforequests:detail:action:deadline' %}:</p>
       <p class="span10">{% include "inforequests/detail/texts/deadline.html" %}</p>
@@ -140,7 +146,7 @@
     </button>
   {% endif %}
   {% if forloop.last and not inforequest.closed and not inforequest.has_undecided_emails %}
-    {% if action.has_obligee_deadline and action.deadline_missed %}
+    {% if action.deadline and action.deadline.is_obligee_deadline and action.deadline.is_extended_deadline_missed %}
       <button type="button" class="btn btn-primary ajax ajax-modal-once with-tooltip"
               action="{% url 'inforequests:extend_deadline' inforequest.slug inforequest.pk branch.pk action.pk %}"
               data-type="html" data-target="#extend-deadline-{{ action.pk }}-modal"
