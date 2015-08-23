@@ -455,7 +455,10 @@ class Inforequest(models.Model):
         super(Inforequest, self).save(*args, **kwargs)
 
     def get_absolute_url(self, anchor=u''):
-        return reverse(u'inforequests:detail', args=[self.slug, self.pk]) + anchor
+        return reverse(u'inforequests:detail', kwargs=dict(
+                inforequest_slug=self.slug,
+                inforequest_pk=self.pk,
+                )) + anchor
 
     def _send_notification(self, template, anchor, dictionary):
         dictionary.update({

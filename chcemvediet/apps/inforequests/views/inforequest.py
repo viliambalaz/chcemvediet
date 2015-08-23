@@ -87,7 +87,10 @@ def inforequest_detail(request, inforequest_slug, inforequest_pk):
     inforequest = Inforequest.objects.owned_by(request.user).prefetch_detail().get_or_404(pk=inforequest_pk)
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:detail', args=[inforequest.slug, inforequest.pk]))
+        return HttpResponseRedirect(reverse(u'inforequests:detail', kwargs=dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            )))
 
     return render(request, u'inforequests/detail/detail.html', {
             u'inforequest': inforequest,

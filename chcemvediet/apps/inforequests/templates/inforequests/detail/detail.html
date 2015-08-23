@@ -17,13 +17,13 @@
     {% if inforequest.has_undecided_emails %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_email.html" %}
-        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest.slug inforequest.pk %}">
+        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest_slug=inforequest.slug inforequest_pk=inforequest.pk %}">
           {% trans 'inforequests:detail:add_email_button' %}</a>
       </div>
     {% else %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_smail.html" %}
-        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest.slug inforequest.pk %}">
+        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest_slug=inforequest.slug inforequest_pk=inforequest.pk %}">
           {% trans 'inforequests:detail:add_smail_button' %}</a>
       </div>
     {% endif %}

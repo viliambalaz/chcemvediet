@@ -97,8 +97,12 @@ class AppealWizard(Wizard):
         self.branch = branch
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:appeal', args=[
-            self.branch.inforequest.slug, self.branch.inforequest.pk, self.branch.pk, step.index]) + anchor
+        return reverse(u'inforequests:appeal', kwargs=dict(
+            inforequest_slug=self.branch.inforequest.slug,
+            inforequest_pk=self.branch.inforequest.pk,
+            branch_pk=self.branch.pk,
+            step_idx=step.index,
+            )) + anchor
 
     def context(self, extra=None):
         res = super(AppealWizard, self).context(extra)

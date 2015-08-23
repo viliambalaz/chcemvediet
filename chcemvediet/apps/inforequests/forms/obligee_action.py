@@ -705,8 +705,11 @@ class ObligeeActionWizard(Wizard):
         self.email = email
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:obligee_action',
-                args=[self.inforequest.slug, self.inforequest.pk, step.index]) + anchor
+        return reverse(u'inforequests:obligee_action', kwargs=dict(
+                inforequest_slug=self.inforequest.slug,
+                inforequest_pk=self.inforequest.pk,
+                step_idx=step.index,
+                )) + anchor
 
     def context(self, extra=None):
         res = super(ObligeeActionWizard, self).context(extra)

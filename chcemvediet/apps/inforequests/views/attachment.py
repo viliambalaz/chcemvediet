@@ -20,7 +20,7 @@ from chcemvediet.apps.inforequests.models import InforequestDraft, Action
 @login_required(raise_exception=True)
 def attachment_upload(request):
     session = Session.objects.get(session_key=request.session.session_key)
-    download_url_func = (lambda a: reverse(u'inforequests:download_attachment', args=(a.pk,)))
+    download_url_func = (lambda a: reverse(u'inforequests:download_attachment', args=[a.pk]))
     return attachments_views.upload(request, session, download_url_func)
 
 @require_http_methods([u'HEAD', u'GET'])

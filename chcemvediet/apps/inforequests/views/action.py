@@ -22,8 +22,11 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
     email = inforequestemail.email if inforequestemail is not None else None
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:obligee_action',
-                args=[inforequest.slug, inforequest.pk, step_idx]))
+        return HttpResponseRedirect(reverse(u'inforequests:obligee_action', kwargs=dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            step_idx=step_idx,
+            )))
 
     def finish(wizard):
         result = wizard.values[u'result']
@@ -49,8 +52,11 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
-                args=[inforequest.slug, inforequest.pk, step_idx]))
+        return HttpResponseRedirect(reverse(u'inforequests:clarification_response', kwargs=dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            step_idx=step_idx,
+            )))
 
     if not branch.can_add_clarification_response:
         return HttpResponseNotFound()
@@ -72,8 +78,11 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:appeal',
-                args=[inforequest.slug, inforequest.pk, step_idx]))
+        return HttpResponseRedirect(reverse(u'inforequests:appeal', kwargs=dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            step_idx=step_idx,
+            )))
 
     if not branch.can_add_appeal:
         return HttpResponseNotFound()
@@ -97,8 +106,12 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
     action = branch.last_action
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:extend_deadline',
-                args=[inforequest.slug, inforequest.pk, branch_pk, action_pk]))
+        return HttpResponseRedirect(reverse(u'inforequests:extend_deadline', kwargs=dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            branch_pk=branch_pk,
+            action_pk=action_pk,
+            )))
 
     if action.pk != Action._meta.pk.to_python(action_pk):
         return HttpResponseNotFound()

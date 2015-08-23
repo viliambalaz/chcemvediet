@@ -10,10 +10,24 @@
 {% endcomment %}
 
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{% static 'main/images/languages/'|add:request.LANGUAGE_CODE|add:'.png' %}" alt="{{ request.LANGUAGE_CODE }}" style="margin: 0px 5px 3px 0px;"> {{ request.LANGUAGE_CODE|upper }} <b class="caret"></b></a>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <img src="{% static 'main/images/languages/'|add:request.LANGUAGE_CODE|add:'.png' %}"
+         alt="{{ request.LANGUAGE_CODE }}"
+         style="margin: 0px 5px 3px 0px;">
+    {{ request.LANGUAGE_CODE|upper }} <b class="caret"></b>
+  </a>
   <ul class="dropdown-menu">
     {% for lang in LANGUAGES %}
-      <li><a href="{% url 'set_language' %}" class="post" data-post-csrfmiddlewaretoken="{{ csrf_token }}" data-post-language="{{ lang.0 }}" data-post-next="{% change_lang lang.0 %}"><img src="{% static 'main/images/languages/'|add:lang.0|add:'.png' %}" alt="{{ lang.0 }}" style="margin: 0px 5px 3px 0px;"> {{ lang.1 }}</a></li>
+      <li>
+        <a href="{% url 'set_language' %}" class="post"
+           data-post-csrfmiddlewaretoken="{{ csrf_token }}"
+           data-post-language="{{ lang.0 }}"
+           data-post-next="{% change_lang lang.0 %}">
+          <img src="{% static 'main/images/languages/'|add:lang.0|add:'.png' %}"
+               alt="{{ lang.0 }}" style="margin: 0px 5px 3px 0px;">
+          {{ lang.1 }}
+        </a>
+      </li>
     {% endfor %}
   </ul>
 </li>
