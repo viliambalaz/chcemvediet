@@ -71,8 +71,7 @@ def inforequest_create(request, draft_pk=None):
         form = InforequestForm(request.POST, attached_to=attached_to, user=request.user)
         if not form.is_valid():
             return render(request, template, dict(form=form))
-        inforequest = Inforequest(applicant=request.user)
-        form.save(inforequest)
+        inforequest = form.save()
         inforequest.save()
         inforequest.main_branch.last_action.send_by_email()
         if draft:

@@ -18,7 +18,7 @@ from poleno.utils.forms import AutoSuppressedSelect
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Wizard, WizardStep
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
-from chcemvediet.apps.inforequests.models import Branch, Action, InforequestEmail
+from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 
 class ObligeeActionStep(WizardStep):
     template = u'inforequests/obligee_action/wizard.html'
@@ -725,7 +725,7 @@ class ObligeeActionWizard(Wizard):
         assert not self.email or self.values[u'result_action'] in Action.OBLIGEE_EMAIL_ACTION_TYPES
         assert self.values[u'result_branch'].can_add_action(self.values[u'result_action'])
 
-        action = Action(
+        action = Action.create(
                 branch=self.values[u'result_branch'],
                 type=self.values[u'result_action'],
                 email=self.email if self.email else None,
@@ -737,31 +737,10 @@ class ObligeeActionWizard(Wizard):
                 obligee_extension=self.values.get(u'result_obligee_extension', None),
                 disclosure_level=self.values.get(u'result_disclosure_level', None),
                 refusal_reason=self.values.get(u'result_refusal_reason', None),
+                advanced_to=self.values.get(u'result_advanced_to', None),
+                attachments=self.email.attachments if self.email else self.values.get(u'result_attachments', None),
                 )
         action.save()
-
-        if self.email:
-            for attch in self.email.attachments:
-                attachment = attch.clone(action)
-                attachment.save()
-        else:
-            action.attachment_set = self.values[u'result_attachments']
-
-        for obligee in self.values.get(u'result_advanced_to', []):
-            if obligee:
-                sub_branch = Branch(
-                        obligee=obligee,
-                        inforequest=action.branch.inforequest,
-                        advanced_by=action,
-                        )
-                sub_branch.save()
-
-                sub_action = Action(
-                        branch=sub_branch,
-                        type=Action.TYPES.ADVANCED_REQUEST,
-                        legal_date=self.values[u'result_legal_date'],
-                        )
-                sub_action.save()
 
         if self.email:
             self.inforequestemail.type = InforequestEmail.TYPES.OBLIGEE_ACTION

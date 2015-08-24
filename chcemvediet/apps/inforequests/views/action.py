@@ -62,8 +62,7 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
         return HttpResponseNotFound()
 
     def finish(wizard):
-        action = Action(type=Action.TYPES.CLARIFICATION_RESPONSE)
-        wizard.save(action)
+        action = wizard.save()
         action.save()
         action.send_by_email()
         return action.get_absolute_url()
@@ -89,8 +88,7 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
 
     def finish(wizard):
         branch.add_expiration_if_expired()
-        action = Action(type=Action.TYPES.APPEAL)
-        wizard.save(action)
+        action = wizard.save()
         action.save()
         return action.get_absolute_url()
 

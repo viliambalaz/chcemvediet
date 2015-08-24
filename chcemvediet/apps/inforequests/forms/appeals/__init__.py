@@ -175,13 +175,17 @@ class AppealWizard(Wizard):
     def retrospection(self):
         return self._retrospection(self.branch.last_action)
 
-    def save(self, appeal):
-        appeal.branch = self.branch
-        appeal.subject = self.values[u'subject']
-        appeal.content = self.values[u'content']
-        appeal.content_type = Action.CONTENT_TYPES.HTML
-        appeal.sent_date = self.values[u'legal_date']
-        appeal.legal_date = self.values[u'legal_date']
+    def save(self):
+        action = Action.create(
+                branch=self.branch,
+                type=Action.TYPES.APPEAL,
+                subject=self.values[u'subject'],
+                content=self.values[u'content'],
+                content_type=Action.CONTENT_TYPES.HTML,
+                sent_date=self.values[u'legal_date'],
+                legal_date=self.values[u'legal_date'],
+                )
+        return action
 
 
 # Must be after ``AppealWizard`` to break cyclic dependency

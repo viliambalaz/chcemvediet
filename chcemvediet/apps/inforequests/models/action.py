@@ -14,12 +14,9 @@ from multiselectfield import MultiSelectField
 from poleno import datacheck
 from poleno.attachments.models import Attachment
 from poleno.workdays import workdays
-from poleno.utils.models import FieldChoices, QuerySet, join_lookup
+from poleno.utils.models import FieldChoices, QuerySet, join_lookup, after_saved
 from poleno.utils.date import utc_now, local_today
 from poleno.utils.misc import Bunch, squeeze, decorate
-
-from .deadline import Deadline
-from .inforequestemail import InforequestEmail
 
 class ActionQuerySet(QuerySet):
     # Applicant actions
@@ -389,6 +386,34 @@ class Action(models.Model):
 
         raise ValueError(u'Invalid action type: %d' % self.type)
 
+    @classmethod
+    def create(cls, *args, **kwargs):
+        advanced_to = kwargs.pop(u'advanced_to', None) or []
+        attachments = kwargs.pop(u'attachments', None) or []
+        action = Action(*args, **kwargs)
+
+        @after_saved(action)
+        def deferred(action):
+            for obligee in advanced_to:
+                if not obligee:
+                    continue
+                sub_branch = Branch.create(
+                        obligee=obligee,
+                        inforequest=action.branch.inforequest,
+                        advanced_by=action,
+                        action_kwargs=dict(
+                            type=Action.TYPES.ADVANCED_REQUEST,
+                            legal_date=action.legal_date,
+                            ),
+                        )
+                sub_branch.save()
+
+            for attch in attachments:
+                attachment = attch.clone(action)
+                attachment.save()
+
+        return action
+
     def get_absolute_url(self):
         return self.branch.inforequest.get_absolute_url(u'#a%d' % self.pk)
 
@@ -443,3 +468,8 @@ def datachecks(superficial, autofix):
         issues = [u'; '.join(issues)]
     for issue in issues:
         yield datacheck.Error(issue + u'.')
+
+# Must be after ``Action`` to break cyclic dependency
+from .deadline import Deadline
+from .branch import Branch
+from .inforequestemail import InforequestEmail

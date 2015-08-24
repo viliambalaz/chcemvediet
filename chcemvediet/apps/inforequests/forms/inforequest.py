@@ -12,7 +12,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.views import reverse
 from poleno.utils.forms import CompositeTextField, PrefixedForm
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
-from chcemvediet.apps.inforequests.models import Branch, Action
+from chcemvediet.apps.inforequests.models import Inforequest
 
 from poleno.utils.template import lazy_render_to_string
 
@@ -76,35 +76,23 @@ class InforequestForm(PrefixedForm):
             self.fields[u'subject'].required = False
             self.fields[u'content'].required = False
 
-    def save(self, inforequest):
+    def save(self):
         assert self.is_valid()
-        inforequest.subject = self.cleaned_data[u'subject'][0]
-        inforequest.content = self.cleaned_data[u'content'][0]
-
-        @after_saved(inforequest)
-        def deferred(inforequest):
-            branch = Branch(
-                    obligee=self.cleaned_data[u'obligee'],
-                    inforequest=inforequest,
-                    )
-            branch.save()
-
-            subject = self.fields[u'subject'].finalize(self.cleaned_data[u'subject'])
-            content = self.fields[u'content'].finalize(self.cleaned_data[u'content'], dict(
+        subject_finalize = lambda inforequest: self.fields[u'subject'].finalize(self.cleaned_data[u'subject'])
+        content_finalize = lambda inforequest: self.fields[u'content'].finalize(self.cleaned_data[u'content'], dict(
                 unique_email=inforequest.unique_email,
                 obligee=self.cleaned_data[u'obligee'],
                 ))
-            action = Action(
-                    branch=branch,
-                    type=Action.TYPES.REQUEST,
-                    subject=subject,
-                    content=content,
-                    sent_date=inforequest.submission_date,
-                    legal_date=inforequest.submission_date,
-                    )
-            action.save()
-
-            action.attachment_set = self.cleaned_data[u'attachments']
+        inforequest = Inforequest.create(
+                applicant=self.user,
+                subject=self.cleaned_data[u'subject'][0],
+                content=self.cleaned_data[u'content'][0],
+                obligee=self.cleaned_data[u'obligee'],
+                subject_finalize=subject_finalize,
+                content_finalize=content_finalize,
+                attachments=self.cleaned_data[u'attachments'],
+                )
+        return inforequest
 
     def save_to_draft(self, draft):
         assert self.is_valid()

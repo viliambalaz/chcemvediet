@@ -5,10 +5,8 @@ from django.db.models import Q, F, Prefetch
 from django.utils.functional import cached_property
 
 from poleno import datacheck
-from poleno.utils.models import QuerySet, join_lookup
+from poleno.utils.models import QuerySet, join_lookup, after_saved
 from poleno.utils.misc import squeeze, decorate
-
-from .action import Action
 
 class BranchQuerySet(QuerySet):
     def main(self):
@@ -280,11 +278,27 @@ class Branch(models.Model):
                 return True
         return False
 
+    @classmethod
+    def create(cls, *args, **kwargs):
+        action_args = kwargs.pop(u'action_args', None) or []
+        action_kwargs = kwargs.pop(u'action_kwargs', None) or {}
+        branch = Branch(*args, **kwargs)
+
+        assert (action_kwargs[u'type'] in [Action.TYPES.REQUEST, Action.TYPES.ADVANCED_REQUEST],
+                u'Branch must be created with a request or an advanced request action')
+
+        @after_saved(branch)
+        def deferred(branch):
+            action = Action.create(branch=branch, *action_args, **action_kwargs)
+            action.save()
+
+        return branch
+
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):
         if self.pk is None: # Creating a new object
-            assert self.obligee_id is not None, u'%s.obligee is mandatory' % self.__class__.__name__
-            assert self.historicalobligee_id is None, u'%s.historicalobligee is read-only' % self.__class__.__name__
+            assert self.obligee_id is not None, u'Branch.obligee is mandatory'
+            assert self.historicalobligee_id is None, u'Branch.historicalobligee is read-only'
             self.historicalobligee = self.obligee.history.first()
 
         super(Branch, self).save(*args, **kwargs)
@@ -294,7 +308,7 @@ class Branch(models.Model):
         if not deadline or not deadline.is_obligee_deadline or not deadline.is_deadline_missed:
             return
         action_type = Action.TYPES.APPEAL_EXPIRATION if self.last_action.type == Action.TYPES.APPEAL else Action.TYPES.EXPIRATION
-        expiration = Action(
+        expiration = Action.create(
                 branch=self,
                 type=action_type,
                 legal_date=deadline.deadline_date,
@@ -338,3 +352,6 @@ def datachecks(superficial, autofix):
         issues = [u'; '.join(issues)]
     for issue in issues:
         yield datacheck.Error(issue + u'.')
+
+# Must be after ``Branch`` to break cyclic dependency
+from .action import Action

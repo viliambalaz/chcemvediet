@@ -15,6 +15,7 @@ from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards import Wizard, WizardStep
+from chcemvediet.apps.inforequests.models import Action
 
 
 class ClarificationResponseStep(WizardStep):
@@ -102,13 +103,15 @@ class ClarificationResponseWizard(Wizard):
                 })
         return res
 
-    def save(self, action):
-        action.branch = self.branch
-        action.subject = self.values[u'subject']
-        action.content = self.values[u'content']
-        action.sent_date = local_today()
-        action.legal_date = action.sent_date
-
-        @after_saved(action)
-        def deferred(action):
-            action.attachment_set = self.values[u'attachments']
+    def save(self):
+        today = local_today()
+        action = Action.create(
+                branch=self.branch,
+                type=Action.TYPES.CLARIFICATION_RESPONSE,
+                subject=self.values[u'subject'],
+                content=self.values[u'content'],
+                sent_date=today,
+                legal_date=today,
+                attachments=self.values[u'attachments'],
+                )
+        return action

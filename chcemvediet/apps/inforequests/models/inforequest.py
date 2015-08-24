@@ -10,15 +10,11 @@ from aggregate_if import Count
 
 from poleno import datacheck
 from poleno.mail.models import Message
-from poleno.utils.models import QuerySet, join_lookup
+from poleno.utils.models import QuerySet, join_lookup, after_saved
 from poleno.utils.views import complete_url, reverse
 from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
 from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify
-
-from .inforequestemail import InforequestEmail
-from .branch import Branch
-from .action import Action
 
 class InforequestQuerySet(QuerySet):
     def owned_by(self, user):
@@ -420,23 +416,49 @@ class Inforequest(models.Model):
                 return branch
         raise ValueError
 
+    @classmethod
+    def create(cls, *args, **kwargs):
+        obligee = kwargs.pop(u'obligee')
+        subject_finalize = kwargs.pop(u'subject_finalize')
+        content_finalize = kwargs.pop(u'content_finalize')
+        attachments = kwargs.pop(u'attachments', None) or []
+        inforequest = Inforequest(*args, **kwargs)
+
+        @after_saved(inforequest)
+        def deferred(inforequest):
+            branch = Branch.create(
+                    obligee=obligee,
+                    inforequest=inforequest,
+                    action_kwargs=dict(
+                        type=Action.TYPES.REQUEST,
+                        subject=subject_finalize(inforequest),
+                        content=content_finalize(inforequest),
+                        sent_date=inforequest.submission_date,
+                        legal_date=inforequest.submission_date,
+                        attachments=attachments,
+                        ),
+                    )
+            branch.save()
+
+        return inforequest
+
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):
         if self.pk is None: # Creating a new object
 
             # Freeze applicant contact information
-            assert self.applicant_id is not None, u'%s.applicant is mandatory' % self.__class__.__name__
-            assert self.applicant_name == u'', u'%s.applicant_name is read-only' % self.__class__.__name__
-            assert self.applicant_street == u'', u'%s.applicant_street is read-only' % self.__class__.__name__
-            assert self.applicant_city == u'', u'%s.applicant_city is read-only' % self.__class__.__name__
-            assert self.applicant_zip == u'', u'%s.applicant_zip is read-only' % self.__class__.__name__
+            assert self.applicant_id is not None, u'Inforequest.applicant is mandatory'
+            assert self.applicant_name == u'', u'Inforequest.applicant_name is read-only'
+            assert self.applicant_street == u'', u'Inforequest.applicant_street is read-only'
+            assert self.applicant_city == u'', u'Inforequest.applicant_city is read-only'
+            assert self.applicant_zip == u'', u'Inforequest.applicant_zip is read-only'
             self.applicant_name = self.applicant.get_full_name()
             self.applicant_street = self.applicant.profile.street
             self.applicant_city = self.applicant.profile.city
             self.applicant_zip = self.applicant.profile.zip
 
             # Generate unique random email
-            assert self.unique_email == u'', u'%s.unique_email is read-only' % self.__class__.__name__
+            assert self.unique_email == u'', u'Inforequest.unique_email is read-only'
             length = 4
             while True:
                 token = random_readable_string(length)
@@ -521,3 +543,8 @@ def datachecks(superficial, autofix):
         issues = [u'; '.join(issues)]
     for issue in issues:
         yield datacheck.Error(issue + u'.')
+
+# Must be after ``Inforequest`` to break cyclic dependency
+from .inforequestemail import InforequestEmail
+from .branch import Branch
+from .action import Action
