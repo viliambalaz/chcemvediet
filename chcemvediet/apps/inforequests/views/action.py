@@ -4,7 +4,8 @@ from django.db import transaction
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 
-from poleno.utils.views import require_ajax, login_required, reverse
+from poleno.utils.urls import reverse
+from poleno.utils.views import require_ajax, login_required
 from chcemvediet.apps.wizards.views import wizard_view
 from chcemvediet.apps.inforequests.forms import ExtendDeadlineForm
 from chcemvediet.apps.inforequests.forms import AppealWizards, ClarificationResponseWizard, ObligeeActionWizard
@@ -22,11 +23,8 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
     email = inforequestemail.email if inforequestemail is not None else None
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:obligee_action', kwargs=dict(
-            inforequest_slug=inforequest.slug,
-            inforequest_pk=inforequest.pk,
-            step_idx=step_idx,
-            )))
+        return HttpResponseRedirect(reverse(u'inforequests:obligee_action',
+                kwargs=dict(inforequest=inforequest, step_idx=step_idx)))
 
     def finish(wizard):
         result = wizard.values[u'result']
@@ -51,15 +49,11 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
     inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
-    if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:clarification_response', kwargs=dict(
-            inforequest_slug=inforequest.slug,
-            inforequest_pk=inforequest.pk,
-            step_idx=step_idx,
-            )))
-
     if not branch.can_add_clarification_response:
         return HttpResponseNotFound()
+    if inforequest_slug != inforequest.slug:
+        return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
+                kwargs=dict(branch=branch, step_idx=step_idx)))
 
     def finish(wizard):
         action = wizard.save()
@@ -76,15 +70,11 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
     inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
-    if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:appeal', kwargs=dict(
-            inforequest_slug=inforequest.slug,
-            inforequest_pk=inforequest.pk,
-            step_idx=step_idx,
-            )))
-
     if not branch.can_add_appeal:
         return HttpResponseNotFound()
+    if inforequest_slug != inforequest.slug:
+        return HttpResponseRedirect(reverse(u'inforequests:appeal',
+                kwargs=dict(branch=branch, step_idx=step_idx)))
 
     def finish(wizard):
         branch.add_expiration_if_expired()
@@ -103,14 +93,6 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
     action = branch.last_action
 
-    if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:extend_deadline', kwargs=dict(
-            inforequest_slug=inforequest.slug,
-            inforequest_pk=inforequest.pk,
-            branch_pk=branch_pk,
-            action_pk=action_pk,
-            )))
-
     if action.pk != Action._meta.pk.to_python(action_pk):
         return HttpResponseNotFound()
     if not action.deadline or not action.deadline.is_obligee_deadline:
@@ -119,6 +101,9 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
         return HttpResponseNotFound()
     if inforequest.has_undecided_emails:
         return HttpResponseNotFound()
+    if inforequest_slug != inforequest.slug:
+        return HttpResponseRedirect(reverse(u'inforequests:extend_deadline',
+                kwargs=dict(action=action)))
 
     if request.method != u'POST':
         form = ExtendDeadlineForm(prefix=action.pk)

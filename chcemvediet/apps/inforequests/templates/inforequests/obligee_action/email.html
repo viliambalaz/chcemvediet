@@ -1,6 +1,6 @@
 {# vim: set filetype=htmldjango :#}
 {% load trans from i18n %}
-{% load squeeze from poleno.utils %}
+{% load url squeeze from poleno.utils %}
 
 {% comment %}
  %
@@ -45,7 +45,7 @@
       <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:attachments' %}:</p>
       <p class="span10">
         {% for attachment in email.attachments %}
-          <a href="{% url 'inforequests:download_attachment' attachment_pk=attachment.pk %}">
+          <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
             <span class="label label-info">{{ attachment.name }}</span>
           </a>
         {% endfor %}

@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.utils.functional import cached_property
 
 from poleno.utils.models import QuerySet, after_saved
-from poleno.utils.views import complete_reverse
+from poleno.utils.urls import complete_reverse
 from poleno.utils.date import utc_now
 from poleno.utils.mail import render_mail
 from poleno.utils.misc import squeeze, decorate, random_string

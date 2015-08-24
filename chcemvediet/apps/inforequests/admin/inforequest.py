@@ -8,7 +8,7 @@ from django.contrib.sessions.models import Session
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.misc import try_except, decorate, squeeze
 from poleno.utils.admin import simple_list_filter_factory, admin_obj_format, live_field
 from poleno.utils.admin import AdminLiveFieldsMixin, ADMIN_FIELD_INDENT

@@ -15,7 +15,7 @@ from django.utils.html import format_html
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.forms import ValidatorChain, validate_comma_separated_emails
 from poleno.utils.misc import decorate, squeeze
 from poleno.utils.admin import (simple_list_filter_factory, admin_obj_format, extend_model_admin,

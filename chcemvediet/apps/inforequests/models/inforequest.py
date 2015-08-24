@@ -11,7 +11,7 @@ from aggregate_if import Count
 from poleno import datacheck
 from poleno.mail.models import Message
 from poleno.utils.models import QuerySet, join_lookup, after_saved
-from poleno.utils.views import complete_url, reverse
+from poleno.utils.urls import reverse, complete_url
 from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
 from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify
@@ -477,10 +477,7 @@ class Inforequest(models.Model):
         super(Inforequest, self).save(*args, **kwargs)
 
     def get_absolute_url(self, anchor=u''):
-        return reverse(u'inforequests:detail', kwargs=dict(
-                inforequest_slug=self.slug,
-                inforequest_pk=self.pk,
-                )) + anchor
+        return reverse(u'inforequests:detail', kwargs=dict(inforequest=self)) + anchor
 
     def _send_notification(self, template, anchor, dictionary):
         dictionary.update({

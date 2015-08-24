@@ -8,7 +8,7 @@ from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.contrib.contenttypes import generic
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.misc import filesize, decorate, try_except
 from poleno.utils.admin import admin_obj_format, live_field, AdminLiveFieldsMixin
 

@@ -14,7 +14,7 @@ from django.template import Context, Template, Origin
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.translation import translation
 
 path_regex = re.compile(r'^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$')

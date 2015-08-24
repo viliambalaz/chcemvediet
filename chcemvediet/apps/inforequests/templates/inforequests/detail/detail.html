@@ -1,6 +1,7 @@
 {# vim: set filetype=htmldjango :#}
 {% extends request.is_ajax|yesno:"main/base/ajax.html,main/base/single_column.html" %}
 {% load trans from i18n %}
+{% load url from poleno.utils %}
 
 {% comment %}
  %
@@ -17,13 +18,13 @@
     {% if inforequest.has_undecided_emails %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_email.html" %}
-        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest_slug=inforequest.slug inforequest_pk=inforequest.pk %}">
+        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
           {% trans 'inforequests:detail:add_email_button' %}</a>
       </div>
     {% else %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_smail.html" %}
-        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest_slug=inforequest.slug inforequest_pk=inforequest.pk %}">
+        <a class="btn btn-primary" href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
           {% trans 'inforequests:detail:add_smail_button' %}</a>
       </div>
     {% endif %}

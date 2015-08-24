@@ -8,7 +8,7 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils.translation import get_language
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.http import send_file_response
 from poleno.utils.misc import decorate
 

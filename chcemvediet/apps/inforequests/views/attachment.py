@@ -9,7 +9,8 @@ from django.contrib.sessions.models import Session
 from poleno.attachments import views as attachments_views
 from poleno.attachments.models import Attachment
 from poleno.mail.models import Message
-from poleno.utils.views import require_ajax, login_required, reverse
+from poleno.utils.urls import reverse
+from poleno.utils.views import require_ajax, login_required
 
 from chcemvediet.apps.inforequests.models import InforequestDraft, Action
 

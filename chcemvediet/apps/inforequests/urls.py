@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext_lazy as _
 
+from poleno.utils.urls import reverse_adaptor, reverse
 from poleno.utils.lazy import lazy_concat, lazy_format
 
 from . import views
@@ -46,3 +47,53 @@ if settings.DEBUG: # pragma: no cover
         url(lazy_format(r'^devtools/undo-last-action/{inforequest_pk}$', **parts), views.devtools_undo_last_action, name=u'devtools_undo_last_action'),
         url(lazy_format(r'^devtools/push-history/{inforequest_pk}$', **parts),     views.devtools_push_history,     name=u'devtools_push_history'),
     )
+
+
+@reverse_adaptor(u'inforequests:create', u'draft')
+@reverse_adaptor(u'inforequests:delete_draft', u'draft')
+def draft_adaptor(draft):
+    return dict(draft_pk=draft.pk)
+
+@reverse_adaptor(u'inforequests:detail', u'inforequest')
+@reverse_adaptor(u'inforequests:obligee_action', u'inforequest')
+def inforequest_adaptor_slug_and_pk(inforequest):
+    return dict(
+            inforequest_slug=inforequest.slug,
+            inforequest_pk=inforequest.pk,
+            )
+
+@reverse_adaptor(u'inforequests:devtools_mock_response', u'inforequest')
+@reverse_adaptor(u'inforequests:devtools_undo_last_action', u'inforequest')
+@reverse_adaptor(u'inforequests:devtools_push_history', u'inforequest')
+def inforequest_adaptor_pk(inforequest):
+    return dict(
+            inforequest_pk=inforequest.pk,
+            )
+
+@reverse_adaptor(u'inforequests:clarification_response', u'branch')
+@reverse_adaptor(u'inforequests:appeal', u'branch')
+def branch_adaptor(branch):
+    return dict(
+            inforequest_slug=branch.inforequest.slug,
+            inforequest_pk=branch.inforequest.pk,
+            branch_pk=branch.pk,
+            )
+
+@reverse_adaptor(u'inforequests:extend_deadline', u'action')
+def action_adaptor(action):
+    return dict(
+            inforequest_slug=action.branch.inforequest.slug,
+            inforequest_pk=action.branch.inforequest.pk,
+            branch_pk=action.branch.pk,
+            action_pk=action.pk,
+            )
+
+@reverse_adaptor(u'inforequests:download_attachment', u'attachment')
+def attachment_adaptor(attachment):
+    return dict(attachment_pk=attachment.pk)
+
+@reverse_adaptor(u'inforequests:obligee_action', u'step')
+@reverse_adaptor(u'inforequests:clarification_response', u'step')
+@reverse_adaptor(u'inforequests:appeal', u'step')
+def step_adaptor(step):
+    return dict(step_idx=step.index)

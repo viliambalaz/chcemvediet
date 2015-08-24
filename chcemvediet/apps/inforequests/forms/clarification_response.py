@@ -10,7 +10,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments.forms import AttachmentsField
 from poleno.workdays import workdays
 from poleno.utils.models import after_saved
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze
@@ -87,12 +87,7 @@ class ClarificationResponseWizard(Wizard):
         self.branch = branch
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:clarification_response', kwargs=dict(
-            inforequest_slug=self.branch.inforequest.slug,
-            inforequest_pk=self.branch.inforequest.pk,
-            branch_pk=self.branch.pk,
-            step_idx=step.index,
-            )) + anchor
+        return reverse(u'inforequests:clarification_response', kwargs=dict(branch=self.branch, step=step)) + anchor
 
     def context(self, extra=None):
         res = super(ClarificationResponseWizard, self).context(extra)

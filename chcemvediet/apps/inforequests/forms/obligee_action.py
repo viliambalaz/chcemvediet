@@ -13,7 +13,7 @@ from multiselectfield import MultiSelectFormField
 from poleno.attachments.forms import AttachmentsField
 from poleno.workdays import workdays
 from poleno.utils.models import after_saved
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.forms import AutoSuppressedSelect
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Wizard, WizardStep
@@ -705,11 +705,7 @@ class ObligeeActionWizard(Wizard):
         self.email = email
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:obligee_action', kwargs=dict(
-                inforequest_slug=self.inforequest.slug,
-                inforequest_pk=self.inforequest.pk,
-                step_idx=step.index,
-                )) + anchor
+        return reverse(u'inforequests:obligee_action', kwargs=dict(inforequest=self.inforequest, step=step)) + anchor
 
     def context(self, extra=None):
         res = super(ObligeeActionWizard, self).context(extra)

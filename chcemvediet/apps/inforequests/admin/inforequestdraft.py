@@ -10,7 +10,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments.forms import AttachmentsField
 from poleno.attachments.admin import AttachmentInline
 from poleno.utils.models import after_saved
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.misc import decorate
 from poleno.utils.admin import (admin_obj_format, live_field, AdminLiveFieldsMixin,
         ADMIN_FIELD_INDENT)

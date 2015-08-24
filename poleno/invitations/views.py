@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from allauth.account.adapter import get_adapter
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.messages import render_message
 
 from . import forms, UserMayNotInvite

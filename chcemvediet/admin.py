@@ -7,7 +7,7 @@ from admin_tools.menu import items, Menu
 from admin_tools.dashboard import modules, Dashboard, AppIndexDashboard
 
 from poleno.mail.models import Message
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from chcemvediet.apps.inforequests.models import InforequestEmail
 
 ADMIN_LINKS = [

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import admin
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.forms import clean_button
 
 from . import forms

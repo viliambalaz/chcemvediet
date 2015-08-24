@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from poleno.workdays import workdays
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards import WizardStep, Wizard, WizardGroup
@@ -97,12 +97,7 @@ class AppealWizard(Wizard):
         self.branch = branch
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:appeal', kwargs=dict(
-            inforequest_slug=self.branch.inforequest.slug,
-            inforequest_pk=self.branch.inforequest.pk,
-            branch_pk=self.branch.pk,
-            step_idx=step.index,
-            )) + anchor
+        return reverse(u'inforequests:appeal', kwargs=dict(branch=self.branch, step=step)) + anchor
 
     def context(self, extra=None):
         res = super(AppealWizard, self).context(extra)

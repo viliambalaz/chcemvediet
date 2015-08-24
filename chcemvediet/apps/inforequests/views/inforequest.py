@@ -7,7 +7,8 @@ from django.contrib.sessions.models import Session
 from django.shortcuts import render
 from allauth.account.decorators import verified_email_required
 
-from poleno.utils.views import login_required, reverse
+from poleno.utils.urls import reverse
+from poleno.utils.views import login_required
 from poleno.utils.forms import clean_button
 from chcemvediet.apps.inforequests.forms import InforequestForm
 from chcemvediet.apps.inforequests.models import InforequestDraft, Inforequest, Branch
@@ -86,10 +87,7 @@ def inforequest_detail(request, inforequest_slug, inforequest_pk):
     inforequest = Inforequest.objects.owned_by(request.user).prefetch_detail().get_or_404(pk=inforequest_pk)
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:detail', kwargs=dict(
-            inforequest_slug=inforequest.slug,
-            inforequest_pk=inforequest.pk,
-            )))
+        return HttpResponseRedirect(reverse(u'inforequests:detail', kwargs=dict(inforequest=inforequest)))
 
     return render(request, u'inforequests/detail/detail.html', {
             u'inforequest': inforequest,

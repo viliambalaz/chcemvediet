@@ -15,7 +15,7 @@ from django.contrib.sessions.models import Session
 from poleno.attachments.forms import AttachmentsField
 from poleno.mail.models import Message
 from poleno.utils.models import after_saved
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.date import local_date
 from poleno.utils.misc import try_except, decorate
 from poleno.utils.admin import admin_obj_format, admin_obj_format_join, live_field

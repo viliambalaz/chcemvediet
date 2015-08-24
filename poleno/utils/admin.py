@@ -14,7 +14,7 @@ from django.utils.decorators import available_attrs
 from django.utils.safestring import mark_safe
 from django.contrib import admin
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 
 ADMIN_FIELD_INDENT = u'    • '
 

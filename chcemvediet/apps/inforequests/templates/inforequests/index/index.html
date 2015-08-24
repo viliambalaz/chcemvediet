@@ -1,6 +1,7 @@
 {# vim: set filetype=htmldjango :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
+{% load url from poleno.utils %}
 
 {% comment %}
  %
@@ -66,7 +67,7 @@
         {% for draft in drafts %}
           <tr>
             <td>
-              <a href="{% url 'inforequests:create' draft_pk=draft.pk %}">
+              <a href="{% url 'inforequests:create' draft=draft %}">
                 {% if draft.obligee %}
                   {{ draft.obligee.name }}
                 {% else %}
@@ -75,10 +76,10 @@
               </a>
             </td>
             <td class="text-right">
-              <a class="btn" href="{% url 'inforequests:create' draft_pk=draft.pk %}">
+              <a class="btn" href="{% url 'inforequests:create' draft=draft %}">
                 <i class="icon-edit"></i> {% trans 'inforequests:index:drafts:create_from_draft' %}
               </a>
-              <a class="btn post confirm" href="{% url 'inforequests:delete_draft' draft_pk=draft.pk %}"
+              <a class="btn post confirm" href="{% url 'inforequests:delete_draft' draft=draft %}"
                  data-post-csrfmiddlewaretoken="{{ csrf_token }}"
                  data-confirm="{% trans 'inforequests:index:draft:delete:confirm' %}">
                 <i class="icon-trash"></i> {% trans 'inforequests:index:draft:delete' %}

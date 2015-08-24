@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from aggregate_if import Count
 
 from poleno.mail.models import Message
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.misc import try_except, decorate
 from poleno.utils.admin import (simple_list_filter_factory, admin_obj_format,
         admin_obj_format_join, extend_model_admin)

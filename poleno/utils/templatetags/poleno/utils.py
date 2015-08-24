@@ -11,7 +11,7 @@ from django.contrib.webdesign.lorem_ipsum import paragraphs
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.misc import squeeze as squeeze_func
 from poleno.utils.date import utc_date as utc_date_func, local_date as local_date_func
 from poleno.utils.translation import translation
@@ -256,6 +256,10 @@ def change_lang(context, lang=None):
         url = reverse(view_name, kwargs=kwargs)
 
     return u'%s' % url
+
+@register.simple_tag
+def url(viewname, *args, **kwargs):
+    return reverse(viewname, args=args, kwargs=kwargs)
 
 @register.simple_tag
 def external_css():

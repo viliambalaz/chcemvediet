@@ -6,7 +6,7 @@ from django.core.urlresolvers import resolve
 from django.template import Library
 from django.utils.translation import get_language
 
-from poleno.utils.views import reverse
+from poleno.utils.urls import reverse
 from poleno.utils.translation import translation
 from poleno.pages.pages import File, Page
 
