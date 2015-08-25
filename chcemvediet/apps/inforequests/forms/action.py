@@ -10,22 +10,25 @@ from poleno.utils.template import lazy_render_to_string
 class ExtendDeadlineForm(PrefixedForm):
     template = u'inforequests/modals/extend_deadline.html'
 
-    applicant_extension = forms.IntegerField(
-            label=_(u'inforequests:ExtendDeadlineForm:applicant_extension:label'),
-            initial=5,
-            min_value=2,
-            max_value=100,
-            widget=forms.NumberInput(attrs={
-                u'placeholder': _(u'inforequests:ExtendDeadlineForm:applicant_extension:placeholder'),
-                u'class': u'with-tooltip',
-                u'data-toggle': u'tooltip',
-                u'title': lazy_render_to_string(u'inforequests/modals/tooltips/extend_deadline.txt'),
-                }),
-            )
+    def __init__(self, *args, **kwargs):
+        max_value = kwargs.pop(u'max_value')
+        super(ExtendDeadlineForm, self).__init__(*args, **kwargs)
+
+        self.fields[u'applicant_extension'] = forms.IntegerField(
+                label=_(u'inforequests:ExtendDeadlineForm:applicant_extension:label'),
+                initial=(2+max_value+1)/2,
+                min_value=2,
+                max_value=max_value,
+                widget=forms.NumberInput(attrs={
+                    u'placeholder': _(u'inforequests:ExtendDeadlineForm:applicant_extension:placeholder'),
+                    u'class': u'with-tooltip',
+                    u'data-toggle': u'tooltip',
+                    u'title': lazy_render_to_string(u'inforequests/modals/tooltips/extend_deadline.txt'),
+                    }),
+                )
 
     def save(self, action):
         assert self.is_valid()
-        assert action.deadline is not None
 
         # User sets the extended deadline relative to today.
         until_today = -action.deadline.calendar_days_remaining

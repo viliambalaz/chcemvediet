@@ -146,7 +146,7 @@
     </button>
   {% endif %}
   {% if forloop.last and not inforequest.closed and not inforequest.has_undecided_emails %}
-    {% if action.deadline and action.deadline.is_obligee_deadline and action.deadline.is_extended_deadline_missed %}
+    {% if action.can_applicant_extend %}
       <button type="button" class="btn btn-primary ajax ajax-modal-once with-tooltip"
               action="{% url 'inforequests:extend_deadline' action=action %}"
               data-type="html" data-target="#extend-deadline-{{ action.pk }}-modal"

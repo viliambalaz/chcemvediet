@@ -95,9 +95,7 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
 
     if action.pk != Action._meta.pk.to_python(action_pk):
         return HttpResponseNotFound()
-    if not action.deadline or not action.deadline.is_obligee_deadline:
-        return HttpResponseNotFound()
-    if not action.deadline.is_extended_deadline_missed:
+    if not action.can_applicant_extend:
         return HttpResponseNotFound()
     if inforequest.has_undecided_emails:
         return HttpResponseNotFound()
@@ -105,11 +103,13 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
         return HttpResponseRedirect(reverse(u'inforequests:extend_deadline',
                 kwargs=dict(action=action)))
 
+    max_value = action.max_applicant_extension
+
     if request.method != u'POST':
-        form = ExtendDeadlineForm(prefix=action.pk)
+        form = ExtendDeadlineForm(max_value=max_value, prefix=action.pk)
         return render_form(request, form, inforequest=inforequest, branch=branch, action=action)
 
-    form = ExtendDeadlineForm(request.POST, prefix=action.pk)
+    form = ExtendDeadlineForm(request.POST, max_value=max_value, prefix=action.pk)
     if not form.is_valid():
         return json_form(request, form, inforequest=inforequest, branch=branch, action=action)
 
