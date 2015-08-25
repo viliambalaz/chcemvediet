@@ -6,6 +6,7 @@ from django.utils.functional import cached_property
 
 from poleno import datacheck
 from poleno.utils.models import QuerySet, join_lookup, after_saved
+from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze, decorate
 
 class BranchQuerySet(QuerySet):
@@ -164,12 +165,11 @@ class Branch(models.Model):
 
     @cached_property
     def can_add_clarification_response(self):
-        return self.last_action.type == Action.TYPES.CLARIFICATION_REQUEST
+        return (self.last_action.type == Action.TYPES.CLARIFICATION_REQUEST
+                and -self.last_action.deadline.calendar_days_remaining <= 15)
 
     @cached_property
     def can_add_appeal(self):
-        if self.last_action.type == Action.TYPES.DISCLOSURE:
-            return self.last_action.disclosure_level != Action.DISCLOSURE_LEVELS.FULL
         if self.last_action.type in [
                 Action.TYPES.REQUEST,
                 Action.TYPES.CLARIFICATION_RESPONSE,
@@ -178,12 +178,22 @@ class Branch(models.Model):
                 Action.TYPES.REMANDMENT,
                 Action.TYPES.ADVANCED_REQUEST,
                 ]:
-            return self.last_action.deadline and self.last_action.deadline.is_deadline_missed
-        return self.last_action.type in [
+            # All these actions have deadlines
+            return self.last_action.deadline.is_deadline_missed
+
+        if self.last_action.type == Action.TYPES.ADVANCEMENT:
+            # Advancement has no deadline defined
+            return (local_today() - self.last_action.delivered_date).days <= 7
+
+        if self.last_action.type in [
+                Action.TYPES.DISCLOSURE,
                 Action.TYPES.REFUSAL,
-                Action.TYPES.ADVANCEMENT,
                 Action.TYPES.EXPIRATION,
-                ]
+                ]:
+            # Full disclosure has no deadline
+            return self.last_action.deadline and -self.last_action.deadline.calendar_days_remaining <= 15
+
+        return False
 
     @cached_property
     def can_add_confirmation(self):

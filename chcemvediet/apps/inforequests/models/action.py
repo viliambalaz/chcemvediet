@@ -344,6 +344,8 @@ class Action(models.Model):
                     self.applicant_extension or previous.applicant_extension)
 
         elif self.type == self.TYPES.ADVANCEMENT:
+            # The user may send an appeal after advancement. But it is not very common, so we don't
+            # show any deadline nor send deadline reminder.
             return None
 
         elif self.type == self.TYPES.CLARIFICATION_REQUEST:
