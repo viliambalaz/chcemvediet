@@ -109,10 +109,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     u'chcemvediet.context_processors.settings',
     )
 
+# Daily jobs do all their work the first time they are run in a day. Duplicte runs in the same day
+# should do nothing. However, we run them multiple times in a day in case something was broken and
+# the jobs failed earlier.
+CRON_USER_INTERACTION_TIMES = [u'09:00', u'10:00', u'11:00', u'12:00', u'13:00', u'14:00']
+CRON_IMPORTANT_MAINTENANCE_TIMES = [u'02:00', u'03:00', u'04:00', u'05:00']
+CRON_UNIMPORTANT_MAINTENANCE_TIMES = [u'04:00']
 CRON_CLASSES = (
     u'poleno.cron.cron.clear_old_cronlogs',
     u'poleno.datacheck.cron.datacheck',
     u'poleno.mail.cron.mail',
+    u'chcemvediet.apps.wizards.cron.delete_old_drafts',
     u'chcemvediet.apps.inforequests.cron.undecided_email_reminder',
     u'chcemvediet.apps.inforequests.cron.obligee_deadline_reminder',
     u'chcemvediet.apps.inforequests.cron.applicant_deadline_reminder',

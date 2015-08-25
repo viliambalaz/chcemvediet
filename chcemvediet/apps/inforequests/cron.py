@@ -13,13 +13,7 @@ from poleno.utils.misc import nop
 
 from .models import Inforequest, Branch, Action
 
-# All these jobs do all their work the first time they are run in a day. Any later runs in the same
-# day should do nothing. However, we run them multiple times in a day in case something was broken
-# at the morning and the jobs failed.
-REMINDER_TIMES = [u'09:00', u'10:00', u'11:00', u'12:00', u'13:00', u'14:00']
-MAINTENANCE_TIMES = [u'02:00', u'03:00', u'04:00', u'05:00']
-
-@cron_job(run_at_times=REMINDER_TIMES)
+@cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
 def undecided_email_reminder():
     with translation(settings.LANGUAGE_CODE):
@@ -64,7 +58,7 @@ def undecided_email_reminder():
                 msg = u'Sending undecided email reminder failed: %r\n%s'
                 cron_logger.error(msg % (inforequest, traceback.format_exc()))
 
-@cron_job(run_at_times=REMINDER_TIMES)
+@cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
 def obligee_deadline_reminder():
     with translation(settings.LANGUAGE_CODE):
@@ -115,7 +109,7 @@ def obligee_deadline_reminder():
                 msg = u'Sending obligee deadline reminder failed: %r\n%s'
                 cron_logger.error(msg % (branch.last_action, traceback.format_exc()))
 
-@cron_job(run_at_times=REMINDER_TIMES)
+@cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
 def applicant_deadline_reminder():
     with translation(settings.LANGUAGE_CODE):
@@ -162,7 +156,7 @@ def applicant_deadline_reminder():
                 msg = u'Sending applicant deadline reminder failed: %r\n%s'
                 cron_logger.error(msg % (branch.last_action, traceback.format_exc()))
 
-@cron_job(run_at_times=MAINTENANCE_TIMES)
+@cron_job(run_at_times=settings.CRON_IMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
 def close_inforequests():
     inforequests = (Inforequest.objects
@@ -197,7 +191,7 @@ def close_inforequests():
             msg = u'Closing inforequest failed: %r\n%s'
             cron_logger.error(msg % (inforequest, traceback.format_exc()))
 
-@cron_job(run_at_times=MAINTENANCE_TIMES)
+@cron_job(run_at_times=settings.CRON_IMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
 def add_expirations():
     inforequests = (Inforequest.objects

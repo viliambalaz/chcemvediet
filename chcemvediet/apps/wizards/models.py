@@ -1,6 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.contenttypes import generic
 from jsonfield import JSONField
 
 from poleno.utils.models import QuerySet
@@ -20,6 +21,9 @@ class WizardDraft(models.Model):
 
     # May NOT be NULL; Automatically updated on every save
     modified = models.DateTimeField(auto_now=True)
+
+    # May be empty; Backward generic relation
+    attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
 
     objects = WizardDraftQuerySet.as_manager()
 
