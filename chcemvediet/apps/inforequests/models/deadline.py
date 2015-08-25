@@ -113,10 +113,13 @@ class Deadline(object):
         return self.extended_deadline_date < at
 
     def __unicode__(self):
-        return u'<Deadline: {} {} for {} since {}{}>'.format(
+        return u'{} {} for {} since {}{}'.format(
                 self.value,
                 u'CD' if self.is_in_calendar_days else u'WD',
                 u'Applicant' if self.is_obligee_deadline else u'Obligee',
                 self.base_date,
                 u' +{0} CD'.format(self.applicant_extension) if self.applicant_extension else u'',
                 )
+
+    def __repr__(self):
+        return u'<Deadline: %s>' % unicode(self)

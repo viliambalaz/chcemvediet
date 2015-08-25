@@ -352,8 +352,9 @@ class Action(models.Model):
 
         elif self.type == self.TYPES.EXTENSION:
             previous = self.previous_action.deadline
+            obligee_extension = self.obligee_extension or 0
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
-                    previous.base_date, previous.value + self.obligee_extension, previous.unit,
+                    previous.base_date, previous.value + obligee_extension, previous.unit,
                     self.applicant_extension or previous.applicant_extension)
 
         elif self.type == self.TYPES.ADVANCEMENT:

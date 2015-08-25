@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
-from django.core.urlresolvers import reverse as django_reverse
+from django.core.urlresolvers import get_urlconf, get_resolver, reverse as django_reverse
 from django.contrib.sites.models import Site
 
 reverse_adaptors = defaultdict(list)
@@ -49,6 +49,10 @@ def reverse(viewname, urlconf=None, args=None, kwargs=None, prefix=None, current
     recostruct such urls with Django ``reverse()``. Unfortunatelly, if None occurs in the middle of
     ``args`` there is no way to fix it.
     """
+    # Make sure urls were included. Otherwise the adaptors don't have to be registered yet if this
+    # is the first call to the resolver.
+    get_resolver(urlconf or get_urlconf())._populate()
+
     for argname, adaptor in reverse_adaptors[viewname]:
         if kwargs and argname in kwargs:
             kwargs.update(adaptor(kwargs.pop(argname)))
