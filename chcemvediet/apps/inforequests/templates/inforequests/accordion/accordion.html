@@ -1,0 +1,67 @@
+{# vim: set filetype=htmldjango :#}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- last_action: chcemvediet.apps.inforequests.models.Action
+ %
+{% endcomment %}
+
+<h4>{% trans 'inforequests:accordion:heading' %}</h4>
+<div id="accordion-actions" class="accordion">
+  {% for action in last_action.action_path %}
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-actions" href="#accordion-action-{{ action.pk }}">
+          {{ action.get_type_display }}
+        </a>
+      </div>
+      <div id="accordion-action-{{ action.pk }}" class="accordion-body collapse">
+        <div class="accordion-inner">
+          {% if action.legal_date %}
+            <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
+            {{ action.legal_date }}<br>
+          {% endif %}
+          {% if action.type == action.TYPES.EXTENSION %}
+            <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
+            {% include "inforequests/accordion/texts/extension.html" %}<br>
+          {% endif %}
+          {% if action.file_number %}
+            <strong>{% trans 'inforequests:accordion:action:file_number' %}:</strong>
+            {{ action.file_number }}<br>
+          {% endif %}
+          {% if action.subject %}
+            <strong>{% trans 'inforequests:accordion:action:subject' %}:</strong>
+            {{ action.subject }}<br>
+          {% endif %}
+          {% if action.disclosure_level %}
+            <strong>{% trans 'inforequests:accordion:action:disclosure_level' %}:</strong>
+            {{ action.get_disclosure_level_display }}<br>
+          {% endif %}
+          {% if action.refusal_reason %}
+            <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
+            {{ action.get_refusal_reason_display }}<br>
+          {% endif %}
+          {% if action.attachments %}
+            <strong>{% trans 'inforequests:accordion:action:attachments' %}:</strong>
+            {% for attachment in action.attachments %}
+              <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+                <span class="label label-info">{{ attachment.name }}</span>
+              </a>
+            {% endfor %}<br>
+          {% endif %}
+          {% if action.content %}
+            <br>
+            {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
+              <p style="white-space: pre-line;">{{ action.content }}</p>
+            {% elif action.content_type == action.CONTENT_TYPES.HTML %}
+              {{ action.content|safe }}
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

@@ -295,6 +295,12 @@ class Action(models.Model):
         return self.branch.action_set.order_by_created().after(self).first()
 
     @cached_property
+    def action_path(self):
+        res = [] if self.branch.is_main else self.branch.advanced_by.action_path
+        res += self.branch.actions[:self.branch.actions.index(self)+1]
+        return res
+
+    @cached_property
     def is_applicant_action(self):
         return self.type in self.APPLICANT_ACTION_TYPES
 

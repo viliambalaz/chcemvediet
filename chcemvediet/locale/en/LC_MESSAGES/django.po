@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 21:51+0200\n"
+"POT-Creation-Date: 2015-08-28 00:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,6 +460,30 @@ msgstr "Unrelated"
 
 msgid "inforequests:InforequestEmail:type:UNKNOWN"
 msgstr "Unknown"
+
+msgid "inforequests:accordion:heading"
+msgstr "Request History"
+
+msgid "inforequests:accordion:action:legal_date"
+msgstr "Date"
+
+msgid "inforequests:accordion:action:extension"
+msgstr "Extension"
+
+msgid "inforequests:accordion:action:file_number"
+msgstr "File"
+
+msgid "inforequests:accordion:action:subject"
+msgstr "Subject"
+
+msgid "inforequests:accordion:action:disclosure_level"
+msgstr "Disclosure"
+
+msgid "inforequests:accordion:action:refusal_reason"
+msgstr "Refusal"
+
+msgid "inforequests:accordion:action:attachments"
+msgstr "Attachments"
 
 msgid "inforequests:appeals:title"
 msgstr "Odvolanie voči rozhodnutiu o nesprístupnení informácie"

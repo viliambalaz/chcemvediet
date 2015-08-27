@@ -27,3 +27,14 @@
   {% endif %}
   {{ block.super }}
 {% endblock %}
+
+{% block body-plus-footer %}
+  <div class="row">
+    <div class="span8">
+      {{ block.super }}
+    </div>
+    <div class="span4">
+      {% include "inforequests/accordion/accordion.html" %}
+    </div>
+  </div>
+{% endblock %}
