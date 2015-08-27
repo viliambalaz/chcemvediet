@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 18:57+0200\n"
+"POT-Creation-Date: 2015-08-27 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,13 +77,13 @@ msgstr "Manage Connections"
 msgid "inforequests:AppealPaperStep:legal_date:placeholder"
 msgstr "mm/dd/yyyy"
 
-msgid "inforequests:AppealPaperStep:legal_date:older_than_last_action_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:older_than_last_action"
 msgstr "May not be older than the previous action."
 
-msgid "inforequests:AppealPaperStep:legal_date:from_past_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:from_past"
 msgstr "May not be from the past."
 
-msgid "inforequests:AppealPaperStep:legal_date:too_far_from_future_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "May not be more than 5 days from the future."
 
 msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:yes"
@@ -185,13 +185,13 @@ msgstr "mm/dd/yyyy"
 msgid "inforequests:obligee_action:BasicsStep:attachments:label"
 msgstr "Attachments"
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_previous_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_previous"
 msgstr "May not be older than previous action."
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:from_future_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:from_future"
 msgstr "May not be from future."
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_month_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_month"
 msgstr "May not be older than one month."
 
 msgid "inforequests:obligee_action:IsQuestionStep:yes"
@@ -251,10 +251,10 @@ msgstr "Advanced To"
 msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_3:placeholder"
 msgstr "Obligee"
 
-msgid "inforequests:obligee_action:IsAdvancementStep:same_obligee_error"
+msgid "inforequests:obligee_action:IsAdvancementStep:error:same_obligee"
 msgstr "May not advance to the same obligee."
 
-msgid "inforequests:obligee_action:IsAdvancementStep:duplicate_obligee_error"
+msgid "inforequests:obligee_action:IsAdvancementStep:error:duplicate_obligee"
 msgstr "May not advance twice to the same obligee."
 
 msgid "inforequests:obligee_action:IsExtensionStep:yes"
@@ -344,25 +344,25 @@ msgstr "Appeal Delivered Date"
 msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:advanced_request"
 msgstr "Advancement Delivered Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:newer_than_delivered_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:newer_than_delivered_date"
 msgstr "May not be later than the delivered date."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_previous_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_previous"
 msgstr "May not be older than previous action."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:from_future_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:from_future"
 msgstr "May not be from future."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_month_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_month"
 msgstr "May not be older than one month."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:newer_than_legal_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:newer_than_legal_date"
 msgstr "May not be later than this lagal date."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:older_than_last_action_legal_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:older_than_last_action_legal_date"
 msgstr "May not be older than the respective legal date."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:from_future_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:from_future"
 msgstr "May not be from future."
 
 msgid "inforequests:Action:type:REQUEST"

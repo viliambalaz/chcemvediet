@@ -130,11 +130,11 @@ class BasicsStep(ObligeeActionStep):
         if delivered_date is not None:
             try:
                 if branch and delivered_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_previous_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_previous'))
                 if delivered_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:from_future_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:error:from_future'))
                 if delivered_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_month_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_month'))
             except ValidationError as e:
                 self.add_error(u'delivered_date', e)
 
@@ -356,11 +356,11 @@ class IsAdvancementStep(ObligeeActionStep):
             advanced_to = cleaned_data.get(field, None)
             try:
                 if advanced_to and advanced_to == branch.obligee:
-                    raise ValidationError(_(u'inforequests:obligee_action:IsAdvancementStep:same_obligee_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:IsAdvancementStep:error:same_obligee'))
                 for field_2 in self.ADVANCED_TO_FIELDS[0:i]:
                     advanced_to_2 = cleaned_data.get(field_2, None)
                     if advanced_to_2 and advanced_to_2 == advanced_to:
-                        raise ValidationError(_(u'inforequests:obligee_action:IsAdvancementStep:duplicate_obligee_error'))
+                        raise ValidationError(_(u'inforequests:obligee_action:IsAdvancementStep:error:duplicate_obligee'))
             except ValidationError as e:
                 self.add_error(field, e)
 
@@ -697,23 +697,23 @@ class CategorizedStep(ObligeeActionStep):
         if legal_date is not None:
             try:
                 if legal_date > delivered_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:newer_than_delivered_date_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:error:newer_than_delivered_date'))
                 if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:older_than_previous_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_previous'))
                 if legal_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:from_future_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:error:from_future'))
                 if legal_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:older_than_month_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_month'))
             except ValidationError as e:
                 self.add_error(u'legal_date', e)
         if last_action_delivered_date is not None:
             try:
                 if legal_date and last_action_delivered_date > legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:newer_than_legal_date_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:newer_than_legal_date'))
                 if last_action_delivered_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:older_than_last_action_legal_date_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:older_than_last_action_legal_date'))
                 if last_action_delivered_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:from_future_error'))
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:from_future'))
                 pass
             except ValidationError as e:
                 self.add_error(u'last_action_delivered_date', e)

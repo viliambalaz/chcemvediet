@@ -49,11 +49,11 @@ class AppealPaperStep(AppealStep, WizardPaperStep):
         if legal_date is not None:
             try:
                 if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:older_than_last_action_error'))
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:older_than_last_action'))
                 if legal_date < local_today():
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:from_past_error'))
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:from_past'))
                 if legal_date > local_today() + relativedelta(days=5):
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:too_far_from_future_error'))
+                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:too_far_from_future'))
             except ValidationError as e:
                 self.add_error(u'legal_date', e)
 

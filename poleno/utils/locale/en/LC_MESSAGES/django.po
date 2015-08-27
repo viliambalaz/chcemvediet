@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-30 06:24+0200\n"
+"POT-Creation-Date: 2015-08-27 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #, python-brace-format
-msgid "utils:validate_formatted_email:invalid_error {0}"
+msgid "utils:validate_formatted_email:error:invalid {0}"
 msgstr "\"{0}\" is not a valid email address."
 
 #, python-brace-format
-msgid "utils:validate_comma_separated_emails:invalid_error {0}"
+msgid "utils:validate_comma_separated_emails:error:invalid {0}"
 msgstr "\"{0}\" is not a valid email address."

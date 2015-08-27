@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 18:57+0200\n"
+"POT-Creation-Date: 2015-08-27 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,13 +77,13 @@ msgstr "Spravovať pripojenia"
 msgid "inforequests:AppealPaperStep:legal_date:placeholder"
 msgstr "dd.mm.yyyy"
 
-msgid "inforequests:AppealPaperStep:legal_date:older_than_last_action_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:older_than_last_action"
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
 
-msgid "inforequests:AppealPaperStep:legal_date:from_past_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:from_past"
 msgstr "Nesmie byť z minulosti."
 
-msgid "inforequests:AppealPaperStep:legal_date:too_far_from_future_error"
+msgid "inforequests:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "Nesmie byť viac ako 5 dní z budúcnosti."
 
 msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:yes"
@@ -185,13 +185,13 @@ msgstr "dd.mm.yyyy"
 msgid "inforequests:obligee_action:BasicsStep:attachments:label"
 msgstr "Prílohy"
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_previous_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_previous"
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:from_future_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:from_future"
 msgstr "Nesmie byť z budúcnosti."
 
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_month_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_month"
 msgstr "Nesmie byť starší ako 1 mesiac."
 
 msgid "inforequests:obligee_action:IsQuestionStep:yes"
@@ -251,10 +251,10 @@ msgstr "Postúpené pre"
 msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_3:placeholder"
 msgstr "Povinná osoba"
 
-msgid "inforequests:obligee_action:IsAdvancementStep:same_obligee_error"
+msgid "inforequests:obligee_action:IsAdvancementStep:error:same_obligee"
 msgstr "Nemožno postúpiť tej istej inštitúcii."
 
-msgid "inforequests:obligee_action:IsAdvancementStep:duplicate_obligee_error"
+msgid "inforequests:obligee_action:IsAdvancementStep:error:duplicate_obligee"
 msgstr "Nemožno postúpiť dvakrát tej istej inštitúcii."
 
 msgid "inforequests:obligee_action:IsExtensionStep:yes"
@@ -344,25 +344,25 @@ msgstr "Dátum doručenia odvolania"
 msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:advanced_request"
 msgstr "Dátum doručenia postúpenia"
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:newer_than_delivered_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:newer_than_delivered_date"
 msgstr "Nesmie byť novší ako dátum doručenia."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_previous_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_previous"
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:from_future_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:from_future"
 msgstr "Nesmie byť z budúcnosti."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_month_error"
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_month"
 msgstr "Nesmie byť starší ako 1 mesiac."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:newer_than_legal_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:newer_than_legal_date"
 msgstr "Nesmie byť novší ako dátum tohto úkonu."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:older_than_last_action_legal_date_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:older_than_last_action_legal_date"
 msgstr "Nesmie byť starší ako dátum prílušného úkonu."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:from_future_error"
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:from_future"
 msgstr "Nesmie byť z budúcnosti."
 
 msgid "inforequests:Action:type:REQUEST"
