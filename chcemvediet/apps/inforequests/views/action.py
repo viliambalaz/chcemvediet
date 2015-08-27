@@ -103,13 +103,11 @@ def extend_deadline(request, inforequest_slug, inforequest_pk, branch_pk, action
         return HttpResponseRedirect(reverse(u'inforequests:extend_deadline',
                 kwargs=dict(action=action)))
 
-    max_value = action.max_applicant_extension
-
     if request.method != u'POST':
-        form = ExtendDeadlineForm(max_value=max_value, prefix=action.pk)
+        form = ExtendDeadlineForm(prefix=action.pk)
         return render_form(request, form, inforequest=inforequest, branch=branch, action=action)
 
-    form = ExtendDeadlineForm(request.POST, max_value=max_value, prefix=action.pk)
+    form = ExtendDeadlineForm(request.POST, prefix=action.pk)
     if not form.is_valid():
         return json_form(request, form, inforequest=inforequest, branch=branch, action=action)
 

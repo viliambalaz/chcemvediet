@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-23 20:07+0200\n"
+"POT-Creation-Date: 2015-08-27 17:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,12 +73,6 @@ msgstr "Manage E-mails"
 
 msgid "accounts:profile:manage_connections"
 msgstr "Manage Connections"
-
-msgid "inforequests:ExtendDeadlineForm:applicant_extension:label"
-msgstr "Deadline Extension"
-
-msgid "inforequests:ExtendDeadlineForm:applicant_extension:placeholder"
-msgstr "Working Days"
 
 msgid "inforequests:AppealPaperStep:legal_date:placeholder"
 msgstr "mm/dd/yyyy"
@@ -522,7 +516,7 @@ msgid "inforequests:detail:action:print"
 msgstr "Print"
 
 msgid "inforequests:detail:action:extend_deadline"
-msgstr "Deadline is Missed, Extend it"
+msgstr "Wait 3 more days"
 
 msgid "inforequests:detail:action:clarification_response"
 msgstr "Clarification Response"
@@ -615,10 +609,10 @@ msgid "inforequests:index:closed:submission_date"
 msgstr "Submission Date"
 
 msgid "inforequests:modals:extend-deadline:heading"
-msgstr "Deadline Extension"
+msgstr "Wait 3 more days"
 
 msgid "inforequests:modals:extend-deadline:extend"
-msgstr "Extend Deadline"
+msgstr "Wait 3 days"
 
 msgid "inforequests:modals:close"
 msgstr "Close"

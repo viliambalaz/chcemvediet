@@ -28,9 +28,10 @@
   Lehota uplynula {{ action.deadline.deadline_date }}.
 {% elif not action.deadline.is_extended_deadline_missed %}
   Lehota uplynula {{ action.deadline.deadline_date }}.<br>
-  Lehotu ste predĺžili o {{ action.deadline.applicant_extension }} kalendárnych dni.
+  Uviedli, že ešte počkáte {{ action.deadline.applicant_extension }} kalendárne dni od uplynutia
+  lehoty, tj. do {{ action.deadline.extended_deadline_date }}.
 {% else %}
   Lehota uplynula {{ action.deadline.deadline_date }}.<br>
-  Lehotu ste predĺžili o {{ action.deadline.applicant_extension }} kalendárnych dni, ktoré však už
-  tiež uplynuli.
+  Uviedli, že ešte počkáte {{ action.deadline.applicant_extension }} kalendárne dni od uplynutia
+  lehoty, ale aj tie už uplynuli.
 {% endif %}

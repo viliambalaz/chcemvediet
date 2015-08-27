@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-23 20:07+0200\n"
+"POT-Creation-Date: 2015-08-27 17:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,12 +73,6 @@ msgstr "Spravovať e-maily"
 
 msgid "accounts:profile:manage_connections"
 msgstr "Spravovať pripojenia"
-
-msgid "inforequests:ExtendDeadlineForm:applicant_extension:label"
-msgstr "Predĺženie lehoty"
-
-msgid "inforequests:ExtendDeadlineForm:applicant_extension:placeholder"
-msgstr "pracovných dní"
 
 msgid "inforequests:AppealPaperStep:legal_date:placeholder"
 msgstr "dd.mm.yyyy"
@@ -522,7 +516,7 @@ msgid "inforequests:detail:action:print"
 msgstr "Vytlačiť"
 
 msgid "inforequests:detail:action:extend_deadline"
-msgstr "Lehota uplynula, predĺžte ju"
+msgstr "Počkať ešte 3 dni"
 
 msgid "inforequests:detail:action:clarification_response"
 msgstr "Odpoveď na výzvu na doplnenie žiadosti"
@@ -615,10 +609,10 @@ msgid "inforequests:index:closed:submission_date"
 msgstr "Dátum odoslania"
 
 msgid "inforequests:modals:extend-deadline:heading"
-msgstr "Oznámenie o predĺžení lehoty"
+msgstr "Počkať ešte 3 dni"
 
 msgid "inforequests:modals:extend-deadline:extend"
-msgstr "Oznámenie o predĺžení lehoty"
+msgstr "Počkať 3 dni"
 
 msgid "inforequests:modals:close"
 msgstr "Zavrieť"

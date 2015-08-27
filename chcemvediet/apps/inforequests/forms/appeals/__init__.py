@@ -78,12 +78,12 @@ class AppealFinalStep(AppealStep, WizardPrintStep):
 
         last_action = self.wizard.branch.last_action
         legal_date = self.wizard.values[u'legal_date']
-        if last_action.deadline and last_action.deadline.is_applicant_deadline:
+        if last_action.has_applicant_deadline:
             res.update({
                     u'is_deadline_missed_at_today': last_action.deadline.is_deadline_missed,
-                    u'calendar_days_remaining_at_today': last_action.deadline.calendar_days_remaining,
+                    u'calendar_days_behind_at_today': last_action.deadline.calendar_days_behind,
                     u'is_deadline_missed_at_legal_date': last_action.deadline.is_deadline_missed_at(legal_date),
-                    u'calendar_days_remaining_at_legal_date': last_action.deadline.calendar_days_remaining_at(legal_date),
+                    u'calendar_days_behind_at_legal_date': last_action.deadline.calendar_days_behind_at(legal_date),
                     })
 
         return res

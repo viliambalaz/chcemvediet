@@ -1,5 +1,5 @@
 {# vim: set filetype=django :#}
-{% load squeeze negate from poleno.utils %}
+{% load squeeze from poleno.utils %}
 
 {% comment %}
  %
@@ -20,7 +20,7 @@
     Vaša lehota
   {% endif %}
   {% if action.deadline.is_deadline_missed %}
-    uplynula pred {{ action.deadline.calendar_days_remaining|negate }} kalendárnymi dňami.
+    uplynula pred {{ action.deadline.calendar_days_behind }} kalendárnymi dňami.
   {% else %}
     uplynie o {{ action.deadline.calendar_days_remaining }} kalendárnych dni.
   {% endif %}

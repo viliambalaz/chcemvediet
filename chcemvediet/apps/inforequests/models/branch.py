@@ -166,7 +166,7 @@ class Branch(models.Model):
     @cached_property
     def can_add_clarification_response(self):
         return (self.last_action.type == Action.TYPES.CLARIFICATION_REQUEST
-                and -self.last_action.deadline.calendar_days_remaining <= 3)
+                and self.last_action.deadline.calendar_days_behind <= 3)
 
     @cached_property
     def can_add_appeal(self):
@@ -186,14 +186,14 @@ class Branch(models.Model):
             return (local_today() - self.last_action.delivered_date).days <= 7
 
         if self.last_action.type == Action.TYPES.REFUSAL:
-            return -self.last_action.deadline.calendar_days_remaining <= 7
+            return self.last_action.deadline.calendar_days_behind <= 7
 
         if self.last_action.type == Action.TYPES.DISCLOSURE:
             return (self.last_action.disclosure_level != Action.TYPES.FULL
-                    and -self.last_action.deadline.calendar_days_remaining <= 47)
+                    and self.last_action.deadline.calendar_days_behind <= 47)
 
         if self.last_action.type == Action.TYPES.EXPIRATION:
-            return -self.last_action.deadline.calendar_days_remaining <= 47
+            return self.last_action.deadline.calendar_days_behind <= 47
 
         return False
 
@@ -316,14 +316,13 @@ class Branch(models.Model):
         super(Branch, self).save(*args, **kwargs)
 
     def add_expiration_if_expired(self):
-        deadline = self.last_action.deadline
-        if not deadline or not deadline.is_obligee_deadline or not deadline.is_deadline_missed:
+        if not self.last_action.has_obligee_deadline_missed:
             return
         action_type = Action.TYPES.APPEAL_EXPIRATION if self.last_action.type == Action.TYPES.APPEAL else Action.TYPES.EXPIRATION
         expiration = Action.create(
                 branch=self,
                 type=action_type,
-                legal_date=deadline.deadline_date,
+                legal_date=self.last_action.deadline.deadline_date,
                 )
         expiration.save()
 

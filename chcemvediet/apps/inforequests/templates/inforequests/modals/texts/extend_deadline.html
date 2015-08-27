@@ -10,29 +10,17 @@
 {% endcomment %}
 
 <p>
-Môžete predĺžiť lehotu, keď vás chcemvediet.sk znova upozorní. Niekedy to je vhodné, ak viete, že
-inštitúcia je pomalá alebo dúfate, že ešte vám stále môže prísť požadovaná informácia.
+Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre {{ branch.historicalobligee.name }}
+{% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name }}{% endif %}
+bola {{ action.deadline.value }}
+{% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
+dni od {{ action.deadline.base_date }}.
+Lehota uplynula {{ action.deadline.deadline_date }}.
+Od vtedy prešlo {{ action.deadline.calendar_days_behind }} kalendárnych dni.
 </p>
+
 <p>
-{% if branch.is_main %}
-  Predĺžte lehotu na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
-  {{ branch.historicalobligee.name }}.
-{% else %}
-  Predĺžte lehotu na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
-  {{ inforequest.main_branch.historicalobligee.name }}
-  postúpenej {{ branch.historicalobligee.name }}.
-{% endif %}
-</p>
-<p>
-{% if action.deadline.is_in_calendar_days %}
-  Pôvodná lehota bola {{ action.deadline.value }} kalendárnych dni od
-  {{ action.deadline.base_date }}.
-{% else %}
-  Pôvodná lehota bola {{ action.deadline.value }} pracovných dni od
-  {{ action.deadline.base_date }}.
-{% endif %}
-{% if action.deadline.applicant_extension %}
-  Túto lehotu ste už o {{ action.deadline.applicant_extension }} kalendárnych dni predĺžili.
-{% endif %}
-Do dnes uplynulo {{ action.deadline.calendar_days_passed }} kalendárnych dni.
+Skôr než vykonáte ďalšiu akciu, môžete poskytnúť inštitúcii ešte pár dni na odpoveď. Niekedy to je
+vhodné, ak viete, že inštitúcia je pomalá alebo dúfate, že ešte vám stále môže prísť požadovaná
+informácia. Po uplynutí aj týcto dni vás chcemvediet.sk znova upozorní.
 </p>

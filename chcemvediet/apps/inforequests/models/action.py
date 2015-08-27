@@ -312,17 +312,32 @@ class Action(models.Model):
         return self.email_id is not None
 
     @cached_property
-    def max_applicant_extension(self):
-        u"""
-        Returns max number of days after today the user may extend the action deadline such that
-        the total extension since the deadline will not be more than 7 calendar days.
-        """
-        return self.deadline.calendar_days_remaining + 7
+    def has_obligee_deadline(self):
+        return self.deadline and self.deadline.is_obligee_deadline
+
+    @cached_property
+    def has_applicant_deadline(self):
+        return self.deadline and self.deadline.is_applicant_deadline
+
+    @cached_property
+    def has_obligee_deadline_missed(self):
+        return self.has_obligee_deadline and self.deadline.is_deadline_missed
+
+    @cached_property
+    def has_obligee_extended_deadline_missed(self):
+        return self.has_obligee_deadline and self.deadline.is_extended_deadline_missed
+
+    @cached_property
+    def has_applicant_deadline_missed(self):
+        return self.has_applicant_deadline and self.deadline.is_deadline_missed
 
     @cached_property
     def can_applicant_extend(self):
-        return (self.deadline and self.deadline.is_obligee_deadline
-                and self.deadline.is_extended_deadline_missed and self.max_applicant_extension >= 2)
+        u"""
+        Whether the applicant may extend the action deadline by 3 calendar days from today such
+        that the total extension since the deadline will not be more than 8 calendar days.
+        """
+        return self.has_obligee_extended_deadline_missed and 8 - self.deadline.calendar_days_behind >= 3
 
     @cached_property
     def deadline(self):

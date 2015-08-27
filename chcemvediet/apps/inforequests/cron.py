@@ -74,9 +74,7 @@ def obligee_deadline_reminder():
             for branch in inforequest.branches:
                 action = branch.last_action
                 try:
-                    if not action.deadline or not action.deadline.is_obligee_deadline:
-                        continue
-                    if not action.deadline.is_extended_deadline_missed:
+                    if not action.has_obligee_extended_deadline_missed:
                         continue
                     # The last reminder was sent after the deadline was extended for the last time
                     # iff the extended deadline was missed before the reminder was sent. We don't
@@ -125,7 +123,7 @@ def applicant_deadline_reminder():
             for branch in inforequest.branches:
                 action = branch.last_action
                 try:
-                    if not action.deadline or not action.deadline.is_applicant_deadline:
+                    if not action.has_applicant_deadline:
                         continue
                     # The reminder is sent 2 CD before the deadline is missed.
                     if action.deadline.calendar_days_remaining > 2:
@@ -170,7 +168,7 @@ def close_inforequests():
         try:
             for branch in inforequest.branches:
                 action = branch.last_action
-                if action.deadline and action.deadline.extended_calendar_days_remaining > -100:
+                if action.deadline and action.deadline.extended_calendar_days_behind < 100:
                     break
             else:
                 # Every branch that has a deadline have been missed for at least 100 WD.
@@ -206,14 +204,12 @@ def add_expirations():
         for branch in inforequest.branches:
             try:
                 action = branch.last_action
-                if not action.deadline or not action.deadline.is_obligee_deadline:
+                if not action.has_obligee_extended_deadline_missed:
                     continue
-                if not action.deadline.is_extended_deadline_missed:
+                if action.deadline.calendar_days_behind <= 8:
                     continue
-                if action.deadline.calendar_days_remaining >= -7:
-                    continue
-                # The last action obligee deadline was missed more than 7 calendar days ago. The
-                # applicant may extend the obligee deadline by 7 calendar days at most. So it's
+                # The last action obligee deadline was missed more than 8 calendar days ago. The
+                # applicant may extend the obligee deadline by 8 calendar days at most. So it's
                 # safe to add expiration now. The expiration action has 15 calendar days deadline
                 # of which about half is still left.
                 filtered.append(branch)

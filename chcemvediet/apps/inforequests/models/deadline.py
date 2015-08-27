@@ -81,6 +81,22 @@ class Deadline(object):
         return self.extended_workdays_remaining_at(self._today)
 
     @cached_property
+    def calendar_days_behind(self):
+        return -self.calendar_days_remaining
+
+    @cached_property
+    def workdays_behind(self):
+        return -self.workdays_remaining
+
+    @cached_property
+    def extended_calendar_days_behind(self):
+        return -self.extended_calendar_days_remaining
+
+    @cached_property
+    def extended_workdays_behind(self):
+        return -self.extended_workdays_remaining
+
+    @cached_property
     def is_deadline_missed(self):
         return self.is_deadline_missed_at(self._today)
 
@@ -105,6 +121,18 @@ class Deadline(object):
 
     def extended_workdays_remaining_at(self, at):
         return workdays.between(at, self.extended_deadline_date)
+
+    def calendar_days_behind_at(self, at):
+        return -calendar_days_remaining_at(self, at)
+
+    def workdays_behind_at(self, at):
+        return -workdays_remaining_at(self, at)
+
+    def extended_calendar_days_behind_at(self, at):
+        return -extended_calendar_days_remaining_at(self, at)
+
+    def extended_workdays_behind_at(self, at):
+        return -extended_workdays_remaining_at(self, at)
 
     def is_deadline_missed_at(self, at):
         return self.deadline_date < at

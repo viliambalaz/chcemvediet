@@ -26,8 +26,6 @@ class ExpirationAppealWizard(AppealWizard):
     def applicable(cls, branch):
         if branch.last_action.type == Action.TYPES.EXPIRATION:
             return True
-        if not branch.last_action.deadline or not branch.last_action.deadline.is_obligee_deadline:
-            return False
-        if not branch.last_action.deadline.is_deadline_missed:
+        if not branch.last_action.has_obligee_deadline_missed:
             return False
         return True

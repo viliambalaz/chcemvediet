@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango :#}
-{% load negate from poleno.utils %}
 
 {% comment %}
  %
@@ -21,7 +20,7 @@
     <h4>Zmeškaný termin</h4>
     <p>
     Termin na doplnenie žiadosti vypršal pred
-    {{ last_action.deadline.calendar_days_remaining|negate }} kalendárnymi dnami.
+    {{ last_action.deadline.calendar_days_behind }} kalendárnymi dnami.
     </p>
   </div>
 {% endif %}
