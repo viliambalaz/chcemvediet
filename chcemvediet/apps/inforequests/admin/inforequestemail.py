@@ -98,9 +98,6 @@ class InforequestEmailAdminDecideForm(forms.Form):
     legal_date = Action._meta.get_field(u'legal_date').formfield(
             widget=admin.widgets.AdminDateWidget(),
             )
-    applicant_extension = Action._meta.get_field(u'applicant_extension').formfield(
-            widget=admin.widgets.AdminIntegerFieldWidget(),
-            )
     disclosure_level = Action._meta.get_field(u'disclosure_level').formfield(
             )
     refusal_reason = Action._meta.get_field(u'refusal_reason').formfield(
@@ -139,7 +136,6 @@ class InforequestEmailAdminDecideForm(forms.Form):
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
                 legal_date=self.cleaned_data[u'legal_date'],
-                applicant_extension=self.cleaned_data[u'applicant_extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
                 refusal_reason=self.cleaned_data[u'refusal_reason'],
                 )
@@ -293,7 +289,6 @@ class InforequestEmailAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'content',
                     u'attachments',
                     u'legal_date',
-                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     u'obligee_set',

@@ -74,15 +74,14 @@ def obligee_deadline_reminder():
             for branch in inforequest.branches:
                 action = branch.last_action
                 try:
-                    if not action.has_obligee_extended_deadline_missed:
+                    if not action.has_obligee_deadline_snooze_missed:
                         continue
-                    # The last reminder was sent after the deadline was extended for the last time
-                    # iff the extended deadline was missed before the reminder was sent. We don't
-                    # want to send any more reminders if the last reminder was sent after the
-                    # deadline was extended for the last time.
+                    # The last reminder was sent after the applicant snoozed for the last time iff
+                    # the snooze was missed before the reminder was sent. We don't want to send any
+                    # more reminders if the last reminder was sent after the last snooze.
                     last = action.last_deadline_reminder
                     last_date = local_date(last) if last else None
-                    if last and action.deadline.is_extended_deadline_missed_at(last_date):
+                    if last and action.deadline.is_snooze_missed_at(last_date):
                         continue
                     filtered.append(branch)
                 except Exception:
@@ -128,7 +127,7 @@ def applicant_deadline_reminder():
                     # The reminder is sent 2 CD before the deadline is missed.
                     if action.deadline.calendar_days_remaining > 2:
                         continue
-                    # Applicant deadlines may not be extended, so we send at most one applicant
+                    # Applicant may not snooze his deadlines, so we send at most one applicant
                     # deadline reminder for the action.
                     if action.last_deadline_reminder:
                         continue
@@ -168,7 +167,7 @@ def close_inforequests():
         try:
             for branch in inforequest.branches:
                 action = branch.last_action
-                if action.deadline and action.deadline.extended_calendar_days_behind < 100:
+                if action.deadline and action.deadline.snooze_calendar_days_behind < 100:
                     break
             else:
                 # Every branch that has a deadline have been missed for at least 100 WD.
@@ -204,14 +203,14 @@ def add_expirations():
         for branch in inforequest.branches:
             try:
                 action = branch.last_action
-                if not action.has_obligee_extended_deadline_missed:
+                if not action.has_obligee_deadline_snooze_missed:
                     continue
                 if action.deadline.calendar_days_behind <= 8:
                     continue
                 # The last action obligee deadline was missed more than 8 calendar days ago. The
-                # applicant may extend the obligee deadline by 8 calendar days at most. So it's
-                # safe to add expiration now. The expiration action has 15 calendar days deadline
-                # of which about half is still left.
+                # applicant may snooze for at most 8 calendar days. So it's safe to add expiration
+                # now. The expiration action has 15 calendar days deadline of which about half is
+                # still left.
                 filtered.append(branch)
             except Exception:
                 msg = u'Checking if expiration action should be added failed: %r\n%s'

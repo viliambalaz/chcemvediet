@@ -146,15 +146,15 @@
     </button>
   {% endif %}
   {% if forloop.last and not inforequest.closed and not inforequest.has_undecided_emails %}
-    {% if action.can_applicant_extend %}
+    {% if action.can_applicant_snooze %}
       <button type="button" class="btn btn-primary ajax ajax-modal-once with-tooltip"
-              action="{% url 'inforequests:extend_deadline' action=action %}"
-              data-type="html" data-target="#extend-deadline-{{ action.pk }}-modal"
+              action="{% url 'inforequests:snooze' action=action %}"
+              data-type="html" data-target="#snooze-{{ action.pk }}-modal"
               data-fail-target="#ajax-fail-modal" data-toggle="tooltip" data-placement="right"
-              title="{% spaceless %}{% include "inforequests/detail/tooltips/extend_deadline.txt" %}{% endspaceless %}">
-        {% trans 'inforequests:detail:action:extend_deadline' %}
+              title="{% spaceless %}{% include "inforequests/detail/tooltips/snooze.txt" %}{% endspaceless %}">
+        {% trans 'inforequests:detail:action:snooze' %}
       </button>
-      <span id="extend-deadline-{{ action.pk }}-modal" class="modal ajax-operations hide fade"
+      <span id="snooze-{{ action.pk }}-modal" class="modal ajax-operations hide fade"
             data-fail-target="#ajax-fail-modal"></span>
     {% endif %}
     {% if branch.can_add_clarification_response %}

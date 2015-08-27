@@ -204,12 +204,11 @@ class Action(models.Model):
                 """))
 
     # May be NULL for actions with obligee deadline; NULL otherwise
-    applicant_extension = models.IntegerField(blank=True, null=True,
+    snooze = models.DateField(blank=True, null=True,
             help_text=squeeze(u"""
-                Applicant extension to the deadline, if the action sets an obligee deadline. The
-                applicant may extend the deadline after it is missed in order to be patient and
-                wait a little longer. He may extend it multiple times. Ignored for applicant
-                deadlines, as they may not be extended.
+                The applicant may snooze for few days after the obligee misses its deadline and
+                wait a little longer. He may snooze multiple times. Ignored for applicant
+                deadlines.
                 """))
 
     # NOT NULL for obligee actions that may disclose the information; NULL otherwise
@@ -316,28 +315,28 @@ class Action(models.Model):
         return self.deadline and self.deadline.is_obligee_deadline
 
     @cached_property
-    def has_applicant_deadline(self):
-        return self.deadline and self.deadline.is_applicant_deadline
-
-    @cached_property
     def has_obligee_deadline_missed(self):
         return self.has_obligee_deadline and self.deadline.is_deadline_missed
 
     @cached_property
-    def has_obligee_extended_deadline_missed(self):
-        return self.has_obligee_deadline and self.deadline.is_extended_deadline_missed
+    def has_obligee_deadline_snooze_missed(self):
+        return self.has_obligee_deadline and self.deadline.is_snooze_missed
+
+    @cached_property
+    def has_applicant_deadline(self):
+        return self.deadline and self.deadline.is_applicant_deadline
 
     @cached_property
     def has_applicant_deadline_missed(self):
         return self.has_applicant_deadline and self.deadline.is_deadline_missed
 
     @cached_property
-    def can_applicant_extend(self):
+    def can_applicant_snooze(self):
         u"""
-        Whether the applicant may extend the action deadline by 3 calendar days from today such
-        that the total extension since the deadline will not be more than 8 calendar days.
+        Whether the applicant may snooze for 3 calendar days sinde today such that the total snooze
+        since the deadline date will not be more than 8 calendar days.
         """
-        return self.has_obligee_extended_deadline_missed and 8 - self.deadline.calendar_days_behind >= 3
+        return self.has_obligee_deadline_snooze_missed and 8 - self.deadline.calendar_days_behind >= 3
 
     @cached_property
     def deadline(self):
@@ -346,31 +345,31 @@ class Action(models.Model):
         if self.type == self.TYPES.REQUEST:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     self.delivered_date or workdays.advance(self.sent_date, 1),
-                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    8, Deadline.UNITS.WORKDAYS, self.snooze)
 
         elif self.type == self.TYPES.CLARIFICATION_RESPONSE:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     self.delivered_date or workdays.advance(self.sent_date, 1),
-                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    8, Deadline.UNITS.WORKDAYS, self.snooze)
 
         elif self.type == self.TYPES.APPEAL:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     self.delivered_date or workdays.advance(self.sent_date, 6),
-                    15, Deadline.UNITS.CALENDAR_DAYS, self.applicant_extension)
+                    15, Deadline.UNITS.CALENDAR_DAYS, self.snooze)
 
         # Obligee actions
         elif self.type == self.TYPES.CONFIRMATION:
             previous = self.previous_action.deadline
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     previous.base_date, previous.value, previous.unit,
-                    self.applicant_extension or previous.applicant_extension)
+                    self.snooze or previous.snooze)
 
         elif self.type == self.TYPES.EXTENSION:
             previous = self.previous_action.deadline
             obligee_extension = self.obligee_extension or 0
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     previous.base_date, previous.value + obligee_extension, previous.unit,
-                    self.applicant_extension)
+                    self.snooze or previous.snooze)
 
         elif self.type == self.TYPES.ADVANCEMENT:
             # The user may send an appeal after advancement. But it is not very common, so we don't
@@ -400,13 +399,13 @@ class Action(models.Model):
         elif self.type == self.TYPES.REMANDMENT:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     workdays.advance(self.legal_date, 4),
-                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    8, Deadline.UNITS.WORKDAYS, self.snooze)
 
         # Implicit actions
         elif self.type == self.TYPES.ADVANCED_REQUEST:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     workdays.advance(self.legal_date, 4),
-                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    8, Deadline.UNITS.WORKDAYS, self.snooze)
 
         elif self.type == self.TYPES.EXPIRATION:
             return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,

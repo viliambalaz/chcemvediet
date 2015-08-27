@@ -27,8 +27,8 @@
     Pôvodná lehota bola {{ action.deadline.value }} pracovných dni od
     {{ action.deadline.base_date }}.
   {% endif %}
-  {% if action.deadline.applicant_extension %}
-    Túto lehotu ste už o {{ action.deadline.applicant_extension }} kalendárnych dni predĺžili.
+  {% if action.deadline.is_snoozed %}
+    Túto lehotu ste už o {{ action.deadline.snooze_in_calendar_days }} kalendárnych dni predĺžili.
   {% endif %}
   Do dnes uplynulo {{ action.deadline.calendar_days_passed }} kalendárnych dni.
 {% endfilter %}

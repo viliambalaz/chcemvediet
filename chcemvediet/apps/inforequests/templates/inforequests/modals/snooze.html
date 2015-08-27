@@ -8,26 +8,26 @@
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- branch: chcemvediet.apps.inforequests.models.Branch
  %  -- action: chcemvediet.apps.inforequests.models.Action
- %  -- form: chcemvediet.apps.inforequests.forms.ExtendDeadlineForm
+ %  -- form: chcemvediet.apps.inforequests.forms.SnoozeForm
  %
 {% endcomment %}
 
 <form class="form-horizontal ajax" method="post"
-      action="{% url 'inforequests:extend_deadline' action=action %}">
+      action="{% url 'inforequests:snooze' action=action %}">
   {% csrf_token %}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h3>{% trans 'inforequests:modals:extend-deadline:heading' %}</h3>
+    <h3>{% trans 'inforequests:modals:snooze:heading' %}</h3>
   </div>
   <div class="modal-body">
-    {% include "inforequests/modals/texts/extend_deadline.html" %}
+    {% include "inforequests/modals/texts/snooze.html" %}
     <div>
       {% include "main/snippets/form_horizontal.html" with form=form %}
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" name="button" value="extend">
-      {% trans 'inforequests:modals:extend-deadline:extend' %}
+    <button type="submit" class="btn btn-primary" name="button" value="snooze">
+      {% trans 'inforequests:modals:snooze:snooze' %}
     </button>
     <button type="button" class="btn" data-dismiss="modal">
       <i class="icon-remove"></i> {% trans 'inforequests:modals:close' %}

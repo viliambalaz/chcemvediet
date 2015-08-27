@@ -20,12 +20,12 @@ class Deadline(object):
             WORKDAYS = 2,
             )
 
-    def __init__(self, type, base_date, value, unit, applicant_extension):
+    def __init__(self, type, base_date, value, unit, snooze):
         self.type = type
         self.base_date = base_date
         self.value = value
         self.unit = unit
-        self.applicant_extension = applicant_extension or 0
+        self._snooze = snooze
         self._today = local_today()
 
     @property
@@ -52,93 +52,108 @@ class Deadline(object):
             return workdays.advance(self.base_date, self.value)
 
     @cached_property
-    def extended_deadline_date(self):
-        # Applicant extension is always in calendar days
-        return self.deadline_date + datetime.timedelta(days=self.applicant_extension)
-
-    @cached_property
     def calendar_days_passed(self):
         return self.calendar_days_passed_at(self._today)
+
+    def calendar_days_passed_at(self, at):
+        return (at - self.base_date).days
 
     @cached_property
     def workdays_passed(self):
         return self.workdays_passed(self._today)
 
+    def workdays_passed_at(self, at):
+        return workdays.between(self.base_date, at)
+
     @cached_property
     def calendar_days_remaining(self):
         return self.calendar_days_remaining_at(self._today)
+
+    def calendar_days_remaining_at(self, at):
+        return (self.deadline_date - at).days
 
     @cached_property
     def workdays_remaining(self):
         return self.workdays_remaining_at(self._today)
 
-    @cached_property
-    def extended_calendar_days_remaining(self):
-        return self.extended_calendar_days_remaining_at(self._today)
-
-    @cached_property
-    def extended_workdays_remaining(self):
-        return self.extended_workdays_remaining_at(self._today)
+    def workdays_remaining_at(self, at):
+        return workdays.between(at, self.deadline_date)
 
     @cached_property
     def calendar_days_behind(self):
         return -self.calendar_days_remaining
 
+    def calendar_days_behind_at(self, at):
+        return -self.calendar_days_remaining_at(at)
+
     @cached_property
     def workdays_behind(self):
         return -self.workdays_remaining
 
-    @cached_property
-    def extended_calendar_days_behind(self):
-        return -self.extended_calendar_days_remaining
-
-    @cached_property
-    def extended_workdays_behind(self):
-        return -self.extended_workdays_remaining
+    def workdays_behind_at(self, at):
+        return -self.workdays_remaining_at(at)
 
     @cached_property
     def is_deadline_missed(self):
         return self.is_deadline_missed_at(self._today)
 
-    @cached_property
-    def is_extended_deadline_missed(self):
-        return self.is_extended_deadline_missed_at(self._today)
-
-    def calendar_days_passed_at(self, at):
-        return (at - self.base_date).days
-
-    def workdays_passed_at(self, at):
-        return workdays.between(self.base_date, at)
-
-    def calendar_days_remaining_at(self, at):
-        return (self.deadline_date - at).days
-
-    def workdays_remaining_at(self, at):
-        return workdays.between(at, self.deadline_date)
-
-    def extended_calendar_days_remaining_at(self, at):
-        return (self.extended_deadline_date - at).days
-
-    def extended_workdays_remaining_at(self, at):
-        return workdays.between(at, self.extended_deadline_date)
-
-    def calendar_days_behind_at(self, at):
-        return -calendar_days_remaining_at(self, at)
-
-    def workdays_behind_at(self, at):
-        return -workdays_remaining_at(self, at)
-
-    def extended_calendar_days_behind_at(self, at):
-        return -extended_calendar_days_remaining_at(self, at)
-
-    def extended_workdays_behind_at(self, at):
-        return -extended_workdays_remaining_at(self, at)
-
     def is_deadline_missed_at(self, at):
         return self.deadline_date < at
 
-    def is_extended_deadline_missed_at(self, at):
-        return self.extended_deadline_date < at
+    @cached_property
+    def snooze_date(self):
+        res = self._snooze or self.deadline_date
+        res = max(res, self.deadline_date)
+        res = min(res, self.deadline_date + datetime.timedelta(days=8))
+        return res
+
+    @cached_property
+    def is_snoozed(self):
+        return self.snooze_date > self.deadline_date
+
+    @cached_property
+    def snooze_in_calendar_days(self):
+        return self.calendar_days_behind_at(self.snooze_date)
+
+    @cached_property
+    def snooze_in_workdays(self):
+        return self.workdays_behind_at(self.snooze_date)
+
+    @cached_property
+    def snooze_calendar_days_remaining(self):
+        return self.snooze_calendar_days_remaining_at(self._today)
+
+    def snooze_calendar_days_remaining_at(self, at):
+        return (self.snooze_date - at).days
+
+    @cached_property
+    def snooze_workdays_remaining(self):
+        return self.snooze_workdays_remaining_at(self._today)
+
+    def snooze_workdays_remaining_at(self, at):
+        return workdays.between(at, self.snooze_date)
+
+    @cached_property
+    def snooze_calendar_days_behind(self):
+        return -self.snooze_calendar_days_remaining
+
+    def snooze_calendar_days_behind_at(self, at):
+        return -self.snooze_calendar_days_remaining_at(at)
+
+    @cached_property
+    def snooze_workdays_behind(self):
+        return -self.snooze_workdays_remaining
+
+    def snooze_workdays_behind_at(self, at):
+        return -self.snooze_workdays_remaining_at(at)
+
+    @cached_property
+    def is_snooze_missed(self):
+        return self.is_snooze_missed_at(self._today)
+
+    def is_snooze_missed_at(self, at):
+        return self.snooze_date < at
+
 
     def __unicode__(self):
         return u'{} {} for {} since {}{}'.format(
@@ -146,7 +161,7 @@ class Deadline(object):
                 u'CD' if self.is_in_calendar_days else u'WD',
                 u'Applicant' if self.is_obligee_deadline else u'Obligee',
                 self.base_date,
-                u' +{0} CD'.format(self.applicant_extension) if self.applicant_extension else u'',
+                u' +{0} CD'.format(self.snooze_in_calendar_days) if self.snooze_date != self.deadline_date else u'',
                 )
 
     def __repr__(self):

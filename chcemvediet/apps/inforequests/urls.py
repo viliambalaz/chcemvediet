@@ -24,7 +24,7 @@ parts = {
     u'obligee_action':         lazy_concat(_(u'inforequests:urls:obligee_action'), u'/'),
     u'clarification_response': lazy_concat(_(u'inforequests:urls:clarification_response'), u'/'),
     u'appeal':                 lazy_concat(_(u'inforequests:urls:appeal'), u'/'),
-    u'extend_deadline':        lazy_concat(_(u'inforequests:urls:extend_deadline'), u'/'),
+    u'snooze':                 lazy_concat(_(u'inforequests:urls:snooze'), u'/'),
     u'attachments':            lazy_concat(_(u'inforequests:urls:attachments'), u'/'),
     }
 
@@ -36,7 +36,7 @@ urlpatterns = patterns(u'',
     url(lazy_format(r'^{inforequest_slug_pk}{obligee_action}{step_idx?}$', **parts),                    views.obligee_action,           name=u'obligee_action'),
     url(lazy_format(r'^{inforequest_slug_pk}{clarification_response}{branch_pk}{step_idx?}$', **parts), views.clarification_response,   name=u'clarification_response'),
     url(lazy_format(r'^{inforequest_slug_pk}{appeal}{branch_pk}{step_idx?}$', **parts),                 views.appeal,                   name=u'appeal'),
-    url(lazy_format(r'^{inforequest_slug_pk}{extend_deadline}{branch_pk}{action_pk}$', **parts),        views.extend_deadline,          name=u'extend_deadline'),
+    url(lazy_format(r'^{inforequest_slug_pk}{snooze}{branch_pk}{action_pk}$', **parts),                 views.snooze,                   name=u'snooze'),
     url(lazy_format(r'^{attachments}$', **parts),                                                       views.attachment_upload,        name=u'upload_attachment'),
     url(lazy_format(r'^{attachments}{attachment_pk}$', **parts),                                        views.attachment_download,      name=u'download_attachment'),
 )
@@ -79,7 +79,7 @@ def branch_adaptor(branch):
             branch_pk=branch.pk,
             )
 
-@reverse_adaptor(u'inforequests:extend_deadline', u'action')
+@reverse_adaptor(u'inforequests:snooze', u'action')
 def action_adaptor(action):
     return dict(
             inforequest_slug=action.branch.inforequest.slug,

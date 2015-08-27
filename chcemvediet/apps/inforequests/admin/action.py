@@ -105,7 +105,6 @@ class ActionAdminAddForm(forms.ModelForm):
                 subject=self.cleaned_data[u'subject'],
                 content=self.cleaned_data[u'content'],
                 legal_date=self.cleaned_data[u'legal_date'],
-                applicant_extension=self.cleaned_data[u'applicant_extension'],
                 disclosure_level=self.cleaned_data[u'disclosure_level'],
                 refusal_reason=self.cleaned_data[u'refusal_reason'],
                 )
@@ -264,7 +263,6 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'subject',
                     u'content',
                     u'legal_date',
-                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     ],
@@ -292,7 +290,6 @@ class ActionAdmin(AdminLiveFieldsMixin, admin.ModelAdmin):
                     u'content',
                     u'attachments',
                     u'legal_date',
-                    u'applicant_extension',
                     u'disclosure_level',
                     u'refusal_reason',
                     u'obligee_set',
