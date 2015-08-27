@@ -127,8 +127,8 @@ def applicant_deadline_reminder():
                 try:
                     if not action.deadline or not action.deadline.is_applicant_deadline:
                         continue
-                    # The reminder is sent 2 WDs before the deadline is missed.
-                    if action.deadline.workdays_remaining > 2:
+                    # The reminder is sent 2 CD before the deadline is missed.
+                    if action.deadline.calendar_days_remaining > 2:
                         continue
                     # Applicant deadlines may not be extended, so we send at most one applicant
                     # deadline reminder for the action.

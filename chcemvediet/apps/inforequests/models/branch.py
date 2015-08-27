@@ -166,7 +166,7 @@ class Branch(models.Model):
     @cached_property
     def can_add_clarification_response(self):
         return (self.last_action.type == Action.TYPES.CLARIFICATION_REQUEST
-                and -self.last_action.deadline.calendar_days_remaining <= 15)
+                and -self.last_action.deadline.calendar_days_remaining <= 3)
 
     @cached_property
     def can_add_appeal(self):
@@ -185,13 +185,15 @@ class Branch(models.Model):
             # Advancement has no deadline defined
             return (local_today() - self.last_action.delivered_date).days <= 7
 
-        if self.last_action.type in [
-                Action.TYPES.DISCLOSURE,
-                Action.TYPES.REFUSAL,
-                Action.TYPES.EXPIRATION,
-                ]:
-            # Full disclosure has no deadline
-            return self.last_action.deadline and -self.last_action.deadline.calendar_days_remaining <= 15
+        if self.last_action.type == Action.TYPES.REFUSAL:
+            return -self.last_action.deadline.calendar_days_remaining <= 7
+
+        if self.last_action.type == Action.TYPES.DISCLOSURE:
+            return (self.last_action.disclosure_level != Action.TYPES.FULL
+                    and -self.last_action.deadline.calendar_days_remaining <= 47)
+
+        if self.last_action.type == Action.TYPES.EXPIRATION:
+            return -self.last_action.deadline.calendar_days_remaining <= 47
 
         return False
 

@@ -340,7 +340,7 @@ class Action(models.Model):
 
         elif self.type == self.TYPES.APPEAL:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
-                    self.delivered_date or workdays.advance(self.sent_date, 3),
+                    self.delivered_date or workdays.advance(self.sent_date, 6),
                     15, Deadline.UNITS.CALENDAR_DAYS, self.applicant_extension)
 
         # Obligee actions
@@ -355,7 +355,7 @@ class Action(models.Model):
             obligee_extension = self.obligee_extension or 0
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     previous.base_date, previous.value + obligee_extension, previous.unit,
-                    self.applicant_extension or previous.applicant_extension)
+                    self.applicant_extension)
 
         elif self.type == self.TYPES.ADVANCEMENT:
             # The user may send an appeal after advancement. But it is not very common, so we don't
@@ -384,14 +384,14 @@ class Action(models.Model):
 
         elif self.type == self.TYPES.REMANDMENT:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
-                    workdays.advance(self.legal_date, 3),
-                    13, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    workdays.advance(self.legal_date, 4),
+                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
 
         # Implicit actions
         elif self.type == self.TYPES.ADVANCED_REQUEST:
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
-                    workdays.advance(self.legal_date, 3),
-                    20, Deadline.UNITS.WORKDAYS, self.applicant_extension)
+                    workdays.advance(self.legal_date, 4),
+                    8, Deadline.UNITS.WORKDAYS, self.applicant_extension)
 
         elif self.type == self.TYPES.EXPIRATION:
             return Deadline(Deadline.TYPES.APPLICANT_DEADLINE,
