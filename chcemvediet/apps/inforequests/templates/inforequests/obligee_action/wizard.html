@@ -39,16 +39,16 @@
 {% block footer-cancel-href %}{{ inforequest.get_absolute_url }}{% endblock %}
 
 {% block body-plus-footer %}
-  {% if wizard.values.branch %}
-    <div class="row">
-      <div class="span8">
-        {{ block.super }}
-      </div>
-      <div class="span4">
-        {% include "inforequests/accordion/accordion.html" with last_action=wizard.values.branch.last_action %}
-      </div>
+  <div class="row">
+    <div class="span8">
+      {{ block.super }}
     </div>
-  {% else %}
-    {{ block.super }}
-  {% endif %}
+    <div class="span4">
+      {% if wizard.values.branch %}
+        {% include "inforequests/accordion/accordion.html" with last_action=wizard.values.branch.last_action %}
+      {% else %}
+        {% include "inforequests/accordion/accordion.html" with last_action=inforequest.main_branch.last_action %}
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
