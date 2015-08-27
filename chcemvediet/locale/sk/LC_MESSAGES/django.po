@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 17:59+0200\n"
+"POT-Creation-Date: 2015-08-27 18:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,38 +176,17 @@ msgstr "V texte sa nespomínajú žiadne dôvody"
 msgid "inforequests:obligee_action:BasicsStep:branch:label"
 msgstr "Povinná osoba"
 
-msgid "inforequests:obligee_action:BasicsStep:legal_date:label"
-msgstr "Dátum úkonu"
-
-msgid "inforequests:obligee_action:BasicsStep:legal_date:placeholder"
-msgstr "dd.mm.yyyy"
-
 msgid "inforequests:obligee_action:BasicsStep:delivered_date:label"
 msgstr "Dátum doručenia"
 
 msgid "inforequests:obligee_action:BasicsStep:delivered_date:placeholder"
 msgstr "dd.mm.yyyy"
 
-msgid "inforequests:obligee_action:BasicsStep:file_number:label"
-msgstr "Číslo spisu"
-
-msgid "inforequests:obligee_action:BasicsStep:file_number:placeholder"
-msgstr "Číslo spisu"
-
 msgid "inforequests:obligee_action:BasicsStep:attachments:label"
 msgstr "Prílohy"
 
-msgid "inforequests:obligee_action:BasicsStep:legal_date:older_than_previous_error"
+msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_previous_error"
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
-
-msgid "inforequests:obligee_action:BasicsStep:legal_date:from_future_error"
-msgstr "Nesmie byť z budúcnosti."
-
-msgid "inforequests:obligee_action:BasicsStep:legal_date:older_than_month_error"
-msgstr "Nesmie byť starší ako 1 mesiac."
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:older_than_legal_date"
-msgstr "Nesmie byť starší ako dátum úkonu."
 
 msgid "inforequests:obligee_action:BasicsStep:delivered_date:from_future_error"
 msgstr "Nesmie byť z budúcnosti."
@@ -337,6 +316,54 @@ msgstr "Správa pre admina"
 
 msgid "inforequests:obligee_action:NotCategorizedStep:help_request:placeholder"
 msgstr "Popíšte adminovi, čomu ste nerozumeli"
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:label"
+msgstr "Dátum úkonu"
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:placeholder"
+msgstr "dd.mm.yyyy"
+
+msgid "inforequests:obligee_action:CategorizedStep:file_number:label"
+msgstr "Číslo spisu"
+
+msgid "inforequests:obligee_action:CategorizedStep:file_number:placeholder"
+msgstr "Číslo spisu"
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:placeholder"
+msgstr "dd.mm.yyyy"
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:request"
+msgstr "Dátum doručenia žiadosti"
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:clarification_response"
+msgstr "Dátum doručenia doplnenia"
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:appeal"
+msgstr "Dátum doručenia odvolania"
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:advanced_request"
+msgstr "Dátum doručenia postúpenia"
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:newer_than_delivered_date_error"
+msgstr "Nesmie byť novší ako dátum doručenia."
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_previous_error"
+msgstr "Nesmie byť starší ako dátum predošlej akcie."
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:from_future_error"
+msgstr "Nesmie byť z budúcnosti."
+
+msgid "inforequests:obligee_action:CategorizedStep:legal_date:older_than_month_error"
+msgstr "Nesmie byť starší ako 1 mesiac."
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:newer_than_legal_date_error"
+msgstr "Nesmie byť novší ako dátum tohto úkonu."
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:older_than_last_action_legal_date_error"
+msgstr "Nesmie byť starší ako dátum prílušného úkonu."
+
+msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:from_future_error"
+msgstr "Nesmie byť z budúcnosti."
 
 msgid "inforequests:Action:type:REQUEST"
 msgstr "Žiadosť"

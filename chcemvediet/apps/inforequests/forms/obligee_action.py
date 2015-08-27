@@ -79,29 +79,12 @@ class BasicsStep(ObligeeActionStep):
                     u'class': u'suppressed-control',
                     }),
             )
-    legal_date = forms.DateField(
-            label=_(u'inforequests:obligee_action:BasicsStep:legal_date:label'),
-            localize=True,
-            widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:obligee_action:BasicsStep:legal_date:placeholder'),
-                u'class': u'datepicker',
-                }),
-            )
     delivered_date = forms.DateField(
             label=_(u'inforequests:obligee_action:BasicsStep:delivered_date:label'),
             localize=True,
             widget=forms.DateInput(attrs={
                 u'placeholder': _('inforequests:obligee_action:BasicsStep:delivered_date:placeholder'),
                 u'class': u'datepicker',
-                }),
-            )
-    file_number = forms.CharField(
-            label=_(u'inforequests:obligee_action:BasicsStep:file_number:label'),
-            max_length=255,
-            required=False,
-            widget=forms.TextInput(attrs={
-                u'placeholder': _(u'inforequests:obligee_action:BasicsStep:file_number:placeholder'),
-                u'class': u'span5',
                 }),
             )
     attachments = AttachmentsField(
@@ -143,22 +126,11 @@ class BasicsStep(ObligeeActionStep):
         cleaned_data = super(BasicsStep, self).clean()
 
         branch = cleaned_data.get(u'branch', None)
-        legal_date = cleaned_data.get(u'legal_date', None)
         delivered_date = cleaned_data.get(u'delivered_date', None)
-        if legal_date is not None:
-            try:
-                if branch and legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:older_than_previous_error'))
-                if legal_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:from_future_error'))
-                if legal_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:legal_date:older_than_month_error'))
-            except ValidationError as e:
-                self.add_error(u'legal_date', e)
         if delivered_date is not None:
             try:
-                if legal_date and delivered_date < legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_legal_date'))
+                if branch and delivered_date < branch.last_action.legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:older_than_previous_error'))
                 if delivered_date > local_today():
                     raise ValidationError(_(u'inforequests:obligee_action:BasicsStep:delivered_date:from_future_error'))
                 if delivered_date < local_today() - relativedelta(months=1):
@@ -180,9 +152,7 @@ class BasicsStep(ObligeeActionStep):
     def values(self):
         res = super(BasicsStep, self).values()
         res[u'result_branch'] = self.cleaned_data[u'branch']
-        res[u'result_legal_date'] = self.cleaned_data[u'legal_date']
         res[u'result_delivered_date'] = self.cleaned_data[u'delivered_date'] if not self.wizard.email else local_date(self.wizard.email.processed)
-        res[u'result_file_number'] = self.cleaned_data[u'file_number']
         res[u'result_attachments'] = self.cleaned_data[u'attachments'] if not self.wizard.email else None
         return res
 
@@ -669,11 +639,93 @@ class NotCategorizedStep(ObligeeActionStep):
 class CategorizedStep(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/categorized.html'
 
+    legal_date = forms.DateField(
+            label=_(u'inforequests:obligee_action:CategorizedStep:legal_date:label'),
+            localize=True,
+            widget=forms.DateInput(attrs={
+                u'placeholder': _('inforequests:obligee_action:CategorizedStep:legal_date:placeholder'),
+                u'class': u'datepicker',
+                }),
+            )
+    file_number = forms.CharField(
+            label=_(u'inforequests:obligee_action:CategorizedStep:file_number:label'),
+            max_length=255,
+            required=False,
+            widget=forms.TextInput(attrs={
+                u'placeholder': _(u'inforequests:obligee_action:CategorizedStep:file_number:placeholder'),
+                u'class': u'span5',
+                }),
+            )
+    last_action_delivered_date = forms.DateField(
+            localize=True,
+            required=False,
+            widget=forms.DateInput(attrs={
+                u'placeholder': _('inforequests:obligee_action:CategorizedStep:last_action_delivered_date:placeholder'),
+                u'class': u'datepicker',
+                }),
+            )
+
     @classmethod
     def applicable(cls, wizard):
         result = wizard.values.get(u'result', None)
         return result == u'action'
 
+    def __init__(self, *args, **kwargs):
+        super(CategorizedStep, self).__init__(*args, **kwargs)
+
+        branch = self.wizard.values[u'result_branch']
+        if branch.last_action.delivered_date is not None:
+            del self.fields[u'last_action_delivered_date']
+        elif branch.last_action.type == Action.TYPES.REQUEST:
+            self.fields[u'last_action_delivered_date'].label=_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:request')
+        elif branch.last_action.type == Action.TYPES.CLARIFICATION_RESPONSE:
+            self.fields[u'last_action_delivered_date'].label=_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:clarification_response')
+        elif branch.last_action.type == Action.TYPES.APPEAL:
+            self.fields[u'last_action_delivered_date'].label=_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:appeal')
+        elif branch.last_action.type == Action.TYPES.ADVANCED_REQUEST:
+            self.fields[u'last_action_delivered_date'].label=_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:advanced_request')
+        else:
+            del self.fields[u'last_action_delivered_date']
+
+    def clean(self):
+        cleaned_data = super(CategorizedStep, self).clean()
+
+        branch = self.wizard.values[u'result_branch']
+        delivered_date = self.wizard.values[u'result_delivered_date']
+        legal_date = cleaned_data.get(u'legal_date', None)
+        last_action_delivered_date = cleaned_data.get(u'last_action_delivered_date', None)
+        if legal_date is not None:
+            try:
+                if legal_date > delivered_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:newer_than_delivered_date_error'))
+                if legal_date < branch.last_action.legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:older_than_previous_error'))
+                if legal_date > local_today():
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:from_future_error'))
+                if legal_date < local_today() - relativedelta(months=1):
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:legal_date:older_than_month_error'))
+            except ValidationError as e:
+                self.add_error(u'legal_date', e)
+        if last_action_delivered_date is not None:
+            try:
+                if legal_date and last_action_delivered_date > legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:newer_than_legal_date_error'))
+                if last_action_delivered_date < branch.last_action.legal_date:
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:older_than_last_action_legal_date_error'))
+                if last_action_delivered_date > local_today():
+                    raise ValidationError(_(u'inforequests:obligee_action:CategorizedStep:last_action_delivered_date:from_future_error'))
+                pass
+            except ValidationError as e:
+                self.add_error(u'last_action_delivered_date', e)
+
+        return cleaned_data
+
+    def values(self):
+        res = super(CategorizedStep, self).values()
+        res[u'result_legal_date'] = self.cleaned_data[u'legal_date']
+        res[u'result_file_number'] = self.cleaned_data[u'file_number']
+        res[u'result_last_action_delivered_date'] = self.cleaned_data.get(u'last_action_delivered_date', None)
+        return res
 
 class ObligeeActionWizard(Wizard):
     step_classes = OrderedDict([
@@ -720,6 +772,12 @@ class ObligeeActionWizard(Wizard):
         assert self.values[u'result_action'] in Action.OBLIGEE_ACTION_TYPES
         assert not self.email or self.values[u'result_action'] in Action.OBLIGEE_EMAIL_ACTION_TYPES
         assert self.values[u'result_branch'].can_add_action(self.values[u'result_action'])
+
+        branch = self.values[u'result_branch']
+        last_action_delivered_date = self.values.get(u'result_last_action_delivered_date', None)
+        if last_action_delivered_date and not branch.last_action.delivered_date:
+            branch.last_action.delivered_date = last_action_delivered_date
+            branch.last_action.save()
 
         action = Action.create(
                 branch=self.values[u'result_branch'],
