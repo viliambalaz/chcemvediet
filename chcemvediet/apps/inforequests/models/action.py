@@ -197,7 +197,7 @@ class Action(models.Model):
                 """))
 
     # NOT NULL for EXTENSION; NULL otherwise
-    obligee_extension = models.IntegerField(blank=True, null=True,
+    extension = models.IntegerField(blank=True, null=True,
             help_text=squeeze(u"""
                 Obligee extension to the original deadline. Applicable only to extension actions.
                 Ignored for all other actions.
@@ -362,14 +362,14 @@ class Action(models.Model):
             previous = self.previous_action.deadline
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
                     previous.base_date, previous.value, previous.unit,
-                    self.snooze or previous.snooze)
+                    self.snooze or previous.snooze_date)
 
         elif self.type == self.TYPES.EXTENSION:
             previous = self.previous_action.deadline
-            obligee_extension = self.obligee_extension or 0
+            extension = self.extension or 0
             return Deadline(Deadline.TYPES.OBLIGEE_DEADLINE,
-                    previous.base_date, previous.value + obligee_extension, previous.unit,
-                    self.snooze or previous.snooze)
+                    previous.base_date, previous.value + extension, previous.unit,
+                    self.snooze or previous.snooze_date)
 
         elif self.type == self.TYPES.ADVANCEMENT:
             # The user may send an appeal after advancement. But it is not very common, so we don't

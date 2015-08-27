@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-27 21:12+0200\n"
+"POT-Creation-Date: 2015-08-27 21:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -263,10 +263,10 @@ msgstr "Áno, spomína sa"
 msgid "inforequests:obligee_action:IsExtensionStep:no"
 msgstr "Nie, nespomína sa"
 
-msgid "inforequests:obligee_action:IsExtensionStep:obligee_extension:label"
+msgid "inforequests:obligee_action:IsExtensionStep:extension:label"
 msgstr "Predĺženie lehoty"
 
-msgid "inforequests:obligee_action:IsExtensionStep:obligee_extension:placeholder"
+msgid "inforequests:obligee_action:IsExtensionStep:extension:placeholder"
 msgstr "Kalendárne dni"
 
 msgid "inforequests:obligee_action:IsAppealDecisionStep:yes"
@@ -512,7 +512,7 @@ msgstr "Dátum odoslania"
 msgid "inforequests:detail:action:delivered_date"
 msgstr "Dátum doručenia"
 
-msgid "inforequests:detail:action:obligee_extension"
+msgid "inforequests:detail:action:extension"
 msgstr "Predĺženie lehoty"
 
 msgid "inforequests:detail:action:deadline"
@@ -920,13 +920,13 @@ msgstr "Je potrebné overenie e-mailovej adresy"
 msgid "main:base:title"
 msgstr "Chcemvediet.sk"
 
-msgid "main:ajax-fail:heading"
+msgid "main:ajax_fail:heading"
 msgstr "Niečo sa pokazilo"
 
-msgid "main:ajax-fail:reload"
+msgid "main:ajax_fail:reload"
 msgstr "Obnoviť stránku"
 
-msgid "main:ajax-fail:close"
+msgid "main:ajax_fail:close"
 msgstr "Zavrieť"
 
 msgid "main:menu:brand"

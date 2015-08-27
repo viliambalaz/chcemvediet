@@ -34,8 +34,8 @@
   {% endif %}
   {% if action.type == action.TYPES.EXTENSION %}
     <div class="row-fluid">
-      <p class="span2 text-right">{% trans 'inforequests:detail:action:obligee_extension' %}:</p>
-      <p class="span10">{% include "inforequests/detail/texts/obligee_extension.html" %}</p>
+      <p class="span2 text-right">{% trans 'inforequests:detail:action:extension' %}:</p>
+      <p class="span10">{% include "inforequests/detail/texts/extension.html" %}</p>
     </div>
   {% endif %}
   {% if forloop.last and action.deadline  %}

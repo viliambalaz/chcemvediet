@@ -390,13 +390,13 @@ class IsExtensionStep(ObligeeActionStep):
                 u'data-target-1': u'.control-group:has(.visible-if-extension)',
                 }),
             )
-    obligee_extension = forms.IntegerField(
-            label=_(u'inforequests:obligee_action:IsExtensionStep:obligee_extension:label'),
+    extension = forms.IntegerField(
+            label=_(u'inforequests:obligee_action:IsExtensionStep:extension:label'),
             initial=8,
             min_value=2,
             max_value=15,
             widget=forms.NumberInput(attrs={
-                u'placeholder': _(u'inforequests:obligee_action:IsExtensionStep:obligee_extension:placeholder'),
+                u'placeholder': _(u'inforequests:obligee_action:IsExtensionStep:extension:placeholder'),
                 u'class': u'visible-if-extension',
                 }),
             )
@@ -412,10 +412,10 @@ class IsExtensionStep(ObligeeActionStep):
         cleaned_data = super(IsExtensionStep, self).clean()
 
         is_extension = cleaned_data.get(u'is_extension', None)
-        obligee_extension = cleaned_data.get(u'obligee_extension', None)
-        if not is_extension and not obligee_extension:
-            msg = self.fields[u'obligee_extension'].error_messages[u'required']
-            self.add_error(u'obligee_extension', msg)
+        extension = cleaned_data.get(u'extension', None)
+        if not is_extension and not extension:
+            msg = self.fields[u'extension'].error_messages[u'required']
+            self.add_error(u'extension', msg)
 
         return cleaned_data
 
@@ -424,7 +424,7 @@ class IsExtensionStep(ObligeeActionStep):
         if self.cleaned_data[u'is_extension']:
             res[u'result'] = u'action'
             res[u'result_action'] = Action.TYPES.EXTENSION
-            res[u'result_obligee_extension'] = self.cleaned_data[u'obligee_extension']
+            res[u'result_extension'] = self.cleaned_data[u'extension']
         return res
 
 class DisclosureReasonsStep(ReasonsMixin, ObligeeActionStep):
@@ -788,7 +788,7 @@ class ObligeeActionWizard(Wizard):
                 file_number=self.values.get(u'result_file_number', u''),
                 delivered_date=self.values[u'result_delivered_date'],
                 legal_date=self.values[u'result_legal_date'],
-                obligee_extension=self.values.get(u'result_obligee_extension', None),
+                extension=self.values.get(u'result_extension', None),
                 disclosure_level=self.values.get(u'result_disclosure_level', None),
                 refusal_reason=self.values.get(u'result_refusal_reason', None),
                 advanced_to=self.values.get(u'result_advanced_to', None),
