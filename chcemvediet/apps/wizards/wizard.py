@@ -151,9 +151,9 @@ class Wizard(object):
 
     def step(self, index=None):
         try:
-            self.draft = WizardDraft.objects.get(pk=self.instance_id)
+            self.draft = WizardDraft.objects.owned_by(self.request.user).get(pk=self.instance_id)
         except WizardDraft.DoesNotExist:
-            self.draft = WizardDraft(id=self.instance_id, data={})
+            self.draft = WizardDraft(id=self.instance_id, owner=self.request.user, data={})
 
         try:
             current_index = int(index)

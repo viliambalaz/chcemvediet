@@ -11,7 +11,7 @@ from poleno.attachments.models import Attachment
 from poleno.mail.models import Message
 from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
-
+from chcemvediet.apps.wizards.models import WizardDraft
 from chcemvediet.apps.inforequests.models import InforequestDraft, Action
 
 
@@ -30,6 +30,7 @@ def attachment_download(request, attachment_pk):
     permitted = {
             Session: Q(session_key=request.session.session_key),
             Message: Q(inforequest__applicant=request.user),
+            WizardDraft: Q(owner=request.user),
             InforequestDraft: Q(applicant=request.user),
             Action: Q(branch__inforequest__applicant=request.user),
             }
