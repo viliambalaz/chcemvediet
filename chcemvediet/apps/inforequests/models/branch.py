@@ -189,7 +189,7 @@ class Branch(models.Model):
             return self.last_action.deadline.calendar_days_behind <= 7
 
         if self.last_action.type == Action.TYPES.DISCLOSURE:
-            return (self.last_action.disclosure_level != Action.TYPES.FULL
+            return (self.last_action.disclosure_level != Action.DISCLOSURE_LEVELS.FULL
                     and self.last_action.deadline.calendar_days_behind <= 47)
 
         if self.last_action.type == Action.TYPES.EXPIRATION:
