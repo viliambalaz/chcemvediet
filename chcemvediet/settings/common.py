@@ -23,11 +23,6 @@ LANGUAGES = (
     )
 
 INSTALLED_APPS = (
-    # For django-admin-tools; must be before "django.contrib.auth":
-    u'admin_tools',
-    u'admin_tools.theming',
-    u'admin_tools.menu',
-    u'admin_tools.dashboard',
     # For django itself:
     u'django.contrib.auth',
     u'django.contrib.contenttypes',
@@ -35,7 +30,7 @@ INSTALLED_APPS = (
     u'django.contrib.sites',
     u'django.contrib.messages',
     u'django.contrib.staticfiles',
-    u'django.contrib.admin.apps.SimpleAdminConfig', # See "django-adminplus" docs for Django 1.7
+    u'django.contrib.admin',
     u'django.contrib.sitemaps',
     # For django-allauth:
     u'allauth',
@@ -47,7 +42,6 @@ INSTALLED_APPS = (
     u'allauth.socialaccount.providers.twitter',
     # Other 3part apps
     u'sekizai',
-    u'adminplus',
     u'django_cron',
     u'simple_history',
     u'pipeline',
@@ -223,8 +217,3 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = u'none'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 INVITATIONS_INVITATION_ONLY = False
 INVITATIONS_USERS_CAN_INVITE = True
-
-# Django-admin-tools settings
-ADMIN_TOOLS_MENU = u'chcemvediet.admin.CustomMenu'
-ADMIN_TOOLS_INDEX_DASHBOARD = u'chcemvediet.admin.CustomIndexDashboard'
-ADMIN_TOOLS_APP_INDEX_DASHBOARD = u'chcemvediet.admin.CustomAppIndexDashboard'

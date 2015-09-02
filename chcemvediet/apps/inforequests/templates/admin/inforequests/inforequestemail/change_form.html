@@ -1,9 +1,0 @@
-{# vim: set filetype=htmldjango :#}
-{% extends "admin/change_form.html" %}
-
-{% block object-tools-items %}
-  {% if decide_url %}
-    <li><a href="{{ decide_url }}">Decide E-mail</a></li>
-  {% endif %}
-  {{ block.super }}
-{% endblock %}
