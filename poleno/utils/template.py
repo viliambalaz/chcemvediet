@@ -1,13 +1,15 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from os.path import splitext
+from os.path import splitext, join
 from inspect import getargspec
 from functools import partial
 
 from django import template
+from django.apps import apps
 from django.template import TemplateSyntaxError, TemplateDoesNotExist
 from django.template.base import parse_bits
 from django.template.loader import BaseLoader, find_template_loader, render_to_string
+from django.template.loaders.filesystem import Loader as FilesystemLoader
 from django.utils.translation import get_language
 
 from .lazy import lazy_decorator
@@ -62,6 +64,45 @@ class TranslationLoader(BaseLoader):
             return self.loader(u'%s.%s%s' % (template_base, language, template_ext), template_dirs)
         except TemplateDoesNotExist:
             return self.loader(template_name, template_dirs)
+
+
+class AppLoader(FilesystemLoader):
+    u"""
+    Django template loader that allows you to load a template from a specific application. This
+    allows you to both extend and override a template at the same time. The default Django loaders
+    require you to copy the entire template you want to override, even if you only want to override
+    one small block.
+
+    Template usage example::
+
+        {% extends "admin:admin/base.html" %}
+
+    Settings::
+
+        TEMPLATE_LOADERS = (
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+            'poleno.utils.template.AppLoader',
+        )
+
+    Based on: https://pypi.python.org/pypi/django-apptemplates/
+    Which is based on: http://djangosnippets.org/snippets/1376/
+    """
+    is_usable = True
+
+    def get_template_sources(self, template_name, template_dirs=None):
+        u"""
+        Returns the absolute paths to "template_name" in the specified app. If the name does not
+        contain an app name (no colon), an empty list is returned. The parent
+        FilesystemLoader.load_template_source() will take care of the actual loading for us.
+        """
+        if not u':' in template_name:
+            return []
+        app_name, template_name = template_name.split(u':', 1)
+        for app in apps.get_app_configs():
+            if app.label == app_name:
+                return [join(app.path, u'templates', template_name)]
+        return []
 
 
 class Library(template.Library):

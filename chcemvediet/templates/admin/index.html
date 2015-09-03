@@ -1,0 +1,23 @@
+{# vim: set filetype=htmldjango :#}
+{% extends "admin:admin/index.html" %}
+
+{% block sidebar %}
+  {{ block.super }}
+  <div style="float: left; width: 100%;">
+    <div class="module">
+      <table>
+        <caption>Misc</caption>
+        <tr>
+          <th scope="row"><a href="{% url "admin:timewarp" %}">Timewarp</a></th>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="{% url "admin:pages_languages" %}">Pages</a></th>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+{% endblock %}

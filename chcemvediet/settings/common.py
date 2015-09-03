@@ -30,7 +30,7 @@ INSTALLED_APPS = (
     u'django.contrib.sites',
     u'django.contrib.messages',
     u'django.contrib.staticfiles',
-    u'django.contrib.admin',
+    u'django.contrib.admin.apps.SimpleAdminConfig', # See "django-adminplus" docs for Django 1.7
     u'django.contrib.sitemaps',
     # For django-allauth:
     u'allauth',
@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     u'allauth.socialaccount.providers.twitter',
     # Other 3part apps
     u'sekizai',
+    u'adminplus',
     u'django_cron',
     u'simple_history',
     u'pipeline',
@@ -81,7 +82,7 @@ AUTHENTICATION_BACKENDS = (
 TEMPLATE_LOADERS = (
     (u'poleno.utils.template.TranslationLoader', u'django.template.loaders.filesystem.Loader'),
     (u'poleno.utils.template.TranslationLoader', u'django.template.loaders.app_directories.Loader'),
-    (u'poleno.utils.template.TranslationLoader', u'apptemplates.Loader'),
+    (u'poleno.utils.template.TranslationLoader', u'poleno.utils.template.AppLoader'),
     )
 
 TEMPLATE_DIRS = (
