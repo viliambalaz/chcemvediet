@@ -26,6 +26,8 @@ class MessageQuerySet(QuerySet):
         return self.filter(processed__isnull=True)
     def order_by_pk(self):
         return self.order_by(u'pk')
+    def order_by_created(self):
+        return self.order_by(u'created', u'pk')
     def order_by_processed(self):
         return self.order_by(u'processed', u'pk')
 
@@ -36,6 +38,12 @@ class Message(models.Model):
             (u'OUTBOUND', 2, _(u'mail:Message:type:OUTBOUND')),
             )
     type = models.SmallIntegerField(choices=TYPES._choices)
+
+    # May NOT be NULL
+    created = models.DateTimeField(auto_now_add=True,
+            help_text=squeeze(u"""
+                Date and time the message object was created,
+                """))
 
     # NOT NULL for processed messages; NULL for queued messages; For index see index_together
     processed = models.DateTimeField(blank=True, null=True,
@@ -100,6 +108,7 @@ class Message(models.Model):
     class Meta:
         index_together = [
                 [u'processed', u'id'],
+                [u'created', u'id'],
                 ]
 
     @property

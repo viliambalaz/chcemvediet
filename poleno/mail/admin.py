@@ -14,7 +14,7 @@ class RecipientInline(admin.TabularInline):
 
 @admin.register(Message, site=admin.site)
 class MessageAdmin(admin.ModelAdmin):
-    date_hierarchy = u'processed'
+    date_hierarchy = u'created'
     list_display = [
             u'id',
             u'type',
@@ -31,15 +31,16 @@ class MessageAdmin(admin.ModelAdmin):
                     ] if v),
                 short_description=u'Recipients',
                 ),
+            u'created',
             u'processed',
             ]
     list_filter = [
             u'type',
+            u'created',
             simple_list_filter_factory(u'Processed', u'processed', [
                 (u'1', u'Yes', lambda qs: qs.processed()),
                 (u'0', u'No',  lambda qs: qs.not_processed()),
                 ]),
-            u'processed',
             ]
     search_fields = [
             u'=id',
@@ -50,7 +51,7 @@ class MessageAdmin(admin.ModelAdmin):
             u'received_for',
             ]
     ordering = [
-            u'-processed',
+            u'-created',
             u'-id',
             ]
     inlines = [

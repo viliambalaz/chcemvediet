@@ -86,6 +86,7 @@ def devtools_push_history(request, inforequest_pk):
                 last_undecided_email_reminder=F(u'last_undecided_email_reminder') - delta,
                 )
         inforequest.email_set.all().update(
+                created=F(u'created') - delta,
                 processed=F(u'processed') - delta,
                 )
         Action.objects.filter(branch__inforequest=inforequest).update(
