@@ -25,39 +25,27 @@ class ObligeeActionStep(WizardStep):
     form_template = u'main/snippets/form_horizontal.html'
 
 class ReasonsMixin(ObligeeActionStep):
-    no_reason = forms.BooleanField(
-            label=_(u'inforequests:obligee_action:ReasonsMixin:none'),
-            required=False,
-            widget=forms.CheckboxInput(attrs={
-                u'class': u'toggle-changed',
-                u'data-container': u'form',
-                u'data-action': u'disable',
-                u'data-target-false': u'.disabled-if-no-reasons',
-                })
-            )
     refusal_reason = MultiSelectFormField(
             label=u' ',
-            required=False,
-            choices=Action.REFUSAL_REASONS._choices,
-            widget=forms.CheckboxSelectMultiple(attrs={
-                u'class': u'disabled-if-no-reasons',
-                }),
+            choices=Action.REFUSAL_REASONS._choices + [
+                (u'none', _(u'inforequests:obligee_action:ReasonsMixin:none')),
+                ],
             )
 
     def clean(self):
         cleaned_data = super(ReasonsMixin, self).clean()
 
-        no_reason = cleaned_data.get(u'no_reason', None)
         refusal_reason = cleaned_data.get(u'refusal_reason', None)
-        if not no_reason and not refusal_reason:
-            msg = self.fields[u'refusal_reason'].error_messages[u'required']
-            self.add_error(u'refusal_reason', msg)
+        if refusal_reason is not None:
+            if u'none' in refusal_reason and len(refusal_reason) != 1:
+                msg = _(u'inforequests:obligee_action:ReasonsMixin:error:none_contradiction')
+                self.add_error(u'refusal_reason', msg)
 
         return cleaned_data
 
     def values(self):
         res = super(ReasonsMixin, self).values()
-        if self.cleaned_data[u'no_reason']:
+        if u'none' in self.cleaned_data[u'refusal_reason']:
             res[u'result_refusal_reason'] = []
         else:
             res[u'result_refusal_reason'] = self.cleaned_data[u'refusal_reason']

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-28 00:40+0200\n"
+"POT-Creation-Date: 2015-09-07 20:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,6 +172,9 @@ msgstr "Prílohy"
 
 msgid "inforequests:obligee_action:ReasonsMixin:none"
 msgstr "V texte sa nespomínajú žiadne dôvody"
+
+msgid "inforequests:obligee_action:ReasonsMixin:error:none_contradiction"
+msgstr "Zvolené možnosti si protirečia"
 
 msgid "inforequests:obligee_action:BasicsStep:branch:label"
 msgstr "Povinná osoba"
