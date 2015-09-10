@@ -251,3 +251,195 @@ class WizardGroup(object):
             if wizard_class.applicable(*args, **kwargs):
                 return wizard_class(request, *args, **kwargs)
         raise ValueError
+
+#########################
+
+class Bottom(object):
+    pass
+
+class Transition(object):
+    def __init__(self):
+        self.values = {}
+        self.globals = {}
+        self.next = None
+
+class StepWIP(forms.Form):
+    base_template = u'wizards/wizardwip.html'
+    template = None
+    text_template = None
+    form_template = None
+    global_fields = []
+    next_step_class = Bottom
+
+    def __init__(self, wizard, index, accessible, *args, **kwargs):
+        # Make sure there are no step name conflicts
+        assert self.__class__.__name__ != u'global'
+        assert self.__class__.__name__ not in [s.__class__.__name__ for s in wizard.steps]
+
+        super(StepWIP, self).__init__(*args, **kwargs)
+        self.wizard = wizard
+        self.index = index
+        self.accessible = accessible
+        self.values = None
+
+    def commit(self):
+        for field_name in self.fields:
+            group = u'global' if field_name in self.global_fields else self.__class__.__name__
+            dest = self.wizard.draft.data.setdefault(group, {})
+            dest[field_name] = self._raw_value(field_name)
+
+    def add_prefix(self, field_name):
+        return self.wizard.add_prefix(field_name)
+
+    def next(self):
+        return self.wizard.next_step(self)
+
+    def prev(self):
+        return self.wizard.prev_step(self)
+
+    def is_last(self):
+        return self.wizard.is_last_step(self)
+
+    def is_first(self):
+        return self.wizard.is_first_step(self)
+
+    def add_fields(self):
+        pass
+
+    def context(self, extra=None):
+        return dict(self.wizard.context(extra), step=self)
+
+    def get_url(self, anchor=u''):
+        return self.wizard.get_step_url(self, anchor)
+
+    def render(self):
+        return render(self.wizard.request, self.template or self.base_template, self.context())
+
+    def render_to_string(self):
+        return render_to_string(self.template or self.base_template,
+                context_instance=RequestContext(self.wizard.request), dictionary=self.context())
+
+    def pre_transition(self):
+        return Transition()
+
+    def post_transition(self):
+        res = Transition()
+        for field_name in self.fields:
+            value = self.cleaned_data[field_name] if self.is_valid() else None
+            dest = res.globals if field_name in self.global_fields else res.values
+            dest[field_name] = value
+        res.next = self.next_step_class
+        return res
+
+class WizardWIP(object):
+    first_step_class = None
+
+    def _step_data(self, step_class, prefixed=False):
+        res = {}
+        for field, value in self.draft.data.get(step_class.__name__, {}).items():
+            res[field] = value
+        for field in step_class.global_fields:
+            res[field] = self.draft.data.get(u'global', {}).get(field, None)
+        if prefixed:
+            res = {self.add_prefix(f): v for f, v in res.items()}
+        return res
+
+    def __init__(self, request, index=None):
+        self.request = request
+        self.steps = []
+        self.values = {}
+        self.instance_id = self.get_instance_id()
+
+        try:
+            self.draft = WizardDraft.objects.owned_by(request.user).get(pk=self.instance_id)
+        except WizardDraft.DoesNotExist:
+            self.draft = WizardDraft(id=self.instance_id, owner=request.user, data={})
+
+        try:
+            current_index = int(index)
+        except (TypeError, ValueError):
+            current_index = -1
+
+        accessible = True
+        step_class = self.first_step_class
+        while step_class and step_class is not Bottom:
+            initial = self._step_data(step_class)
+            if accessible and len(self.steps) < current_index:
+                post = self._step_data(step_class, prefixed=True)
+            elif accessible and len(self.steps) == current_index and request.method == u'POST':
+                post = request.POST
+            else:
+                post = None
+
+            step = step_class(self, len(self.steps), accessible, initial=initial, data=post)
+
+            transition = step.pre_transition()
+            step.values = dict(transition.values if accessible else {})
+            self.values.update(transition.globals if accessible else {})
+            step_class = transition.next
+            if step_class:
+                continue
+
+            self.steps.append(step)
+            if accessible:
+                step.add_fields()
+            if not step.is_valid():
+                accessible = False
+
+            transition = step.post_transition()
+            step.values.update(transition.values if accessible else {})
+            self.values.update(transition.globals if accessible else {})
+            step_class = transition.next
+
+        assert len(self.steps) > 0
+        current_index = max(0, min(current_index, len(self.steps)-1))
+        while current_index > 0 and not self.steps[current_index].accessible:
+            current_index -= 1
+        if u'%d' % current_index != index:
+            raise WizzardRollback(self.steps[current_index])
+        self.current_step = self.steps[current_index]
+
+    def add_prefix(self, field_name):
+        return u'%s-%s' % (self.instance_id, field_name)
+
+    def commit(self):
+        self.current_step.commit()
+        self.draft.step = self.current_step.__class__.__name__
+        self.draft.save()
+
+    def reset(self):
+        self.draft.delete()
+
+    def next_step(self, step=None):
+        if step is None:
+            step = self.current_step
+        if step.index+1 < len(self.steps):
+            return self.steps[step.index+1]
+        else:
+            return None
+
+    def prev_step(self, step=None):
+        if step is None:
+            step = self.current_step
+        if step.index > 0:
+            return self.steps[step.index-1]
+        else:
+            return None
+
+    def is_last_step(self, step=None):
+        return self.next_step(step) is None
+
+    def is_first_step(self, step=None):
+        return self.prev_step(step) is None
+
+    def get_instance_id(self):
+        raise NotImplementedError
+
+    def get_step_url(self, step, anchor=u''):
+        raise NotImplementedError
+
+    def context(self, extra=None):
+        return dict(extra or {}, wizard=self)
+
+    def finish(self):
+        raise NotImplementedError
