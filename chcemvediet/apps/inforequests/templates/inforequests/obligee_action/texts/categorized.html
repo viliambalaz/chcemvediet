@@ -4,7 +4,7 @@
  %
  % Context:
  %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
- %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.CategorizedStep
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
  %
@@ -13,32 +13,32 @@
 <h4>Zaradené</h4>
 <p>
   <span style="color: red;">FIXME</span>
-  Odpoveď sa zaradí ako: 
+  Odpoveď sa zaradí ako:
   {% with TYPES=inforequest.main_branch.last_action.TYPES %}
     {% with DISCLOSURE_LEVELS=inforequest.main_branch.last_action.DISCLOSURE_LEVELS %}
-      {% if wizard.values.result_action == TYPES.ADVANCEMENT %}
+      {% if wizard.values.action == TYPES.ADVANCEMENT %}
         postúpenie žiadosti.
-      {% elif wizard.values.result_action == TYPES.AFFIRMATION %}
+      {% elif wizard.values.action == TYPES.AFFIRMATION %}
         potvrdenie rozhodnutia a zamietnutie odvolania.
-      {% elif wizard.values.result_action == TYPES.CLARIFICATION_REQUEST %}
+      {% elif wizard.values.action == TYPES.CLARIFICATION_REQUEST %}
         výzva na doplnenie žiadosti.
-      {% elif wizard.values.result_action == TYPES.CONFIRMATION %}
+      {% elif wizard.values.action == TYPES.CONFIRMATION %}
         potvrdenie prijatia žiadosti.
-      {% elif wizard.values.result_action == TYPES.DISCLOSURE %}
-        {% if wizard.values.result_disclosure_level == DISCLOSURE_LEVELS.NONE %}
+      {% elif wizard.values.action == TYPES.DISCLOSURE %}
+        {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
           nesprístupnienie informácií (bez vydania rozhodnutia).
-        {% elif wizard.values.result_disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
+        {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
           čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
-        {% elif wizard.values.result_disclosure_level == DISCLOSURE_LEVELS.FULL %}
+        {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
           sprístupnienie informácií.
         {% endif %}
-      {% elif wizard.values.result_action == TYPES.EXTENSION %}
+      {% elif wizard.values.action == TYPES.EXTENSION %}
         predĺženie lehoty.
-      {% elif wizard.values.result_action == TYPES.REFUSAL %}
+      {% elif wizard.values.action == TYPES.REFUSAL %}
         rozhodnutie o nesprístupnení informácie.
-      {% elif wizard.values.result_action == TYPES.REMANDMENT %}
+      {% elif wizard.values.action == TYPES.REMANDMENT %}
         rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové prejednanie.
-      {% elif wizard.values.result_action == TYPES.REVERSION %}
+      {% elif wizard.values.action == TYPES.REVERSION %}
         rozhodnutie, ktorým pôvodné rozhodnutie mení.
       {% endif %}
     {% endwith %}

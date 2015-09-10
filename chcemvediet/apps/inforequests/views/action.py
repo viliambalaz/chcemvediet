@@ -6,7 +6,7 @@ from django.http import HttpResponseNotFound, HttpResponseRedirect
 
 from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
-from chcemvediet.apps.wizards.views import wizard_view
+from chcemvediet.apps.wizards.views import wizard_view, wizard_view_wip
 from chcemvediet.apps.inforequests.forms import SnoozeForm
 from chcemvediet.apps.inforequests.forms import AppealWizards, ClarificationResponseWizard, ObligeeActionWizard
 from chcemvediet.apps.inforequests.models import Inforequest, Action
@@ -26,20 +26,7 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
         return HttpResponseRedirect(reverse(u'inforequests:obligee_action',
                 kwargs=dict(inforequest=inforequest, step_idx=step_idx)))
 
-    def finish(wizard):
-        result = wizard.values[u'result']
-        if result == u'action':
-            action = wizard.save_action()
-            return action.get_absolute_url()
-        if result == u'help':
-            wizard.save_help()
-            return inforequest.get_absolute_url()
-        if result == u'unrelated':
-            wizard.save_unrelated()
-            return inforequest.get_absolute_url()
-        raise ValueError
-
-    return wizard_view(ObligeeActionWizard, request, step_idx, finish,
+    return wizard_view_wip(ObligeeActionWizard, request, step_idx,
             inforequest, inforequestemail, email)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])

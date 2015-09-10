@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-07 20:06+0200\n"
+"POT-Creation-Date: 2015-09-11 00:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,197 +176,185 @@ msgstr "V texte sa nespomínajú žiadne dôvody"
 msgid "inforequests:obligee_action:ReasonsMixin:error:none_contradiction"
 msgstr "Zvolené možnosti si protirečia"
 
-msgid "inforequests:obligee_action:BasicsStep:branch:label"
-msgstr "Obligee"
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:label"
-msgstr "Delivered Date"
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:placeholder"
-msgstr "mm/dd/yyyy"
-
-msgid "inforequests:obligee_action:BasicsStep:attachments:label"
-msgstr "Attachments"
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_previous"
-msgstr "May not be older than previous action."
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:from_future"
-msgstr "May not be from future."
-
-msgid "inforequests:obligee_action:BasicsStep:delivered_date:error:older_than_month"
-msgstr "May not be older than one month."
-
-msgid "inforequests:obligee_action:IsQuestionStep:yes"
-msgstr "Áno, je to otázka"
-
-msgid "inforequests:obligee_action:IsQuestionStep:no"
-msgstr "Nie, nie je to otázka"
-
-msgid "inforequests:obligee_action:IsConfirmationStep:yes"
-msgstr "Áno, potvrdzujú, že vec dostali"
-
-msgid "inforequests:obligee_action:IsConfirmationStep:no"
-msgstr "Nie, je to niečo iné"
-
-msgid "inforequests:obligee_action:IsOnTopicStep:yes"
-msgstr "Áno, je to reakcia na žiadosť"
-
-msgid "inforequests:obligee_action:IsOnTopicStep:no"
-msgstr "Nie, je to niečo iné"
-
-msgid "inforequests:obligee_action:ContainsInfoStep:full"
-msgstr "Som úplne spokojný"
-
-msgid "inforequests:obligee_action:ContainsInfoStep:partial"
-msgstr "Čiastočne"
-
-msgid "inforequests:obligee_action:ContainsInfoStep:none"
-msgstr "Vôbec"
-
-msgid "inforequests:obligee_action:IsDecisionStep:yes"
-msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie"
-
-msgid "inforequests:obligee_action:IsDecisionStep:no"
-msgstr "Nie, je to niečo iné"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:yes"
-msgstr "Áno, inštitúcia postupuje žiadosť inej inštitúcii"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:no"
-msgstr "Nie, v texte sa postúpenie nespomína"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_1:label"
-msgstr "Advanced To"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_1:placeholder"
-msgstr "Obligee"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_2:label"
-msgstr "Advanced To"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_2:placeholder"
-msgstr "Obligee"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_3:label"
-msgstr "Advanced To"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:advanced_to_3:placeholder"
-msgstr "Obligee"
-
-msgid "inforequests:obligee_action:IsAdvancementStep:error:same_obligee"
-msgstr "May not advance to the same obligee."
-
-msgid "inforequests:obligee_action:IsAdvancementStep:error:duplicate_obligee"
-msgstr "May not advance twice to the same obligee."
-
-msgid "inforequests:obligee_action:IsExtensionStep:yes"
-msgstr "Áno, spomína sa"
-
-msgid "inforequests:obligee_action:IsExtensionStep:no"
-msgstr "Nie, nespomína sa"
-
-msgid "inforequests:obligee_action:IsExtensionStep:extension:label"
-msgstr "Deadline Extension"
-
-msgid "inforequests:obligee_action:IsExtensionStep:extension:placeholder"
-msgstr "Calendar days"
-
-msgid "inforequests:obligee_action:IsAppealDecisionStep:yes"
-msgstr "Áno, má"
-
-msgid "inforequests:obligee_action:IsAppealDecisionStep:no"
-msgstr "Nie, nemá"
-
-msgid "inforequests:obligee_action:ContainsAppealInfoStep:full"
-msgstr "Áno, som úplne spokojný"
-
-msgid "inforequests:obligee_action:ContainsAppealInfoStep:partial"
-msgstr "Čiastočne"
-
-msgid "inforequests:obligee_action:ContainsAppealInfoStep:none"
-msgstr "Vôbec"
-
-msgid "inforequests:obligee_action:WasAcceptedStep:all"
-msgstr "Áno, všetky"
-
-msgid "inforequests:obligee_action:WasAcceptedStep:some"
-msgstr "Niektoré"
-
-msgid "inforequests:obligee_action:WasAcceptedStep:none"
-msgstr "Žiadne"
-
-msgid "inforequests:obligee_action:WasReturnedStep:yes"
-msgstr "Áno, vracia"
-
-msgid "inforequests:obligee_action:WasReturnedStep:no"
-msgstr "Nie, nevracia"
-
-msgid "inforequests:obligee_action:InvalidReversionStep:help_request:label"
-msgstr "Správa pre admina"
-
-msgid "inforequests:obligee_action:InvalidReversionStep:help_request:placeholder"
-msgstr "Popíšte adminovi, čo sa stalo"
-
-msgid "inforequests:obligee_action:NotCategorizedStep:help"
+msgid "inforequests:obligee_action:NotCategorized:help"
 msgstr "Áno, chcem pomoc od admina"
 
-msgid "inforequests:obligee_action:NotCategorizedStep:unrelated"
+msgid "inforequests:obligee_action:NotCategorized:unrelated"
 msgstr "Nie, je to úplna haluz"
 
-msgid "inforequests:obligee_action:NotCategorizedStep:help_request:label"
+msgid "inforequests:obligee_action:NotCategorized:help_request:label"
 msgstr "Správa pre admina"
 
-msgid "inforequests:obligee_action:NotCategorizedStep:help_request:placeholder"
+msgid "inforequests:obligee_action:NotCategorized:help_request:placeholder"
 msgstr "Popíšte adminovi, čomu ste nerozumeli"
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:label"
+msgid "inforequests:obligee_action:Categorized:legal_date:label"
 msgstr "Legal Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:placeholder"
+msgid "inforequests:obligee_action:Categorized:legal_date:placeholder"
 msgstr "mm/dd/yyyy"
 
-msgid "inforequests:obligee_action:CategorizedStep:file_number:label"
+msgid "inforequests:obligee_action:Categorized:file_number:label"
 msgstr "File Number"
 
-msgid "inforequests:obligee_action:CategorizedStep:file_number:placeholder"
+msgid "inforequests:obligee_action:Categorized:file_number:placeholder"
 msgstr "File Number"
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:placeholder"
-msgstr "mm/dd/yyyy"
-
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:request"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:label:request"
 msgstr "Request Delivered Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:clarification_response"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:label:clarification_response"
 msgstr "Completion Delivered Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:appeal"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:label:appeal"
 msgstr "Appeal Delivered Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:label:advanced_request"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:label:advanced_request"
 msgstr "Advancement Delivered Date"
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:newer_than_delivered_date"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:placeholder"
+msgstr "mm/dd/yyyy"
+
+msgid "inforequests:obligee_action:Categorized:legal_date:error:newer_than_delivered_date"
 msgstr "May not be later than the delivered date."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_previous"
+msgid "inforequests:obligee_action:Categorized:legal_date:error:older_than_previous"
 msgstr "May not be older than previous action."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:from_future"
+msgid "inforequests:obligee_action:Categorized:legal_date:error:from_future"
 msgstr "May not be from future."
 
-msgid "inforequests:obligee_action:CategorizedStep:legal_date:error:older_than_month"
+msgid "inforequests:obligee_action:Categorized:legal_date:error:older_than_month"
 msgstr "May not be older than one month."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:newer_than_legal_date"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:error:newer_than_legal_date"
 msgstr "May not be later than this lagal date."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:older_than_last_action_legal_date"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:error:older_than_last_action_legal_date"
 msgstr "May not be older than the respective legal date."
 
-msgid "inforequests:obligee_action:CategorizedStep:last_action_delivered_date:error:from_future"
+msgid "inforequests:obligee_action:Categorized:last_action_dd:error:from_future"
 msgstr "May not be from future."
+
+msgid "inforequests:obligee_action:InvalidReversion:help_request:label"
+msgstr "Správa pre admina"
+
+msgid "inforequests:obligee_action:InvalidReversion:help_request:placeholder"
+msgstr "Popíšte adminovi, čo sa stalo"
+
+msgid "inforequests:obligee_action:WasItReturned:yes"
+msgstr "Áno, vracia"
+
+msgid "inforequests:obligee_action:WasItReturned:no"
+msgstr "Nie, nevracia"
+
+msgid "inforequests:obligee_action:WasItAccepted:all"
+msgstr "Áno, všetky"
+
+msgid "inforequests:obligee_action:WasItAccepted:some"
+msgstr "Niektoré"
+
+msgid "inforequests:obligee_action:WasItAccepted:none"
+msgstr "Žiadne"
+
+msgid "inforequests:obligee_action:ContainsAppealInfo:full"
+msgstr "Áno, som úplne spokojný"
+
+msgid "inforequests:obligee_action:ContainsAppealInfo:partial"
+msgstr "Čiastočne"
+
+msgid "inforequests:obligee_action:ContainsAppealInfo:none"
+msgstr "Vôbec"
+
+msgid "inforequests:obligee_action:IsItAppealDecision:yes"
+msgstr "Áno, má"
+
+msgid "inforequests:obligee_action:IsItAppealDecision:no"
+msgstr "Nie, nemá"
+
+msgid "inforequests:obligee_action:IsItExtension:yes"
+msgstr "Áno, spomína sa"
+
+msgid "inforequests:obligee_action:IsItExtension:no"
+msgstr "Nie, nespomína sa"
+
+msgid "inforequests:obligee_action:IsItExtension:extension:label"
+msgstr "Deadline Extension"
+
+msgid "inforequests:obligee_action:IsItExtension:extension:placeholder"
+msgstr "Calendar days"
+
+msgid "inforequests:obligee_action:IsItAdvancement:yes"
+msgstr "Áno, inštitúcia postupuje žiadosť inej inštitúcii"
+
+msgid "inforequests:obligee_action:IsItAdvancement:no"
+msgstr "Nie, v texte sa postúpenie nespomína"
+
+msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:label"
+msgstr "Advanced To"
+
+msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder"
+msgstr "Obligee"
+
+msgid "inforequests:obligee_action:IsItAdvancement:error:same_obligee"
+msgstr "May not advance to the same obligee."
+
+msgid "inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee"
+msgstr "May not advance twice to the same obligee."
+
+msgid "inforequests:obligee_action:IsItDecision:yes"
+msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie"
+
+msgid "inforequests:obligee_action:IsItDecision:no"
+msgstr "Nie, je to niečo iné"
+
+msgid "inforequests:obligee_action:ContainsInfo:full"
+msgstr "Som úplne spokojný"
+
+msgid "inforequests:obligee_action:ContainsInfo:partial"
+msgstr "Čiastočne"
+
+msgid "inforequests:obligee_action:ContainsInfo:none"
+msgstr "Vôbec"
+
+msgid "inforequests:obligee_action:IsOnTopic:yes"
+msgstr "Áno, je to reakcia na žiadosť"
+
+msgid "inforequests:obligee_action:IsOnTopic:no"
+msgstr "Nie, je to niečo iné"
+
+msgid "inforequests:obligee_action:IsItConfirmation:yes"
+msgstr "Áno, potvrdzujú, že vec dostali"
+
+msgid "inforequests:obligee_action:IsItConfirmation:no"
+msgstr "Nie, je to niečo iné"
+
+msgid "inforequests:obligee_action:IsItQuestion:yes"
+msgstr "Áno, je to otázka"
+
+msgid "inforequests:obligee_action:IsItQuestion:no"
+msgstr "Nie, nie je to otázka"
+
+msgid "inforequests:obligee_action:InputBasics:delivered_date:label"
+msgstr "Delivered Date"
+
+msgid "inforequests:obligee_action:InputBasics:delivered_date:placeholder"
+msgstr "mm/dd/yyyy"
+
+msgid "inforequests:obligee_action:InputBasics:attachments:label"
+msgstr "Attachments"
+
+msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_previous"
+msgstr "May not be older than previous action."
+
+msgid "inforequests:obligee_action:InputBasics:delivered_date:error:from_future"
+msgstr "May not be from future."
+
+msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month"
+msgstr "May not be older than one month."
+
+msgid "inforequests:obligee_action:SelectBranch:branch:label"
+msgstr "Obligee"
 
 msgid "inforequests:Action:type:REQUEST"
 msgstr "Request"

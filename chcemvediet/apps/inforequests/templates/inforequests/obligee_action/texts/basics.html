@@ -4,7 +4,7 @@
  %
  % Context:
  %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
- %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.BasicsStep
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.InputBasics
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
  %
@@ -13,14 +13,6 @@
 <h4>Čo vám prišlo</h4>
 <p>
   <span style="color: red;">FIXME</span>
-  {% if inforequest.branches|length > 1 %}
-    Táto žiadosť bola v minulosti postúpená. Vyberte, ktorá z inštitúcii sa ozvala.
-  {% endif %}
-  {% if not email %}
-    Zadajte datum, kedy ste si list prebrali na pošte alebo našli v schránke.
-  {% endif %}
-  Zadajte číslo spisu, ak inštitúcia nejaké udala.
-  {% if not email %}
-    Oskenujte celý dokument alebo ho odfoťte a priložte ho.
-  {% endif %}
+  Zadajte datum, kedy ste si list prebrali na pošte alebo našli v schránke.
+  Oskenujte celý dokument alebo ho odfoťte a priložte ho.
 </p>
