@@ -13,11 +13,11 @@ from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
-from chcemvediet.apps.wizards import Bottom, StepWIP, WizardWIP
+from chcemvediet.apps.wizards import Bottom, Step, Wizard
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 
-class ObligeeActionStep(StepWIP):
+class ObligeeActionStep(Step):
     template = u'inforequests/obligee_action/wizard.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -862,7 +862,7 @@ class HasSingeBranch(ObligeeActionStep):
 
 # Wizard
 
-class ObligeeActionWizard(WizardWIP):
+class ObligeeActionWizard(Wizard):
     first_step_class = HasSingeBranch
 
     def __init__(self, request, index, inforequest, inforequestemail, email):

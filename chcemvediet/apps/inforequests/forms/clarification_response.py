@@ -11,10 +11,10 @@ from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import StepWIP, WizardWIP
+from chcemvediet.apps.wizards import Step, Wizard
 from chcemvediet.apps.inforequests.models import Action
 
-class Main(StepWIP):
+class Main(Step):
     template = u'inforequests/clarification_response/main.html'
     text_template = u'inforequests/clarification_response/texts/main.html'
     form_template = u'main/snippets/form_horizontal.html'
@@ -81,7 +81,7 @@ class Main(StepWIP):
 
         return res
 
-class ClarificationResponseWizard(WizardWIP):
+class ClarificationResponseWizard(Wizard):
     first_step_class = Main
 
     def __init__(self, request, index, branch):

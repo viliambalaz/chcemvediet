@@ -6,7 +6,7 @@ from django.http import HttpResponseNotFound, HttpResponseRedirect
 
 from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
-from chcemvediet.apps.wizards.views import wizard_view_wip
+from chcemvediet.apps.wizards.views import wizard_view
 from chcemvediet.apps.inforequests.forms import SnoozeForm
 from chcemvediet.apps.inforequests.forms import AppealWizard, ClarificationResponseWizard, ObligeeActionWizard
 from chcemvediet.apps.inforequests.models import Inforequest, Action
@@ -26,7 +26,7 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
         return HttpResponseRedirect(reverse(u'inforequests:obligee_action',
                 kwargs=dict(inforequest=inforequest, step_idx=step_idx)))
 
-    return wizard_view_wip(ObligeeActionWizard, request, step_idx,
+    return wizard_view(ObligeeActionWizard, request, step_idx,
             inforequest, inforequestemail, email)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])
@@ -42,7 +42,7 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
         return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
 
-    return wizard_view_wip(ClarificationResponseWizard, request, step_idx, branch)
+    return wizard_view(ClarificationResponseWizard, request, step_idx, branch)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @transaction.atomic
@@ -57,7 +57,7 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
         return HttpResponseRedirect(reverse(u'inforequests:appeal',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
 
-    return wizard_view_wip(AppealWizard, request, step_idx, branch)
+    return wizard_view(AppealWizard, request, step_idx, branch)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @require_ajax

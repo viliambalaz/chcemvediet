@@ -23,8 +23,8 @@ class Transition(object):
         self.globals = {}
         self.next = None
 
-class StepWIP(forms.Form):
-    base_template = u'wizards/wizardwip.html'
+class Step(forms.Form):
+    base_template = u'wizards/wizard.html'
     template = None
     text_template = None
     form_template = None
@@ -33,7 +33,7 @@ class StepWIP(forms.Form):
     post_step_class = Bottom
 
     def __init__(self, wizard, index, accessible, *args, **kwargs):
-        super(StepWIP, self).__init__(*args, **kwargs)
+        super(Step, self).__init__(*args, **kwargs)
         self.wizard = wizard
         self.index = index
         self.key = self.__class__.__name__
@@ -102,8 +102,8 @@ class StepWIP(forms.Form):
         res.next = self.post_step_class
         return res
 
-class SectionStepWIP(StepWIP):
-    base_template = u'wizards/sectionwip.html'
+class SectionStep(Step):
+    base_template = u'wizards/section.html'
     section_template = None
 
     def paper_fields(self, paper):
@@ -115,44 +115,44 @@ class SectionStepWIP(StepWIP):
     def section_is_empty(self):
         return False
 
-class DeadendStepWIP(StepWIP):
-    base_template = u'wizards/deadendwip.html'
+class DeadendStep(Step):
+    base_template = u'wizards/deadend.html'
 
     def clean(self):
-        cleaned_data = super(DeadendStepWIP, self).clean()
+        cleaned_data = super(DeadendStep, self).clean()
         self.add_error(None, u'deadend')
         return cleaned_data
 
-class PaperStepWIP(StepWIP):
-    base_template = u'wizards/paperwip.html'
+class PaperStep(Step):
+    base_template = u'wizards/paper.html'
     subject_template = None
     content_template = None
     subject_value_name = u'subject'
     content_value_name = u'content'
 
     def add_fields(self):
-        super(PaperStepWIP, self).add_fields()
+        super(PaperStep, self).add_fields()
         for step in self.wizard.steps:
-            if isinstance(step, SectionStepWIP):
+            if isinstance(step, SectionStep):
                 step.paper_fields(self)
 
     def get_global_fields(self):
         res = []
-        res.extend(super(PaperStepWIP, self).get_global_fields())
+        res.extend(super(PaperStep, self).get_global_fields())
         for step in self.wizard.steps:
-            if isinstance(step, SectionStepWIP):
+            if isinstance(step, SectionStep):
                 res.extend(step.get_global_fields())
         return res
 
     def context(self, extra=None):
-        res = super(PaperStepWIP, self).context(extra)
+        res = super(PaperStep, self).context(extra)
         for step in self.wizard.steps:
-            if isinstance(step, SectionStepWIP):
+            if isinstance(step, SectionStep):
                 res.update(step.paper_context())
         return res
 
     def post_transition(self):
-        res = super(PaperStepWIP, self).post_transition()
+        res = super(PaperStep, self).post_transition()
 
         if self.is_valid():
             context = self.context(dict(finalize=True))
@@ -163,14 +163,14 @@ class PaperStepWIP(StepWIP):
 
         return res
 
-class PrintStepWIP(StepWIP):
-    base_template = u'wizards/printwip.html'
+class PrintStep(Step):
+    base_template = u'wizards/print.html'
     print_value_name = u'content'
 
     def print_content(self):
         return self.wizard.values[self.print_value_name]
 
-class WizardWIP(object):
+class Wizard(object):
     first_step_class = None
 
     def _step_data(self, step, prefixed=False):

@@ -1,7 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from poleno.utils.urls import reverse
-from chcemvediet.apps.wizards import WizardWIP
+from chcemvediet.apps.wizards import Wizard
 from chcemvediet.apps.inforequests.models import Action
 
 from .common import AppealStep
@@ -43,7 +43,7 @@ class Dispatcher(AppealStep):
 
         return res
 
-class AppealWizard(WizardWIP):
+class AppealWizard(Wizard):
     first_step_class = Dispatcher
 
     def __init__(self, request, index, branch):

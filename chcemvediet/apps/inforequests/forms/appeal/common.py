@@ -9,19 +9,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import StepWIP, SectionStepWIP, DeadendStepWIP, PaperStepWIP, PrintStepWIP
+from chcemvediet.apps.wizards import Step, SectionStep, DeadendStep, PaperStep, PrintStep
 from chcemvediet.apps.wizards.forms import PaperDateField
 
-class AppealStep(StepWIP):
+class AppealStep(Step):
     template = u'inforequests/appeal/wizard.html'
 
-class AppealSectionStep(AppealStep, SectionStepWIP):
+class AppealSectionStep(AppealStep, SectionStep):
     pass
 
-class AppealDeadendStep(AppealStep, DeadendStepWIP):
+class AppealDeadendStep(AppealStep, DeadendStep):
     pass
 
-class AppealFinalStep(AppealStep, PrintStepWIP):
+class AppealFinalStep(AppealStep, PrintStep):
     text_template = u'inforequests/appeal/texts/final.html'
 
     def clean(self):
@@ -50,7 +50,7 @@ class AppealFinalStep(AppealStep, PrintStepWIP):
 
         return res
 
-class AppealPaperStep(AppealStep, PaperStepWIP):
+class AppealPaperStep(AppealStep, PaperStep):
     text_template = u'inforequests/appeal/texts/paper.html'
     subject_template = u'inforequests/appeal/papers/subject.txt'
     content_template = u'inforequests/appeal/papers/base.html'
