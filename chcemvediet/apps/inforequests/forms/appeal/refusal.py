@@ -139,9 +139,9 @@ class SanitizationLevel(SanitizationStep):
         self.fields[u'sanitization_level'] = forms.ChoiceField(
                 choices=(
                     (None, u''),
-                    (u'overly-sanitized',   _(u'inforequests:SanitizationLevel:OverlySanitized')),
-                    (u'missing-document',   _(u'inforequests:SanitizationLevel:MissingDocument')),
-                    (u'properly-sanitized', _(u'inforequests:SanitizationLevel:ProperlySanitized')),
+                    (u'overly-sanitized',   _(u'inforequests:appeal:SanitizationLevel:OverlySanitized')),
+                    (u'missing-document',   _(u'inforequests:appeal:SanitizationLevel:MissingDocument')),
+                    (u'properly-sanitized', _(u'inforequests:appeal:SanitizationLevel:ProperlySanitized')),
                     ),
                 )
 
@@ -218,8 +218,8 @@ class OtherReasonValid(ReasonStep):
                 coerce=int,
                 choices=(
                     (None, u''),
-                    (1, _(u'inforequests:OtherReasonValid:yes')),
-                    (0, _(u'inforequests:OtherReasonValid:no')),
+                    (1, _(u'inforequests:appeal:OtherReasonValid:yes')),
+                    (0, _(u'inforequests:appeal:OtherReasonValid:no')),
                     ),
                 )
 
@@ -301,8 +301,8 @@ class ConfidentialNotConfidential(ReasonStep):
                 coerce=int,
                 choices=(
                     (None, u''),
-                    (1, _(u'inforequests:ConfidentialNotConfidential:yes')),
-                    (0, _(u'inforequests:ConfidentialNotConfidential:no')),
+                    (1, _(u'inforequests:appeal:ConfidentialNotConfidential:yes')),
+                    (0, _(u'inforequests:appeal:ConfidentialNotConfidential:no')),
                     ),
                 )
 
@@ -384,8 +384,8 @@ class PersonalOfficer(ReasonStep):
                 coerce=int,
                 choices=(
                     (None, u''),
-                    (1, _(u'inforequests:PersonalOfficer:yes')),
-                    (0, _(u'inforequests:PersonalOfficer:no')),
+                    (1, _(u'inforequests:appeal:PersonalOfficer:yes')),
+                    (0, _(u'inforequests:appeal:PersonalOfficer:no')),
                     ),
                 )
 
@@ -476,11 +476,11 @@ class BusinessSecretDefinition(ReasonStep):
                 label=u' ',
                 required=False,
                 choices=(
-                    (u'comercial', _(u'inforequests:BusinessSecretDefinition:comercial')),
-                    (u'value',     _(u'inforequests:BusinessSecretDefinition:value')),
-                    (u'common',    _(u'inforequests:BusinessSecretDefinition:common')),
-                    (u'will',      _(u'inforequests:BusinessSecretDefinition:will')),
-                    (u'ensured',   _(u'inforequests:BusinessSecretDefinition:ensured')),
+                    (u'comercial', _(u'inforequests:appeal:BusinessSecretDefinition:comercial')),
+                    (u'value',     _(u'inforequests:appeal:BusinessSecretDefinition:value')),
+                    (u'common',    _(u'inforequests:appeal:BusinessSecretDefinition:common')),
+                    (u'will',      _(u'inforequests:appeal:BusinessSecretDefinition:will')),
+                    (u'ensured',   _(u'inforequests:appeal:BusinessSecretDefinition:ensured')),
                     ),
                 widget=forms.CheckboxSelectMultiple(),
                 )
@@ -511,8 +511,8 @@ class BusinessSecretPublicFunds(ReasonStep):
                 coerce=int,
                 choices=(
                     (None, u''),
-                    (1, _(u'inforequests:BusinessSecretPublicFunds:yes')),
-                    (0, _(u'inforequests:BusinessSecretPublicFunds:no')),
+                    (1, _(u'inforequests:appeal:BusinessSecretPublicFunds:yes')),
+                    (0, _(u'inforequests:appeal:BusinessSecretPublicFunds:no')),
                     ),
                 )
 
@@ -617,8 +617,8 @@ class DoesNotProvidePublicFunds(ReasonStep):
                 coerce=int,
                 choices=(
                     (None, u''),
-                    (1, _(u'inforequests:DoesNotProvidePublicFunds:yes')),
-                    (0, _(u'inforequests:DoesNotProvidePublicFunds:no')),
+                    (1, _(u'inforequests:appeal:DoesNotProvidePublicFunds:yes')),
+                    (0, _(u'inforequests:appeal:DoesNotProvidePublicFunds:no')),
                     ),
                 )
 

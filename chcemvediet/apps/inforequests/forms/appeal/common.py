@@ -65,7 +65,7 @@ class AppealPaperStep(AppealStep, PaperStepWIP):
             initial=local_today,
             final_format=u'd.m.Y',
             widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:AppealPaperStep:legal_date:placeholder'),
+                u'placeholder': _('inforequests:appeal:AppealPaperStep:legal_date:placeholder'),
                 u'class': u'datepicker',
                 }),
             )
@@ -78,11 +78,11 @@ class AppealPaperStep(AppealStep, PaperStepWIP):
         if legal_date is not None:
             try:
                 if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:older_than_last_action'))
+                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:older_than_last_action'))
                 if legal_date < local_today():
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:from_past'))
+                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:from_past'))
                 if legal_date > local_today() + relativedelta(days=5):
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:too_far_from_future'))
+                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future'))
             except ValidationError as e:
                 self.add_error(u'legal_date', e)
 
