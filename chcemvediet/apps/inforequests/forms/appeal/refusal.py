@@ -446,6 +446,7 @@ class BusinessSecretDefinitionReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
     text_template = u'inforequests/appeal/texts/refusal/business_secret_definition_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/business_secret_definition_reason.html'
+    # For ``global_fields`` see ``get_global_fields()``
     post_step_class = BusinessSecretEnd
 
     def add_fields(self):
