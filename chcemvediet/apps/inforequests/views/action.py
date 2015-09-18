@@ -6,7 +6,7 @@ from django.http import HttpResponseNotFound, HttpResponseRedirect
 
 from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
-from chcemvediet.apps.wizards.views import wizard_view, wizard_view_wip
+from chcemvediet.apps.wizards.views import wizard_view_wip
 from chcemvediet.apps.inforequests.forms import SnoozeForm
 from chcemvediet.apps.inforequests.forms import AppealWizard, ClarificationResponseWizard, ObligeeActionWizard
 from chcemvediet.apps.inforequests.models import Inforequest, Action
@@ -42,13 +42,7 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
         return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
 
-    def finish(wizard):
-        action = wizard.save()
-        action.save()
-        action.send_by_email()
-        return action.get_absolute_url()
-
-    return wizard_view(ClarificationResponseWizard, request, step_idx, finish, branch)
+    return wizard_view_wip(ClarificationResponseWizard, request, step_idx, branch)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @transaction.atomic

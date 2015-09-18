@@ -1,68 +1,68 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from collections import OrderedDict
-
 from django import forms
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
 from poleno.attachments.forms import AttachmentsField
-from poleno.workdays import workdays
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import Wizard, WizardStep
+from chcemvediet.apps.wizards import StepWIP, WizardWIP
 from chcemvediet.apps.inforequests.models import Action
 
-
-class ClarificationResponseStep(WizardStep):
+class Main(StepWIP):
     template = u'inforequests/clarification_response/main.html'
     text_template = u'inforequests/clarification_response/texts/main.html'
     form_template = u'main/snippets/form_horizontal.html'
+    global_fields = [u'attachments']
 
-    content = CompositeTextField(
-            label=_(u'inforequests:ClarificationResponseStep:content:label'),
-            template=u'inforequests/clarification_response/forms/content.txt',
-            fields=[
-                forms.CharField(widget=forms.Textarea(attrs={
-                    u'placeholder': _(u'inforequests:ClarificationResponseStep:content:placeholder'),
-                    u'class': u'autosize',
-                    u'cols': u'', u'rows': u'',
-                    })),
-                ],
-            composite_attrs={
-                u'class': u'input-block-level',
-                },
-            )
-    attachments = AttachmentsField(
-            label=_(u'inforequests:ClarificationResponseStep:attachments:label'),
-            required=False,
-            upload_url_func=(lambda: reverse(u'inforequests:upload_attachment')),
-            download_url_func=(lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
-            )
+    def add_fields(self):
+        super(Main, self).add_fields()
 
-    def __init__(self, *args, **kwargs):
-        super(ClarificationResponseStep, self).__init__(*args, **kwargs)
-        session = Session.objects.get(session_key=self.wizard.request.session.session_key)
-        self.fields[u'content'].widget.context.update(self.context())
-        self.fields[u'attachments'].attached_to = (self.wizard.draft, session)
+        self.fields[u'content'] = CompositeTextField(
+                label=_(u'inforequests:clarification_response:Main:content:label'),
+                template=u'inforequests/clarification_response/forms/content.txt',
+                context=self.context(),
+                fields=[
+                    forms.CharField(widget=forms.Textarea(attrs={
+                        u'placeholder': _(u'inforequests:clarification_response:Main:content:placeholder'),
+                        u'class': u'autosize',
+                        u'cols': u'', u'rows': u'',
+                        })),
+                    ],
+                composite_attrs={
+                    u'class': u'input-block-level',
+                    },
+                )
+
+        self.fields[u'attachments'] = AttachmentsField(
+                label=_(u'inforequests:clarification_response:Main:attachments:label'),
+                required=False,
+                attached_to=(
+                    self.wizard.draft,
+                    Session.objects.get(session_key=self.wizard.request.session.session_key),
+                    ),
+                upload_url_func=(lambda: reverse(u'inforequests:upload_attachment')),
+                download_url_func=(lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
+                )
 
     def clean(self):
-        cleaned_data = super(ClarificationResponseStep, self).clean()
+        cleaned_data = super(Main, self).clean()
 
         if self.wizard.branch.inforequest.has_undecided_emails:
-                msg = squeeze(render_to_string(u'inforequests/clarification_response/messages/undecided_emails.txt', {
-                        u'inforequest': self.wizard.branch.inforequest,
-                        }))
-                raise forms.ValidationError(msg, code=u'undecided_emails')
+            msg = squeeze(render_to_string(u'inforequests/clarification_response/messages/undecided_emails.txt', {
+                    u'inforequest': self.wizard.branch.inforequest,
+                    }))
+            self.add_error(None, msg)
 
         return cleaned_data
 
     def commit(self):
-        super(ClarificationResponseStep, self).commit()
+        super(Main, self).commit()
 
         @after_saved(self.wizard.draft)
         def deferred(draft):
@@ -70,35 +70,43 @@ class ClarificationResponseStep(WizardStep):
                 attachment.generic_object = draft
                 attachment.save()
 
-    def values(self):
-        res = super(ClarificationResponseStep, self).values()
-        res[u'subject'] = squeeze(render_to_string(u'inforequests/clarification_response/forms/subject.txt'))
-        res[u'content'] = self.fields[u'content'].finalize(self.cleaned_data[u'content'])
+    def post_transition(self):
+        res = super(Main, self).post_transition()
+
+        if self.is_valid():
+            res.globals.update({
+                u'subject': squeeze(render_to_string(u'inforequests/clarification_response/forms/subject.txt')),
+                u'content': self.fields[u'content'].finalize(self.cleaned_data[u'content']),
+                })
+
         return res
 
-class ClarificationResponseWizard(Wizard):
-    step_classes = OrderedDict([
-            (u'main', ClarificationResponseStep),
-            ])
+class ClarificationResponseWizard(WizardWIP):
+    first_step_class = Main
 
-    def __init__(self, request, branch):
-        super(ClarificationResponseWizard, self).__init__(request)
-        self.instance_id = u'%s-%s' % (self.__class__.__name__, branch.last_action.pk)
+    def __init__(self, request, index, branch):
+        self.inforequest = branch.inforequest
         self.branch = branch
+        self.last_action = branch.last_action
+        super(ClarificationResponseWizard, self).__init__(request, index)
+
+    def get_instance_id(self):
+        return u'%s-%s' % (self.__class__.__name__, self.last_action.pk)
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:clarification_response', kwargs=dict(branch=self.branch, step=step)) + anchor
+        return reverse(u'inforequests:clarification_response',
+                kwargs=dict(branch=self.branch, step=step)) + anchor
 
     def context(self, extra=None):
         res = super(ClarificationResponseWizard, self).context(extra)
         res.update({
-                u'inforequest': self.branch.inforequest,
+                u'inforequest': self.inforequest,
                 u'branch': self.branch,
-                u'last_action': self.branch.last_action,
+                u'last_action': self.last_action,
                 })
         return res
 
-    def save(self):
+    def finish(self):
         today = local_today()
         action = Action.create(
                 branch=self.branch,
@@ -109,4 +117,7 @@ class ClarificationResponseWizard(Wizard):
                 legal_date=today,
                 attachments=self.values[u'attachments'],
                 )
-        return action
+        action.save()
+        action.send_by_email()
+
+        return action.get_absolute_url()
