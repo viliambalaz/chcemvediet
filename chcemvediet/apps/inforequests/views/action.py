@@ -8,7 +8,7 @@ from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
 from chcemvediet.apps.wizards.views import wizard_view, wizard_view_wip
 from chcemvediet.apps.inforequests.forms import SnoozeForm
-from chcemvediet.apps.inforequests.forms import AppealWizards, ClarificationResponseWizard, ObligeeActionWizard
+from chcemvediet.apps.inforequests.forms import AppealWizard, ClarificationResponseWizard, ObligeeActionWizard
 from chcemvediet.apps.inforequests.models import Inforequest, Action
 
 from .shortcuts import render_form, json_form, json_success
@@ -63,13 +63,7 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
         return HttpResponseRedirect(reverse(u'inforequests:appeal',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
 
-    def finish(wizard):
-        branch.add_expiration_if_expired()
-        action = wizard.save()
-        action.save()
-        return action.get_absolute_url()
-
-    return wizard_view(AppealWizards, request, step_idx, finish, branch)
+    return wizard_view_wip(AppealWizard, request, step_idx, branch)
 
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @require_ajax

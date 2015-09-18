@@ -269,22 +269,25 @@ class StepWIP(forms.Form):
     text_template = None
     form_template = None
     global_fields = []
-    next_step_class = Bottom
+    pre_step_class = None
+    post_step_class = Bottom
 
     def __init__(self, wizard, index, accessible, *args, **kwargs):
-        # Make sure there are no step name conflicts
-        assert self.__class__.__name__ != u'global'
-        assert self.__class__.__name__ not in [s.__class__.__name__ for s in wizard.steps]
-
         super(StepWIP, self).__init__(*args, **kwargs)
         self.wizard = wizard
         self.index = index
+        self.key = self.__class__.__name__
         self.accessible = accessible
         self.values = None
 
+        # Make sure there are no step name conflicts
+        assert self.key != u'global'
+        assert self.key not in [s.key for s in wizard.steps]
+
     def commit(self):
+        global_fields = self.get_global_fields()
         for field_name in self.fields:
-            group = u'global' if field_name in self.global_fields else self.__class__.__name__
+            group = u'global' if field_name in global_fields else self.key
             dest = self.wizard.draft.data.setdefault(group, {})
             dest[field_name] = self._raw_value(field_name)
 
@@ -306,6 +309,9 @@ class StepWIP(forms.Form):
     def add_fields(self):
         pass
 
+    def get_global_fields(self):
+        return self.global_fields
+
     def context(self, extra=None):
         return dict(self.wizard.context(extra), step=self)
 
@@ -320,25 +326,98 @@ class StepWIP(forms.Form):
                 context_instance=RequestContext(self.wizard.request), dictionary=self.context())
 
     def pre_transition(self):
-        return Transition()
+        res = Transition()
+        res.next = self.pre_step_class
+        return res
 
     def post_transition(self):
         res = Transition()
-        for field_name in self.fields:
-            value = self.cleaned_data[field_name] if self.is_valid() else None
-            dest = res.globals if field_name in self.global_fields else res.values
-            dest[field_name] = value
-        res.next = self.next_step_class
+        if self.is_valid():
+            global_fields = self.get_global_fields()
+            for field_name in self.fields:
+                if field_name in global_fields:
+                    res.globals[field_name] = self.cleaned_data[field_name]
+                else:
+                    res.values[field_name] = self.cleaned_data[field_name]
+        res.next = self.post_step_class
         return res
+
+class SectionStepWIP(StepWIP):
+    base_template = u'wizards/sectionwip.html'
+    section_template = None
+
+    def paper_fields(self, paper):
+        pass
+
+    def paper_context(self, extra=None):
+        return dict(extra or {})
+
+    def section_is_empty(self):
+        return False
+
+class DeadendStepWIP(StepWIP):
+    base_template = u'wizards/deadendwip.html'
+
+    def clean(self):
+        cleaned_data = super(DeadendStepWIP, self).clean()
+        self.add_error(None, u'deadend')
+        return cleaned_data
+
+class PaperStepWIP(StepWIP):
+    base_template = u'wizards/paperwip.html'
+    subject_template = None
+    content_template = None
+    subject_value_name = u'subject'
+    content_value_name = u'content'
+
+    def add_fields(self):
+        super(PaperStepWIP, self).add_fields()
+        for step in self.wizard.steps:
+            if isinstance(step, SectionStepWIP):
+                step.paper_fields(self)
+
+    def get_global_fields(self):
+        res = []
+        res.extend(super(PaperStepWIP, self).get_global_fields())
+        for step in self.wizard.steps:
+            if isinstance(step, SectionStepWIP):
+                res.extend(step.get_global_fields())
+        return res
+
+    def context(self, extra=None):
+        res = super(PaperStepWIP, self).context(extra)
+        for step in self.wizard.steps:
+            if isinstance(step, SectionStepWIP):
+                res.update(step.paper_context())
+        return res
+
+    def post_transition(self):
+        res = super(PaperStepWIP, self).post_transition()
+
+        if self.is_valid():
+            context = self.context(dict(finalize=True))
+            subject = squeeze(render_to_string(self.subject_template, context))
+            content = render_to_string(self.content_template, context)
+            res.globals[self.subject_value_name] = subject
+            res.globals[self.content_value_name] = content
+
+        return res
+
+class PrintStepWIP(StepWIP):
+    base_template = u'wizards/printwip.html'
+    print_value_name = u'content'
+
+    def print_content(self):
+        return self.wizard.values[self.print_value_name]
 
 class WizardWIP(object):
     first_step_class = None
 
-    def _step_data(self, step_class, prefixed=False):
+    def _step_data(self, step, prefixed=False):
         res = {}
-        for field, value in self.draft.data.get(step_class.__name__, {}).items():
+        for field, value in self.draft.data.get(step.key, {}).items():
             res[field] = value
-        for field in step_class.global_fields:
+        for field in step.get_global_fields():
             res[field] = self.draft.data.get(u'global', {}).get(field, None)
         if prefixed:
             res = {self.add_prefix(f): v for f, v in res.items()}
@@ -363,15 +442,7 @@ class WizardWIP(object):
         accessible = True
         step_class = self.first_step_class
         while step_class and step_class is not Bottom:
-            initial = self._step_data(step_class)
-            if accessible and len(self.steps) < current_index:
-                post = self._step_data(step_class, prefixed=True)
-            elif accessible and len(self.steps) == current_index and request.method == u'POST':
-                post = request.POST
-            else:
-                post = None
-
-            step = step_class(self, len(self.steps), accessible, initial=initial, data=post)
+            step = step_class(self, len(self.steps), accessible)
 
             transition = step.pre_transition()
             step.values = dict(transition.values if accessible else {})
@@ -380,11 +451,18 @@ class WizardWIP(object):
             if step_class:
                 continue
 
-            self.steps.append(step)
             if accessible:
                 step.add_fields()
-            if not step.is_valid():
-                accessible = False
+                step.initial = self._step_data(step)
+                if len(self.steps) < current_index:
+                    step.data = self._step_data(step, prefixed=True)
+                    step.is_bound = True
+                if len(self.steps) == current_index and request.method == u'POST':
+                    step.data = request.POST
+                    step.is_bound = True
+                if not step.is_valid():
+                    accessible = False
+            self.steps.append(step)
 
             transition = step.post_transition()
             step.values.update(transition.values if accessible else {})
@@ -404,7 +482,7 @@ class WizardWIP(object):
 
     def commit(self):
         self.current_step.commit()
-        self.draft.step = self.current_step.__class__.__name__
+        self.draft.step = self.current_step.key
         self.draft.save()
 
     def reset(self):

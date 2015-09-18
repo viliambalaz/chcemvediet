@@ -1,0 +1,17 @@
+{# vim: set filetype=htmldjango :#}
+{% extends "wizards/wizardwip.html" %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.wizards.WizardWIP
+ %  -- step: chcemvediet.apps.wizards.PaperStepWIP
+ %
+{% endcomment %}
+
+{% block body %}
+  {{ block.super }}
+  <div class="action-content">
+    {% include step.content_template %}
+  </div>
+{% endblock %}

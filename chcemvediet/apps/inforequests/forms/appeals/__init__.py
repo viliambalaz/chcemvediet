@@ -1,119 +1,96 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from dateutil.relativedelta import relativedelta
-
-from django import forms
-from django.core.exceptions import ValidationError
-from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
-
-from poleno.workdays import workdays
 from poleno.utils.urls import reverse
-from poleno.utils.date import local_today
-from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import WizardStep, Wizard, WizardGroup
-from chcemvediet.apps.wizards import WizardSectionStep, WizardDeadendStep, WizardPaperStep, WizardPrintStep
-from chcemvediet.apps.wizards.forms import PaperDateField
+from chcemvediet.apps.wizards import WizardWIP
 from chcemvediet.apps.inforequests.models import Action
 
+from .common import AppealStep
+from .refusal import RefusalAppeal
+from .refusal_no_reason import RefusalNoReasonAppeal
+from .disclosure import DisclosureAppeal
+from .advancement import AdvancementAppeal
+from .expiration import ExpirationAppeal
+from .fallback import FallbackAppeal
 
-class AppealStep(WizardStep):
-    template = u'inforequests/appeals/wizard.html'
+class Dispatcher(AppealStep):
 
-class AppealSectionStep(AppealStep, WizardSectionStep):
-    pass
+    def pre_transition(self):
+        res = super(Dispatcher, self).pre_transition()
+        last_action = self.wizard.last_action
 
-class AppealDeadendStep(AppealStep, WizardDeadendStep):
-    pass
+        if (last_action.type == Action.TYPES.REFUSAL
+                and last_action.refusal_reason
+                and set(last_action.refusal_reason) <= RefusalAppeal.covered_reasons()):
+            res.next = RefusalAppeal
 
-class AppealPaperStep(AppealStep, WizardPaperStep):
-    text_template = u'inforequests/appeals/texts/paper.html'
-    subject_template = u'inforequests/appeals/papers/subject.txt'
-    content_template = u'inforequests/appeals/papers/base.html'
+        elif (last_action.type == Action.TYPES.REFUSAL
+                and not last_action.refusal_reason):
+            res.next = RefusalNoReasonAppeal
 
-    legal_date = PaperDateField(
-            localize=True,
-            initial=local_today,
-            final_format=u'd.m.Y',
-            widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:AppealPaperStep:legal_date:placeholder'),
-                u'class': u'datepicker',
-                }),
-            )
+        elif (last_action.type == Action.TYPES.DISCLOSURE
+                and last_action.disclosure_level != Action.DISCLOSURE_LEVELS.FULL):
+            res.next = DisclosureAppeal
 
-    def clean(self):
-        cleaned_data = super(AppealPaperStep, self).clean()
+        elif last_action.type == Action.TYPES.ADVANCEMENT:
+            res.next = AdvancementAppeal
 
-        branch = self.wizard.branch
-        legal_date = cleaned_data.get(u'legal_date', None)
-        if legal_date is not None:
-            try:
-                if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:older_than_last_action'))
-                if legal_date < local_today():
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:from_past'))
-                if legal_date > local_today() + relativedelta(days=5):
-                    raise ValidationError(_(u'inforequests:AppealPaperStep:legal_date:error:too_far_from_future'))
-            except ValidationError as e:
-                self.add_error(u'legal_date', e)
+        elif (last_action.type == Action.TYPES.EXPIRATION
+                or last_action.has_obligee_deadline_missed):
+            res.next = ExpirationAppeal
 
-        return cleaned_data
-
-class AppealFinalStep(AppealStep, WizardPrintStep):
-    text_template = u'inforequests/appeals/texts/final.html'
-
-    def clean(self):
-        cleaned_data = super(AppealFinalStep, self).clean()
-
-        if self.wizard.branch.inforequest.has_undecided_emails:
-                msg = squeeze(render_to_string(u'inforequests/appeals/messages/undecided_emails.txt', {
-                        u'inforequest': self.wizard.branch.inforequest,
-                        }))
-                raise forms.ValidationError(msg, code=u'undecided_emails')
-
-        return cleaned_data
-
-    def context(self, extra=None):
-        res = super(AppealFinalStep, self).context(extra)
-
-        last_action = self.wizard.branch.last_action
-        legal_date = self.wizard.values[u'legal_date']
-        if last_action.has_applicant_deadline:
-            res.update({
-                    u'is_deadline_missed_at_today': last_action.deadline.is_deadline_missed,
-                    u'calendar_days_behind_at_today': last_action.deadline.calendar_days_behind,
-                    u'is_deadline_missed_at_legal_date': last_action.deadline.is_deadline_missed_at(legal_date),
-                    u'calendar_days_behind_at_legal_date': last_action.deadline.calendar_days_behind_at(legal_date),
-                    })
+        else:
+            res.next = FallbackAppeal
 
         return res
 
+class AppealWizard(WizardWIP):
+    first_step_class = Dispatcher
 
-class AppealWizard(Wizard):
-
-    def __init__(self, request, branch):
-        super(AppealWizard, self).__init__(request)
-        self.instance_id = u'%s-%s' % (self.__class__.__name__, branch.last_action.pk)
+    def __init__(self, request, index, branch):
+        self.inforequest = branch.inforequest
         self.branch = branch
+        self.last_action = branch.last_action
+        super(AppealWizard, self).__init__(request, index)
+
+    def get_instance_id(self):
+        return u'%s-%s' % (self.__class__.__name__, self.last_action.pk)
 
     def get_step_url(self, step, anchor=u''):
-        return reverse(u'inforequests:appeal', kwargs=dict(branch=self.branch, step=step)) + anchor
+        return reverse(u'inforequests:appeal',
+                kwargs=dict(branch=self.branch, step=step)) + anchor
 
     def context(self, extra=None):
         res = super(AppealWizard, self).context(extra)
         res.update({
-                u'inforequest': self.branch.inforequest,
+                u'inforequest': self.inforequest,
                 u'branch': self.branch,
-                u'last_action': self.branch.last_action,
+                u'last_action': self.last_action,
                 u'rozklad': u'ministerstvo' in self.branch.obligee.name.lower(),
-                u'fiktivne': self.branch.last_action.type != Action.TYPES.REFUSAL,
-                u'not_at_all': self.branch.last_action.disclosure_level not in [
+                u'fiktivne': self.last_action.type != Action.TYPES.REFUSAL,
+                u'not_at_all': self.last_action.disclosure_level not in [
                     Action.DISCLOSURE_LEVELS.PARTIAL, Action.DISCLOSURE_LEVELS.FULL],
                 })
         return res
 
-    def _retrospection(self, last_action, recursive=False):
+    def finish(self):
+        self.branch.add_expiration_if_expired()
+
+        action = Action.create(
+                branch=self.branch,
+                type=Action.TYPES.APPEAL,
+                subject=self.values[u'subject'],
+                content=self.values[u'content'],
+                content_type=Action.CONTENT_TYPES.HTML,
+                sent_date=self.values[u'legal_date'],
+                legal_date=self.values[u'legal_date'],
+                )
+        action.save()
+
+        return action.get_absolute_url()
+
+    def retrospection(self, last_action=None, recursive=False):
         res = []
+        last_action = last_action if last_action else self.last_action
         branch = last_action.branch
         obligee = branch.historicalobligee if recursive else None
 
@@ -123,7 +100,7 @@ class AppealWizard(Wizard):
         if branch.is_main:
             clause(u'request', inforequest=branch.inforequest)
         else:
-            res.extend(self._retrospection(branch.advanced_by, recursive=True))
+            res.extend(self.retrospection(branch.advanced_by, recursive=True))
 
         start_index = 0
         while True:
@@ -166,37 +143,3 @@ class AppealWizard(Wizard):
             clause(u'advancement', advancement=last_action)
 
         return res
-
-    def retrospection(self):
-        return self._retrospection(self.branch.last_action)
-
-    def save(self):
-        action = Action.create(
-                branch=self.branch,
-                type=Action.TYPES.APPEAL,
-                subject=self.values[u'subject'],
-                content=self.values[u'content'],
-                content_type=Action.CONTENT_TYPES.HTML,
-                sent_date=self.values[u'legal_date'],
-                legal_date=self.values[u'legal_date'],
-                )
-        return action
-
-
-# Must be after ``AppealWizard`` to break cyclic dependency
-from .disclosure import DisclosureAppealWizard
-from .refusal import RefusalAppealWizard
-from .refusal_no_reason import RefusalNoReasonAppealWizard
-from .advancement import AdvancementAppealWizard
-from .expiration import ExpirationAppealWizard
-from .fallback import FallbackAppealWizard
-
-class AppealWizards(WizardGroup):
-    wizard_classes = [
-            DisclosureAppealWizard,
-            RefusalAppealWizard,
-            RefusalNoReasonAppealWizard,
-            AdvancementAppealWizard,
-            ExpirationAppealWizard,
-            FallbackAppealWizard,
-            ]

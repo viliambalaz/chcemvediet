@@ -1,28 +1,21 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from collections import OrderedDict
-
 from poleno.utils.forms import EditableSpan
 from chcemvediet.apps.wizards.forms import PaperCharField
 
-from . import AppealPaperStep, AppealFinalStep, AppealWizard
+from .common import AppealStep, AppealPaperStep, AppealFinalStep
 
-
-class FallbackAppealPaperStep(AppealPaperStep):
+class Paper(AppealPaperStep):
     text_template = u'inforequests/appeals/texts/fallback.html'
     content_template = u'inforequests/appeals/papers/fallback.html'
+    post_step_class = AppealFinalStep
 
-    reason = PaperCharField(widget=EditableSpan())
+    def add_fields(self):
+        super(Paper, self).add_fields()
+        self.fields[u'reason'] = PaperCharField(widget=EditableSpan())
 
-class FallbackAppealWizard(AppealWizard):
+class FallbackAppeal(AppealStep):
     u"""
     Fallback appeal wizard for all cases not covered with a more specific wizard.
     """
-    step_classes = OrderedDict([
-            (u'paper', FallbackAppealPaperStep),
-            (u'final', AppealFinalStep),
-            ])
-
-    @classmethod
-    def applicable(cls, branch):
-        return True
+    pre_step_class = Paper

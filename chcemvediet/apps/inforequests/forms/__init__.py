@@ -4,5 +4,5 @@
 from .inforequest import InforequestForm
 from .action import SnoozeForm
 from .obligee_action import ObligeeActionWizard
-from .appeals import AppealWizards
+from .appeals import AppealWizard
 from .clarification_response import ClarificationResponseWizard

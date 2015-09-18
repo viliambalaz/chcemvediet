@@ -1,30 +1,14 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from collections import OrderedDict
+from .common import AppealStep, AppealPaperStep, AppealFinalStep
 
-from chcemvediet.apps.inforequests.models import Action
-
-from . import AppealPaperStep, AppealFinalStep, AppealWizard
-
-
-class RefusalNoReasonAppealPaperStep(AppealPaperStep):
+class Paper(AppealPaperStep):
     text_template = u'inforequests/appeals/texts/refusal_no_reason.html'
     content_template = u'inforequests/appeals/papers/refusal_no_reason.html'
+    post_step_class = AppealFinalStep
 
-class RefusalNoReasonAppealWizard(AppealWizard):
+class RefusalNoReasonAppeal(AppealStep):
     u"""
     Appeal wizard for branches that end with a refusal action with no reason specified.
     """
-
-    step_classes = OrderedDict([
-            (u'paper', RefusalNoReasonAppealPaperStep),
-            (u'final', AppealFinalStep),
-            ])
-
-    @classmethod
-    def applicable(cls, branch):
-        if branch.last_action.type != Action.TYPES.REFUSAL:
-            return False
-        if branch.last_action.refusal_reason: # With a reason
-            return False
-        return True
+    pre_step_class = Paper

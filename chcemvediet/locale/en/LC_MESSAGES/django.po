@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 00:42+0200\n"
+"POT-Creation-Date: 2015-09-18 06:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,59 +86,59 @@ msgstr "May not be from the past."
 msgid "inforequests:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "May not be more than 5 days from the future."
 
-msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:yes"
-msgstr "Yes"
-
-msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:no"
-msgstr "No"
-
-msgid "inforequests:RefusalAppealBusinessSecretPublicFundsStep:yes"
-msgstr "Yes"
-
-msgid "inforequests:RefusalAppealBusinessSecretPublicFundsStep:no"
-msgstr "No"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:comercial"
-msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiacu s podnikom,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:value"
-msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:common"
-msgstr "Je v príslušných obchodných kruhoch bežne dostupná,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:will"
-msgstr "Nie je podľa vôle podnikateľa utajená,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:ensured"
-msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
-
-msgid "inforequests:RefusalAppealPersonalOfficerStep:yes"
-msgstr "Yes"
-
-msgid "inforequests:RefusalAppealPersonalOfficerStep:no"
-msgstr "No"
-
-msgid "inforequests:RefusalAppealConfidentialNotConfidentialStep:yes"
-msgstr "Yes"
-
-msgid "inforequests:RefusalAppealConfidentialNotConfidentialStep:no"
-msgstr "No"
-
-msgid "inforequests:RefusalAppealOtherReasonValidStep:yes"
-msgstr "Yes"
-
-msgid "inforequests:RefusalAppealOtherReasonValidStep:no"
-msgstr "No"
-
-msgid "inforequests:RefusalAppealSanitizationLevelStep:OverlySanitized"
+msgid "inforequests:SanitizationLevel:OverlySanitized"
 msgstr "Áno, bolo vyčiernené viac."
 
-msgid "inforequests:RefusalAppealSanitizationLevelStep:MissingDocument"
+msgid "inforequests:SanitizationLevel:MissingDocument"
 msgstr "Áno, niečo úplne chýbalo."
 
-msgid "inforequests:RefusalAppealSanitizationLevelStep:ProperlySanitized"
+msgid "inforequests:SanitizationLevel:ProperlySanitized"
 msgstr "Nie, vyčiernenie bolo korektné."
+
+msgid "inforequests:OtherReasonValid:yes"
+msgstr "Yes"
+
+msgid "inforequests:OtherReasonValid:no"
+msgstr "No"
+
+msgid "inforequests:ConfidentialNotConfidential:yes"
+msgstr "Yes"
+
+msgid "inforequests:ConfidentialNotConfidential:no"
+msgstr "No"
+
+msgid "inforequests:PersonalOfficer:yes"
+msgstr "Yes"
+
+msgid "inforequests:PersonalOfficer:no"
+msgstr "No"
+
+msgid "inforequests:BusinessSecretDefinition:comercial"
+msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiacu s podnikom,"
+
+msgid "inforequests:BusinessSecretDefinition:value"
+msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
+
+msgid "inforequests:BusinessSecretDefinition:common"
+msgstr "Je v príslušných obchodných kruhoch bežne dostupná,"
+
+msgid "inforequests:BusinessSecretDefinition:will"
+msgstr "Nie je podľa vôle podnikateľa utajená,"
+
+msgid "inforequests:BusinessSecretDefinition:ensured"
+msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
+
+msgid "inforequests:BusinessSecretPublicFunds:yes"
+msgstr "Yes"
+
+msgid "inforequests:BusinessSecretPublicFunds:no"
+msgstr "No"
+
+msgid "inforequests:DoesNotProvidePublicFunds:yes"
+msgstr "Yes"
+
+msgid "inforequests:DoesNotProvidePublicFunds:no"
+msgstr "No"
 
 msgid "inforequests:ClarificationResponseStep:content:label"
 msgstr "Odpoveď"

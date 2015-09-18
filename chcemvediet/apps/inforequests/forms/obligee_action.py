@@ -48,8 +48,10 @@ class ReasonsMixin(ObligeeActionStep):
         res = super(ReasonsMixin, self).post_transition()
 
         if self.is_valid() and u'none' in self.cleaned_data[u'refusal_reason']:
-            dest = res.globals if u'refusal_reason' in self.global_fields else res.values
-            dest[u'refusal_reason'] = []
+            if u'refusal_reason' in self.get_global_fields():
+                res.globals[u'refusal_reason'] = []
+            else:
+                res.values[u'refusal_reason'] = []
 
         return res
 
@@ -58,7 +60,7 @@ class ReasonsMixin(ObligeeActionStep):
 class NotCategorized(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/not_categorized.html'
     global_fields = [u'help_request']
-    next_step_class = Bottom
+    post_step_class = Bottom
 
     def add_fields(self):
         super(NotCategorized, self).add_fields()
@@ -110,7 +112,7 @@ class NotCategorized(ObligeeActionStep):
 class Categorized(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/categorized.html'
     global_fields = [u'legal_date', u'file_number', u'last_action_dd']
-    next_step_class = Bottom
+    post_step_class = Bottom
 
     def add_fields(self):
         super(Categorized, self).add_fields()
@@ -196,7 +198,7 @@ class Categorized(ObligeeActionStep):
 class InvalidReversion(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/invalid_reversion.html'
     global_fields = [u'help_request']
-    next_step_class = Bottom
+    post_step_class = Bottom
 
     def add_fields(self):
         super(InvalidReversion, self).add_fields()
@@ -311,7 +313,7 @@ class WasItAccepted(ObligeeActionStep):
 class ContainsAppealInfo(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/contains_appeal_info.html'
     global_fields = [u'disclosure_level']
-    next_step_class = WasItAccepted
+    post_step_class = WasItAccepted
 
     def add_fields(self):
         super(ContainsAppealInfo, self).add_fields()
@@ -757,7 +759,7 @@ class CanAddClarificationRequest(ObligeeActionStep):
 class InputBasics(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/basics.html'
     global_fields = [u'delivered_date', u'attachments']
-    next_step_class = CanAddClarificationRequest
+    post_step_class = CanAddClarificationRequest
 
     def add_fields(self):
         super(InputBasics, self).add_fields()
@@ -825,7 +827,7 @@ class IsByEmail(ObligeeActionStep):
 class SelectBranch(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/branch.html'
     global_fields = [u'branch']
-    next_step_class = IsByEmail
+    post_step_class = IsByEmail
 
     def add_fields(self):
         super(SelectBranch, self).add_fields()

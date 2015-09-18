@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 00:42+0200\n"
+"POT-Creation-Date: 2015-09-18 06:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,59 +86,59 @@ msgstr "Nesmie byť z minulosti."
 msgid "inforequests:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "Nesmie byť viac ako 5 dní z budúcnosti."
 
-msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:yes"
-msgstr "Áno, týka sa"
-
-msgid "inforequests:RefusalAppealDoesNotProvidePublicFundsStep:no"
-msgstr "Nie, netýka sa"
-
-msgid "inforequests:RefusalAppealBusinessSecretPublicFundsStep:yes"
-msgstr "Áno, týka sa"
-
-msgid "inforequests:RefusalAppealBusinessSecretPublicFundsStep:no"
-msgstr "Nie, netýka sa"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:comercial"
-msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiacu s podnikom,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:value"
-msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:common"
-msgstr "Je v príslušných obchodných kruhoch bežne dostupná,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:will"
-msgstr "Nie je podľa vôle podnikateľa utajená,"
-
-msgid "inforequests:RefusalAppealBusinessSecretDefinitionStep:ensured"
-msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
-
-msgid "inforequests:RefusalAppealPersonalOfficerStep:yes"
-msgstr "Áno, týkajú sa verejných zamestnancov"
-
-msgid "inforequests:RefusalAppealPersonalOfficerStep:no"
-msgstr "Nie, týkajú sa iných osôb"
-
-msgid "inforequests:RefusalAppealConfidentialNotConfidentialStep:yes"
-msgstr "Áno, dá sa zaradiť"
-
-msgid "inforequests:RefusalAppealConfidentialNotConfidentialStep:no"
-msgstr "Nie, nedá sa zaradiť "
-
-msgid "inforequests:RefusalAppealOtherReasonValidStep:yes"
-msgstr "Áno, ide o dôvod uvedený v zákone"
-
-msgid "inforequests:RefusalAppealOtherReasonValidStep:no"
-msgstr "Nie, ide o haluz"
-
-msgid "inforequests:RefusalAppealSanitizationLevelStep:OverlySanitized"
+msgid "inforequests:SanitizationLevel:OverlySanitized"
 msgstr "Áno, bolo vyčiernené viac."
 
-msgid "inforequests:RefusalAppealSanitizationLevelStep:MissingDocument"
+msgid "inforequests:SanitizationLevel:MissingDocument"
 msgstr "Áno, niečo úplne chýbalo."
 
-msgid "inforequests:RefusalAppealSanitizationLevelStep:ProperlySanitized"
+msgid "inforequests:SanitizationLevel:ProperlySanitized"
 msgstr "Nie, vyčiernenie bolo korektné."
+
+msgid "inforequests:OtherReasonValid:yes"
+msgstr "Áno, ide o dôvod uvedený v zákone"
+
+msgid "inforequests:OtherReasonValid:no"
+msgstr "Nie, ide o haluz"
+
+msgid "inforequests:ConfidentialNotConfidential:yes"
+msgstr "Áno, dá sa zaradiť"
+
+msgid "inforequests:ConfidentialNotConfidential:no"
+msgstr "Nie, nedá sa zaradiť "
+
+msgid "inforequests:PersonalOfficer:yes"
+msgstr "Áno, týkajú sa verejných zamestnancov"
+
+msgid "inforequests:PersonalOfficer:no"
+msgstr "Nie, týkajú sa iných osôb"
+
+msgid "inforequests:BusinessSecretDefinition:comercial"
+msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiacu s podnikom,"
+
+msgid "inforequests:BusinessSecretDefinition:value"
+msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
+
+msgid "inforequests:BusinessSecretDefinition:common"
+msgstr "Je v príslušných obchodných kruhoch bežne dostupná,"
+
+msgid "inforequests:BusinessSecretDefinition:will"
+msgstr "Nie je podľa vôle podnikateľa utajená,"
+
+msgid "inforequests:BusinessSecretDefinition:ensured"
+msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
+
+msgid "inforequests:BusinessSecretPublicFunds:yes"
+msgstr "Áno, týka sa"
+
+msgid "inforequests:BusinessSecretPublicFunds:no"
+msgstr "Nie, netýka sa"
+
+msgid "inforequests:DoesNotProvidePublicFunds:yes"
+msgstr "Áno, týka sa"
+
+msgid "inforequests:DoesNotProvidePublicFunds:no"
+msgstr "Nie, netýka sa"
 
 msgid "inforequests:ClarificationResponseStep:content:label"
 msgstr "Odpoveď"
