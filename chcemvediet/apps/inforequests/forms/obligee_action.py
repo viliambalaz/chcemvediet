@@ -5,7 +5,6 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import smart_text
 from django.contrib.sessions.models import Session
 from multiselectfield import MultiSelectFormField
 
@@ -16,6 +15,7 @@ from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Bottom, Step, Wizard
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
+from chcemvediet.apps.inforequests.forms import BranchChoiceField
 
 class ObligeeActionStep(Step):
     template = u'inforequests/obligee_action/wizard.html'
@@ -832,20 +832,10 @@ class SelectBranch(ObligeeActionStep):
     def add_fields(self):
         super(SelectBranch, self).add_fields()
 
-        # we assume that converting a Branch to a string gives its ``pk``
-        self.fields[u'branch'] = forms.TypedChoiceField(
+        self.fields[u'branch'] = BranchChoiceField(
                 label=_(u'inforequests:obligee_action:SelectBranch:branch:label'),
-                empty_value=None,
-                choices=[(u'', u'')] + [(branch, branch.historicalobligee.name)
-                    for branch in self.wizard.inforequest.branches],
+                inforequest=self.wizard.inforequest,
                 )
-
-        def coerce(val):
-            for o, v in self.fields[u'branch'].choices:
-                if o and smart_text(o.pk) == val:
-                    return o
-            raise ValueError
-        self.fields[u'branch'].coerce = coerce
 
 class HasSingeBranch(ObligeeActionStep):
 
