@@ -272,3 +272,16 @@ def cached_method(method=None, cached_exceptions=None):
     if method:
         return actual_decorator(method)
     return actual_decorator
+
+def print_invocations(func=None):
+    if not hasattr(print_invocations, u'level'):
+        print_invocations.level = 0
+    @wraps(func, assigned=available_attrs(func))
+    def wrapped_func(*args, **kwargs):
+        print(u'%s>%s: args=%r kwargs=%r' % (u'  '*print_invocations.level, func.__name__, args, kwargs))
+        print_invocations.level += 1
+        res = func(*args, **kwargs)
+        print_invocations.level -= 1
+        print(u'%s<%s: res=%r' % (u'  '*print_invocations.level, func.__name__, res))
+        return res
+    return wrapped_func

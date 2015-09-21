@@ -35,7 +35,7 @@
 @media (max-width: 767px) { .devbar { margin: 0 -20px; } }
 
 /* Fixed top bars */
-.fixed { position: fixed; width: 100%; top: 0; }
+.fixed { position: fixed; width: 100%; top: 0; z-index: 1; }
 
 /* Fix body padding for fixded top bars */
 body.push1 { padding-top: 60px; }

@@ -12,7 +12,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Bottom, Step, Wizard
-from chcemvediet.apps.obligees.forms import ObligeeWidget, ObligeeField
+from chcemvediet.apps.obligees.forms import MultipleObligeeWidget, MultipleObligeeField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
 
@@ -437,6 +437,7 @@ class CanAddExtension(ObligeeActionStep):
 
 class IsItAdvancement(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/is_advancement.html'
+    global_fields = [u'advanced_to']
 
     def add_fields(self):
         super(IsItAdvancement, self).add_fields()
@@ -455,39 +456,32 @@ class IsItAdvancement(ObligeeActionStep):
                     }),
                 )
 
-        self.ADVANCED_TO_FIELDS = []
-        for idx in range(3):
-            self.fields[u'advanced_to_%d' % idx] = ObligeeField(
-                    label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
-                    required=False,
-                    widget=ObligeeWidget(attrs={
-                        u'placeholder': _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
-                        u'class': u'span5 visible-if-advancement',
-                        }),
-                    )
-            self.ADVANCED_TO_FIELDS.append(u'advanced_to_%d' % idx)
+        self.fields[u'advanced_to'] = MultipleObligeeField(
+                label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
+                required=False,
+                widget=MultipleObligeeWidget(input_attrs={
+                    u'class': u'span5 visible-if-advancement',
+                    u'placeholder': _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
+                    }),
+                )
 
     def clean(self):
         cleaned_data = super(IsItAdvancement, self).clean()
 
         is_advancement = cleaned_data.get(u'is_advancement', None)
-        if is_advancement and not any(cleaned_data.get(f) for f in self.ADVANCED_TO_FIELDS):
-            field = self.ADVANCED_TO_FIELDS[0]
-            msg = self.fields[field].error_messages[u'required']
-            self.add_error(field, msg)
-
+        advanced_to = cleaned_data.get(u'advanced_to', None)
         branch = self.wizard.values[u'branch']
-        for i, field in enumerate(self.ADVANCED_TO_FIELDS):
-            advanced_to = cleaned_data.get(field, None)
+        if is_advancement:
             try:
-                if advanced_to and advanced_to == branch.obligee:
-                    raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee'))
-                for field_2 in self.ADVANCED_TO_FIELDS[0:i]:
-                    advanced_to_2 = cleaned_data.get(field_2, None)
-                    if advanced_to_2 and advanced_to_2 == advanced_to:
-                        raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee'))
+                if not advanced_to:
+                    raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
+                for obligee in advanced_to:
+                    if obligee == branch.obligee:
+                        raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee'))
+                if len(advanced_to) != len(set(advanced_to)):
+                    raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee'))
             except ValidationError as e:
-                self.add_error(field, e)
+                self.add_error(u'advanced_to', e)
 
         return cleaned_data
 
@@ -499,7 +493,6 @@ class IsItAdvancement(ObligeeActionStep):
         elif self.cleaned_data[u'is_advancement']:
             res.globals[u'result'] = u'action'
             res.globals[u'action'] = Action.TYPES.ADVANCEMENT
-            res.globals[u'advanced_to'] = [self.cleaned_data[f] for f in self.ADVANCED_TO_FIELDS]
             res.next = Categorized
         else:
             res.next = CanAddExtension

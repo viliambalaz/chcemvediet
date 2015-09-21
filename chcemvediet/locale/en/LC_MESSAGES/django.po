@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-21 15:25+0200\n"
+"POT-Creation-Date: 2015-09-21 21:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -710,7 +710,10 @@ msgstr "snooze"
 msgid "inforequests:urls:attachments"
 msgstr "attachments"
 
-msgid "obligees:ObligeeField:invalid_obligee_name"
+msgid "obligees:ObligeeField:error:invalid_obligee"
+msgstr "Invalid obligee name. Select one form the menu."
+
+msgid "obligees:ObligeeField:error:invalid_list"
 msgstr "Invalid obligee name. Select one form the menu."
 
 msgid "obligees:Obligee:status:PENDING"
@@ -733,6 +736,9 @@ msgstr "Address"
 
 msgid "obligees:index:table:emails"
 msgstr "E-mail"
+
+msgid "obligees:obligee_widget:add"
+msgstr "More Obligees"
 
 msgid "obligees:obligee_widget:email"
 msgstr "E-mail"

@@ -1,23 +1,16 @@
 {# vim: set filetype=htmldjango :#}
-{% load trans from i18n %}
 
 {% comment %}
  %
  % Context:
- %  -- name: string
- %  -- textinput: html string
+ %  -- widget_attrs: {string -> string}
+ %  -- input_attrs: {string -> string}
  %  -- obligee: chcemvediet.apps.obligees.models.Obligee | None
  %
 {% endcomment %}
 
-<div class="obligee_widget">
-  <div class="input-append">
-    {{ textinput }}
-    <label class="add-on" for="id_{{ name }}"><i class="icon-search"></i></label>
-  </div>
-  <div class="obligee_widget_details {% if not obligee %}obligee_widget_hide{% endif %}">
-    <span class="obligee_widget_street">{{ obligee.street|default:'' }}</span><br>
-    <span class="obligee_widget_zip">{{ obligee.zip|default:'' }}</span> <span class="obligee_widget_city">{{ obligee.city|default:'' }}</span><br>
-    {% trans 'obligees:obligee_widget:email' %}: <span class="obligee_widget_email">{{ obligee.emails|default:'' }}</span>
+<div {% for k, v in widget_attrs.items %}{{ k }}="{{ v }}" {% endfor %}>
+  <div class="obligee_widget_inputs">
+    {% include "obligees/widgets/obligee_widget_input.html" %}
   </div>
 </div>

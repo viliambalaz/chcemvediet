@@ -1,0 +1,28 @@
+{# vim: set filetype=htmldjango :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- input_attrs: {string -> string}
+ %  -- obligee: chcemvediet.apps.obligees.models.Obligee | None
+ %  -- allow_delete: boolean
+ %
+{% endcomment %}
+
+<div class="obligee_widget_input">
+  {% if allow_delete %}
+    <button class="obligee_widget_del">&times;</button>
+  {% endif %}
+  <label>
+    <div class="input-append">
+      <input {% for k, v in input_attrs.items %}{{ k }}="{{ v }}" {% endfor %}/>
+      <span class="add-on"><i class="icon-search"></i></span>
+    </div>
+  </label>
+  <div class="obligee_widget_details {% if not obligee %}obligee_widget_hide{% endif %}">
+    <span class="obligee_widget_street">{{ obligee.street }}</span><br>
+    <span class="obligee_widget_zip">{{ obligee.zip }}</span> <span class="obligee_widget_city">{{ obligee.city }}</span><br>
+    {% trans 'obligees:obligee_widget:email' %}: <span class="obligee_widget_email">{{ obligee.emails }}</span>
+  </div>
+</div>

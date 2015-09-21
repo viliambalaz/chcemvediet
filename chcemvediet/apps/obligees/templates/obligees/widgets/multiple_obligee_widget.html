@@ -1,0 +1,29 @@
+{# vim: set filetype=htmldjango :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- widget_attrs: {string -> string}
+ %  -- inputs: [(input_attrs, obligee), ...]
+ %      -- input_attrs: {string -> string}
+ %      -- obligee: chcemvediet.apps.obligees.models.Obligee | None
+ %  -- skel_attrs: {string -> string}
+ %
+{% endcomment %}
+
+<div {% for k, v in widget_attrs.items %}{{ k }}="{{ v }}" {% endfor %}>
+  <div class="obligee_widget_inputs">
+    {% for input_attrs, obligee in inputs %}
+      {% include "obligees/widgets/obligee_widget_input.html" with allow_delete=True %}
+    {% endfor %}
+  </div>
+  <div class="obligee_widget_skel">
+    {% include "obligees/widgets/obligee_widget_input.html" with input_attrs=skel_attrs obligee=None allow_delete=True %}
+  </div>
+  <div class="obligee_widget_buttons">
+    <button class="btn obligee_widget_add">
+      <i class="icon-plus"></i> {% trans 'obligees:obligee_widget:add' %}
+    </button>
+  </div>
+</div>

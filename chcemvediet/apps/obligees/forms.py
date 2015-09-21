@@ -5,73 +5,102 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_text
+from django.utils.datastructures import MultiValueDict, MergeDict
 
+from poleno.utils.html import merge_html_attrs
 from poleno.utils.misc import cached_method
 
 from .models import Obligee
 
-class ObligeeWidget(forms.TextInput):
-    u"""
-    TextInput with extra information about the selected Obligee rendered below the inputbox.
-    """
+class ObligeeWidget(forms.Widget):
+
+    def __init__(self, *args, **kwargs):
+        self.input_attrs = kwargs.pop(u'input_attrs', {})
+        super(ObligeeWidget, self).__init__(*args, **kwargs)
+
+    def _widget_attrs(self, attrs=None):
+        return merge_html_attrs(self.attrs, attrs, {
+                u'class': u'obligee_widget',
+                })
+
+    def _input_attrs(self, name, value, skel=False):
+        obligee = value if isinstance(value, Obligee) else None
+        value = force_text(obligee.name if obligee else u'' if value is None else value)
+        return merge_html_attrs(self.input_attrs, {
+                u'class': u'autocomplete',
+                u'type': u'text',
+                u'name': name if not skel else u'',
+                u'value': value,
+                u'data-autocomplete-url': reverse_lazy(u'obligees:autocomplete'),
+                u'data-name': name,
+                })
+
     def render(self, name, value, attrs=None):
         obligee = value if isinstance(value, Obligee) else None
-
-        textinput_value = obligee.name if obligee else value
-        textinput = super(ObligeeWidget, self).render(name, textinput_value, attrs)
-
         return render_to_string(u'obligees/widgets/obligee_widget.html', {
-                u'name': name,
-                u'textinput': textinput,
+                u'widget_attrs': self._widget_attrs(attrs),
+                u'input_attrs': self._input_attrs(name, value),
                 u'obligee': obligee,
                 })
 
+class MultipleObligeeWidget(ObligeeWidget):
+
+    def render(self, name, value, attrs=None):
+        inputs = []
+        for item in value or [None]:
+            obligee = item if isinstance(item, Obligee) else None
+            input_attrs = self._input_attrs(name, item)
+            inputs.append((input_attrs, obligee))
+        return render_to_string(u'obligees/widgets/multiple_obligee_widget.html', {
+                u'widget_attrs': self._widget_attrs(attrs),
+                u'skel_attrs': self._input_attrs(name, None, skel=True),
+                u'inputs': inputs,
+                })
+
+    def value_from_datadict(self, data, files, name):
+        if isinstance(data, (MultiValueDict, MergeDict)):
+            return data.getlist(name)
+        return data.get(name, None)
+
 class ObligeeField(forms.Field):
-    u"""
-    Form field for Obligee selection with autocomplete functionality. Works with classic
-    ``TextInput`` widget and with ``ObligeeWidget`` widget as well. ``ObligeeWidget`` shows
-    additional information about selected Obligee below the inputbox.
+    widget = ObligeeWidget
 
-    Example;
-        class MyForm(forms.Form):
-            obligee = ObligeeField(
-                    label=_(u'Obligee'),
-                    )
-
-        class AnotherForm(forms.Form):
-            obligee = ObligeeField(
-                    label=_(u'Obligee'),
-                    widget=ObligeeWidget(),
-                    )
-    """
     def prepare_value(self, value):
-        if isinstance(self.widget, ObligeeWidget):
-            # ``ObligeeWidget`` needs ``Obligee`` as its value, but somehow sometimes the given
-            # value is just a string containing an obligee name, not the Obligee itself. It's
-            # probably taken directly from POST request and not converted by ``to_python`` method.
-            if not isinstance(value, Obligee):
-                try:
-                    value = self.to_python(value)
-                except ValidationError:
-                    pass
-        else:
-            if isinstance(value, Obligee):
-                value = value.name
-        return value
+        if isinstance(value, Obligee):
+            return value
+        try:
+            return self.coerce(value)
+        except ValidationError:
+            return value
+
+    def to_python(self, value):
+        u""" Returns an Obligee """
+        return self.coerce(value)
 
     @cached_method(cached_exceptions=ValidationError)
-    def to_python(self, value):
+    def coerce(self, value):
         u""" Returns an Obligee """
         if value in self.empty_values:
             return None
         # FIXME: Should be ``.get(name=value)``, but there are Obligees with duplicate names, yet.
         value = Obligee.objects.pending().filter(name=value).order_by_pk().first()
         if value is None:
-            raise ValidationError(_(u'obligees:ObligeeField:invalid_obligee_name'))
+            raise ValidationError(_(u'obligees:ObligeeField:error:invalid_obligee'))
         return value
 
-    def widget_attrs(self, widget):
-        attrs = super(ObligeeField, self).widget_attrs(widget)
-        attrs[u'data-autocomplete-url'] = reverse_lazy(u'obligees:autocomplete')
-        attrs[u'class'] = u'autocomplete %s' % widget.attrs[u'class'] if u'class' in widget.attrs else u'autocomplete'
-        return attrs
+class MultipleObligeeField(ObligeeField):
+    widget = MultipleObligeeWidget
+
+    def prepare_value(self, value):
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+        return [super(MultipleObligeeField, self).prepare_value(v) for v in value]
+
+    def to_python(self, value):
+        u""" Returns a list of Obligees """
+        if not value:
+            return []
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError(_(u'obligees:ObligeeField:error:invalid_list'))
+        return [self.coerce(v) for v in value if self.coerce(v)]
