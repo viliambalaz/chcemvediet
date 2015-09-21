@@ -6,7 +6,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
-from multiselectfield import MultiSelectFormField
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
@@ -15,45 +14,11 @@ from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Bottom, Step, Wizard
 from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
-from chcemvediet.apps.inforequests.forms import BranchChoiceField
+from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
 
 class ObligeeActionStep(Step):
     template = u'inforequests/obligee_action/wizard.html'
     form_template = u'main/snippets/form_horizontal.html'
-
-class ReasonsMixin(ObligeeActionStep):
-
-    def add_fields(self):
-        super(ReasonsMixin, self).add_fields()
-
-        self.fields[u'refusal_reason'] = MultiSelectFormField(
-                label=u' ',
-                choices=Action.REFUSAL_REASONS._choices + [
-                    (u'none', _(u'inforequests:obligee_action:ReasonsMixin:none')),
-                    ],
-                )
-
-    def clean(self):
-        cleaned_data = super(ReasonsMixin, self).clean()
-
-        refusal_reason = cleaned_data.get(u'refusal_reason', None)
-        if refusal_reason is not None:
-            if u'none' in refusal_reason and len(refusal_reason) != 1:
-                msg = _(u'inforequests:obligee_action:ReasonsMixin:error:none_contradiction')
-                self.add_error(u'refusal_reason', msg)
-
-        return cleaned_data
-
-    def post_transition(self):
-        res = super(ReasonsMixin, self).post_transition()
-
-        if self.is_valid() and u'none' in self.cleaned_data[u'refusal_reason']:
-            if u'refusal_reason' in self.get_global_fields():
-                res.globals[u'refusal_reason'] = []
-            else:
-                res.values[u'refusal_reason'] = []
-
-        return res
 
 # Epilogue
 
@@ -218,9 +183,13 @@ class InvalidReversion(ObligeeActionStep):
 
         return res
 
-class ReversionReasons(ReasonsMixin, ObligeeActionStep):
+class ReversionReasons(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/reversion_reasons.html'
     global_fields = [u'refusal_reason']
+
+    def add_fields(self):
+        super(ReversionReasons, self).add_fields()
+        self.fields[u'refusal_reason'] = RefusalReasonField()
 
     def post_transition(self):
         res = super(ReversionReasons, self).post_transition()
@@ -376,9 +345,13 @@ class CanAddAppealDecision(ObligeeActionStep):
 
 # Pre Appeal
 
-class DisclosureReasons(ReasonsMixin, ObligeeActionStep):
+class DisclosureReasons(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/disclosure_reasons.html'
     global_fields = [u'refusal_reason']
+
+    def add_fields(self):
+        super(DisclosureReasons, self).add_fields()
+        self.fields[u'refusal_reason'] = RefusalReasonField()
 
     def post_transition(self):
         res = super(DisclosureReasons, self).post_transition()
@@ -548,9 +521,13 @@ class CanAddAdvancement(ObligeeActionStep):
 
         return res
 
-class RefusalReasons(ReasonsMixin, ObligeeActionStep):
+class RefusalReasons(ObligeeActionStep):
     text_template = u'inforequests/obligee_action/texts/refusal_reasons.html'
     global_fields = [u'refusal_reason']
+
+    def add_fields(self):
+        super(RefusalReasons, self).add_fields()
+        self.fields[u'refusal_reason'] = RefusalReasonField()
 
     def post_transition(self):
         res = super(RefusalReasons, self).post_transition()
@@ -832,7 +809,7 @@ class SelectBranch(ObligeeActionStep):
     def add_fields(self):
         super(SelectBranch, self).add_fields()
 
-        self.fields[u'branch'] = BranchChoiceField(
+        self.fields[u'branch'] = BranchField(
                 label=_(u'inforequests:obligee_action:SelectBranch:branch:label'),
                 inforequest=self.wizard.inforequest,
                 )

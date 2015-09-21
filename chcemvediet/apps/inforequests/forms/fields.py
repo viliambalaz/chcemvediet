@@ -3,12 +3,17 @@
 from collections import defaultdict
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+from multiselectfield import MultiSelectFormField
 
-class BranchChoiceField(forms.TypedChoiceField):
+from chcemvediet.apps.inforequests.models import Action
+
+class BranchField(forms.TypedChoiceField):
 
     def __init__(self, *args, **kwargs):
         inforequest = kwargs.pop(u'inforequest', None)
-        super(BranchChoiceField, self).__init__(coerce=self.coerce, empty_value=None, *args, **kwargs)
+        super(BranchField, self).__init__(coerce=self.coerce, empty_value=None, *args, **kwargs)
         self.inforequest = inforequest
 
     @property
@@ -39,3 +44,23 @@ class BranchChoiceField(forms.TypedChoiceField):
             if value == branch.pk:
                 return branch
         raise ValueError
+
+class RefusalReasonField(MultiSelectFormField):
+
+    def __init__(self, *args, **kwargs):
+        self.allow_no_reason = kwargs.pop(u'allow_no_reason', True)
+        kwargs.setdefault(u'label', u' ')
+
+        choices = Action.REFUSAL_REASONS._choices
+        if self.allow_no_reason:
+            choices = choices + [(u'none', _(u'inforequests:RefusalReasonField:no_reason'))]
+
+        super(RefusalReasonField, self).__init__(choices=choices, *args, **kwargs)
+
+    def clean(self, value):
+        value = super(RefusalReasonField, self).clean(value)
+        if value == [u'none']:
+            return []
+        if u'none' in value:
+            raise ValidationError(_(u'inforequests:RefusalReasonField:error:none_contradiction'))
+        return value

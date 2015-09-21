@@ -1,7 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 
-from .fields import BranchChoiceField
+from .fields import BranchField, RefusalReasonField
 
 from .inforequest import InforequestForm
 from .obligee_action import ObligeeActionWizard

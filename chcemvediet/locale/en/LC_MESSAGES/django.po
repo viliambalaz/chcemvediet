@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-18 16:36+0200\n"
+"POT-Creation-Date: 2015-09-21 07:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,6 +149,12 @@ msgstr "Uveďte, čo inštitúcia chcela doplniť"
 msgid "inforequests:clarification_response:Main:attachments:label"
 msgstr "Prílohy"
 
+msgid "inforequests:RefusalReasonField:no_reason"
+msgstr "V texte sa nespomínajú žiadne dôvody"
+
+msgid "inforequests:RefusalReasonField:error:none_contradiction"
+msgstr "Zvolené možnosti si protirečia"
+
 msgid "inforequests:InforequestForm:obligee:label"
 msgstr "Obligee"
 
@@ -169,12 +175,6 @@ msgstr "Request"
 
 msgid "inforequests:InforequestForm:attachments:label"
 msgstr "Attachments"
-
-msgid "inforequests:obligee_action:ReasonsMixin:none"
-msgstr "V texte sa nespomínajú žiadne dôvody"
-
-msgid "inforequests:obligee_action:ReasonsMixin:error:none_contradiction"
-msgstr "Zvolené možnosti si protirečia"
 
 msgid "inforequests:obligee_action:NotCategorized:help"
 msgstr "Áno, chcem pomoc od admina"
