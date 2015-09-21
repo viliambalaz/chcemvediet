@@ -10,7 +10,7 @@ from poleno.utils.misc import cached_method
 
 from .models import Obligee
 
-class ObligeeWithAddressInput(forms.TextInput):
+class ObligeeWidget(forms.TextInput):
     u"""
     TextInput with extra information about the selected Obligee rendered below the inputbox.
     """
@@ -18,37 +18,36 @@ class ObligeeWithAddressInput(forms.TextInput):
         obligee = value if isinstance(value, Obligee) else None
 
         textinput_value = obligee.name if obligee else value
-        textinput = super(ObligeeWithAddressInput, self).render(name, textinput_value, attrs)
+        textinput = super(ObligeeWidget, self).render(name, textinput_value, attrs)
 
-        return render_to_string(u'obligees/widgets/obligee_with_address_input.html', {
+        return render_to_string(u'obligees/widgets/obligee_widget.html', {
                 u'name': name,
                 u'textinput': textinput,
                 u'obligee': obligee,
                 })
 
-class ObligeeAutocompleteField(forms.Field):
+class ObligeeField(forms.Field):
     u"""
     Form field for Obligee selection with autocomplete functionality. Works with classic
-    ``TextInput`` widget and with ``ObligeeWithAddressInput`` widget as well.
-    ``ObligeeWithAddressInput`` shows additional information about selected Obligee below the
-    inputbox.
+    ``TextInput`` widget and with ``ObligeeWidget`` widget as well. ``ObligeeWidget`` shows
+    additional information about selected Obligee below the inputbox.
 
     Example;
         class MyForm(forms.Form):
-            obligee = ObligeeAutocompleteField(
+            obligee = ObligeeField(
                     label=_(u'Obligee'),
                     )
 
         class AnotherForm(forms.Form):
-            obligee = ObligeeAutocompleteField(
+            obligee = ObligeeField(
                     label=_(u'Obligee'),
-                    widget=ObligeeWithAddressInput(),
+                    widget=ObligeeWidget(),
                     )
     """
     def prepare_value(self, value):
-        if isinstance(self.widget, ObligeeWithAddressInput):
-            # ``ObligeeWithAddressInput`` needs ``Obligee`` as its value, but somehow sometimes the
-            # given value is just a string containing an obligee name, not the Obligee itself. It's
+        if isinstance(self.widget, ObligeeWidget):
+            # ``ObligeeWidget`` needs ``Obligee`` as its value, but somehow sometimes the given
+            # value is just a string containing an obligee name, not the Obligee itself. It's
             # probably taken directly from POST request and not converted by ``to_python`` method.
             if not isinstance(value, Obligee):
                 try:
@@ -68,11 +67,11 @@ class ObligeeAutocompleteField(forms.Field):
         # FIXME: Should be ``.get(name=value)``, but there are Obligees with duplicate names, yet.
         value = Obligee.objects.pending().filter(name=value).order_by_pk().first()
         if value is None:
-            raise ValidationError(_(u'obligees:ObligeeAutocompleteField:invalid_obligee_name'))
+            raise ValidationError(_(u'obligees:ObligeeField:invalid_obligee_name'))
         return value
 
     def widget_attrs(self, widget):
-        attrs = super(ObligeeAutocompleteField, self).widget_attrs(widget)
+        attrs = super(ObligeeField, self).widget_attrs(widget)
         attrs[u'data-autocomplete-url'] = reverse_lazy(u'obligees:autocomplete')
         attrs[u'class'] = u'autocomplete %s' % widget.attrs[u'class'] if u'class' in widget.attrs else u'autocomplete'
         return attrs

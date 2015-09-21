@@ -12,7 +12,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards import Bottom, Step, Wizard
-from chcemvediet.apps.obligees.forms import ObligeeWithAddressInput, ObligeeAutocompleteField
+from chcemvediet.apps.obligees.forms import ObligeeWidget, ObligeeField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
 
@@ -457,10 +457,10 @@ class IsItAdvancement(ObligeeActionStep):
 
         self.ADVANCED_TO_FIELDS = []
         for idx in range(3):
-            self.fields[u'advanced_to_%d' % idx] = ObligeeAutocompleteField(
+            self.fields[u'advanced_to_%d' % idx] = ObligeeField(
                     label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
                     required=False,
-                    widget=ObligeeWithAddressInput(attrs={
+                    widget=ObligeeWidget(attrs={
                         u'placeholder': _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
                         u'class': u'span5 visible-if-advancement',
                         }),

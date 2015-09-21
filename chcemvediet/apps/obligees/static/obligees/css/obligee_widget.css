@@ -1,0 +1,6 @@
+/* For chcemvediet.apps.obligees.forms.ObligeeWidget */
+
+.obligee_widget { display: inline-block; vertical-align: top; }
+.obligee_widget ~ .help-inline { padding-top: 5px; }
+.obligee_widget_details { padding: 5px 6px; border: 1px solid #CCC; border-radius: 4px; }
+.obligee_widget_hide { display: none; }
