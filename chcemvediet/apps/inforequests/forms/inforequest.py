@@ -21,7 +21,7 @@ class InforequestForm(PrefixedForm):
     obligee = ObligeeField(
             label=_(u'inforequests:InforequestForm:obligee:label'),
             help_text=lazy_render_to_string(u'inforequests/create/tooltips/obligee.txt'),
-            widget=ObligeeWidget(attrs={
+            widget=ObligeeWidget(input_attrs={
                 u'placeholder': _(u'inforequests:InforequestForm:obligee:placeholder'),
                 u'class': u'span5',
                 u'data-container': u'body',
