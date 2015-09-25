@@ -1,0 +1,24 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message | None
+ %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
+ %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
+ %
+{% endcomment %}
+
+{% if wizard.values.branch.last_action.type == ACTION_TYPES.REQUEST %}
+  Vyplňte prosím dátum, kedy inštitúcia prijala Vašu žiadosť, čiže deň, kedy inštitúcia Vašu
+  žiadosť oficiálne vzala na vedomie a zaregistrovala.
+{% elif wizard.values.branch.last_action.type == ACTION_TYPES.CLARIFICATION_RESPONSE %}
+  FIXME
+{% elif wizard.values.branch.last_action.type == ACTION_TYPES.APPEAL %}
+  FIXME
+{% elif wizard.values.branch.last_action.type == ACTION_TYPES.ADVANCED_REQUEST %}
+  FIXME
+{% endif %}

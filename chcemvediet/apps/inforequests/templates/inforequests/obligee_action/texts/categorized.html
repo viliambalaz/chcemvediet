@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango :#}
+{% load obligee_declension from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -7,40 +8,59 @@
  %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
+ %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
+ %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
  %
 {% endcomment %}
 
 <h4>Zaradené</h4>
 <p>
-  <span style="color: red;">FIXME</span>
-  Odpoveď sa zaradí ako:
-  {% with TYPES=inforequest.main_branch.last_action.TYPES %}
-    {% with DISCLOSURE_LEVELS=inforequest.main_branch.last_action.DISCLOSURE_LEVELS %}
-      {% if wizard.values.action == TYPES.ADVANCEMENT %}
-        postúpenie žiadosti.
-      {% elif wizard.values.action == TYPES.AFFIRMATION %}
-        potvrdenie rozhodnutia a zamietnutie odvolania.
-      {% elif wizard.values.action == TYPES.CLARIFICATION_REQUEST %}
-        výzva na doplnenie žiadosti.
-      {% elif wizard.values.action == TYPES.CONFIRMATION %}
-        potvrdenie prijatia žiadosti.
-      {% elif wizard.values.action == TYPES.DISCLOSURE %}
-        {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
-          nesprístupnienie informácií (bez vydania rozhodnutia).
-        {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
-          čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
-        {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
-          sprístupnienie informácií.
-        {% endif %}
-      {% elif wizard.values.action == TYPES.EXTENSION %}
-        predĺženie lehoty.
-      {% elif wizard.values.action == TYPES.REFUSAL %}
-        rozhodnutie o nesprístupnení informácie.
-      {% elif wizard.values.action == TYPES.REMANDMENT %}
-        rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové prejednanie.
-      {% elif wizard.values.action == TYPES.REVERSION %}
-        rozhodnutie, ktorým pôvodné rozhodnutie mení.
+  {% if wizard.values.action == ACTION_TYPES.ADVANCEMENT %}
+    Odpoveď sa zaradí ako <b>postúpenie žiadosti</b>. Inštitúcia postúpila vašu žiadosť
+    {% for obligee in wizard.values.advanced_to %}
+      {% if forloop.revcounter == 1 %}
+        {% obligee_declension obligee "dative" %}.
+      {% elif forloop.revcounter == 2 %}
+        {% obligee_declension obligee "dative" %} a
+      {% else %}
+        {% obligee_declension obligee "dative" %},
       {% endif %}
-    {% endwith %}
-  {% endwith %}
+    {% endfor %}
+    Vy nemusíte už urobiť žiadnu akciu, čakajte na odpoveď od novej inštitúcie.
+  {% elif wizard.values.action == ACTION_TYPES.AFFIRMATION %}
+    Odpoveď sa zaradí ako potvrdenie rozhodnutia a zamietnutie odvolania.
+    <span style="color: red;">FIXME</span>
+  {% elif wizard.values.action == ACTION_TYPES.CLARIFICATION_REQUEST %}
+    Odpoveď sa zaradí ako <b>výzva na doplnenie žiadosti</b>. Prosím, poskytnite inštitúcii
+    dodatočné informácie, ktoré od vás požadovala, a to čo najskôr. Od doplnenia žiadosti vám bude
+    plynúť nova štandardná lehota na vybavenie vašej žiadosti.
+  {% elif wizard.values.action == ACTION_TYPES.CONFIRMATION %}
+    Odpoveď sa zaradí ako <b>potvrdenie prijatia žiadosti</b>. Inštitúcia vám potvrdila, že prijala
+    vašu žiadosť. Teraz čakajte na ďalšiu reakciu inštitúcie.
+  {% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
+    {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
+      Odpoveď sa zaradí ako nesprístupnienie informácií (bez vydania rozhodnutia).
+      <span style="color: red;">FIXME</span>
+    {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
+      Odpoveď sa zaradí ako čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
+      <span style="color: red;">FIXME</span>
+    {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
+      Odpoveď sa zaradí ako <b>sprístupnienie informácií</b>. Inštitúcia vám sprístupnila
+      informácie, ktoré ste požadovali, v plnom rozsahu. Gratulujeme!
+    {% endif %}
+  {% elif wizard.values.action == ACTION_TYPES.EXTENSION %}
+    Odpoveď sa zaradí ako <b>predĺženie lehoty</b>. Inštitúcia predĺžila dobu, kedy je povinná
+    vybaviť vašu žiadosť. Nemusíte nič robiť, čakajte.
+  {% elif wizard.values.action == ACTION_TYPES.REFUSAL %}
+    Odpoveď sa zaradí ako <b>rozhodnutie o nesprístupnení informácie</b>. Ak ste napriek
+    rozhodnutiu presvedčení o tom, že vám inštitúcia mala informácie sprístupniť, pokračujte ďalej,
+    pomôžeme vám s odvolaním.
+  {% elif wizard.values.action == ACTION_TYPES.REMANDMENT %}
+    Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové
+    prejednanie.
+    <span style="color: red;">FIXME</span>
+  {% elif wizard.values.action == ACTION_TYPES.REVERSION %}
+    Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie mení.
+    <span style="color: red;">FIXME</span>
+  {% endif %}
 </p>

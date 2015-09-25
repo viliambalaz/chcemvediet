@@ -1,0 +1,43 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message | None
+ %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
+ %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
+ %
+{% endcomment %}
+
+Vyplňte prosím dátum úkonu, čiže dátum, ktorým je datovaný
+{% if email %}email{% else %}list{% endif %}.
+
+Tentoraz je to dátum, ktorý označuje deň, kedy inštitúcia sformulovala
+{% if wizard.values.action == ACTION_TYPES.ADVANCEMENT %}
+  postúpenie žiadosti.
+{% elif wizard.values.action == ACTION_TYPES.AFFIRMATION %}
+  potvrdenie rozhodnutia a zamietnutie odvolania.
+{% elif wizard.values.action == ACTION_TYPES.CLARIFICATION_REQUEST %}
+  výzvu na doplnenie žiadosti.
+{% elif wizard.values.action == ACTION_TYPES.CONFIRMATION %}
+  potvrdenie prijatia žiadosti.
+{% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
+  {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
+    nesprístupnienie informácií (bez vydania rozhodnutia).
+  {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
+    čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
+  {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
+    sprístupnienie informácií.
+  {% endif %}
+{% elif wizard.values.action == ACTION_TYPES.EXTENSION %}
+  predĺženie lehoty.
+{% elif wizard.values.action == ACTION_TYPES.REFUSAL %}
+  rozhodnutie o nesprístupnení informácie.
+{% elif wizard.values.action == ACTION_TYPES.REMANDMENT %}
+  rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové prejednanie.
+{% elif wizard.values.action == ACTION_TYPES.REVERSION %}
+  rozhodnutie, ktorým pôvodné rozhodnutie mení.
+{% endif %}

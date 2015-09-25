@@ -133,16 +133,18 @@ class SanitizationOverlySanitized(AppealSectionStep, SanitizationStep):
 
 class SanitizationLevel(SanitizationStep):
     text_template = u'inforequests/appeal/texts/refusal/sanitization_level.html'
+    form_template = u'main/snippets/form_horizontal.html'
 
     def add_fields(self):
         super(SanitizationLevel, self).add_fields()
         self.fields[u'sanitization_level'] = forms.ChoiceField(
+                label=u' ',
                 choices=(
-                    (None, u''),
                     (u'overly-sanitized',   _(u'inforequests:appeal:SanitizationLevel:OverlySanitized')),
                     (u'missing-document',   _(u'inforequests:appeal:SanitizationLevel:MissingDocument')),
                     (u'properly-sanitized', _(u'inforequests:appeal:SanitizationLevel:ProperlySanitized')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
     def post_transition(self):
@@ -211,16 +213,18 @@ class OtherReasonValidReason(AppealSectionStep, ReasonStep):
 class OtherReasonValid(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.OTHER_REASON
     text_template = u'inforequests/appeal/texts/refusal/other_reason_valid.html'
+    form_template = u'main/snippets/form_horizontal.html'
 
     def add_fields(self):
         super(OtherReasonValid, self).add_fields()
         self.fields[u'other_reason_valid'] = forms.TypedChoiceField(
+                label=u' ',
                 coerce=int,
                 choices=(
-                    (None, u''),
                     (1, _(u'inforequests:appeal:OtherReasonValid:yes')),
                     (0, _(u'inforequests:appeal:OtherReasonValid:no')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
     def post_transition(self):
@@ -294,16 +298,18 @@ class ConfidentialNotConfidentialReason(AppealSectionStep, ReasonStep):
 class ConfidentialNotConfidential(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
     text_template = u'inforequests/appeal/texts/refusal/confidential_not_confidential.html'
+    form_template = u'main/snippets/form_horizontal.html'
 
     def add_fields(self):
         super(ConfidentialNotConfidential, self).add_fields()
         self.fields[u'confidential_not_confidential'] = forms.TypedChoiceField(
+                label=u' ',
                 coerce=int,
                 choices=(
-                    (None, u''),
                     (1, _(u'inforequests:appeal:ConfidentialNotConfidential:yes')),
                     (0, _(u'inforequests:appeal:ConfidentialNotConfidential:no')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
     def post_transition(self):
@@ -377,16 +383,18 @@ class PersonalOfficerReason(AppealSectionStep, ReasonStep):
 class PersonalOfficer(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
     text_template = u'inforequests/appeal/texts/refusal/personal_officer.html'
+    form_template = u'main/snippets/form_horizontal.html'
 
     def add_fields(self):
         super(PersonalOfficer, self).add_fields()
         self.fields[u'personal_officer'] = forms.TypedChoiceField(
+                label=u' ',
                 coerce=int,
                 choices=(
-                    (None, u''),
                     (1, _(u'inforequests:appeal:PersonalOfficer:yes')),
                     (0, _(u'inforequests:appeal:PersonalOfficer:no')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
     def post_transition(self):
@@ -503,18 +511,20 @@ class BusinessSecretDefinition(ReasonStep):
 class BusinessSecretPublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
     text_template = u'inforequests/appeal/texts/refusal/business_secret_public_funds.html'
+    form_template = u'main/snippets/form_horizontal.html'
     global_fields = [u'business_secret_public_funds']
     post_step_class = BusinessSecretDefinition
 
     def add_fields(self):
         super(BusinessSecretPublicFunds, self).add_fields()
         self.fields[u'business_secret_public_funds'] = forms.TypedChoiceField(
+                label=u' ',
                 coerce=int,
                 choices=(
-                    (None, u''),
                     (1, _(u'inforequests:appeal:BusinessSecretPublicFunds:yes')),
                     (0, _(u'inforequests:appeal:BusinessSecretPublicFunds:no')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
 class BusinessSecret(ReasonDispatcher):
@@ -611,16 +621,18 @@ class DoesNotProvidePublicFundsReason(AppealSectionStep, ReasonStep):
 class DoesNotProvidePublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
     text_template = u'inforequests/appeal/texts/refusal/does_not_provide_public_funds.html'
+    form_template = u'main/snippets/form_horizontal.html'
 
     def add_fields(self):
         super(DoesNotProvidePublicFunds, self).add_fields()
         self.fields[u'does_not_provide_public_funds'] = forms.TypedChoiceField(
+                label=u' ',
                 coerce=int,
                 choices=(
-                    (None, u''),
                     (1, _(u'inforequests:appeal:DoesNotProvidePublicFunds:yes')),
                     (0, _(u'inforequests:appeal:DoesNotProvidePublicFunds:no')),
                     ),
+                widget=forms.RadioSelect(),
                 )
 
     def post_transition(self):

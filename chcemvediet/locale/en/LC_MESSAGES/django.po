@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-21 21:30+0200\n"
+"POT-Creation-Date: 2015-09-25 08:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,10 +96,10 @@ msgid "inforequests:appeal:SanitizationLevel:ProperlySanitized"
 msgstr "Nie, vyčiernenie bolo korektné."
 
 msgid "inforequests:appeal:OtherReasonValid:yes"
-msgstr "Yes"
+msgstr "Áno, jedná sa o dôvod uvedený v zákone."
 
 msgid "inforequests:appeal:OtherReasonValid:no"
-msgstr "No"
+msgstr "Nie, jedná sa o nesúvisiace vyjadrenie."
 
 msgid "inforequests:appeal:ConfidentialNotConfidential:yes"
 msgstr "Yes"
@@ -114,7 +114,7 @@ msgid "inforequests:appeal:PersonalOfficer:no"
 msgstr "No"
 
 msgid "inforequests:appeal:BusinessSecretDefinition:comercial"
-msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiacu s podnikom,"
+msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiaca s podnikom,"
 
 msgid "inforequests:appeal:BusinessSecretDefinition:value"
 msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
@@ -129,16 +129,16 @@ msgid "inforequests:appeal:BusinessSecretDefinition:ensured"
 msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
 
 msgid "inforequests:appeal:BusinessSecretPublicFunds:yes"
-msgstr "Yes"
+msgstr "Áno, súvisí"
 
 msgid "inforequests:appeal:BusinessSecretPublicFunds:no"
-msgstr "No"
+msgstr "Nie, nesúvisí"
 
 msgid "inforequests:appeal:DoesNotProvidePublicFunds:yes"
-msgstr "Yes"
+msgstr "Áno, súvisí"
 
 msgid "inforequests:appeal:DoesNotProvidePublicFunds:no"
-msgstr "No"
+msgstr "Nie, nesúvisí"
 
 msgid "inforequests:clarification_response:Main:content:label"
 msgstr "Odpoveď"
@@ -150,7 +150,7 @@ msgid "inforequests:clarification_response:Main:attachments:label"
 msgstr "Prílohy"
 
 msgid "inforequests:RefusalReasonField:no_reason"
-msgstr "V texte sa nespomínajú žiadne dôvody"
+msgstr "V texte rozhodnutia sa nespomínajú žiadne dôvody."
 
 msgid "inforequests:RefusalReasonField:error:none_contradiction"
 msgstr "Zvolené možnosti si protirečia"
@@ -177,10 +177,10 @@ msgid "inforequests:InforequestForm:attachments:label"
 msgstr "Attachments"
 
 msgid "inforequests:obligee_action:NotCategorized:help"
-msgstr "Áno, chcem pomoc od admina"
+msgstr "Áno, odpoveď nejako súvisí, chcem, aby mi admin pomohol identifikovať odpoveď inštitúcie."
 
 msgid "inforequests:obligee_action:NotCategorized:unrelated"
-msgstr "Nie, je to úplna haluz"
+msgstr "Nie, odpoveď inštitúcie zjavne nesúvisí s mojou žiadosťou."
 
 msgid "inforequests:obligee_action:NotCategorized:help_request:label"
 msgstr "Správa pre admina"
@@ -199,18 +199,6 @@ msgstr "File Number"
 
 msgid "inforequests:obligee_action:Categorized:file_number:placeholder"
 msgstr "File Number"
-
-msgid "inforequests:obligee_action:Categorized:last_action_dd:label:request"
-msgstr "Request Delivered Date"
-
-msgid "inforequests:obligee_action:Categorized:last_action_dd:label:clarification_response"
-msgstr "Completion Delivered Date"
-
-msgid "inforequests:obligee_action:Categorized:last_action_dd:label:appeal"
-msgstr "Appeal Delivered Date"
-
-msgid "inforequests:obligee_action:Categorized:last_action_dd:label:advanced_request"
-msgstr "Advancement Delivered Date"
 
 msgid "inforequests:obligee_action:Categorized:last_action_dd:placeholder"
 msgstr "mm/dd/yyyy"
@@ -273,28 +261,31 @@ msgid "inforequests:obligee_action:IsItAppealDecision:no"
 msgstr "Nie, nemá"
 
 msgid "inforequests:obligee_action:IsItExtension:yes"
-msgstr "Áno, spomína sa"
+msgstr "Áno, v liste sa spomína predĺženie lehoty."
 
 msgid "inforequests:obligee_action:IsItExtension:no"
-msgstr "Nie, nespomína sa"
+msgstr "Nie, v liste sa nespomína predĺženie lehoty."
 
 msgid "inforequests:obligee_action:IsItExtension:extension:label"
 msgstr "Deadline Extension"
+
+msgid "inforequests:obligee_action:IsItExtension:extension:help_text"
+msgstr "Vyplňte počet dní, o ktoré inštitúcia predlžuje lehotu."
 
 msgid "inforequests:obligee_action:IsItExtension:extension:placeholder"
 msgstr "Calendar days"
 
 msgid "inforequests:obligee_action:IsItAdvancement:yes"
-msgstr "Áno, inštitúcia postupuje žiadosť inej inštitúcii"
+msgstr "Áno, inštitúcia postupuje moju žiadosť inej inštitúcii."
 
 msgid "inforequests:obligee_action:IsItAdvancement:no"
-msgstr "Nie, v texte sa postúpenie nespomína"
+msgstr "Nie, inštitúcia nepostupuje moju žiadosť inej inštitúcii."
 
 msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:label"
-msgstr "Advanced To"
+msgstr "Žiadosť postúpená pre"
 
 msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder"
-msgstr "Obligee"
+msgstr "Názov inštitúcie, ktorej bola vaša žiadosť postúpená"
 
 msgid "inforequests:obligee_action:IsItAdvancement:error:same_obligee"
 msgstr "May not advance to the same obligee."
@@ -303,31 +294,31 @@ msgid "inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee"
 msgstr "May not advance twice to the same obligee."
 
 msgid "inforequests:obligee_action:IsItDecision:yes"
-msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie"
+msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie."
 
 msgid "inforequests:obligee_action:IsItDecision:no"
-msgstr "Nie, je to niečo iné"
+msgstr "Nie, neobsahuje to dokument s nadpisom rozhodnutie."
 
 msgid "inforequests:obligee_action:ContainsInfo:full"
-msgstr "Som úplne spokojný"
+msgstr "Áno, inštitúcia mi poslala požadované informácie."
 
 msgid "inforequests:obligee_action:ContainsInfo:partial"
-msgstr "Čiastočne"
+msgstr "Inštitúcia mi poslala požadované informácie len čiastočne."
 
 msgid "inforequests:obligee_action:ContainsInfo:none"
-msgstr "Vôbec"
+msgstr "Nie, inštitúcia mi neposlala žiadne z informácií, o ktoré som žiadal."
 
 msgid "inforequests:obligee_action:IsOnTopic:yes"
-msgstr "Áno, je to reakcia na žiadosť"
+msgstr "Áno, týka sa mojej žiadosti."
 
 msgid "inforequests:obligee_action:IsOnTopic:no"
-msgstr "Nie, je to niečo iné"
+msgstr "Nie, vôbec sa mojej žiadosti netýka."
 
 msgid "inforequests:obligee_action:IsItConfirmation:yes"
-msgstr "Áno, potvrdzujú, že vec dostali"
+msgstr "Áno, inštitúcia mi v liste len potvrdila, že dostala moju žiadosť."
 
 msgid "inforequests:obligee_action:IsItConfirmation:no"
-msgstr "Nie, je to niečo iné"
+msgstr "Nie, list od inštitúcie nie je potvrdením prijatia žiadosti."
 
 msgid "inforequests:obligee_action:IsItQuestion:yes"
 msgstr "Áno, je to otázka"
@@ -348,7 +339,7 @@ msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_p
 msgstr "May not be older than previous action."
 
 msgid "inforequests:obligee_action:InputBasics:delivered_date:error:from_future"
-msgstr "May not be from future."
+msgstr "Zadajte prosím dnešný dátum, alebo starší. Dátum nesmie byť v budúcnosti."
 
 msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month"
 msgstr "May not be older than one month."
@@ -411,28 +402,28 @@ msgid "inforequests:Action:disclosure_level:FULL"
 msgstr "Full Disclosure"
 
 msgid "inforequests:Action:refusal_reason:DOES_NOT_HAVE"
-msgstr "Does not Have Information"
+msgstr "Inštitúcia uviedla, že nemá požadovanú informáciu."
 
 msgid "inforequests:Action:refusal_reason:DOES_NOT_PROVIDE"
-msgstr "Does not Provide Information"
+msgstr "Inštitúcia uviedla, že nie je povinná poskytovať požadovanú informáciu."
 
 msgid "inforequests:Action:refusal_reason:DOES_NOT_CREATE"
-msgstr "Does not Create Information"
+msgstr "Inštitúcia uviedla, že sprístupnenie požadovanej informácie si vyžaduje túto informáciu nanovo vytvoriť, a inštitúcia nie je povinná vytvárať nové informácie."
 
 msgid "inforequests:Action:refusal_reason:COPYRIGHT"
-msgstr "Copyright Restriction"
+msgstr "Inštitúcia uviedla, že sprístupnením požadovanej informácie by porušila autorské právo."
 
 msgid "inforequests:Action:refusal_reason:BUSINESS_SECRET"
-msgstr "Business Secret"
+msgstr "Inštitúcia uviedla, že požadovaná informácia je predmetom obchodného tajomstva."
 
 msgid "inforequests:Action:refusal_reason:PERSONAL"
-msgstr "Personal Information"
+msgstr "Inštitúcia uviedla, že sprístupnením požadovanej informácie by porušila ochranu osobných údajov."
 
 msgid "inforequests:Action:refusal_reason:CONFIDENTIAL"
-msgstr "Confidential Information"
+msgstr "Inštitúcia uviedla, že požadovaná informácia je predmetom utajovanej skutočnosti."
 
 msgid "inforequests:Action:refusal_reason:OTHER_REASON"
-msgstr "Other Reason"
+msgstr "Inštitúcia uviedla inú príčinu."
 
 msgid "inforequests:Inforequest:fallback_slug"
 msgstr "request"

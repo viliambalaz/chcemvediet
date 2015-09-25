@@ -20,7 +20,7 @@ from poleno.utils.template import lazy_render_to_string
 class InforequestForm(PrefixedForm):
     obligee = ObligeeField(
             label=_(u'inforequests:InforequestForm:obligee:label'),
-            help_text=lazy_render_to_string(u'inforequests/create/tooltips/obligee.txt'),
+            help_text=lazy_render_to_string(u'inforequests/create/texts/obligee.txt'),
             widget=ObligeeWidget(input_attrs={
                 u'placeholder': _(u'inforequests:InforequestForm:obligee:placeholder'),
                 u'class': u'span5',

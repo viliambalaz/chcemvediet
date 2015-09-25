@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
@@ -84,6 +85,7 @@ class Categorized(ObligeeActionStep):
 
         self.fields[u'legal_date'] = forms.DateField(
                 label=_(u'inforequests:obligee_action:Categorized:legal_date:label'),
+                help_text=render_to_string(u'inforequests/obligee_action/texts/categorized_legal_date_help.txt', self.context()),
                 localize=True,
                 widget=forms.DateInput(attrs={
                     u'placeholder': _('inforequests:obligee_action:Categorized:legal_date:placeholder'),
@@ -102,19 +104,11 @@ class Categorized(ObligeeActionStep):
                 )
 
         branch = self.wizard.values[u'branch']
-        labels = {
-                Action.TYPES.REQUEST:
-                    _(u'inforequests:obligee_action:Categorized:last_action_dd:label:request'),
-                Action.TYPES.CLARIFICATION_RESPONSE:
-                    _(u'inforequests:obligee_action:Categorized:last_action_dd:label:clarification_response'),
-                Action.TYPES.APPEAL:
-                    _(u'inforequests:obligee_action:Categorized:last_action_dd:label:appeal'),
-                Action.TYPES.ADVANCED_REQUEST:
-                    _(u'inforequests:obligee_action:Categorized:last_action_dd:label:advanced_request'),
-                }
-        if branch.last_action.delivered_date is None and branch.last_action.type in labels:
+        if branch.last_action.delivered_date is None and branch.last_action.type in [
+                Action.TYPES.REQUEST, Action.TYPES.CLARIFICATION_RESPONSE, Action.TYPES.APPEAL, Action.TYPES.ADVANCED_REQUEST]:
             self.fields[u'last_action_dd'] = forms.DateField(
-                    label=labels[branch.last_action.type],
+                    label=render_to_string(u'inforequests/obligee_action/texts/categorized_last_action_dd_label.txt', self.context()),
+                    help_text=render_to_string(u'inforequests/obligee_action/texts/categorized_last_action_dd_help.txt', self.context()),
                     localize=True,
                     required=False,
                     widget=forms.DateInput(attrs={
@@ -385,6 +379,7 @@ class IsItExtension(ObligeeActionStep):
 
         self.fields[u'extension'] = forms.IntegerField(
                 label=_(u'inforequests:obligee_action:IsItExtension:extension:label'),
+                help_text=_(u'inforequests:obligee_action:IsItExtension:extension:help_text'),
                 initial=8,
                 min_value=2,
                 max_value=15,
@@ -843,6 +838,8 @@ class ObligeeActionWizard(Wizard):
         res.update({
                 u'inforequest': self.inforequest,
                 u'email': self.email,
+                u'ACTION_TYPES': Action.TYPES,
+                u'DISCLOSURE_LEVELS': Action.DISCLOSURE_LEVELS,
                 })
         return res
 

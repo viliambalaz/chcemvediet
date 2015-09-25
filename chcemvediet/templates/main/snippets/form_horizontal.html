@@ -23,7 +23,7 @@
       {% if field.label.strip %}
         <label class="control-label" for="{{ field.auto_id }}">
           {% if field.field.required %}*{% endif %}
-          {{ field.label }}:
+          {{ field.label.strip }}:
         </label>
       {% endif %}
       <div class="controls">
@@ -31,7 +31,7 @@
         <span class="help-inline">{{ field.errors|join:" " }}</span>
         {% if field.field.help_text %}
           <span class="help-block">
-            {{ field.field.help_text }}
+            {{ field.field.help_text.strip }}
           </span>
         {% endif %}
       </div>

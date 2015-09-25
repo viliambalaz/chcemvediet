@@ -1,6 +1,5 @@
 {# vim: set filetype=htmldjango :#}
 {% load squeeze from poleno.utils %}
-{% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -31,7 +30,7 @@
       {% if reason == last_action.REFUSAL_REASONS.BUSINESS_SECRET %}
         obchodné tajomstvo
       {% elif reason == last_action.REFUSAL_REASONS.PERSONAL %}
-        osobný údaj podliehajúci ochrane
+        osobný údaj podliehajúci ochrane osobných údajov
       {% elif reason == last_action.REFUSAL_REASONS.CONFIDENTIAL %}
         utajovaná skutočnosť
       {% endif %}
@@ -46,7 +45,7 @@
       {% if reason == last_action.REFUSAL_REASONS.BUSINESS_SECRET %}
         obchodné tajomstvo
       {% elif reason == last_action.REFUSAL_REASONS.PERSONAL %}
-        osobné údaje podliehajúce ochrane
+        osobné údaje podliehajúce ochrane osobných údajov
       {% elif reason == last_action.REFUSAL_REASONS.CONFIDENTIAL %}
         utajované skutočnosti
       {% endif %}
@@ -57,5 +56,4 @@
 </p>
 <p>
   Stalo sa tak?
-  {% paper_field step.sanitization_level %}
 </p>
