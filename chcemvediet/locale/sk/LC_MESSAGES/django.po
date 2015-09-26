@@ -390,7 +390,7 @@ msgid "inforequests:Action:type:REMANDMENT"
 msgstr "Vrátenie rozhodnutia"
 
 msgid "inforequests:Action:type:ADVANCED_REQUEST"
-msgstr "Postúpenie žiadosti"
+msgstr "Doručenie postúpenia žiadosti"
 
 msgid "inforequests:Action:type:EXPIRATION"
 msgstr "Vypršanie lehoty"
