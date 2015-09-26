@@ -14,13 +14,11 @@ from poleno.utils.forms import CompositeTextField, PrefixedForm
 from chcemvediet.apps.obligees.forms import ObligeeWidget, ObligeeField
 from chcemvediet.apps.inforequests.models import Inforequest
 
-from poleno.utils.template import lazy_render_to_string
-
 
 class InforequestForm(PrefixedForm):
     obligee = ObligeeField(
             label=_(u'inforequests:InforequestForm:obligee:label'),
-            help_text=lazy_render_to_string(u'inforequests/create/texts/obligee.txt'),
+            help_text=_(u'inforequests:InforequestForm:obligee:help_text'),
             widget=ObligeeWidget(input_attrs={
                 u'placeholder': _(u'inforequests:InforequestForm:obligee:placeholder'),
                 u'class': u'span5',

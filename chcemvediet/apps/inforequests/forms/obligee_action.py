@@ -453,6 +453,7 @@ class IsItAdvancement(ObligeeActionStep):
 
         self.fields[u'advanced_to'] = MultipleObligeeField(
                 label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
+                help_text=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:help_text'),
                 required=False,
                 widget=MultipleObligeeWidget(input_attrs={
                     u'class': u'span5 visible-if-advancement',

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-25 08:11+0200\n"
+"POT-Creation-Date: 2015-09-26 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,10 +156,13 @@ msgid "inforequests:RefusalReasonField:error:none_contradiction"
 msgstr "Zvolené možnosti si protirečia"
 
 msgid "inforequests:InforequestForm:obligee:label"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
+
+msgid "inforequests:InforequestForm:obligee:help_text"
+msgstr "Zadajte časť názvu inštitúcie. Vyhľadáva sa bez ohľadu na diakritiku a veľké a malé písmená."
 
 msgid "inforequests:InforequestForm:obligee:placeholder"
-msgstr "Hľadať povinnú osobu"
+msgstr "Názov inštitúcie, ktorej chcete žiadosť poslať"
 
 msgid "inforequests:InforequestForm:subject:label"
 msgstr "Predmet"
@@ -284,6 +287,9 @@ msgstr "Nie, inštitúcia nepostupuje moju žiadosť inej inštitúcii."
 msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:label"
 msgstr "Žiadosť postúpená pre"
 
+msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:help_text"
+msgstr "Zadajte časť názvu inštitúcie. Vyhľadáva sa bez ohľadu na diakritiku a veľké a malé písmená."
+
 msgid "inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder"
 msgstr "Názov inštitúcie, ktorej bola vaša žiadosť postúpená"
 
@@ -345,7 +351,7 @@ msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_m
 msgstr "Nesmie byť starší ako 1 mesiac."
 
 msgid "inforequests:obligee_action:SelectBranch:branch:label"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:Action:type:REQUEST"
 msgstr "Žiadosť"
@@ -477,7 +483,7 @@ msgid "inforequests:clarification_response:applicant_label"
 msgstr "Žiadateľ"
 
 msgid "inforequests:clarification_response:obligee"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:clarification_response:subject"
 msgstr "Predmet"
@@ -576,7 +582,7 @@ msgid "inforequests:detail:request:applicant"
 msgstr "Žiadateľ"
 
 msgid "inforequests:detail:request:obligee"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:detail:request:unique_email"
 msgstr "Unikátna emailová adresa"
@@ -597,7 +603,7 @@ msgid "inforequests:index:heading"
 msgstr "Odoslané žiadosti"
 
 msgid "inforequests:index:obligee"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:index:subject"
 msgstr "Subjekt"
@@ -615,7 +621,7 @@ msgid "inforequests:index:drafts:heading"
 msgstr "Rozpracované žiadosti"
 
 msgid "inforequests:index:drafts:obligee"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:index:drafts:empty_obligee"
 msgstr "(neboli vybrané žiadne inštitúcie)"
@@ -633,7 +639,7 @@ msgid "inforequests:index:closed:heading"
 msgstr "Uzavreté žiadosti"
 
 msgid "inforequests:index:closed:obligee"
-msgstr "Povinná osoba"
+msgstr "Inštitúcia"
 
 msgid "inforequests:index:closed:subject"
 msgstr "Subjekt"
