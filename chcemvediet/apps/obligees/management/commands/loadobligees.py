@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management.color import color_style
 from django.db import transaction
+from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import Bunch
@@ -369,6 +370,13 @@ class Importer(object):
         for row in self.iterate_sheet(SHEETS.tags):
             pass
 
+    def obligee_dummy_mail_if_configured(self, row):
+        if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
+            name = row[COLUMNS.obligees.name]
+            return Obligee.dummy_email(name, settings.OBLIGEE_DUMMY_MAIL)
+        else:
+            return row[COLUMNS.obligees.emails]
+
     def import_obligees(self):
         Obligee.objects.all().delete()
         for row in self.iterate_sheet(SHEETS.obligees):
@@ -378,7 +386,7 @@ class Importer(object):
                     street=row[COLUMNS.obligees.street],
                     city=row[COLUMNS.obligees.city],
                     zip=row[COLUMNS.obligees.zip],
-                    emails=row[COLUMNS.obligees.emails],
+                    emails=self.obligee_dummy_mail_if_configured(row),
                     status=row[COLUMNS.obligees.status],
                     )
             obligee.save()

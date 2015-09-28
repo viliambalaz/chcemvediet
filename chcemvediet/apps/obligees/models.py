@@ -72,6 +72,11 @@ class Obligee(models.Model):
                 [u'name', u'id'],
                 ]
 
+    @staticmethod
+    def dummy_email(name, tpl):
+        slug = slugify(name)[:30].strip(u'-')
+        return tpl.format(name=slug)
+
     @property
     def emails_parsed(self):
         return ((n, a) for n, a in getaddresses([self.emails]) if a)

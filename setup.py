@@ -244,7 +244,8 @@ def configure_email_addresses(configure, settings):
                 addresses with dummies. Use '{name}' as a placeholder to distinguish individual
                 obligees. For instance 'mail@{name}.example.com' may be expanded to
                 'mail@martika-hnusta.example.com'."""))
-        configure.input(u'obligee_dummy_mail', u'Obligee dummy e-mail', required=True)
+        obligee_dummy_mail = configure.input(u'obligee_dummy_mail', u'Obligee dummy e-mail', required=True)
+        settings.setting(u'OBLIGEE_DUMMY_MAIL', obligee_dummy_mail)
 
 def configure_devbar(configure, settings):
     server_mode = configure.get(u'server_mode')
@@ -380,8 +381,7 @@ def configure_dummy_obligee_emails(configure):
     mail_tpl = configure.get(u'obligee_dummy_mail')
     for model in [Obligee, HistoricalObligee]:
         for obligee in model.objects.all():
-            slug = obligee.slug[0:30].strip(u'-')
-            mail = mail_tpl.format(name=slug)
+            mail = Obligee.dummy_email(obligee.name, mail_tpl)
             if mail != obligee.emails:
                 obligee.emails = mail
                 obligee.save()
