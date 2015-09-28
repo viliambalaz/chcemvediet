@@ -1,11 +1,14 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 import re
+from collections import defaultdict
 from openpyxl import load_workbook
 
 from django.core.management.base import BaseCommand, CommandError
+from django.core.management.color import color_style
 from django.db import transaction
 
+from poleno.utils.misc import Bunch
 from chcemvediet.apps.obligees.models import Obligee
 
 zip_regex = re.compile(r'^\d\d\d \d\d$')
@@ -14,120 +17,204 @@ tags_regex = re.compile(r'^([\w-]+(\s+[\w-]+)*)?$') # 0 or more tags
 hierarchy_regex = re.compile(r'^[\w-]+(/[\w-]+)*$')
 hierarchies_regex = re.compile(r'^[\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*$') # 1 or more hierarchies
 
+SHEETS = Bunch( # {{{
+        obligees=u'Obligees',
+        hierarchy=u'Hierarchia',
+        aliases=u'Aliasy',
+        tags=u'Tagy',
+        ) # }}}
+
+COLUMNS = Bunch( # {{{
+        obligees=Bunch(
+            pk=u'Interne ID institucie',
+            official_name=u'Oficialny nazov',
+            name=u'Rozlisovaci nazov nominativ',
+            name_genitive=u'Rozlisovaci nazov genitiv',
+            name_dative=u'Rozlisovaci nazov dativ',
+            name_accusative=u'Rozlisovaci nazov akuzativ',
+            name_locative=u'Rozlisovaci nazov lokal',
+            name_instrumental=u'Rozlisovaci nazov instrumental',
+            name_gender=u'Rod',
+            ico=u'ICO',
+            hierarchy=u'Hierarchia',
+            street=u'Adresa: Ulica s cislom',
+            city=u'Adresa: Obec',
+            zip=u'Adresa: PSC',
+            emails=u'Adresa: Email',
+            official_description=u'Oficialny popis',
+            simple_description=u'Zrozumitelny popis',
+            status=u'Stav',
+            type=u'Typ',
+            latitude=u'Lat',
+            longitude=u'Lon',
+            iczsj=u'ICZSJ',
+            tags=u'Tagy',
+            notes=u'Poznamka',
+            ),
+        hierarchy=Bunch(
+            pk=u'Interne ID hierarchie',
+            key=u'Kod',
+            name=u'Nazov v hierarchii',
+            description=u'Popis',
+            ),
+        aliases=Bunch(
+            pk=u'Interne ID aliasu',
+            obligee_pk=u'ID institucie',
+            obligee_name=u'Rozlisovaci nazov institucie',
+            alias=u'Alternativny nazov',
+            description=u'Vysvetlenie',
+            notes=u'Poznamka',
+            ),
+        tags=Bunch(
+            pk=u'Interne ID tagu',
+            key=u'Kod',
+            name=u'Nazov',
+            ),
+        ) # }}}
+
 STRUCTURE = { # {{{
-        u'Obligees': {
-            u'Interne ID institucie':          dict(typ=int,     min_value=1), # FIXME: unique pk
-            u'Oficialny nazov':                dict(typ=unicode, nonempty=True),
-            u'Rozlisovaci nazov nominativ':    dict(typ=unicode, nonempty=True), # FIXME: unique slug
-            u'Rozlisovaci nazov genitiv':      dict(typ=unicode, nonempty=True),
-            u'Rozlisovaci nazov dativ':        dict(typ=unicode, nonempty=True),
-            u'Rozlisovaci nazov akuzativ':     dict(typ=unicode, nonempty=True),
-            u'Rozlisovaci nazov lokal':        dict(typ=unicode, nonempty=True),
-            u'Rozlisovaci nazov instrumental': dict(typ=unicode, nonempty=True),
-            u'Rod':                            dict(typ=unicode, choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny']),
-            u'ICO':                            dict(typ=unicode, default=u''),
-            u'Hierarchia':                     dict(typ=unicode, regex=hierarchies_regex), # FIXME: foreign key
-            u'Adresa: Ulica s cislom':         dict(typ=unicode, nonempty=True),
-            u'Adresa: Obec':                   dict(typ=unicode, nonempty=True),
-            u'Adresa: PSC':                    dict(typ=unicode, regex=zip_regex),
-            u'Adresa: Email':                  dict(typ=unicode, default=u''), # FIXME: coerce=parse_emails
-            u'Oficialny popis':                dict(typ=unicode, default=u''),
-            u'Zrozumitelny popis':             dict(typ=unicode, default=u''),
-            u'Stav':                           dict(typ=unicode, choices={u'aktivny': Obligee.STATUSES.PENDING, u'neaktivny': Obligee.STATUSES.DISSOLVED}),
-            u'Typ':                            dict(typ=int,     choices=[1, 2, 3, 4]),
-            u'Lat':                            dict(typ=float,   min_value=-90.0, max_value=90.0),
-            u'Lon':                            dict(typ=float,   min_value=-180.0, max_value=180.0),
-            u'ICZSJ':                          dict(typ=int,     min_value=1), # FIXME: foreign key
-            u'Tagy':                           dict(typ=unicode, default=u'', regex=tags_regex), # FIXME: foreign key
-            u'Poznamka':                       dict(typ=unicode, default=u''),
+        SHEETS.obligees: {
+            COLUMNS.obligees.pk:                   dict(typ=int,     min_value=1), # FIXME: unique pk
+            COLUMNS.obligees.official_name:        dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name:                 dict(typ=unicode, nonempty=True), # FIXME: unique slug
+            COLUMNS.obligees.name_genitive:        dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name_dative:          dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name_accusative:      dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name_locative:        dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name_instrumental:    dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.name_gender:          dict(typ=unicode, choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny']),
+            COLUMNS.obligees.ico:                  dict(typ=unicode, default=u''),
+            COLUMNS.obligees.hierarchy:            dict(typ=unicode, regex=hierarchies_regex), # FIXME: foreign key
+            COLUMNS.obligees.street:               dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.city:                 dict(typ=unicode, nonempty=True),
+            COLUMNS.obligees.zip:                  dict(typ=unicode, regex=zip_regex),
+            COLUMNS.obligees.emails:               dict(typ=unicode, default=u''), # FIXME: coerce=parse_emails
+            COLUMNS.obligees.official_description: dict(typ=unicode, default=u''),
+            COLUMNS.obligees.simple_description:   dict(typ=unicode, default=u''),
+            COLUMNS.obligees.status:               dict(typ=unicode, choices={u'aktivny': Obligee.STATUSES.PENDING, u'neaktivny': Obligee.STATUSES.DISSOLVED}),
+            COLUMNS.obligees.type:                 dict(typ=int,     choices=[1, 2, 3, 4]),
+            COLUMNS.obligees.latitude:             dict(typ=float,   min_value=-90.0, max_value=90.0),
+            COLUMNS.obligees.longitude:            dict(typ=float,   min_value=-180.0, max_value=180.0),
+            COLUMNS.obligees.iczsj:                dict(typ=int,     min_value=1), # FIXME: foreign key
+            COLUMNS.obligees.tags:                 dict(typ=unicode, default=u'', regex=tags_regex), # FIXME: foreign key
+            COLUMNS.obligees.notes:                dict(typ=unicode, default=u''),
             },
-        u'Hierarchia': {
-            u'Interne ID hierarchie':          dict(typ=int,     min_value=1), # FIXME: unique pk
-            u'Kod':                            dict(typ=unicode, regex=hierarchy_regex), # FIXME: unique slug
-            u'Nazov v hierarchii':             dict(typ=unicode, nonempty=True),
-            u'Popis':                          dict(typ=unicode, default=u''),
+        SHEETS.hierarchy: {
+            COLUMNS.hierarchy.pk:                  dict(typ=int,     min_value=1), # FIXME: unique pk
+            COLUMNS.hierarchy.key:                 dict(typ=unicode, regex=hierarchy_regex), # FIXME: unique slug
+            COLUMNS.hierarchy.name:                dict(typ=unicode, nonempty=True),
+            COLUMNS.hierarchy.description:         dict(typ=unicode, default=u''),
             },
-        u'Aliasy': {
-            u'Interne ID aliasu':              dict(typ=int,     min_value=1), # FIXME: unique pk
-            u'ID institucie':                  dict(typ=int,     min_value=1), # FIXME: foreign key
-            u'Rozlisovaci nazov institucie':   dict(typ=unicode, nonempty=True), # FIXME: overit vzhladom na ID institucie
-            u'Alternativny nazov':             dict(typ=unicode, nonempty=True), # FIXME: unique slug
-            u'Vysvetlenie':                    dict(typ=unicode, default=u''),
-            u'Poznamka':                       dict(typ=unicode, default=u''),
+        SHEETS.aliases: {
+            COLUMNS.aliases.pk:                    dict(typ=int,     min_value=1), # FIXME: unique pk
+            COLUMNS.aliases.obligee_pk:            dict(typ=int,     min_value=1), # FIXME: foreign key
+            COLUMNS.aliases.obligee_name:          dict(typ=unicode, nonempty=True), # FIXME: overit vzhladom na ID institucie
+            COLUMNS.aliases.alias:                 dict(typ=unicode, nonempty=True), # FIXME: unique slug
+            COLUMNS.aliases.description:           dict(typ=unicode, default=u''),
+            COLUMNS.aliases.notes:                 dict(typ=unicode, default=u''),
             },
-        u'Tagy': {
-            u'Interne ID tagu':                dict(typ=int,     min_value=1), # FIXME: unique pk
-            u'Kod':                            dict(typ=unicode, regex=tag_regex), # FIXME: unique slug
-            u'Nazov':                          dict(typ=unicode, nonempty=True),
+        SHEETS.tags: {
+            COLUMNS.tags.pk:                       dict(typ=int,     min_value=1), # FIXME: unique pk
+            COLUMNS.tags.key:                      dict(typ=unicode, regex=tag_regex), # FIXME: unique slug
+            COLUMNS.tags.name:                     dict(typ=unicode, nonempty=True),
             },
         } # }}}
 
-class MultipleCommandErrors(CommandError):
-    def __init__(self, errors):
-        msgs = []
-        for error in errors:
-            if isinstance(error, MultipleCommandErrors):
-                msgs.append(u'%s' % error)
+
+class RollingCommandError(CommandError):
+    def __init__(self, count=1):
+        self.count = count
+        super(CommandError, self).__init__(u'Detected {} errors; Rollbacking and giving up'.format(count))
+
+
+class Importer(object):
+
+    def __init__(self, filename, verbosity, stdout):
+        self.filename = filename
+        self.verbosity = verbosity
+        self.stdout = stdout
+        self.wb = None
+        self.columns = None
+        self.color_style = color_style()
+        self._error_cache = defaultdict(int)
+
+    def print_error(self, msg, args, kwargs, suffix=u''):
+        msg = msg.format(*args, **kwargs)
+        msg = u'Error: {}'.format(msg)
+        msg = self.color_style.WARNING(msg)
+        if suffix:
+            suffix = u' ({})'.format(suffix)
+            msg += suffix
+        self.stdout.write(msg)
+
+    def error(self, msg, *args, **kwargs):
+        code = kwargs.pop(u'code', None)
+
+        if self.verbosity == u'1':
+            if code:
+                self._error_cache[code] += 1
+                if self._error_cache[code] == 1:
+                    self.print_error(msg, args, kwargs)
+                elif self._error_cache[code] == 2:
+                    self.print_error(msg, args, kwargs, u'skipping further similar errors')
             else:
-                msgs.append(u'\n -- %s' % error)
-        super(CommandError, self).__init__(u''.join(msgs))
+                self.print_error(msg, args, kwargs)
 
-class Command(BaseCommand):
-    help = u'Loads .xlsx file with obligees'
-    args = u'file'
+        elif self.verbosity >= u'2':
+            self.print_error(msg, args, kwargs)
 
-    def _load_file(self, filename):
-        try:
-            return load_workbook(filename, read_only=True)
-        except Exception as e:
-            raise CommandError(u'Could not read input file: {}'.format(e))
-
-    def _get_columns(self, wb, sheet):
-        try:
-            row = next(wb[sheet].rows)
-        except StopIteration:
-            return {}
-        res = {}
-        for idx, column in enumerate(row):
-            if column.value is not None and not column.value.startswith(u'#'):
-                res[column.value] = idx
-        return res
-
-    def _validate_structure(self, wb):
-        errors = []
+    def validate_structure(self):
+        errors = 0
 
         expected_sheets = set(STRUCTURE)
-        found_sheets = {n for n in wb.get_sheet_names() if not n.startswith(u'#')}
+        found_sheets = {n for n in self.wb.get_sheet_names() if not n.startswith(u'#')}
         missing_sheets = expected_sheets - found_sheets
         superfluous_sheets = found_sheets - expected_sheets
         for sheet in missing_sheets:
-            msg = u'The file does not contain required sheet: {}'.format(sheet)
-            errors.append(CommandError(msg))
+            self.error(u'The file does not contain required sheet: {}', sheet)
+            errors += 1
         for sheet in superfluous_sheets:
-            msg = u'The file contains unexpected sheet: {}'.format(sheet)
-            errors.append(CommandError(msg))
+            self.error(u'The file contains unexpected sheet: {}', sheet)
+            errors += 1
 
-        self._columns = {}
+        self.columns = {}
         for sheet in expected_sheets & found_sheets:
-            self._columns[sheet] = self._get_columns(wb, sheet)
+            self.columns[sheet] = {}
+            row = next(self.wb[sheet].rows, [])
+            for idx, column in enumerate(row):
+                if column.value is not None and not column.value.startswith(u'#'):
+                    self.columns[sheet][column.value] = idx
+
+        for sheet in expected_sheets & found_sheets:
             expected_columns = set(STRUCTURE[sheet])
-            found_columns = set(self._columns[sheet])
+            found_columns = set(self.columns[sheet])
             missing_columns = expected_columns - found_columns
             superfluous_columns = found_columns - expected_columns
             for column in missing_columns:
-                msg = u'Sheet "{}" does not contain required column: {}'.format(sheet, column)
-                errors.append(CommandError(msg))
+                self.error(u'Sheet "{}" does not contain required column: {}', sheet, column)
+                errors += 1
             for column in superfluous_columns:
-                msg = u'Sheet "{}" contains unexpected column: {}'.format(sheet, column)
-                errors.append(CommandError(msg))
+                self.error(u'Sheet "{}" contains unexpected column: {}', sheet, column)
+                errors += 1
 
         if errors:
-            raise MultipleCommandErrors(errors)
+            raise RollingCommandError(errors)
 
-    def _cell_error(self, idx, sheet, column, msg):
-        raise CommandError(u'Invalid value in row {} of "{}.{}": {}'.format(idx+1, sheet, column, msg))
+    def cell_error(self, code, idx, sheet, column, msg):
+        code = u'{}:{}:{}'.format(code, sheet, column)
+        self.error(u'Invalid value in row {} of "{}.{}": {}', idx+1, sheet, column, msg, code=code)
+        raise RollingCommandError
 
-    def _validate_type(self, value, idx, sheet, column):
+    def apply_default(self, value, idx, sheet, column):
+        try:
+            default = STRUCTURE[sheet][column][u'default']
+        except KeyError:
+            return value
+        if value is None:
+            value = default
+        return value
+
+    def validate_type(self, value, idx, sheet, column):
         try:
             typ = STRUCTURE[sheet][column][u'typ']
         except KeyError:
@@ -137,40 +224,40 @@ class Command(BaseCommand):
         if not isinstance(value, typ):
             exp = u', '.join(t.__name__ for t in typ)
             msg = u'Expecting {} but found {}'.format(exp, value.__class__.__name__)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'type', idx, sheet, column, msg)
         return value
 
-    def _validate_min_value(self, value, idx, sheet, column):
+    def validate_min_value(self, value, idx, sheet, column):
         try:
             min_value = STRUCTURE[sheet][column][u'min_value']
         except KeyError:
             return value
         if value < min_value:
             msg = u'Expecting value not smaller than "{}" but found "{}"'.format(min_value, value)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'min_value', idx, sheet, column, msg)
         return value
 
-    def _validate_max_value(self, value, idx, sheet, column):
+    def validate_max_value(self, value, idx, sheet, column):
         try:
             max_value = STRUCTURE[sheet][column][u'max_value']
         except KeyError:
             return value
         if value > max_value:
             msg = u'Expecting value not bigger than "{}" but found "{}"'.format(max_value, value)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'max_value', idx, sheet, column, msg)
         return value
 
-    def _validate_nonempty(self, value, idx, sheet, column):
+    def validate_nonempty(self, value, idx, sheet, column):
         try:
             nonempty = STRUCTURE[sheet][column][u'nonempty']
         except KeyError:
             return value
         if nonempty and not value:
             msg = u'Expecting nonempty value but found "{}"'.format(value)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'nonempty', idx, sheet, column, msg)
         return value
 
-    def _validate_choices(self, value, idx, sheet, column):
+    def validate_choices(self, value, idx, sheet, column):
         try:
             choices = STRUCTURE[sheet][column][u'choices']
         except KeyError:
@@ -178,89 +265,150 @@ class Command(BaseCommand):
         if value not in choices:
             exp = u', '.join(u'"{}"'.format(c) for c in choices)
             msg = u'Expecting one of {} but found "{}"'.format(exp, value)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'choices', idx, sheet, column, msg)
         if isinstance(choices, dict):
             value = choices[value]
         return value
 
-    def _validate_regex(self, value, idx, sheet, column):
+    def validate_regex(self, value, idx, sheet, column):
         try:
             regex = STRUCTURE[sheet][column][u'regex']
         except KeyError:
             return value
         if not regex.match(value):
             msg = u'Expecting value matching "{}" but found "{}"'.format(regex.pattern, value)
-            self._cell_error(idx, sheet, column, msg)
+            self.cell_error(u'regex', idx, sheet, column, msg)
         return value
 
-    def _validate_cell(self, idx, row, sheet, column):
+    def validate_cell(self, idx, row, sheet, column):
         try:
-            value = row[self._columns[sheet][column]].value
+            col_idx = self.columns[sheet][column]
+        except KeyError:
+            self.cell_error(u'missing', idx, sheet, column, u'Missing column')
+
+        try:
+            value = row[col_idx].value
         except IndexError:
             value = None
-        if value is None:
-            value = STRUCTURE[sheet][column].get(u'default', None)
-        value = self._validate_type(value, idx, sheet, column)
-        value = self._validate_min_value(value, idx, sheet, column)
-        value = self._validate_max_value(value, idx, sheet, column)
-        value = self._validate_nonempty(value, idx, sheet, column)
-        value = self._validate_choices(value, idx, sheet, column)
-        value = self._validate_regex(value, idx, sheet, column)
+
+        value = self.apply_default(value, idx, sheet, column)
+        value = self.validate_type(value, idx, sheet, column)
+        value = self.validate_min_value(value, idx, sheet, column)
+        value = self.validate_max_value(value, idx, sheet, column)
+        value = self.validate_nonempty(value, idx, sheet, column)
+        value = self.validate_choices(value, idx, sheet, column)
+        value = self.validate_regex(value, idx, sheet, column)
         return value
 
-    def _validate_row(self, idx, row, sheet):
+    def validate_row(self, idx, row, sheet):
         res = {}
-        errors = []
+        errors = 0
         for column in STRUCTURE[sheet]:
             try:
-                res[column] = self._validate_cell(idx, row, sheet, column)
-            except CommandError as e:
-                errors.append(e)
+                res[column] = self.validate_cell(idx, row, sheet, column)
+            except RollingCommandError as e:
+                errors += e.count
         if errors:
-            raise MultipleCommandErrors(errors)
+            raise RollingCommandError(errors)
         return res
 
-    def _iterate_sheet(self, wb, sheet):
-        errors = []
-        ws = wb[sheet]
-        for idx, row in enumerate(ws.rows):
-            if idx == 0 or not row:
+    def iterate_sheet(self, sheet):
+        try:
+            self.columns[sheet]
+        except KeyError:
+            self.error(u'Skipping sheet: {}', sheet)
+            raise RollingCommandError
+
+        errors = 0
+        count = 0
+        for idx, row in enumerate(self.wb[sheet].rows):
+            if idx == 0 or all(c.value is None for c in row):
                 continue
             try:
-                yield self._validate_row(idx, row, sheet)
-            except CommandError as e:
-                errors.append(e)
+                yield self.validate_row(idx, row, sheet)
+            except RollingCommandError as e:
+                errors += e.count
+            count += 1
+
         if errors:
-            raise MultipleCommandErrors(errors)
+            raise RollingCommandError(errors)
+        elif self.verbosity >= u'1':
+            self.stdout.write(u'Imported sheet: {} ({} entries)'.format(sheet, count))
+
+    def import_hierarchy(self):
+        for row in self.iterate_sheet(SHEETS.hierarchy):
+            pass
+
+    def import_tags(self):
+        for row in self.iterate_sheet(SHEETS.tags):
+            pass
+
+    def import_obligees(self):
+        Obligee.objects.all().delete()
+        for row in self.iterate_sheet(SHEETS.obligees):
+            obligee = Obligee(
+                    pk=row[COLUMNS.obligees.pk],
+                    name=row[COLUMNS.obligees.name],
+                    street=row[COLUMNS.obligees.street],
+                    city=row[COLUMNS.obligees.city],
+                    zip=row[COLUMNS.obligees.zip],
+                    emails=row[COLUMNS.obligees.emails],
+                    status=row[COLUMNS.obligees.status],
+                    )
+            obligee.save()
+
+    def import_aliases(self):
+        for row in self.iterate_sheet(SHEETS.aliases):
+            pass
+
+    @transaction.atomic
+    def handle(self):
+        errors = 0
+
+        try:
+            self.wb = load_workbook(self.filename, read_only=True)
+            self.stdout.write(u'Importing: {}'.format(self.filename))
+        except Exception as e:
+            raise CommandError(u'Could not read input file: {}'.format(e))
+
+        try:
+            self.validate_structure()
+        except RollingCommandError as e:
+            errors += e.count
+
+        try:
+            self.import_hierarchy()
+        except RollingCommandError as e:
+            errors += e.count
+
+        try:
+            self.import_tags()
+        except RollingCommandError as e:
+            errors += e.count
+
+        try:
+            self.import_aliases()
+        except RollingCommandError as e:
+            errors += e.count
+
+        try:
+            self.import_obligees()
+        except RollingCommandError as e:
+            errors += e.count
+
+        if errors:
+            raise RollingCommandError(errors)
+        else:
+            self.stdout.write(u'Done.')
+
+class Command(BaseCommand):
+    help = u'Loads .xlsx file with obligees'
+    args = u'file'
 
     @transaction.atomic
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError(u'Expecting exactly one argument')
 
-        wb = self._load_file(args[0])
-        self._validate_structure(wb)
-
-        for row in self._iterate_sheet(wb, u'Hierarchia'):
-            pass
-
-        for row in self._iterate_sheet(wb, u'Aliasy'):
-            pass
-
-        for row in self._iterate_sheet(wb, u'Tagy'):
-            pass
-
-        Obligee.objects.all().delete()
-        for row in self._iterate_sheet(wb, u'Obligees'):
-            obligee = Obligee(
-                    pk=row[u'Interne ID institucie'],
-                    name=row[u'Rozlisovaci nazov nominativ'],
-                    street=row[u'Adresa: Ulica s cislom'],
-                    city=row[u'Adresa: Obec'],
-                    zip=row[u'Adresa: PSC'],
-                    emails=row[u'Adresa: Email'],
-                    status=row[u'Stav'],
-                    )
-            obligee.save()
-
-        self.stdout.write(u'Imported.')
+        importer = Importer(args[0], options[u'verbosity'], self.stdout)
+        importer.handle()
