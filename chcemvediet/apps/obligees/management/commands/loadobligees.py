@@ -79,51 +79,166 @@ COLUMNS = Bunch( # {{{
         ) # }}}
 
 STRUCTURE = { # {{{
-        SHEETS.obligees: {
-            COLUMNS.obligees.pk:                   dict(typ=int,     min_value=1), # FIXME: unique pk
-            COLUMNS.obligees.official_name:        dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name:                 dict(typ=unicode, nonempty=True), # FIXME: unique slug
-            COLUMNS.obligees.name_genitive:        dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name_dative:          dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name_accusative:      dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name_locative:        dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name_instrumental:    dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.name_gender:          dict(typ=unicode, choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny']),
-            COLUMNS.obligees.ico:                  dict(typ=unicode, default=u''),
-            COLUMNS.obligees.hierarchy:            dict(typ=unicode, regex=hierarchies_regex_1), # FIXME: foreign key
-            COLUMNS.obligees.street:               dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.city:                 dict(typ=unicode, nonempty=True),
-            COLUMNS.obligees.zip:                  dict(typ=unicode, regex=zip_regex),
-            COLUMNS.obligees.emails:               dict(typ=unicode, default=u'', validators=validate_comma_separated_emails),
-            COLUMNS.obligees.official_description: dict(typ=unicode, default=u''),
-            COLUMNS.obligees.simple_description:   dict(typ=unicode, default=u''),
-            COLUMNS.obligees.status:               dict(typ=unicode, choices={u'aktivny': Obligee.STATUSES.PENDING, u'neaktivny': Obligee.STATUSES.DISSOLVED}),
-            COLUMNS.obligees.type:                 dict(typ=int,     choices=[1, 2, 3, 4]),
-            COLUMNS.obligees.latitude:             dict(typ=float,   min_value=-90.0, max_value=90.0),
-            COLUMNS.obligees.longitude:            dict(typ=float,   min_value=-180.0, max_value=180.0),
-            COLUMNS.obligees.iczsj:                dict(typ=int,     min_value=1), # FIXME: foreign key
-            COLUMNS.obligees.tags:                 dict(typ=unicode, default=u'', regex=tags_regex_0), # FIXME: foreign key
-            COLUMNS.obligees.notes:                dict(typ=unicode, default=u''),
-            },
-        SHEETS.hierarchy: {
-            COLUMNS.hierarchy.pk:                  dict(typ=int,     min_value=1), # FIXME: unique pk
-            COLUMNS.hierarchy.key:                 dict(typ=unicode, regex=hierarchy_regex), # FIXME: unique slug
-            COLUMNS.hierarchy.name:                dict(typ=unicode, nonempty=True),
-            COLUMNS.hierarchy.description:         dict(typ=unicode, default=u''),
-            },
-        SHEETS.aliases: {
-            COLUMNS.aliases.pk:                    dict(typ=int,     min_value=1), # FIXME: unique pk
-            COLUMNS.aliases.obligee_pk:            dict(typ=int,     min_value=1), # FIXME: foreign key
-            COLUMNS.aliases.obligee_name:          dict(typ=unicode, nonempty=True), # FIXME: overit vzhladom na ID institucie
-            COLUMNS.aliases.alias:                 dict(typ=unicode, nonempty=True), # FIXME: unique slug
-            COLUMNS.aliases.description:           dict(typ=unicode, default=u''),
-            COLUMNS.aliases.notes:                 dict(typ=unicode, default=u''),
-            },
-        SHEETS.tags: {
-            COLUMNS.tags.pk:                       dict(typ=int,     min_value=1), # FIXME: unique pk
-            COLUMNS.tags.key:                      dict(typ=unicode, regex=tag_regex), # FIXME: unique slug
-            COLUMNS.tags.name:                     dict(typ=unicode, nonempty=True),
-            },
+        SHEETS.obligees: { # {{{
+            COLUMNS.obligees.pk: dict( # FIXME: unique pk
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.obligees.official_name: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name: dict( # FIXME: unique slug
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_genitive: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_dative: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_accusative: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_locative: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_instrumental: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.name_gender: dict(
+                typ=unicode,
+                choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny'],
+                ),
+            COLUMNS.obligees.ico: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            COLUMNS.obligees.hierarchy: dict( # FIXME: foreign key
+                typ=unicode,
+                regex=hierarchies_regex_1,
+                ),
+            COLUMNS.obligees.street: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.city: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.obligees.zip: dict(
+                typ=unicode,
+                regex=zip_regex,
+                ),
+            COLUMNS.obligees.emails: dict(
+                typ=unicode,
+                default=u'',
+                validators=validate_comma_separated_emails,
+                ),
+            COLUMNS.obligees.official_description: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            COLUMNS.obligees.simple_description: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            COLUMNS.obligees.status: dict(
+                typ=unicode,
+                choices={u'aktivny': Obligee.STATUSES.PENDING, u'neaktivny': Obligee.STATUSES.DISSOLVED},
+                ),
+            COLUMNS.obligees.type: dict(
+                typ=int,
+                choices=[1, 2, 3, 4],
+                ),
+            COLUMNS.obligees.latitude: dict(
+                typ=float,
+                min_value=-90.0,
+                max_value=90.0,
+                ),
+            COLUMNS.obligees.longitude: dict(
+                typ=float,
+                min_value=-180.0,
+                max_value=180.0,
+                ),
+            COLUMNS.obligees.iczsj: dict( # FIXME: foreign key
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.obligees.tags: dict( # FIXME: foreign key
+                typ=unicode,
+                default=u'',
+                regex=tags_regex_0,
+                ),
+            COLUMNS.obligees.notes: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            }, # }}}
+        SHEETS.hierarchy: { # {{{
+            COLUMNS.hierarchy.pk: dict( # FIXME: unique pk
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.hierarchy.key: dict( # FIXME: unique slug
+                typ=unicode,
+                regex=hierarchy_regex,
+                ),
+            COLUMNS.hierarchy.name: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.hierarchy.description: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            }, # }}}
+        SHEETS.aliases: { # {{{
+            COLUMNS.aliases.pk: dict( # FIXME: unique pk
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.aliases.obligee_pk: dict( # FIXME: foreign key
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.aliases.obligee_name: dict( # FIXME: overit vzhladom na ID institucie
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.aliases.alias: dict( # FIXME: unique slug
+                typ=unicode,
+                nonempty=True,
+                ),
+            COLUMNS.aliases.description: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            COLUMNS.aliases.notes: dict(
+                typ=unicode,
+                default=u'',
+                ),
+            }, # }}}
+        SHEETS.tags: { # {{{
+            COLUMNS.tags.pk: dict( # FIXME: unique pk
+                typ=int,
+                min_value=1,
+                ),
+            COLUMNS.tags.key: dict( # FIXME: unique slug
+                typ=unicode,
+                regex=tag_regex,
+                ),
+            COLUMNS.tags.name: dict(
+                typ=unicode,
+                nonempty=True,
+                ),
+            }, # }}}
         } # }}}
 
 
@@ -215,20 +330,7 @@ class Importer(object):
         self.error(u'Invalid value in row {} of "{}.{}": {}', idx+1, sheet, column, msg, code=code)
         raise RollingCommandError
 
-    def apply_default(self, value, idx, sheet, column):
-        try:
-            default = STRUCTURE[sheet][column][u'default']
-        except KeyError:
-            return value
-        if value is None:
-            value = default
-        return value
-
-    def validate_type(self, value, idx, sheet, column):
-        try:
-            typ = STRUCTURE[sheet][column][u'typ']
-        except KeyError:
-            return value
+    def validate_type(self, value, idx, sheet, column, typ):
         if not isinstance(typ, tuple):
             typ = (typ,)
         if not isinstance(value, typ):
@@ -237,41 +339,25 @@ class Importer(object):
             self.cell_error(u'type', idx, sheet, column, msg)
         return value
 
-    def validate_min_value(self, value, idx, sheet, column):
-        try:
-            min_value = STRUCTURE[sheet][column][u'min_value']
-        except KeyError:
-            return value
+    def validate_min_value(self, value, idx, sheet, column, min_value):
         if value < min_value:
             msg = u'Expecting value not smaller than "{}" but found "{}"'.format(min_value, value)
             self.cell_error(u'min_value', idx, sheet, column, msg)
         return value
 
-    def validate_max_value(self, value, idx, sheet, column):
-        try:
-            max_value = STRUCTURE[sheet][column][u'max_value']
-        except KeyError:
-            return value
+    def validate_max_value(self, value, idx, sheet, column, max_value):
         if value > max_value:
             msg = u'Expecting value not bigger than "{}" but found "{}"'.format(max_value, value)
             self.cell_error(u'max_value', idx, sheet, column, msg)
         return value
 
-    def validate_nonempty(self, value, idx, sheet, column):
-        try:
-            nonempty = STRUCTURE[sheet][column][u'nonempty']
-        except KeyError:
-            return value
+    def validate_nonempty(self, value, idx, sheet, column, nonempty):
         if nonempty and not value:
             msg = u'Expecting nonempty value but found "{}"'.format(value)
             self.cell_error(u'nonempty', idx, sheet, column, msg)
         return value
 
-    def validate_choices(self, value, idx, sheet, column):
-        try:
-            choices = STRUCTURE[sheet][column][u'choices']
-        except KeyError:
-            return value
+    def validate_choices(self, value, idx, sheet, column, choices):
         if value not in choices:
             exp = u', '.join(u'"{}"'.format(c) for c in choices)
             msg = u'Expecting one of {} but found "{}"'.format(exp, value)
@@ -280,21 +366,13 @@ class Importer(object):
             value = choices[value]
         return value
 
-    def validate_regex(self, value, idx, sheet, column):
-        try:
-            regex = STRUCTURE[sheet][column][u'regex']
-        except KeyError:
-            return value
+    def validate_regex(self, value, idx, sheet, column, regex):
         if not regex.match(value):
             msg = u'Expecting value matching "{}" but found "{}"'.format(regex.pattern, value)
             self.cell_error(u'regex', idx, sheet, column, msg)
         return value
 
-    def validate_validators(self, value, idx, sheet, column):
-        try:
-            validators = STRUCTURE[sheet][column][u'validators']
-        except KeyError:
-            return value
+    def validate_validators(self, value, idx, sheet, column, validators):
         if not isinstance(validators, (list, tuple)):
             validators = [validators]
         for validator in validators:
@@ -306,7 +384,9 @@ class Importer(object):
                 self.cell_error(code, idx, sheet, column, msg)
         return value
 
-    def validate_cell(self, idx, row, sheet, column):
+    def validate_cell(self, idx, row, sheet, column, default=None, typ=None,
+                min_value=None, max_value=None, nonempty=None, choices=None, regex=None,
+                validators=None):
         try:
             col_idx = self.columns[sheet][column]
         except KeyError:
@@ -316,23 +396,31 @@ class Importer(object):
             value = row[col_idx].value
         except IndexError:
             value = None
+        if value is None:
+            value = default
 
-        value = self.apply_default(value, idx, sheet, column)
-        value = self.validate_type(value, idx, sheet, column)
-        value = self.validate_min_value(value, idx, sheet, column)
-        value = self.validate_max_value(value, idx, sheet, column)
-        value = self.validate_nonempty(value, idx, sheet, column)
-        value = self.validate_choices(value, idx, sheet, column)
-        value = self.validate_regex(value, idx, sheet, column)
-        value = self.validate_validators(value, idx, sheet, column)
+        if typ is not None:
+            value = self.validate_type(value, idx, sheet, column, typ)
+        if min_value is not None:
+            value = self.validate_min_value(value, idx, sheet, column, min_value)
+        if max_value is not None:
+            value = self.validate_max_value(value, idx, sheet, column, max_value)
+        if nonempty is not None:
+            value = self.validate_nonempty(value, idx, sheet, column, nonempty)
+        if choices is not None:
+            value = self.validate_choices(value, idx, sheet, column, choices)
+        if regex is not None:
+            value = self.validate_regex(value, idx, sheet, column, regex)
+        if validators is not None:
+            value = self.validate_validators(value, idx, sheet, column, validators)
         return value
 
     def validate_row(self, idx, row, sheet):
         res = {}
         errors = 0
-        for column in STRUCTURE[sheet]:
+        for column, kwargs in STRUCTURE[sheet].items():
             try:
-                res[column] = self.validate_cell(idx, row, sheet, column)
+                res[column] = self.validate_cell(idx, row, sheet, column, **kwargs)
             except RollingCommandError as e:
                 errors += e.count
         if errors:
@@ -370,23 +458,24 @@ class Importer(object):
         for row in self.iterate_sheet(SHEETS.tags):
             pass
 
-    def obligee_dummy_mail_if_configured(self, row):
-        if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
-            name = row[COLUMNS.obligees.name]
-            return Obligee.dummy_email(name, settings.OBLIGEE_DUMMY_MAIL)
-        else:
-            return row[COLUMNS.obligees.emails]
-
     def import_obligees(self):
         Obligee.objects.all().delete()
         for row in self.iterate_sheet(SHEETS.obligees):
+
+            # Dummy emails for local and dev server modes
+            if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
+                name = row[COLUMNS.obligees.name]
+                emails = Obligee.dummy_email(name, settings.OBLIGEE_DUMMY_MAIL)
+            else:
+                emails = row[COLUMNS.obligees.emails]
+
             obligee = Obligee(
                     pk=row[COLUMNS.obligees.pk],
                     name=row[COLUMNS.obligees.name],
                     street=row[COLUMNS.obligees.street],
                     city=row[COLUMNS.obligees.city],
                     zip=row[COLUMNS.obligees.zip],
-                    emails=self.obligee_dummy_mail_if_configured(row),
+                    emails=emails,
                     status=row[COLUMNS.obligees.status],
                     )
             obligee.save()
