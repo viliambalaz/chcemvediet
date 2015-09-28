@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 from collections import defaultdict
+from optparse import make_option
 from openpyxl import load_workbook
 
 from django.core.management.base import BaseCommand, CommandError
@@ -126,12 +127,16 @@ class RollingCommandError(CommandError):
         self.count = count
         super(CommandError, self).__init__(u'Detected {} errors; Rollbacking and giving up'.format(count))
 
+class RollbackDryRun(Exception):
+    pass
+
 
 class Importer(object):
 
-    def __init__(self, filename, verbosity, stdout):
+    def __init__(self, filename, options, stdout):
         self.filename = filename
-        self.verbosity = verbosity
+        self.verbosity = options[u'verbosity']
+        self.dry_run = options[u'dry_run']
         self.stdout = stdout
         self.wb = None
         self.columns = None
@@ -367,7 +372,10 @@ class Importer(object):
 
         try:
             self.wb = load_workbook(self.filename, read_only=True)
-            self.stdout.write(u'Importing: {}'.format(self.filename))
+            if self.dry_run:
+                self.stdout.write(u'Importing: {} (dry run)'.format(self.filename))
+            else:
+                self.stdout.write(u'Importing: {}'.format(self.filename))
         except Exception as e:
             raise CommandError(u'Could not read input file: {}'.format(e))
 
@@ -398,17 +406,26 @@ class Importer(object):
 
         if errors:
             raise RollingCommandError(errors)
+        elif self.dry_run:
+            self.stdout.write(u'Rollbacked (dry run)')
+            raise RollbackDryRun
         else:
             self.stdout.write(u'Done.')
 
 class Command(BaseCommand):
     help = u'Loads .xlsx file with obligees'
     args = u'file'
+    option_list = BaseCommand.option_list + (
+        make_option(u'--dry-run', action=u'store_true', dest=u'dry_run', default=False,
+            help=u'Just show if the file would be imported correctly. Rollback at the end.'),
+        )
 
-    @transaction.atomic
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError(u'Expecting exactly one argument')
 
-        importer = Importer(args[0], options[u'verbosity'], self.stdout)
-        importer.handle()
+        try:
+            importer = Importer(args[0], options, self.stdout)
+            importer.handle()
+        except RollbackDryRun:
+            pass
