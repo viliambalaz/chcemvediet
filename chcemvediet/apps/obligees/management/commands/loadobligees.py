@@ -12,8 +12,9 @@ from django.db import transaction
 from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
-from poleno.utils.misc import Bunch
-from chcemvediet.apps.obligees.models import Obligee
+from poleno.utils.misc import Bunch, squeeze
+from chcemvediet.apps.obligees.models import Obligee, HistoricalObligee
+from chcemvediet.apps.inforequests.models import Inforequest
 
 zip_regex = re.compile(r'^\d\d\d \d\d$')
 tag_regex = re.compile(r'^[\w-]+$')
@@ -140,6 +141,7 @@ STRUCTURE = { # {{{
                 typ=unicode,
                 default=u'',
                 validators=validate_comma_separated_emails,
+                # Override with dummy emails for local and dev server modes
                 ),
             COLUMNS.obligees.official_description: dict(
                 typ=unicode,
@@ -255,8 +257,7 @@ class Importer(object):
 
     def __init__(self, filename, options, stdout):
         self.filename = filename
-        self.verbosity = options[u'verbosity']
-        self.dry_run = options[u'dry_run']
+        self.options = options
         self.stdout = stdout
         self.wb = None
         self.columns = None
@@ -275,17 +276,17 @@ class Importer(object):
     def error(self, msg, *args, **kwargs):
         code = kwargs.pop(u'code', None)
 
-        if self.verbosity == u'1':
+        if self.options[u'verbosity'] == u'1':
             if code:
                 self._error_cache[code] += 1
-                if self._error_cache[code] == 1:
+                if self._error_cache[code] < 3:
                     self.print_error(msg, args, kwargs)
-                elif self._error_cache[code] == 2:
+                elif self._error_cache[code] == 3:
                     self.print_error(msg, args, kwargs, u'skipping further similar errors')
             else:
                 self.print_error(msg, args, kwargs)
 
-        elif self.verbosity >= u'2':
+        elif self.options[u'verbosity'] >= u'2':
             self.print_error(msg, args, kwargs)
 
     def validate_structure(self):
@@ -447,8 +448,51 @@ class Importer(object):
 
         if errors:
             raise RollingCommandError(errors)
-        elif self.verbosity >= u'1':
-            self.stdout.write(u'Imported sheet: {} ({} entries)'.format(sheet, count))
+
+    def reset_model(self, model):
+        count = model.objects.count()
+        model.objects.all().delete()
+        if self.options[u'verbosity'] >= u'1':
+            self.stdout.write(u'Reset model {}: {} deleted'.format(model.__name__, count))
+
+    def import_model(self, sheet, model, show, delete):
+        created, changed, unchanged, deleted = 0, 0, 0, 0
+        originals = {o.pk: o for o in model.objects.all()}
+        for row in self.iterate_sheet(sheet):
+            fields = {}
+            yield row, fields
+
+            # Save only if the instance is new or changed to prevent excessive change history
+            original = originals.pop(fields[u'pk'], None)
+            if not original or any(fields[f] != getattr(original, f) for f in fields):
+                obj = model(**fields)
+                obj.save()
+                if original:
+                    changed += 1
+                else:
+                    created += 1
+                if self.options[u'verbosity'] >= u'2':
+                    msg = u'Changed' if original else u'Created'
+                    msg = u'{} {}: ID={} "{}"'.format(msg, model.__name__, obj.pk, fields[show])
+                    self.stdout.write(msg)
+            else:
+                unchanged += 1
+
+        # Delete omitted instances or add an error if delete is not permitted
+        for obj in originals.values():
+            if delete:
+                obj.delete()
+                deleted += 1
+            else:
+                code = u'omitted:{}'.format(sheet)
+                self.error(u'Omitted {}: ID={} "{}"', model.__name__, obj.pk, getattr(obj, show), code=code)
+        if originals:
+            raise RollingCommandError(count=len(originals))
+
+        if self.options[u'verbosity'] >= u'1':
+            msg = u'Imported model {}: {} created, {} changed, {} unchanged and {} deleted'
+            msg = msg.format(model.__name__, created, changed, unchanged, deleted)
+            self.stdout.write(msg)
 
     def import_hierarchy(self):
         for row in self.iterate_sheet(SHEETS.hierarchy):
@@ -459,26 +503,18 @@ class Importer(object):
             pass
 
     def import_obligees(self):
-        Obligee.objects.all().delete()
-        for row in self.iterate_sheet(SHEETS.obligees):
+        for row, fields in self.import_model(SHEETS.obligees, Obligee, show=u'name', delete=False):
+            fields[u'pk'] = row[COLUMNS.obligees.pk]
+            fields[u'name'] = row[COLUMNS.obligees.name]
+            fields[u'street'] = row[COLUMNS.obligees.street]
+            fields[u'city'] = row[COLUMNS.obligees.city]
+            fields[u'zip'] = row[COLUMNS.obligees.zip]
+            fields[u'emails'] = row[COLUMNS.obligees.emails]
+            fields[u'status'] = row[COLUMNS.obligees.status]
 
             # Dummy emails for local and dev server modes
             if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
-                name = row[COLUMNS.obligees.name]
-                emails = Obligee.dummy_email(name, settings.OBLIGEE_DUMMY_MAIL)
-            else:
-                emails = row[COLUMNS.obligees.emails]
-
-            obligee = Obligee(
-                    pk=row[COLUMNS.obligees.pk],
-                    name=row[COLUMNS.obligees.name],
-                    street=row[COLUMNS.obligees.street],
-                    city=row[COLUMNS.obligees.city],
-                    zip=row[COLUMNS.obligees.zip],
-                    emails=emails,
-                    status=row[COLUMNS.obligees.status],
-                    )
-            obligee.save()
+                fields[u'emails'] = Obligee.dummy_email(fields[u'name'], settings.OBLIGEE_DUMMY_MAIL)
 
     def import_aliases(self):
         for row in self.iterate_sheet(SHEETS.aliases):
@@ -488,12 +524,26 @@ class Importer(object):
     def handle(self):
         errors = 0
 
+        if self.options[u'dry_run']:
+            self.stdout.write(u'Importing: {} (dry run)'.format(self.filename))
+        else:
+            self.stdout.write(u'Importing: {}'.format(self.filename))
+
+        # Reset obligees if requested
+        if self.options[u'force'] and not self.options[u'reset']:
+            raise CommandError(u'Option --force may be used with --reset only')
+        if self.options[u'reset']:
+            if Inforequest.objects.exists() and not self.options[u'force']:
+                raise CommandError(squeeze(u"""
+                        Existing inforequests prevented us from discarting current obligees. Use
+                        --force to discard inforequests as well.
+                        """))
+            self.reset_model(Obligee)
+            self.reset_model(HistoricalObligee)
+            self.reset_model(Inforequest)
+
         try:
             self.wb = load_workbook(self.filename, read_only=True)
-            if self.dry_run:
-                self.stdout.write(u'Importing: {} (dry run)'.format(self.filename))
-            else:
-                self.stdout.write(u'Importing: {}'.format(self.filename))
         except Exception as e:
             raise CommandError(u'Could not read input file: {}'.format(e))
 
@@ -513,18 +563,18 @@ class Importer(object):
             errors += e.count
 
         try:
-            self.import_aliases()
+            self.import_obligees()
         except RollingCommandError as e:
             errors += e.count
 
         try:
-            self.import_obligees()
+            self.import_aliases()
         except RollingCommandError as e:
             errors += e.count
 
         if errors:
             raise RollingCommandError(errors)
-        elif self.dry_run:
+        elif self.options[u'dry_run']:
             self.stdout.write(u'Rollbacked (dry run)')
             raise RollbackDryRun
         else:
@@ -535,7 +585,21 @@ class Command(BaseCommand):
     args = u'file'
     option_list = BaseCommand.option_list + (
         make_option(u'--dry-run', action=u'store_true', dest=u'dry_run', default=False,
-            help=u'Just show if the file would be imported correctly. Rollback at the end.'),
+            help=squeeze(u"""
+                Just show if the file would be imported correctly. Rollback the database at the
+                end.
+                """)),
+        make_option(u'--reset', action=u'store_true', dest=u'reset', default=False,
+            help=squeeze(u"""
+                Discard current obligees before imporing the file. The command will fail if there
+                are any inforequests in the database because removing obligees would break them.
+                Use --force to discard inforequests as well.
+                """)),
+        make_option(u'--force', action=u'store_true', dest=u'force', default=False,
+            help=squeeze(u"""
+                If used together with --reset, discard current obligees even if there are
+                inforequests in the database. The inforequests will be discarted as well.
+                """)),
         )
 
     def handle(self, *args, **options):
