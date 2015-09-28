@@ -5,18 +5,22 @@ from collections import defaultdict
 from optparse import make_option
 from openpyxl import load_workbook
 
+from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management.color import color_style
 from django.db import transaction
 
+from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import Bunch
 from chcemvediet.apps.obligees.models import Obligee
 
 zip_regex = re.compile(r'^\d\d\d \d\d$')
 tag_regex = re.compile(r'^[\w-]+$')
-tags_regex = re.compile(r'^([\w-]+(\s+[\w-]+)*)?$') # 0 or more tags
+tags_regex_0 = re.compile(r'^([\w-]+(\s+[\w-]+)*)?$') # 0 or more tags
+tags_regex_1 = re.compile(r'^[\w-]+(\s+[\w-]+)*$') # 1 or more tags
 hierarchy_regex = re.compile(r'^[\w-]+(/[\w-]+)*$')
-hierarchies_regex = re.compile(r'^[\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*$') # 1 or more hierarchies
+hierarchies_regex_0 = re.compile(r'^([\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*)?$') # 0 or more hierarchies
+hierarchies_regex_1 = re.compile(r'^[\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*$') # 1 or more hierarchies
 
 SHEETS = Bunch( # {{{
         obligees=u'Obligees',
@@ -85,11 +89,11 @@ STRUCTURE = { # {{{
             COLUMNS.obligees.name_instrumental:    dict(typ=unicode, nonempty=True),
             COLUMNS.obligees.name_gender:          dict(typ=unicode, choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny']),
             COLUMNS.obligees.ico:                  dict(typ=unicode, default=u''),
-            COLUMNS.obligees.hierarchy:            dict(typ=unicode, regex=hierarchies_regex), # FIXME: foreign key
+            COLUMNS.obligees.hierarchy:            dict(typ=unicode, regex=hierarchies_regex_1), # FIXME: foreign key
             COLUMNS.obligees.street:               dict(typ=unicode, nonempty=True),
             COLUMNS.obligees.city:                 dict(typ=unicode, nonempty=True),
             COLUMNS.obligees.zip:                  dict(typ=unicode, regex=zip_regex),
-            COLUMNS.obligees.emails:               dict(typ=unicode, default=u''), # FIXME: coerce=parse_emails
+            COLUMNS.obligees.emails:               dict(typ=unicode, default=u'', validators=validate_comma_separated_emails),
             COLUMNS.obligees.official_description: dict(typ=unicode, default=u''),
             COLUMNS.obligees.simple_description:   dict(typ=unicode, default=u''),
             COLUMNS.obligees.status:               dict(typ=unicode, choices={u'aktivny': Obligee.STATUSES.PENDING, u'neaktivny': Obligee.STATUSES.DISSOLVED}),
@@ -97,7 +101,7 @@ STRUCTURE = { # {{{
             COLUMNS.obligees.latitude:             dict(typ=float,   min_value=-90.0, max_value=90.0),
             COLUMNS.obligees.longitude:            dict(typ=float,   min_value=-180.0, max_value=180.0),
             COLUMNS.obligees.iczsj:                dict(typ=int,     min_value=1), # FIXME: foreign key
-            COLUMNS.obligees.tags:                 dict(typ=unicode, default=u'', regex=tags_regex), # FIXME: foreign key
+            COLUMNS.obligees.tags:                 dict(typ=unicode, default=u'', regex=tags_regex_0), # FIXME: foreign key
             COLUMNS.obligees.notes:                dict(typ=unicode, default=u''),
             },
         SHEETS.hierarchy: {
@@ -285,6 +289,22 @@ class Importer(object):
             self.cell_error(u'regex', idx, sheet, column, msg)
         return value
 
+    def validate_validators(self, value, idx, sheet, column):
+        try:
+            validators = STRUCTURE[sheet][column][u'validators']
+        except KeyError:
+            return value
+        if not isinstance(validators, (list, tuple)):
+            validators = [validators]
+        for validator in validators:
+            try:
+                validator(value)
+            except ValidationError as e:
+                code = u'validator:{}'.format(validator.__name__)
+                msg = u'; '.join(e.messages)
+                self.cell_error(code, idx, sheet, column, msg)
+        return value
+
     def validate_cell(self, idx, row, sheet, column):
         try:
             col_idx = self.columns[sheet][column]
@@ -303,6 +323,7 @@ class Importer(object):
         value = self.validate_nonempty(value, idx, sheet, column)
         value = self.validate_choices(value, idx, sheet, column)
         value = self.validate_regex(value, idx, sheet, column)
+        value = self.validate_validators(value, idx, sheet, column)
         return value
 
     def validate_row(self, idx, row, sheet):
