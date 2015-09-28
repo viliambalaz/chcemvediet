@@ -12,7 +12,7 @@ from django.db import transaction
 from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
-from poleno.utils.misc import Bunch, squeeze
+from poleno.utils.misc import Bunch, squeeze, slugify
 from chcemvediet.apps.obligees.models import Obligee, HistoricalObligee
 from chcemvediet.apps.inforequests.models import Inforequest
 
@@ -101,8 +101,8 @@ class Sheet(object):
                     u'Expecting value not bigger than "{}" but found "{}"', max_value, value)
         return value
 
-    def validate_nonempty(self, value, idx, column, nonempty):
-        if nonempty and not value:
+    def validate_nonempty(self, value, idx, column):
+        if not value:
             self.cell_error(u'nonempty', idx, column,
                     u'Expecting nonempty value but found "{}"', value)
         return value
@@ -121,6 +121,28 @@ class Sheet(object):
                     u'Expecting value matching "{}" but found "{}"', regex.pattern, value)
         return value
 
+    def validate_unique(self, value, idx, column):
+        if not hasattr(self, u'_unique_cache'):
+            self._unique_cache = defaultdict(dict)
+        if value in self._unique_cache[column]:
+            self.cell_error(u'unique', idx, column,
+                    u'Expecting unique value but "{}" is in row {} as well',
+                    value, self._unique_cache[column][value]+1)
+        self._unique_cache[column][value] = idx
+        return value
+
+    def validate_unique_slug(self, value, idx, column):
+        if not hasattr(self, u'_unique_slug_cache'):
+            self._unique_slug_cache = defaultdict(dict)
+        slug = slugify(value)
+        if slug in self._unique_slug_cache[column]:
+            other_idx, other_value = self._unique_slug_cache[column][slug]
+            self.cell_error(u'unique_slug', idx, column,
+                    u'Expecting value with unique slug but "{}" has the same slug as "{}" in row {}',
+                    value, other_value, other_idx+1)
+        self._unique_slug_cache[column][slug] = (idx, value)
+        return value
+
     def validate_validators(self, value, idx, column, validators):
         if not isinstance(validators, (list, tuple)):
             validators = [validators]
@@ -134,7 +156,7 @@ class Sheet(object):
 
     def validate_cell(self, idx, row, column, default=None, typ=None,
                 min_value=None, max_value=None, nonempty=None, choices=None, regex=None,
-                validators=None):
+                unique=None, unique_slug=None, validators=None):
         try:
             col_idx = self.column_map[column]
         except KeyError:
@@ -153,12 +175,16 @@ class Sheet(object):
             value = self.validate_min_value(value, idx, column, min_value)
         if max_value is not None:
             value = self.validate_max_value(value, idx, column, max_value)
-        if nonempty is not None:
-            value = self.validate_nonempty(value, idx, column, nonempty)
+        if nonempty:
+            value = self.validate_nonempty(value, idx, column)
         if choices is not None:
             value = self.validate_choices(value, idx, column, choices)
         if regex is not None:
             value = self.validate_regex(value, idx, column, regex)
+        if unique:
+            value = self.validate_unique(value, idx, column)
+        if unique_slug:
+            value = self.validate_unique_slug(value, idx, column)
         if validators is not None:
             value = self.validate_validators(value, idx, column, validators)
         return value
@@ -368,12 +394,13 @@ class TagSheet(Sheet):
     delete_omitted = True
 
     columns = Bunch( # {{{
-            pk=Bunch( # FIXME: unique pk
+            pk=Bunch(
                 column=u'Interne ID tagu',
-                typ=int, min_value=1,
+                typ=int, unique=True, min_value=1,
                 ),
-            key=Bunch( # FIXME: unique slug
-                column=u'Kod', typ=unicode, regex=tag_regex,
+            key=Bunch(
+                column=u'Kod',
+                typ=unicode, unique_slug=True, regex=tag_regex,
                 ),
             name=Bunch(
                 column=u'Nazov',
@@ -390,13 +417,13 @@ class HierarchySheet(Sheet):
     delete_omitted = True
 
     columns = Bunch( # {{{
-            pk=Bunch( # FIXME: unique pk
+            pk=Bunch(
                 column=u'Interne ID hierarchie',
-                typ=int, min_value=1,
+                typ=int, unique=True, min_value=1,
                 ),
-            key=Bunch( # FIXME: unique slug
+            key=Bunch(
                 column=u'Kod',
-                typ=unicode, regex=hierarchy_regex,
+                typ=unicode, unique_slug=True, regex=hierarchy_regex,
                 ),
             name=Bunch(
                 column=u'Nazov v hierarchii',
@@ -417,17 +444,17 @@ class ObligeeSheet(Sheet):
     delete_omitted = False
 
     columns = Bunch( # {{{
-            pk=Bunch( # FIXME: unique pk
+            pk=Bunch(
                 column=u'Interne ID institucie',
-                typ=int, min_value=1,
+                typ=int, unique=True, min_value=1,
                 ),
             official_name=Bunch(
                 column=u'Oficialny nazov',
                 typ=unicode, nonempty=True,
                 ),
-            name=Bunch( # FIXME: unique slug
+            name=Bunch(
                 column=u'Rozlisovaci nazov nominativ',
-                typ=unicode, nonempty=True,
+                typ=unicode, unique_slug=True, nonempty=True,
                 ),
             name_genitive=Bunch(
                 column=u'Rozlisovaci nazov genitiv',
@@ -560,9 +587,9 @@ class AliasSheet(Sheet):
     delete_omitted = True
 
     columns = Bunch( # {{{
-            pk=Bunch( # FIXME: unique pk
+            pk=Bunch(
                 column=u'Interne ID aliasu',
-                typ=int, min_value=1,
+                typ=int, unique=True, min_value=1,
                 ),
             obligee_pk=Bunch( # FIXME: foreign key
                 column=u'ID institucie',
@@ -572,9 +599,9 @@ class AliasSheet(Sheet):
                 column=u'Rozlisovaci nazov institucie',
                 typ=unicode, nonempty=True,
                 ),
-            alias=Bunch( # FIXME: unique slug
+            alias=Bunch(
                 column=u'Alternativny nazov',
-                typ=unicode, nonempty=True,
+                typ=unicode, unique_slug=True, nonempty=True,
                 ),
             description=Bunch(
                 column=u'Vysvetlenie',
