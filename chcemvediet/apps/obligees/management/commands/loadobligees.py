@@ -121,7 +121,7 @@ STRUCTURE = { # {{{
                 typ=unicode,
                 default=u'',
                 ),
-            COLUMNS.obligees.hierarchy: dict( # FIXME: foreign key
+            COLUMNS.obligees.hierarchy: dict( # FIXME: m2m foreign key
                 typ=unicode,
                 regex=hierarchies_regex_1,
                 ),
@@ -173,7 +173,7 @@ STRUCTURE = { # {{{
                 typ=int,
                 min_value=1,
                 ),
-            COLUMNS.obligees.tags: dict( # FIXME: foreign key
+            COLUMNS.obligees.tags: dict( # FIXME: m2m foreign key
                 typ=unicode,
                 default=u'',
                 regex=tags_regex_0,
@@ -288,6 +288,23 @@ class Importer(object):
 
         elif self.options[u'verbosity'] >= u'2':
             self.print_error(msg, args, kwargs)
+
+    def input_yes_no(self, prompt, default=u''):
+        while True:
+            self.stdout.write(self.color_style.WARNING(
+                    u'Warning: {} Yes/No/Abort [{}]: '.format(prompt, default)), ending=u'')
+            inputed = raw_input()
+            if not inputed:
+                inputed = default
+            if not inputed:
+                self.stdout.write(self.color_style.ERROR(u'Error: The value is required.'))
+                continue
+            if inputed.upper() not in [u'Y', u'YES', u'N', u'NO', u'A', u'ABORT']:
+                self.stdout.write(self.color_style.ERROR(u'Error: Enter Yes, No or Abort.'))
+                continue
+            if inputed.upper() in [u'A', u'ABORT']:
+                raise CommandError(u'Aborted')
+            return inputed.upper()[0]
 
     def validate_structure(self):
         errors = 0
@@ -458,12 +475,14 @@ class Importer(object):
     def import_model(self, sheet, model, show, delete):
         created, changed, unchanged, deleted = 0, 0, 0, 0
         originals = {o.pk: o for o in model.objects.all()}
-        for row in self.iterate_sheet(sheet):
+        for row in self.iterate_sheet(getattr(SHEETS, sheet)):
+            pk = row[getattr(COLUMNS, sheet).pk]
+            original = originals.pop(pk, None)
             fields = {}
-            yield row, fields
+            yield original, row, fields
+            assert fields[u'pk'] == pk
 
             # Save only if the instance is new or changed to prevent excessive change history
-            original = originals.pop(fields[u'pk'], None)
             if not original or any(fields[f] != getattr(original, f) for f in fields):
                 obj = model(**fields)
                 obj.save()
@@ -477,6 +496,8 @@ class Importer(object):
                     self.stdout.write(msg)
             else:
                 unchanged += 1
+
+            # FIXME: co s m2m relaciami?
 
         # Delete omitted instances or add an error if delete is not permitted
         for obj in originals.values():
@@ -503,7 +524,8 @@ class Importer(object):
             pass
 
     def import_obligees(self):
-        for row, fields in self.import_model(SHEETS.obligees, Obligee, show=u'name', delete=False):
+        for original, row, fields in self.import_model(u'obligees', Obligee, u'name', False):
+            errors = 0
             fields[u'pk'] = row[COLUMNS.obligees.pk]
             fields[u'name'] = row[COLUMNS.obligees.name]
             fields[u'street'] = row[COLUMNS.obligees.street]
@@ -516,12 +538,27 @@ class Importer(object):
             if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
                 fields[u'emails'] = Obligee.dummy_email(fields[u'name'], settings.OBLIGEE_DUMMY_MAIL)
 
+            if original and fields[u'status'] != original.status:
+                inputed = self.input_yes_no(
+                        u'Obligee ID={} "{}" changed status: {} -> {}; Is it correct?'.format(
+                            fields[u'pk'], fields[u'name'],
+                            Obligee.STATUSES._inverse[original.status],
+                            Obligee.STATUSES._inverse[fields[u'status']],
+                            ),
+                        default=u'Y')
+                if inputed != u'Y':
+                    errors += 1
+
+            # FIXME: toto nefunguje, ak je chyba v jednom riadku k dalsiemu sa generator uz nedostane
+            if errors:
+                raise RollingCommandError(errors)
+
     def import_aliases(self):
         for row in self.iterate_sheet(SHEETS.aliases):
             pass
 
     @transaction.atomic
-    def handle(self):
+    def do_import(self):
         errors = 0
 
         if self.options[u'dry_run']:
@@ -530,14 +567,17 @@ class Importer(object):
             self.stdout.write(u'Importing: {}'.format(self.filename))
 
         # Reset obligees if requested
-        if self.options[u'force'] and not self.options[u'reset']:
-            raise CommandError(u'Option --force may be used with --reset only')
         if self.options[u'reset']:
-            if Inforequest.objects.exists() and not self.options[u'force']:
-                raise CommandError(squeeze(u"""
-                        Existing inforequests prevented us from discarting current obligees. Use
-                        --force to discard inforequests as well.
-                        """))
+            count = Inforequest.objects.count()
+            if count:
+                inputed = self.input_yes_no(squeeze(u"""
+                        Discarding current obligees will discard all existing inforequests as well.
+                        There are {} inforequests. Are you sure, you want to discard them?
+                        """).format(count), default=u'N')
+                if inputed != u'Y':
+                    raise CommandError(squeeze(u"""
+                            Existing inforequests prevented us from discarding current obligees.
+                            """))
             self.reset_model(Obligee)
             self.reset_model(HistoricalObligee)
             self.reset_model(Inforequest)
@@ -586,19 +626,11 @@ class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option(u'--dry-run', action=u'store_true', dest=u'dry_run', default=False,
             help=squeeze(u"""
-                Just show if the file would be imported correctly. Rollback the database at the
-                end.
+                Just show if the file would be imported correctly. Rollback all changes at the end.
                 """)),
         make_option(u'--reset', action=u'store_true', dest=u'reset', default=False,
             help=squeeze(u"""
-                Discard current obligees before imporing the file. The command will fail if there
-                are any inforequests in the database because removing obligees would break them.
-                Use --force to discard inforequests as well.
-                """)),
-        make_option(u'--force', action=u'store_true', dest=u'force', default=False,
-            help=squeeze(u"""
-                If used together with --reset, discard current obligees even if there are
-                inforequests in the database. The inforequests will be discarted as well.
+                Discard current obligees before imporing the file.
                 """)),
         )
 
@@ -608,6 +640,9 @@ class Command(BaseCommand):
 
         try:
             importer = Importer(args[0], options, self.stdout)
-            importer.handle()
+            importer.do_import()
+        except KeyboardInterrupt:
+            self.stdout.write(u'\n')
+            raise CommandError(u'Aborted')
         except RollbackDryRun:
             pass
