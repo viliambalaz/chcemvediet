@@ -54,6 +54,7 @@ class ObligeeAdmin(admin.ModelAdmin):
     list_display = [
             u'id',
             u'name',
+            u'ico',
             u'street',
             u'city',
             u'zip',
@@ -65,6 +66,7 @@ class ObligeeAdmin(admin.ModelAdmin):
     search_fields = [
             u'=id',
             u'name',
+            u'ico',
             u'street',
             u'city',
             u'zip',
@@ -72,6 +74,9 @@ class ObligeeAdmin(admin.ModelAdmin):
             ]
     ordering = [
             u'id',
+            ]
+    readonly_fields = [
+            u'slug',
             ]
 
 @admin.register(HistoricalObligee, site=admin.site)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-26 10:47+0200\n"
+"POT-Creation-Date: 2015-10-01 13:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -713,11 +713,23 @@ msgstr "Neplatný názov inštitúcie, zvoľte z menu."
 msgid "obligees:ObligeeField:error:invalid_list"
 msgstr "Neplatný názov inštitúcie, zvoľte z menu."
 
+msgid "obligees:Obligee:gender:MASCULINE"
+msgstr "Mužský"
+
+msgid "obligees:Obligee:gender:FEMININE"
+msgstr "Ženský"
+
+msgid "obligees:Obligee:gender:NEUTER"
+msgstr "Stredný"
+
+msgid "obligees:Obligee:gender:PLURALE"
+msgstr "Pomnožný"
+
 msgid "obligees:Obligee:status:PENDING"
-msgstr "Čakajúce"
+msgstr "Aktívna"
 
 msgid "obligees:Obligee:status:DISSOLVED"
-msgstr "Zrušené"
+msgstr "Zrušená"
 
 msgid "obligees:index:title"
 msgstr "Zoznam inštitúcií"

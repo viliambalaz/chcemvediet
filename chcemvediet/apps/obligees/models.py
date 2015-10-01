@@ -16,8 +16,8 @@ class ObligeeTagQuerySet(QuerySet):
         return self.order_by(u'pk')
     def order_by_key(self):
         return self.order_by(u'key') # no tiebreaker, key is unique
-    def order_by_slug(self):
-        return self.order_by(u'slug') # no tiebreaker, slug is unique
+    def order_by_name(self):
+        return self.order_by(u'name', u'pk')
 
 class ObligeeTag(models.Model):
     # May NOT be empty
@@ -46,6 +46,7 @@ class ObligeeTag(models.Model):
         index_together = [
                 # [u'key'], -- defined on field
                 # [u'slug'], -- defined on field
+                [u'name', u'id'],
                 ]
 
     @decorate(prevent_bulk_create=True)
@@ -69,8 +70,8 @@ class ObligeeGroupQuerySet(QuerySet):
         return self.order_by(u'pk')
     def order_by_key(self):
         return self.order_by(u'key') # no tiebreaker, key is unique
-    def order_by_slug(self):
-        return self.order_by(u'slug') # no tiebreaker, slug is unique
+    def order_by_name(self):
+        return self.order_by(u'name', u'pk')
 
 class ObligeeGroup(models.Model):
     # May NOT be empty
@@ -106,6 +107,7 @@ class ObligeeGroup(models.Model):
         index_together = [
                 # [u'key'], -- defined on field
                 # [u'slug'], -- defined on field
+                [u'name', u'id'],
                 ]
 
     @decorate(prevent_bulk_create=True)
@@ -134,27 +136,66 @@ class ObligeeQuerySet(QuerySet):
 
 @register_history
 class Obligee(models.Model):
-    # Should NOT be empty; For index see index_together
-    name = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    zip = models.CharField(max_length=10)
+    # FIXME: groups -- m2m relation
+    # FIXME: tags -- m2m relation
+    # FIXME: type -- choices names
+    # FIXME: latitude, longitude -- check django geo support
+    # FIXME: iczsj -- m2m relation -- import iczsj table
 
     # Should NOT be empty
-    emails = models.CharField(max_length=1024,
+    official_name = models.CharField(max_length=255, help_text=u'Official obligee name.')
+
+    # Should NOT be empty
+    name = models.CharField(max_length=255,
+            help_text=squeeze(u"""
+                Human readable obligee name. If official obligee name is ambiguous, it should be
+                made more specific. There is no unique constrain on this field, because there is
+                one on the slug.
+                """))
+
+    # Should NOT be empty; Read-only; Automaticly computed in save()
+    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique slug to identify the obligee used in urls. Automaticly computed from the obligee
+                name. May not be changed manually.
+                """))
+
+    # Should NOT be empty
+    name_genitive = models.CharField(max_length=255, help_text=u'Genitive of obligee name.')
+    name_dative = models.CharField(max_length=255, help_text=u'Dative of obligee name.')
+    name_accusative = models.CharField(max_length=255, help_text=u'Accusative of obligee name.')
+    name_locative = models.CharField(max_length=255, help_text=u'Locative of obligee name.')
+    name_instrumental = models.CharField(max_length=255, help_text=u'Instrumental of obligee name.')
+
+    # May NOT be NULL
+    GENDERS = FieldChoices(
+            (u'MASCULINE', 1, _(u'obligees:Obligee:gender:MASCULINE')),
+            (u'FEMININE',  2, _(u'obligees:Obligee:gender:FEMININE')),
+            (u'NEUTER',    3, _(u'obligees:Obligee:gender:NEUTER')),
+            (u'PLURALE',   4, _(u'obligees:Obligee:gender:PLURALE')), # Pomnožné
+            )
+    gender = models.SmallIntegerField(choices=GENDERS._choices, help_text=u'Obligee name grammar gender.')
+
+    # May be empty
+    ico = models.CharField(blank=True, max_length=32, help_text=u'Legal identification number if known.')
+
+    # Should NOT be empty
+    street = models.CharField(max_length=255, help_text=u'Street and number part of postal address.')
+    city = models.CharField(max_length=255, help_text=u'City part of postal address.')
+    zip = models.CharField(max_length=10, help_text=u'Zip part of postal address.')
+
+    # May be empty
+    emails = models.CharField(blank=True, max_length=1024,
             validators=[validate_comma_separated_emails],
             help_text=escape(squeeze(u"""
                 Comma separated list of e-mails. E.g. 'John <john@example.com>,
-                another@example.com, "Smith, Jane" <jane.smith@example.com>'
+                another@example.com, "Smith, Jane" <jane.smith@example.com>'. Empty the email
+                address is unknown.
                 """)))
 
-    # Should NOT be empty; Read-only; Automaticly computed in save() whenever creating a new object
-    # or changing its name. Any user defined value is replaced.
-    slug = models.SlugField(max_length=255, db_index=False,
-            help_text=squeeze(u"""
-                Slug for full-text search. Automaticly computed whenever creating a new object or
-                changing its name. Any user defined value is replaced.
-                """))
+    # May be empty
+    official_description = models.TextField(blank=True, help_text=u'Official obligee description.')
+    simple_description = models.TextField(blank=True, help_text=u'Human readable obligee description.')
 
     # May NOT be NULL
     STATUSES = FieldChoices(
@@ -167,6 +208,9 @@ class Obligee(models.Model):
                 that do not exist any more and no further inforequests may be submitted to them.
                 """))
 
+    # May be empty
+    notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
+
     # Added by ``@register_history``:
     #  -- history: simple_history.manager.HistoryManager
     #     Returns instance historical snapshots as HistoricalObligee model.
@@ -174,14 +218,15 @@ class Obligee(models.Model):
     objects = ObligeeQuerySet.as_manager()
 
     class Meta:
-        # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we don't declare any indexes
-        # for ``slug`` yet. Eventually, we need to define a fulltext index for "slug" or "name" and
-        # use ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not
+        # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we can't use the slug index for
+        # searching. Eventually, we need to define a fulltext index for "slug" or "name" and use
+        # ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not
         # support ``__contains`` and MySQL supports fulltext indexes for InnoDB tables only since
         # version 5.6.4, but our server has only MySQL 5.5.x so far. We need to upgrate our
         # production MySQL server and find a workaround for SQLite we use in development mode.
         # Alternatively, we can use some complex fulltext search engine like ElasticSearch.
         index_together = [
+                # [u'slug'], -- defined on field
                 [u'name', u'id'],
                 ]
 
@@ -204,7 +249,7 @@ class Obligee(models.Model):
 
         # Generate and save slug if saving name
         if update_fields is None or u'name' in update_fields:
-            self.slug = u'-%s-' % slugify(self.name)
+            self.slug = slugify(self.name)
             if update_fields is not None:
                 update_fields.append(u'slug')
 
