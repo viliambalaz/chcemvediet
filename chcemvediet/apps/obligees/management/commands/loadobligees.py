@@ -13,7 +13,7 @@ from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import Bunch, squeeze, slugify
-from chcemvediet.apps.obligees.models import Obligee, HistoricalObligee
+from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee
 from chcemvediet.apps.inforequests.models import Inforequest
 
 
@@ -21,20 +21,52 @@ zip_regex = re.compile(r'^\d\d\d \d\d$')
 tag_regex = re.compile(r'^[\w-]+$')
 tags_regex_0 = re.compile(r'^([\w-]+(\s+[\w-]+)*)?$') # 0 or more tags
 tags_regex_1 = re.compile(r'^[\w-]+(\s+[\w-]+)*$') # 1 or more tags
-hierarchy_regex = re.compile(r'^[\w-]+(/[\w-]+)*$')
-hierarchies_regex_0 = re.compile(r'^([\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*)?$') # 0 or more hierarchies
-hierarchies_regex_1 = re.compile(r'^[\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*$') # 1 or more hierarchies
+group_regex = re.compile(r'^[\w-]+(/[\w-]+)*$')
+groups_regex_0 = re.compile(r'^([\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*)?$') # 0 or more groups
+groups_regex_1 = re.compile(r'^[\w-]+(/[\w-]+)*(\s+[\w-]+(/[\w-]+)*)*$') # 1 or more groups
 
 
 class RollingCommandError(CommandError):
     def __init__(self, count=1):
         self.count = count
         super(CommandError, self).__init__(
-                u'Detected {} errors; Rollbacking and giving up'.format(count))
+                u'Detected {} errors; Rolled back'.format(count))
 
 class RollbackDryRun(Exception):
     pass
 
+
+class Columns(object):
+    def __init__(self, **kwargs):
+        vars(self).update(kwargs)
+
+class Column(object):
+    def __init__(self, label, field=None, typ=None, default=None,
+            min_value=None, max_value=None, min_length=None, max_length=None, nonempty=None,
+            choices=None, regex=None, unique=None, unique_slug=None, validators=None,
+            confirm_changed=None, value_repr=None):
+        self.label = label
+        self.field = field
+        self.typ = typ if typ is None or isinstance(typ, tuple) else (typ,)
+        self.default = default
+        self.min_value = min_value
+        self.max_value = max_value
+        self.min_length = min_length
+        self.max_length = max_length
+        self.nonempty = nonempty
+        self.choices = choices
+        self.regex = regex
+        self.unique = unique
+        self.unique_slug = unique_slug
+        self.validators = validators if validators is None or isinstance(validators, (list, tuple)) else [validators]
+        self.confirm_changed = confirm_changed
+        self.value_repr = value_repr if value_repr is not None else self.value_repr
+
+    def value_repr(self, value):
+        if isinstance(value, (int, long, float)):
+            return u'{}'.format(value)
+        else:
+            return u'"{}"'.format(value)
 
 class Sheet(object):
     label = None
@@ -62,7 +94,7 @@ class Sheet(object):
             if column.value is not None and not column.value.startswith(u'#'):
                 self.column_map[column.value] = idx
 
-        expected_columns = set(c.column for c in self.columns.__dict__.values())
+        expected_columns = set(c.label for c in self.columns.__dict__.values())
         found_columns = set(self.column_map)
         missing_columns = expected_columns - found_columns
         superfluous_columns = found_columns - expected_columns
@@ -77,61 +109,95 @@ class Sheet(object):
             raise RollingCommandError(errors)
 
     def cell_error(self, code, idx, column, msg, *args, **kwargs):
-        self.error((column, code), u'Invalid value in row {} of "{}.{}": {}',
-                idx+1, self.label, column, msg.format(*args, **kwargs))
+        self.error((column.label, code), u'Invalid value in row {} of "{}.{}": {}',
+                idx+1, self.label, column.label, msg.format(*args, **kwargs))
         raise RollingCommandError
 
-    def validate_type(self, value, idx, column, typ):
-        if not isinstance(typ, tuple):
-            typ = (typ,)
-        if not isinstance(value, typ):
+    def validate_type(self, value, idx, column):
+        if column.typ is None:
+            return value
+        if not isinstance(value, column.typ):
             self.cell_error(u'type', idx, column, u'Expecting {} but found {}',
                     u', '.join(t.__name__ for t in typ), value.__class__.__name__)
         return value
 
-    def validate_min_value(self, value, idx, column, min_value):
-        if value < min_value:
+    def validate_min_value(self, value, idx, column):
+        if column.min_value is None:
+            return value
+        if value < column.min_value:
             self.cell_error(u'min_value', idx, column,
-                    u'Expecting value not smaller than "{}" but found "{}"', min_value, value)
+                    u'Expecting value not smaller than {} but found "{}"',
+                    column.min_value, value)
         return value
 
-    def validate_max_value(self, value, idx, column, max_value):
-        if value > max_value:
+    def validate_max_value(self, value, idx, column):
+        if column.max_value is None:
+            return value
+        if value > column.max_value:
             self.cell_error(u'max_value', idx, column,
-                    u'Expecting value not bigger than "{}" but found "{}"', max_value, value)
+                    u'Expecting value not bigger than "{}" but found "{}"',
+                    column.max_value, value)
+        return value
+
+    def validate_min_length(self, value, idx, column):
+        if column.min_length is None:
+            return value
+        if len(value) < column.min_length:
+            self.cell_error(u'min_length', idx, column,
+                    u'Expecting value not shorter than {} but found "{}" with length {}',
+                    column.min_length, value, len(value))
+        return value
+
+    def validate_max_length(self, value, idx, column):
+        if column.max_length is None:
+            return value
+        if len(value) > column.max_length:
+            self.cell_error(u'max_length', idx, column,
+                    u'Expecting value not longer than {} but found "{}" with length {}',
+                    column.max_length, value, len(value))
         return value
 
     def validate_nonempty(self, value, idx, column):
+        if not column.nonempty:
+            return value
         if not value:
             self.cell_error(u'nonempty', idx, column,
                     u'Expecting nonempty value but found "{}"', value)
         return value
 
-    def validate_choices(self, value, idx, column, choices):
-        if value not in choices:
+    def validate_choices(self, value, idx, column):
+        if column.choices is None:
+            return value
+        if value not in column.choices:
             self.cell_error(u'choices', idx, column, u'Expecting one of {} but found "{}"',
-                    u', '.join(u'"{}"'.format(c) for c in choices), value)
-        if isinstance(choices, dict):
-            value = choices[value]
+                    u', '.join(u'"{}"'.format(c) for c in column.choices), value)
+        if isinstance(column.choices, dict):
+            value = column.choices[value]
         return value
 
-    def validate_regex(self, value, idx, column, regex):
-        if not regex.match(value):
+    def validate_regex(self, value, idx, column):
+        if column.regex is None:
+            return value
+        if not column.regex.match(value):
             self.cell_error(u'regex', idx, column,
-                    u'Expecting value matching "{}" but found "{}"', regex.pattern, value)
+                    u'Expecting value matching "{}" but found "{}"', column.regex.pattern, value)
         return value
 
     def validate_unique(self, value, idx, column):
+        if not column.unique:
+            return value
         if not hasattr(self, u'_unique_cache'):
             self._unique_cache = defaultdict(dict)
-        if value in self._unique_cache[column]:
+        if value in self._unique_cache[column.label]:
             self.cell_error(u'unique', idx, column,
                     u'Expecting unique value but "{}" is in row {} as well',
-                    value, self._unique_cache[column][value]+1)
-        self._unique_cache[column][value] = idx
+                    value, self._unique_cache[column.label][value]+1)
+        self._unique_cache[column.label][value] = idx
         return value
 
     def validate_unique_slug(self, value, idx, column):
+        if not column.unique_slug:
+            return value
         if not hasattr(self, u'_unique_slug_cache'):
             self._unique_slug_cache = defaultdict(dict)
         slug = slugify(value)
@@ -143,10 +209,10 @@ class Sheet(object):
         self._unique_slug_cache[column][slug] = (idx, value)
         return value
 
-    def validate_validators(self, value, idx, column, validators):
-        if not isinstance(validators, (list, tuple)):
-            validators = [validators]
-        for validator in validators:
+    def validate_validators(self, value, idx, column):
+        if column.validators is None:
+            return value
+        for validator in column.validators:
             try:
                 validator(value)
             except ValidationError as e:
@@ -154,11 +220,9 @@ class Sheet(object):
                         u'{}', u'; '.join(e.messages))
         return value
 
-    def validate_cell(self, idx, row, column, default=None, typ=None,
-                min_value=None, max_value=None, nonempty=None, choices=None, regex=None,
-                unique=None, unique_slug=None, validators=None):
+    def process_cell(self, idx, row, column):
         try:
-            col_idx = self.column_map[column]
+            col_idx = self.column_map[column.label]
         except KeyError:
             self.cell_error(u'missing', idx, column, u'Missing column')
 
@@ -167,39 +231,61 @@ class Sheet(object):
         except IndexError:
             value = None
         if value is None:
-            value = default
+            value = column.default
 
-        if typ is not None:
-            value = self.validate_type(value, idx, column, typ)
-        if min_value is not None:
-            value = self.validate_min_value(value, idx, column, min_value)
-        if max_value is not None:
-            value = self.validate_max_value(value, idx, column, max_value)
-        if nonempty:
-            value = self.validate_nonempty(value, idx, column)
-        if choices is not None:
-            value = self.validate_choices(value, idx, column, choices)
-        if regex is not None:
-            value = self.validate_regex(value, idx, column, regex)
-        if unique:
-            value = self.validate_unique(value, idx, column)
-        if unique_slug:
-            value = self.validate_unique_slug(value, idx, column)
-        if validators is not None:
-            value = self.validate_validators(value, idx, column, validators)
+        value = self.validate_type(value, idx, column)
+        value = self.validate_min_value(value, idx, column)
+        value = self.validate_max_value(value, idx, column)
+        value = self.validate_min_length(value, idx, column)
+        value = self.validate_max_length(value, idx, column)
+        value = self.validate_nonempty(value, idx, column)
+        value = self.validate_choices(value, idx, column)
+        value = self.validate_regex(value, idx, column)
+        value = self.validate_unique(value, idx, column)
+        value = self.validate_unique_slug(value, idx, column)
+        value = self.validate_validators(value, idx, column)
         return value
 
-    def validate_row(self, idx, row):
+    def process_row(self, idx, row):
         res = {}
         errors = 0
         for column in self.columns.__dict__.values():
             try:
-                res[column.column] = self.validate_cell(idx, row, **column.__dict__)
+                res[column.label] = self.process_cell(idx, row, column)
             except RollingCommandError as e:
                 errors += e.count
         if errors:
             raise RollingCommandError(errors)
         return res
+
+    def confirm_changed(self, value, original, idx, column):
+        if not column.confirm_changed:
+            return value
+        if original and value != getattr(original, column.field):
+            inputed = self.importer.input_yes_no(
+                    u'{} {} changed {}: {} -> {}; Is it correct?',
+                    self.model.__name__, self.get_obj_repr(original), column.field,
+                    column.value_repr(getattr(original, column.field)), column.value_repr(value),
+                    default=u'Y')
+            if inputed != u'Y':
+                raise RollingCommandError
+        return value
+
+    def process_value(self, values, original, idx, column):
+        value = values[column.label]
+        value = self.confirm_changed(value, original, idx, column)
+        return value
+
+    def process_values(self, idx, values, original):
+        errors = 0
+        for column in self.columns.__dict__.values():
+            try:
+                values[column.label] = self.process_value(values, original, idx, column)
+            except RollingCommandError as e:
+                errors += e.count
+        if errors:
+            raise RollingCommandError(errors)
+        return values
 
     def do_import(self):
         errors = 0
@@ -215,10 +301,12 @@ class Sheet(object):
             if idx == 0 or all(c.value is None for c in row):
                 continue
             try:
-                values = self.validate_row(idx, row)
-                original = originals.pop(values[self.columns.pk.column], None)
-                fields = self.get_obj_fields(original, values)
-                assert fields[u'pk'] == values[self.columns.pk.column]
+                values = self.process_row(idx, row)
+                original = originals.pop(values[self.columns.pk.label], None)
+                values = self.process_values(idx, values, original)
+                fields = {c.field: values[c.label] for c in self.columns.__dict__.values() if c.field}
+                fields = self.get_obj_fields(original, values, fields)
+                assert fields[u'pk'] == values[self.columns.pk.label]
 
                 # Save only if the instance is new or changed to prevent excessive change history
                 if not original or any(fields[f] != getattr(original, f) for f in fields):
@@ -259,8 +347,8 @@ class Sheet(object):
         self.importer.write(1, u'Imported model {}: {} created, {} changed, {} unchanged and {} deleted',
                 self.model.__name__, created, changed, unchanged, deleted)
 
-    def get_obj_fields(self, original, values):
-        raise NotImplementedError
+    def get_obj_fields(self, original, values, fields):
+        return fields
 
     def save_obj_rel(self, obj, values):
         pass
@@ -382,243 +470,187 @@ class Importer(object):
         self.book(self).do_import(filename)
 
         if self.dry_run:
-            self.write(0, u'Rollbacked (dry run)')
+            self.write(0, u'Rolled back (dry run)')
             raise RollbackDryRun
         else:
             self.write(0, u'Done.')
 
 
-class TagSheet(Sheet):
+class ObligeeTagSheet(Sheet):
     label = u'Tagy'
-    model = None # FIXME
+    model = ObligeeTag
     delete_omitted = True
 
-    columns = Bunch( # {{{
-            pk=Bunch(
-                column=u'Interne ID tagu',
+    columns = Columns( # {{{
+            pk=Column(u'ID', field=u'pk',
                 typ=int, unique=True, min_value=1,
                 ),
-            key=Bunch(
-                column=u'Kod',
-                typ=unicode, unique_slug=True, regex=tag_regex,
+            key=Column(u'Kod', field=u'key',
+                typ=unicode, unique=True, max_length=255, regex=tag_regex,
+                confirm_changed=True,
                 ),
-            name=Bunch(
-                column=u'Nazov',
-                typ=unicode, nonempty=True,
+            name=Column(u'Nazov', field=u'name',
+                typ=unicode, unique_slug=True, nonempty=True, max_length=255,
                 ),
             ) # }}}
 
-    def get_obj_fields(self, original, values):
-        raise NotImplementedError
+    def get_obj_repr(self, obj):
+        return u'ID={} "{}"'.format(obj.pk, obj.key)
 
-class HierarchySheet(Sheet):
+class ObligeeGroupSheet(Sheet):
     label = u'Hierarchia'
-    model = None # FIXME
+    model = ObligeeGroup
     delete_omitted = True
 
-    columns = Bunch( # {{{
-            pk=Bunch(
-                column=u'Interne ID hierarchie',
+    columns = Columns( # {{{
+            pk=Column(u'ID', field=u'pk',
                 typ=int, unique=True, min_value=1,
                 ),
-            key=Bunch(
-                column=u'Kod',
-                typ=unicode, unique_slug=True, regex=hierarchy_regex,
+            key=Column(u'Kod', field=u'key',
+                typ=unicode, unique=True, max_length=255, regex=group_regex,
+                confirm_changed=True,
                 ),
-            name=Bunch(
-                column=u'Nazov v hierarchii',
-                typ=unicode, nonempty=True,
+            name=Column(u'Nazov v hierarchii', field=u'name',
+                typ=unicode, unique_slug=True, nonempty=True, max_length=255,
                 ),
-            description=Bunch(
-                column=u'Popis',
+            description=Column(u'Popis', field=u'description',
                 typ=unicode, default=u'',
                 ),
             ) # }}}
 
-    def get_obj_fields(self, original, values):
-        raise NotImplementedError
+    def get_obj_repr(self, obj):
+        return u'ID={} "{}"'.format(obj.pk, obj.key)
 
 class ObligeeSheet(Sheet):
     label = u'Obligees'
     model = Obligee
     delete_omitted = False
 
-    columns = Bunch( # {{{
-            pk=Bunch(
-                column=u'Interne ID institucie',
+    columns = Columns( # {{{
+            pk=Column(u'ID', field=u'pk',
                 typ=int, unique=True, min_value=1,
                 ),
-            official_name=Bunch(
-                column=u'Oficialny nazov',
+            official_name=Column(u'Oficialny nazov',
                 typ=unicode, nonempty=True,
                 ),
-            name=Bunch(
-                column=u'Rozlisovaci nazov nominativ',
+            name=Column(u'Rozlisovaci nazov nominativ', field=u'name',
                 typ=unicode, unique_slug=True, nonempty=True,
                 ),
-            name_genitive=Bunch(
-                column=u'Rozlisovaci nazov genitiv',
+            name_genitive=Column(u'Rozlisovaci nazov genitiv',
                 typ=unicode, nonempty=True,
                 ),
-            name_dative=Bunch(
-                column=u'Rozlisovaci nazov dativ',
+            name_dative=Column(u'Rozlisovaci nazov dativ',
                 typ=unicode, nonempty=True,
                 ),
-            name_accusative=Bunch(
-                column=u'Rozlisovaci nazov akuzativ',
+            name_accusative=Column(u'Rozlisovaci nazov akuzativ',
                 typ=unicode, nonempty=True,
                 ),
-            name_locative=Bunch(
-                column=u'Rozlisovaci nazov lokal',
+            name_locative=Column(u'Rozlisovaci nazov lokal',
                 typ=unicode, nonempty=True,
                 ),
-            name_instrumental=Bunch(
-                column=u'Rozlisovaci nazov instrumental',
+            name_instrumental=Column(u'Rozlisovaci nazov instrumental',
                 typ=unicode, nonempty=True,
                 ),
-            name_gender=Bunch(
-                column=u'Rod',
+            name_gender=Column(u'Rod',
                 typ=unicode, choices=[u'muzsky', u'zensky', u'stredny', u'pomnozny'],
                 ),
-            ico=Bunch(
-                column=u'ICO',
+            ico=Column(u'ICO',
                 typ=unicode, default=u'',
                 ),
-            hierarchy=Bunch( # FIXME: m2m foreign key
-                column=u'Hierarchia',
-                typ=unicode, regex=hierarchies_regex_1,
+            group=Column(u'Hierarchia', # FIXME: m2m foreign key
+                typ=unicode, regex=groups_regex_1,
                 ),
-            street=Bunch(
-                column=u'Adresa: Ulica s cislom',
+            street=Column(u'Adresa: Ulica s cislom', field=u'street',
                 typ=unicode, nonempty=True,
                 ),
-            city=Bunch(
-                column=u'Adresa: Obec',
+            city=Column(u'Adresa: Obec', field=u'city',
                 typ=unicode, nonempty=True,
                 ),
-            zip=Bunch(
-                column=u'Adresa: PSC',
+            zip=Column(u'Adresa: PSC', field=u'zip',
                 typ=unicode, regex=zip_regex,
                 ),
-            emails=Bunch(
-                column=u'Adresa: Email',
+            emails=Column(u'Adresa: Email', field=u'emails',
                 typ=unicode, default=u'', validators=validate_comma_separated_emails,
                 # Override with dummy emails for local and dev server modes
                 ),
-            official_description=Bunch(
-                column=u'Oficialny popis',
+            official_description=Column(u'Oficialny popis',
                 typ=unicode, default=u'',
                 ),
-            simple_description=Bunch(
-                column=u'Zrozumitelny popis',
+            simple_description=Column(u'Zrozumitelny popis',
                 typ=unicode, default=u'',
                 ),
-            status=Bunch(
-                column=u'Stav',
+            status=Column(u'Stav', field=u'status',
                 typ=unicode,
                 choices={
                     u'aktivny': Obligee.STATUSES.PENDING,
                     u'neaktivny': Obligee.STATUSES.DISSOLVED,
                     },
+                confirm_changed=True,
+                value_repr=(lambda v: Obligee.STATUSES._inverse[v]),
                 ),
-            type=Bunch(
-                column=u'Typ',
+            type=Column(u'Typ',
                 typ=int, choices=[1, 2, 3, 4],
                 ),
-            latitude=Bunch(
-                column=u'Lat',
+            latitude=Column(u'Lat',
                 typ=float, min_value=-90.0, max_value=90.0,
                 ),
-            longitude=Bunch(
-                column=u'Lon',
+            longitude=Column(u'Lon',
                 typ=float, min_value=-180.0, max_value=180.0,
                 ),
-            iczsj=Bunch( # FIXME: foreign key
-                column=u'ICZSJ',
+            iczsj=Column(u'ICZSJ', # FIXME: foreign key
                 typ=int, min_value=1,
                 ),
-            tags=Bunch( # FIXME: m2m foreign key
-                column=u'Tagy',
+            tags=Column(u'Tagy', # FIXME: m2m foreign key
                 typ=unicode, default=u'', regex=tags_regex_0,
                 ),
-            notes=Bunch(
-                column=u'Poznamka',
+            notes=Column(u'Poznamka',
                 typ=unicode, default=u'',
                 ),
             ) # }}}
 
-    def get_obj_fields(self, original, values):
-        errors = 0
-
-        fields = {}
-        fields[u'pk'] = values[self.columns.pk.column]
-        fields[u'name'] = values[self.columns.name.column]
-        fields[u'street'] = values[self.columns.street.column]
-        fields[u'city'] = values[self.columns.city.column]
-        fields[u'zip'] = values[self.columns.zip.column]
-        fields[u'emails'] = values[self.columns.emails.column]
-        fields[u'status'] = values[self.columns.status.column]
+    def get_obj_fields(self, original, values, fields):
 
         # Dummy emails for local and dev server modes
         if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
             fields[u'emails'] = Obligee.dummy_email(fields[u'name'], settings.OBLIGEE_DUMMY_MAIL)
-
-        if original and fields[u'status'] != original.status:
-            inputed = self.importer.input_yes_no(
-                    u'Obligee ID={} "{}" changed status: {} -> {}; Is it correct?',
-                    fields[u'pk'], fields[u'name'],
-                    Obligee.STATUSES._inverse[original.status],
-                    Obligee.STATUSES._inverse[fields[u'status']],
-                    default=u'Y')
-            if inputed != u'Y':
-                errors += 1
-
-        if errors:
-            raise RollingCommandError(errors)
 
         return fields
 
     def get_obj_repr(self, obj):
         return u'ID={} "{}"'.format(obj.pk, obj.name)
 
-class AliasSheet(Sheet):
+class ObligeeAliasSheet(Sheet):
     label = u'Aliasy'
     model = None # FIXME
     delete_omitted = True
 
-    columns = Bunch( # {{{
-            pk=Bunch(
-                column=u'Interne ID aliasu',
+    columns = Columns( # {{{
+            pk=Column(u'ID',
                 typ=int, unique=True, min_value=1,
                 ),
-            obligee_pk=Bunch( # FIXME: foreign key
-                column=u'ID institucie',
+            obligee_pk=Column(u'ID institucie', # FIXME: foreign key
                 typ=int, min_value=1,
                 ),
-            obligee_name=Bunch( # FIXME: overit vzhladom na ID institucie
-                column=u'Rozlisovaci nazov institucie',
+            obligee_name=Column(u'Rozlisovaci nazov institucie', # FIXME: overit vzhladom na ID institucie
                 typ=unicode, nonempty=True,
                 ),
-            alias=Bunch(
-                column=u'Alternativny nazov',
+            alias=Column(u'Alternativny nazov',
                 typ=unicode, unique_slug=True, nonempty=True,
                 ),
-            description=Bunch(
-                column=u'Vysvetlenie',
+            description=Column(u'Vysvetlenie',
                 typ=unicode, default=u'',
                 ),
-            notes=Bunch(
-                column=u'Poznamka',
+            notes=Column(u'Poznamka',
                 typ=unicode, default=u'',
                 ),
             ) # }}}
 
-    def get_obj_fields(self, original, values):
+    def get_obj_fields(self, original, values, fields):
         raise NotImplementedError
 
 class ObligeeBook(Book):
-    #sheets = [TagSheet, HierarchySheet, ObligeeSheet, AliasSheet]
-    sheets = [ObligeeSheet]
+    #sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]
+    sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet]
 
     def do_import(self, filename):
 

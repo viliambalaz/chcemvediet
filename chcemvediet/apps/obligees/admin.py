@@ -5,7 +5,49 @@ from django.contrib import admin
 from poleno.utils.misc import decorate
 from poleno.utils.admin import admin_obj_format
 
-from .models import Obligee, HistoricalObligee
+from .models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee
+
+@admin.register(ObligeeTag, site=admin.site)
+class ObligeeTagAdmin(admin.ModelAdmin):
+    list_display = [
+            u'id',
+            u'key',
+            u'name',
+            ]
+    list_filter = [
+            ]
+    search_fields = [
+            u'=id',
+            u'key',
+            u'name',
+            ]
+    ordering = [
+            u'id',
+            ]
+    readonly_fields = [
+            u'slug',
+            ]
+
+@admin.register(ObligeeGroup, site=admin.site)
+class ObligeeGroupAdmin(admin.ModelAdmin):
+    list_display = [
+            u'id',
+            u'key',
+            u'name',
+            ]
+    list_filter = [
+            ]
+    search_fields = [
+            u'=id',
+            u'key',
+            u'name',
+            ]
+    ordering = [
+            u'id',
+            ]
+    readonly_fields = [
+            u'slug',
+            ]
 
 @admin.register(Obligee, site=admin.site)
 class ObligeeAdmin(admin.ModelAdmin):

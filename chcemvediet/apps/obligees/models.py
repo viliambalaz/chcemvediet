@@ -11,6 +11,119 @@ from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
 from poleno.utils.misc import squeeze, decorate, slugify
 
+class ObligeeTagQuerySet(QuerySet):
+    def order_by_pk(self):
+        return self.order_by(u'pk')
+    def order_by_key(self):
+        return self.order_by(u'key') # no tiebreaker, key is unique
+    def order_by_slug(self):
+        return self.order_by(u'slug') # no tiebreaker, slug is unique
+
+class ObligeeTag(models.Model):
+    # May NOT be empty
+    key = models.CharField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique key to identify the tag. Should contain only alphanumeric characters,
+                underscores and hyphens.
+                """))
+
+    # Should NOT be empty
+    name = models.CharField(max_length=255,
+            help_text=squeeze(u"""
+                Human readable tag name.
+                """))
+
+    # Should NOT be empty; Read-only; Automaticly computed in save()
+    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique slug to identify the tag used in urls. Automaticly computed from the tag
+                name. May not be changed manually.
+                """))
+
+    objects = ObligeeTagQuerySet.as_manager()
+
+    class Meta:
+        index_together = [
+                # [u'key'], -- defined on field
+                # [u'slug'], -- defined on field
+                ]
+
+    @decorate(prevent_bulk_create=True)
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get(u'update_fields', None)
+
+        # Generate and save slug if saving name
+        if update_fields is None or u'name' in update_fields:
+            self.slug = slugify(self.name)
+            if update_fields is not None:
+                update_fields.append(u'slug')
+
+        super(ObligeeTag, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'%s' % self.pk
+
+
+class ObligeeGroupQuerySet(QuerySet):
+    def order_by_pk(self):
+        return self.order_by(u'pk')
+    def order_by_key(self):
+        return self.order_by(u'key') # no tiebreaker, key is unique
+    def order_by_slug(self):
+        return self.order_by(u'slug') # no tiebreaker, slug is unique
+
+class ObligeeGroup(models.Model):
+    # May NOT be empty
+    key = models.CharField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique key to identify the group. The key is a path of slash separated words each
+                of which represents a supergroup. Every word in the path should be a nonempty
+                string and should only contain alphanumeric characters, underscores and hyphens.
+                """))
+
+    # Should NOT be empty
+    name = models.CharField(max_length=255,
+            help_text=squeeze(u"""
+                Human readable group name.
+                """))
+
+    # Should NOT be empty; Read-only; Automaticly computed in save()
+    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique slug to identify the group used in urls. Automaticly computed from the group
+                name. May not be changed manually.
+                """))
+
+    # May be empty
+    description = models.TextField(blank=True,
+            help_text=squeeze(u"""
+                Human readable group description.
+                """))
+
+    objects = ObligeeGroupQuerySet.as_manager()
+
+    class Meta:
+        index_together = [
+                # [u'key'], -- defined on field
+                # [u'slug'], -- defined on field
+                ]
+
+    @decorate(prevent_bulk_create=True)
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get(u'update_fields', None)
+
+        # Generate and save slug if saving name
+        if update_fields is None or u'name' in update_fields:
+            self.slug = slugify(self.name)
+            if update_fields is not None:
+                update_fields.append(u'slug')
+
+        super(ObligeeGroup, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'%s' % self.pk
+
+
 class ObligeeQuerySet(QuerySet):
     def pending(self):
         return self.filter(status=Obligee.STATUSES.PENDING)
