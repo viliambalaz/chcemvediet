@@ -195,6 +195,10 @@ class Obligee(models.Model):
     latitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS latitude')
     longitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS longitude')
 
+    # May be empty
+    tags = models.ManyToManyField(ObligeeTag)
+    groups = models.ManyToManyField(ObligeeGroup)
+
     # May NOT be NULL
     TYPES = FieldChoices(
             (u'SECTION_1', 1, _(u'obligees:Obligee:type:SECTION_1')),

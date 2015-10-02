@@ -93,6 +93,14 @@ def norm_new_lines(s):
         return None
     return s.replace('\r\n','\n').replace('\r','\n')
 
+def ensure_tuple(value):
+    if isinstance(value, tuple):
+        return value
+    elif isinstance(value, list):
+        return tuple(value)
+    else:
+        return (value,)
+
 def slugify(s):
     u"""
     This slugify transliretares all supported non-latin characters to latin. For instance it
