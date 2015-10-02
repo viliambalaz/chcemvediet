@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('obligees', '0003_obligeegroup'),
+        ('obligees', '0003_obligee_name_force_unique'),
     ]
 
     operations = [

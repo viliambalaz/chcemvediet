@@ -58,9 +58,11 @@ class ObligeeAdmin(admin.ModelAdmin):
             u'street',
             u'city',
             u'zip',
+            u'type',
             u'status',
             ]
     list_filter = [
+            u'type',
             u'status',
             ]
     search_fields = [

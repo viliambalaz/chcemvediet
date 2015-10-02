@@ -364,9 +364,10 @@ class Sheet(object):
             except RollingCommandError as e:
                 errors += e.count
 
-        # Delete omitted instances or add an error if delete is not permitted. Don't delete
-        # anything if there were any import errors as we don't know which instances are missing for
-        # real and which are missing because of parse errors.
+        # Mark omitted instances for deletion or add an error if delete is not permitted. Don't
+        # delete anything if there were any import errors as we don't know which instances are
+        # missing for real and which are missing because of parse errors. The instances will be
+        # deleted only after all sheets are imported to prevent unintentional cascades.
         if errors:
             raise RollingCommandError(errors)
         for obj in originals.values():
@@ -375,7 +376,7 @@ class Sheet(object):
                         u'{} {} was omitted.', u'Are you sure, you want to delete it?',
                         self.model.__name__, self.get_obj_repr(obj), default=u'Y')
                 if inputed == u'Y':
-                    obj.delete()
+                    self.book.marked_for_deletion.add(obj)
                     deleted += 1
                 else:
                     errors += 1
@@ -405,6 +406,7 @@ class Book(object):
         self.importer = importer
         self.wb = None
         self.actual_sheets = None
+        self.marked_for_deletion = None
 
     def reset_model(self, model):
         count = model.objects.count()
@@ -442,6 +444,7 @@ class Book(object):
         except RollingCommandError as e:
             errors += e.count
 
+        self.marked_for_deletion = set()
         for sheet in self.sheets:
             if sheet.label not in self.actual_sheets:
                 continue
@@ -449,6 +452,8 @@ class Book(object):
                 sheet(self).do_import()
             except RollingCommandError as e:
                 errors += e.count
+        for obj in self.marked_for_deletion:
+            obj.delete()
 
         if errors:
             raise RollingCommandError(errors)
@@ -494,14 +499,14 @@ class Importer(object):
             self.stdout.write(self.color_style.ERROR(
                     u'{} Yes/No/Abort [{}]: '.format(prompt, default)), ending=u'')
 
-            if self.assume == u'yes':
-                inputed = u'Yes'
+            if self.assume:
+                if self.assume == u'yes':
+                    inputed = u'Yes'
+                elif self.assume == u'no':
+                    inputed = u'No'
+                else:
+                    inputed = default
                 self.stdout.write(inputed)
-            elif self.assume == u'no':
-                inputed = u'No'
-                self.stdout.write(inputed)
-            elif self.assume == u'default':
-                inputed = default
             else:
                 inputed = raw_input() or default
 
@@ -636,9 +641,32 @@ class ObligeeSheet(Sheet):
             zip=Column(u'Adresa: PSC', field=u'zip',
                 typ=basestring, regex=zip_regex,
                 ),
+            iczsj=Column(u'ICZSJ', # FIXME: foreign key
+                typ=Integral, min_value=1,
+                ),
             emails=Column(u'Adresa: Email', field=u'emails',
                 typ=basestring, default=u'', validators=validate_comma_separated_emails,
                 # Override with dummy emails for local and dev server modes
+                ),
+            latitude=Column(u'Lat', field=u'latitude',
+                typ=Real, min_value=-90.0, max_value=90.0,
+                ),
+            longitude=Column(u'Lon', field=u'longitude',
+                typ=Real, min_value=-180.0, max_value=180.0,
+                ),
+            groups=Column(u'Hierarchia', # FIXME: m2m foreign key
+                typ=basestring, regex=groups_regex_1,
+                ),
+            tags=Column(u'Tagy', # FIXME: m2m foreign key
+                typ=basestring, default=u'', regex=tags_regex_0,
+                ),
+            type=Column(u'Typ', field=u'type',
+                typ=basestring, choices={
+                    u'odsek 1': Obligee.TYPES.SECTION_1,
+                    u'odsek 2': Obligee.TYPES.SECTION_2,
+                    u'odsek 3': Obligee.TYPES.SECTION_3,
+                    u'odsek 4': Obligee.TYPES.SECTION_4,
+                    },
                 ),
             official_description=Column(u'Oficialny popis', field=u'official_description',
                 typ=basestring, default=u'',
@@ -653,29 +681,6 @@ class ObligeeSheet(Sheet):
                     },
                 confirm_changed=True,
                 value_repr=(lambda v: Obligee.STATUSES._inverse[v]),
-                ),
-            type=Column(u'Typ', field=u'type',
-                typ=basestring, choices={
-                    u'odsek 1': Obligee.TYPES.SECTION_1,
-                    u'odsek 2': Obligee.TYPES.SECTION_2,
-                    u'odsek 3': Obligee.TYPES.SECTION_3,
-                    u'odsek 4': Obligee.TYPES.SECTION_4,
-                    },
-                ),
-            group=Column(u'Hierarchia', # FIXME: m2m foreign key
-                typ=basestring, regex=groups_regex_1,
-                ),
-            tags=Column(u'Tagy', # FIXME: m2m foreign key
-                typ=basestring, default=u'', regex=tags_regex_0,
-                ),
-            latitude=Column(u'Lat', field=u'latitude',
-                typ=Real, min_value=-90.0, max_value=90.0,
-                ),
-            longitude=Column(u'Lon', field=u'longitude',
-                typ=Real, min_value=-180.0, max_value=180.0,
-                ),
-            iczsj=Column(u'ICZSJ', # FIXME: foreign key
-                typ=Integral, min_value=1,
                 ),
             notes=Column(u'Poznamka', field=u'notes',
                 typ=basestring, default=u'',

@@ -191,6 +191,19 @@ class Obligee(models.Model):
                 address is unknown.
                 """)))
 
+    # May be NULL
+    latitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS latitude')
+    longitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS longitude')
+
+    # May NOT be NULL
+    TYPES = FieldChoices(
+            (u'SECTION_1', 1, _(u'obligees:Obligee:type:SECTION_1')),
+            (u'SECTION_2', 2, _(u'obligees:Obligee:type:SECTION_2')),
+            (u'SECTION_3', 3, _(u'obligees:Obligee:type:SECTION_3')),
+            (u'SECTION_4', 4, _(u'obligees:Obligee:type:SECTION_4')),
+            )
+    type = models.SmallIntegerField(choices=TYPES._choices, help_text=u'Obligee type according to §2.')
+
     # May be empty
     official_description = models.TextField(blank=True, help_text=u'Official obligee description.')
     simple_description = models.TextField(blank=True, help_text=u'Human readable obligee description.')
@@ -205,19 +218,6 @@ class Obligee(models.Model):
                 "Pending" for obligees that exist and accept inforequests; "Dissolved" for obligees
                 that do not exist any more and no further inforequests may be submitted to them.
                 """))
-
-    # May NOT be NULL
-    TYPES = FieldChoices(
-            (u'SECTION_1', 1, _(u'obligees:Obligee:type:SECTION_1')),
-            (u'SECTION_2', 2, _(u'obligees:Obligee:type:SECTION_2')),
-            (u'SECTION_3', 3, _(u'obligees:Obligee:type:SECTION_3')),
-            (u'SECTION_4', 4, _(u'obligees:Obligee:type:SECTION_4')),
-            )
-    type = models.SmallIntegerField(choices=TYPES._choices, help_text=u'Obligee type according to §2.')
-
-    # May be NULL
-    latitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS latitude')
-    longitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS longitude')
 
     # May be empty
     notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
