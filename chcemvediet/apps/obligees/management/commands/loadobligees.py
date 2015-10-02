@@ -238,7 +238,7 @@ class ManyToManyColumn(Column):
             raise CellError(u'nonempty', u'Expecting nonempty value but found {}',
                     self.value_repr(value))
 
-    def apply_relation(self, value):
+    def apply_relation(self, sheet, value):
         res = []
         for key in value.split():
             try:
@@ -249,12 +249,15 @@ class ManyToManyColumn(Column):
             except self.to_model.MultipleObjectsReturned:
                 raise CellError(u'relation_found_more', u'There are multiple {} with {}="{}"',
                         self.to_model.__name__, self.to_field, key)
+            if obj in sheet.book.marked_for_deletion:
+                raise CellError(u'deleted', u'{} with {}="{}" was deleted',
+                        self.to_model.__name__, self.to_field, key)
             res.append(obj)
         return res
 
     def do_import(self, sheet, row, value):
         value = super(ManyToManyColumn, self).do_import(sheet, row, value)
-        value = self.apply_relation(value)
+        value = self.apply_relation(sheet, value)
         self.validate_nonempty(value)
         return value
 

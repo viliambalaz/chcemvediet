@@ -54,12 +54,17 @@ class ObligeeAdmin(admin.ModelAdmin):
     list_display = [
             u'id',
             u'name',
-            u'ico',
-            u'street',
             u'city',
-            u'zip',
             u'type',
             u'status',
+            decorate(
+                lambda o: u' '.join(t.key for t in o.tags.all()),
+                short_description=u'Tags',
+                ),
+            decorate(
+                lambda o: u' '.join(t.key for t in o.groups.all()),
+                short_description=u'Groups',
+                ),
             ]
     list_filter = [
             u'type',
@@ -73,12 +78,18 @@ class ObligeeAdmin(admin.ModelAdmin):
             u'city',
             u'zip',
             u'emails',
+            u'tags__key',
+            u'groups__key',
             ]
     ordering = [
             u'id',
             ]
     readonly_fields = [
             u'slug',
+            ]
+    raw_id_fields = [
+            u'tags',
+            u'groups',
             ]
 
 @admin.register(HistoricalObligee, site=admin.site)
