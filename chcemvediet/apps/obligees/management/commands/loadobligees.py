@@ -1,6 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 import re
+from numbers import Real, Integral
 from collections import defaultdict
 from optparse import make_option
 from openpyxl import load_workbook
@@ -12,7 +13,7 @@ from django.db import transaction
 from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
-from poleno.utils.misc import Bunch, squeeze, slugify
+from poleno.utils.misc import squeeze, slugify
 from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee
 from chcemvediet.apps.inforequests.models import Inforequest
 
@@ -69,7 +70,7 @@ class Column(object):
     def value_repr(self, value):
         if self._value_repr is not None:
             return self._value_repr(value)
-        elif isinstance(value, (int, long, float)):
+        elif isinstance(value, Real):
             return u'{}'.format(value)
         else:
             return u'"{}"'.format(value)
@@ -525,14 +526,14 @@ class ObligeeTagSheet(Sheet):
 
     columns = Columns( # {{{
             pk=Column(u'ID', field=u'pk',
-                typ=int, unique=True, min_value=1,
+                typ=Integral, unique=True, min_value=1,
                 ),
             key=Column(u'Kod', field=u'key',
-                typ=unicode, unique=True, max_length=255, regex=tag_regex,
+                typ=basestring, unique=True, max_length=255, regex=tag_regex,
                 confirm_changed=True,
                 ),
             name=Column(u'Nazov', field=u'name',
-                typ=unicode, unique_slug=True, nonempty=True, max_length=255,
+                typ=basestring, unique_slug=True, nonempty=True, max_length=255,
                 ),
             ) # }}}
 
@@ -546,17 +547,17 @@ class ObligeeGroupSheet(Sheet):
 
     columns = Columns( # {{{
             pk=Column(u'ID', field=u'pk',
-                typ=int, unique=True, min_value=1,
+                typ=Integral, unique=True, min_value=1,
                 ),
             key=Column(u'Kod', field=u'key',
-                typ=unicode, unique=True, max_length=255, regex=group_regex,
+                typ=basestring, unique=True, max_length=255, regex=group_regex,
                 confirm_changed=True,
                 ),
             name=Column(u'Nazov v hierarchii', field=u'name',
-                typ=unicode, unique_slug=True, nonempty=True, max_length=255,
+                typ=basestring, unique_slug=True, nonempty=True, max_length=255,
                 ),
             description=Column(u'Popis', field=u'description',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             ) # }}}
 
@@ -570,38 +571,38 @@ class ObligeeSheet(Sheet):
 
     columns = Columns( # {{{
             pk=Column(u'ID', field=u'pk',
-                typ=int, unique=True, min_value=1,
+                typ=Integral, unique=True, min_value=1,
                 ),
             official_name=Column(u'Oficialny nazov', field=u'official_name',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_changed=True,
                 ),
             name=Column(u'Rozlisovaci nazov nominativ', field=u'name',
-                typ=unicode, unique_slug=True, nonempty=True,
+                typ=basestring, unique_slug=True, nonempty=True,
                 confirm_unchanged_if_changed=u'official_name',
                 ),
             name_genitive=Column(u'Rozlisovaci nazov genitiv', field=u'name_genitive',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_dative=Column(u'Rozlisovaci nazov dativ', field=u'name_dative',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_accusative=Column(u'Rozlisovaci nazov akuzativ', field=u'name_accusative',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_locative=Column(u'Rozlisovaci nazov lokal', field=u'name_locative',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_instrumental=Column(u'Rozlisovaci nazov instrumental', field=u'name_instrumental',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 confirm_unchanged_if_changed=u'name',
                 ),
             gender=Column(u'Rod', field=u'gender',
-                typ=unicode, choices={
+                typ=basestring, choices={
                     u'muzsky': Obligee.GENDERS.MASCULINE,
                     u'zensky': Obligee.GENDERS.FEMININE,
                     u'stredny': Obligee.GENDERS.NEUTER,
@@ -609,29 +610,29 @@ class ObligeeSheet(Sheet):
                     },
                 ),
             ico=Column(u'ICO', field=u'ico',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             street=Column(u'Adresa: Ulica s cislom', field=u'street',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 ),
             city=Column(u'Adresa: Obec', field=u'city',
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 ),
             zip=Column(u'Adresa: PSC', field=u'zip',
-                typ=unicode, regex=zip_regex,
+                typ=basestring, regex=zip_regex,
                 ),
             emails=Column(u'Adresa: Email', field=u'emails',
-                typ=unicode, default=u'', validators=validate_comma_separated_emails,
+                typ=basestring, default=u'', validators=validate_comma_separated_emails,
                 # Override with dummy emails for local and dev server modes
                 ),
             official_description=Column(u'Oficialny popis', field=u'official_description',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             simple_description=Column(u'Zrozumitelny popis', field=u'simple_description',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             status=Column(u'Stav', field=u'status',
-                typ=unicode, choices={
+                typ=basestring, choices={
                     u'aktivny': Obligee.STATUSES.PENDING,
                     u'neaktivny': Obligee.STATUSES.DISSOLVED,
                     },
@@ -639,7 +640,7 @@ class ObligeeSheet(Sheet):
                 value_repr=(lambda v: Obligee.STATUSES._inverse[v]),
                 ),
             type=Column(u'Typ', field=u'type',
-                typ=unicode, choices={
+                typ=basestring, choices={
                     u'odsek 1': Obligee.TYPES.SECTION_1,
                     u'odsek 2': Obligee.TYPES.SECTION_2,
                     u'odsek 3': Obligee.TYPES.SECTION_3,
@@ -647,22 +648,22 @@ class ObligeeSheet(Sheet):
                     },
                 ),
             group=Column(u'Hierarchia', # FIXME: m2m foreign key
-                typ=unicode, regex=groups_regex_1,
+                typ=basestring, regex=groups_regex_1,
                 ),
             tags=Column(u'Tagy', # FIXME: m2m foreign key
-                typ=unicode, default=u'', regex=tags_regex_0,
+                typ=basestring, default=u'', regex=tags_regex_0,
                 ),
-            latitude=Column(u'Lat',
-                typ=float, min_value=-90.0, max_value=90.0,
+            latitude=Column(u'Lat', field=u'latitude',
+                typ=Real, min_value=-90.0, max_value=90.0,
                 ),
-            longitude=Column(u'Lon',
-                typ=float, min_value=-180.0, max_value=180.0,
+            longitude=Column(u'Lon', field=u'longitude',
+                typ=Real, min_value=-180.0, max_value=180.0,
                 ),
             iczsj=Column(u'ICZSJ', # FIXME: foreign key
-                typ=int, min_value=1,
+                typ=Integral, min_value=1,
                 ),
             notes=Column(u'Poznamka', field=u'notes',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             ) # }}}
 
@@ -684,22 +685,22 @@ class ObligeeAliasSheet(Sheet):
 
     columns = Columns( # {{{
             pk=Column(u'ID',
-                typ=int, unique=True, min_value=1,
+                typ=Integral, unique=True, min_value=1,
                 ),
             obligee_pk=Column(u'ID institucie', # FIXME: foreign key
-                typ=int, min_value=1,
+                typ=Integral, min_value=1,
                 ),
             obligee_name=Column(u'Rozlisovaci nazov institucie', # FIXME: overit vzhladom na ID institucie
-                typ=unicode, nonempty=True,
+                typ=basestring, nonempty=True,
                 ),
             alias=Column(u'Alternativny nazov',
-                typ=unicode, unique_slug=True, nonempty=True,
+                typ=basestring, unique_slug=True, nonempty=True,
                 ),
             description=Column(u'Vysvetlenie',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             notes=Column(u'Poznamka',
-                typ=unicode, default=u'',
+                typ=basestring, default=u'',
                 ),
             ) # }}}
 

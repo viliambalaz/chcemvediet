@@ -138,7 +138,6 @@ class ObligeeQuerySet(QuerySet):
 class Obligee(models.Model):
     # FIXME: groups -- m2m relation
     # FIXME: tags -- m2m relation
-    # FIXME: latitude, longitude -- check django geo support
     # FIXME: iczsj -- m2m relation -- import iczsj table
 
     # Should NOT be empty
@@ -215,6 +214,10 @@ class Obligee(models.Model):
             (u'SECTION_4', 4, _(u'obligees:Obligee:type:SECTION_4')),
             )
     type = models.SmallIntegerField(choices=TYPES._choices, help_text=u'Obligee type according to §2.')
+
+    # May be NULL
+    latitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS latitude')
+    longitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS longitude')
 
     # May be empty
     notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
