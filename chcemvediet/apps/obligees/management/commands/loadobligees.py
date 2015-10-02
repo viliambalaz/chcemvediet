@@ -44,10 +44,13 @@ class Column(object):
     def __init__(self, label, field=None, typ=None, default=None,
             min_value=None, max_value=None, min_length=None, max_length=None, nonempty=None,
             choices=None, regex=None, unique=None, unique_slug=None, validators=None,
-            confirm_changed=None, value_repr=None):
+            confirm_changed=None, confirm_unchanged_if_changed=None, value_repr=None):
+
+        tuple_unless_none = (lambda v: v if v is None or isinstance(v, (list, tuple)) else (v,))
+
         self.label = label
         self.field = field
-        self.typ = typ if typ is None or isinstance(typ, tuple) else (typ,)
+        self.typ = tuple_unless_none(typ)
         self.default = default
         self.min_value = min_value
         self.max_value = max_value
@@ -58,12 +61,15 @@ class Column(object):
         self.regex = regex
         self.unique = unique
         self.unique_slug = unique_slug
-        self.validators = validators if validators is None or isinstance(validators, (list, tuple)) else [validators]
+        self.validators = tuple_unless_none(validators)
         self.confirm_changed = confirm_changed
-        self.value_repr = value_repr if value_repr is not None else self.value_repr
+        self.confirm_unchanged_if_changed = tuple_unless_none(confirm_unchanged_if_changed)
+        self._value_repr = value_repr
 
     def value_repr(self, value):
-        if isinstance(value, (int, long, float)):
+        if self._value_repr is not None:
+            return self._value_repr(value)
+        elif isinstance(value, (int, long, float)):
             return u'{}'.format(value)
         else:
             return u'"{}"'.format(value)
@@ -118,7 +124,7 @@ class Sheet(object):
             return value
         if not isinstance(value, column.typ):
             self.cell_error(u'type', idx, column, u'Expecting {} but found {}',
-                    u', '.join(t.__name__ for t in typ), value.__class__.__name__)
+                    u', '.join(t.__name__ for t in column.typ), value.__class__.__name__)
         return value
 
     def validate_min_value(self, value, idx, column):
@@ -263,17 +269,48 @@ class Sheet(object):
             return value
         if original and value != getattr(original, column.field):
             inputed = self.importer.input_yes_no(
-                    u'{} {} changed {}: {} -> {}; Is it correct?',
-                    self.model.__name__, self.get_obj_repr(original), column.field,
-                    column.value_repr(getattr(original, column.field)), column.value_repr(value),
+                    u'{} {} in row {} changed {}:\n\t{} -> {}',
+                    u'Is it correct?',
+                    self.model.__name__,
+                    self.get_obj_repr(original),
+                    idx+1,
+                    column.field,
+                    column.value_repr(getattr(original, column.field)),
+                    column.value_repr(value),
                     default=u'Y')
             if inputed != u'Y':
                 raise RollingCommandError
         return value
 
+    def confirm_unchanged_if_changed(self, value, values, original, idx, column):
+        if not column.confirm_unchanged_if_changed:
+            return value
+        if original and value == getattr(original, column.field):
+            for other_column in column.confirm_unchanged_if_changed:
+                other_column = self.columns.__dict__[other_column]
+                other_value = values[other_column.label]
+                if other_value != getattr(original, other_column.field):
+                    inputed = self.importer.input_yes_no(
+                            u'{} {} in row {} changed {}:\n\t{} -> {}\nBut not {}:\n\t{}',
+                            u'Is it correct?',
+                            self.model.__name__,
+                            self.get_obj_repr(original),
+                            idx+1,
+                            other_column.field,
+                            other_column.value_repr(getattr(original, other_column.field)),
+                            other_column.value_repr(other_value),
+                            column.field,
+                            column.value_repr(value),
+                            default=u'Y')
+                    if inputed != u'Y':
+                        raise RollingCommandError
+                    break
+        return value
+
     def process_value(self, values, original, idx, column):
         value = values[column.label]
         value = self.confirm_changed(value, original, idx, column)
+        value = self.confirm_unchanged_if_changed(value, values, original, idx, column)
         return value
 
     def process_values(self, idx, values, original):
@@ -326,11 +363,15 @@ class Sheet(object):
             except RollingCommandError as e:
                 errors += e.count
 
-        # Delete omitted instances or add an error if delete is not permitted
+        # Delete omitted instances or add an error if delete is not permitted. Don't delete
+        # anything if there were any import errors as we don't know which instances are missing for
+        # real and which are missing because of parse errors.
+        if errors:
+            raise RollingCommandError(errors)
         for obj in originals.values():
             if self.delete_omitted:
                 inputed = self.importer.input_yes_no(
-                        u'{} {} was omitted. Are you sure, you want to delete it?',
+                        u'{} {} was omitted.', u'Are you sure, you want to delete it?',
                         self.model.__name__, self.get_obj_repr(obj), default=u'Y')
                 if inputed == u'Y':
                     obj.delete()
@@ -429,7 +470,7 @@ class Importer(object):
         if not hasattr(self, u'_error_cache'):
             self._error_cache = defaultdict(int)
 
-        msg = self.color_style.WARNING(u'Error: ' + msg.format(*args, **kwargs))
+        msg = self.color_style.NOTICE(u'Error: ' + msg.format(*args, **kwargs))
 
         if self.verbosity == 1:
             if code:
@@ -443,12 +484,13 @@ class Importer(object):
         elif self.verbosity >= 2:
             self.stdout.write(msg)
 
-    def input_yes_no(self, prompt, *args, **kwargs):
+    def input_yes_no(self, text, prompt, *args, **kwargs):
         default = kwargs.pop(u'default', u'')
         while True:
             self.stdout.write(self.color_style.WARNING(
-                    u'Warning: {} Yes/No/Abort [{}]: '.format(
-                        prompt.format(*args, **kwargs), default)), ending=u'')
+                    u'Warning: {}'.format(text.format(*args, **kwargs))))
+            self.stdout.write(self.color_style.ERROR(
+                    u'{} Yes/No/Abort [{}]: '.format(prompt, default)), ending=u'')
             inputed = raw_input() or default
             if not inputed:
                 self.stdout.write(self.color_style.ERROR(u'Error: The value is required.'))
@@ -532,24 +574,31 @@ class ObligeeSheet(Sheet):
                 ),
             official_name=Column(u'Oficialny nazov', field=u'official_name',
                 typ=unicode, nonempty=True,
+                confirm_changed=True,
                 ),
             name=Column(u'Rozlisovaci nazov nominativ', field=u'name',
                 typ=unicode, unique_slug=True, nonempty=True,
+                confirm_unchanged_if_changed=u'official_name',
                 ),
             name_genitive=Column(u'Rozlisovaci nazov genitiv', field=u'name_genitive',
                 typ=unicode, nonempty=True,
+                confirm_unchanged_if_changed=u'name',
                 ),
             name_dative=Column(u'Rozlisovaci nazov dativ', field=u'name_dative',
                 typ=unicode, nonempty=True,
+                confirm_unchanged_if_changed=u'name',
                 ),
             name_accusative=Column(u'Rozlisovaci nazov akuzativ', field=u'name_accusative',
                 typ=unicode, nonempty=True,
+                confirm_unchanged_if_changed=u'name',
                 ),
             name_locative=Column(u'Rozlisovaci nazov lokal', field=u'name_locative',
                 typ=unicode, nonempty=True,
+                confirm_unchanged_if_changed=u'name',
                 ),
             name_instrumental=Column(u'Rozlisovaci nazov instrumental', field=u'name_instrumental',
                 typ=unicode, nonempty=True,
+                confirm_unchanged_if_changed=u'name',
                 ),
             gender=Column(u'Rod', field=u'gender',
                 typ=unicode, choices={
@@ -582,16 +631,20 @@ class ObligeeSheet(Sheet):
                 typ=unicode, default=u'',
                 ),
             status=Column(u'Stav', field=u'status',
-                typ=unicode,
-                choices={
+                typ=unicode, choices={
                     u'aktivny': Obligee.STATUSES.PENDING,
                     u'neaktivny': Obligee.STATUSES.DISSOLVED,
                     },
                 confirm_changed=True,
                 value_repr=(lambda v: Obligee.STATUSES._inverse[v]),
                 ),
-            type=Column(u'Typ',
-                typ=int, choices=[1, 2, 3, 4],
+            type=Column(u'Typ', field=u'type',
+                typ=unicode, choices={
+                    u'odsek 1': Obligee.TYPES.SECTION_1,
+                    u'odsek 2': Obligee.TYPES.SECTION_2,
+                    u'odsek 3': Obligee.TYPES.SECTION_3,
+                    u'odsek 4': Obligee.TYPES.SECTION_4,
+                    },
                 ),
             group=Column(u'Hierarchia', # FIXME: m2m foreign key
                 typ=unicode, regex=groups_regex_1,
@@ -665,8 +718,9 @@ class ObligeeBook(Book):
             if count:
                 inputed = self.importer.input_yes_no(squeeze(u"""
                         Discarding current obligees will discard all existing inforequests as well.
-                        There are {} inforequests. Are you sure, you want to discard them?
-                        """), count, default=u'N')
+                        There are {} inforequests.
+                        """),
+                        u'Are you sure, you want to discard them?', count, default=u'N')
                 if inputed != u'Y':
                     raise CommandError(squeeze(u"""
                             Existing inforequests prevented us from discarding current obligees.
