@@ -458,6 +458,7 @@ class Importer(object):
     def __init__(self, book, options, stdout):
         self.reset = options[u'reset']
         self.dry_run = options[u'dry_run']
+        self.assume = options[u'assume']
         self.verbosity = int(options[u'verbosity'])
         self.stdout = stdout
         self.color_style = color_style()
@@ -492,16 +493,30 @@ class Importer(object):
                     u'Warning: {}'.format(text.format(*args, **kwargs))))
             self.stdout.write(self.color_style.ERROR(
                     u'{} Yes/No/Abort [{}]: '.format(prompt, default)), ending=u'')
-            inputed = raw_input() or default
+
+            if self.assume == u'yes':
+                inputed = u'Yes'
+                self.stdout.write(inputed)
+            elif self.assume == u'no':
+                inputed = u'No'
+                self.stdout.write(inputed)
+            elif self.assume == u'default':
+                inputed = default
+            else:
+                inputed = raw_input() or default
+
             if not inputed:
-                self.stdout.write(self.color_style.ERROR(u'Error: The value is required.'))
-                continue
-            if inputed.upper() not in [u'Y', u'YES', u'N', u'NO', u'A', u'ABORT']:
-                self.stdout.write(self.color_style.ERROR(u'Error: Enter Yes, No or Abort.'))
-                continue
-            if inputed.upper() in [u'A', u'ABORT']:
+                error = u'The value is required.'
+            elif inputed.upper() in [u'A', u'ABORT']:
                 raise CommandError(u'Aborted')
-            return inputed.upper()[0]
+            elif inputed.upper() not in [u'Y', u'YES', u'N', u'NO']:
+                error = u'Enter Yes, No or Abort.'
+            else:
+                return inputed.upper()[0]
+
+            if self.assume:
+                raise CommandError(error)
+            self.stdout.write(self.color_style.ERROR(u'Error: {}'.format(error)))
 
     @transaction.atomic
     def do_import(self, filename):
@@ -737,13 +752,17 @@ class Command(BaseCommand):
     help = u'Loads .xlsx file with obligees'
     args = u'file'
     option_list = BaseCommand.option_list + (
-        make_option(u'--dry-run', action=u'store_true', dest=u'dry_run', default=False,
+        make_option(u'--dry-run', action=u'store_true', default=False,
             help=squeeze(u"""
                 Just show if the file would be imported correctly. Rollback all changes at the end.
                 """)),
-        make_option(u'--reset', action=u'store_true', dest=u'reset', default=False,
+        make_option(u'--reset', action=u'store_true', default=False,
             help=squeeze(u"""
                 Discard current obligees before imporing the file.
+                """)),
+        make_option(u'--assume', choices=[u'yes', u'no', u'default'],
+            help=squeeze(u"""
+                Assume yes/no/default answer to all yes/no questions.
                 """)),
         )
 
