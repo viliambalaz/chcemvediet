@@ -6,7 +6,7 @@ from collections import Mapping, defaultdict
 from optparse import make_option
 from openpyxl import load_workbook
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management.color import color_style
 from django.db import transaction
@@ -14,7 +14,7 @@ from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import squeeze, slugify, ensure_tuple
-from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee
+from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee, ObligeeAlias
 from chcemvediet.apps.inforequests.models import Inforequest
 
 
@@ -36,28 +36,37 @@ class CellError(Exception):
 class Column(object):
     value_type = None
 
-    def _tuple(self, value):
-        if isinstance(value, (list, tuple)):
-            return value
-        return (value,)
-
-    def __init__(self, label, field=None, default=None, choices=None, unique=False,
-            validators=None, confirm_changed=None, confirm_unchanged_if_changed=None):
+    def __init__(self, label, field=None, default=None, null=False, blank=False, choices=None,
+            unique=False, validators=None, coercers=None, post_coerce_validators=None,
+            confirm_changed=None, confirm_unchanged_if_changed=None):
         self.label = label
         self.field = field
-        self.default = default
-        self.choices = choices
-        self.unique = unique
-        self.validators = validators
-        self.confirm_changed = confirm_changed
-        self.confirm_unchanged_if_changed = confirm_unchanged_if_changed
+        self.default = default # pre coerce
+        self.null = null # pre coerce
+        self.blank = blank # post coerce
+        self.choices = choices # pre coerce + coerce if it is mapping
+        self.unique = unique # post coerce
+        self.validators = validators # pre coerce
+        self.coercers = coercers # coerce
+        self.post_coerce_validators = post_coerce_validators # post coerce
+        self.confirm_changed = confirm_changed # post row
+        self.confirm_unchanged_if_changed = confirm_unchanged_if_changed # post row
 
     def validate_type(self, value):
         if self.value_type is None:
             return
+        if self.null and value is None:
+            return
         if not isinstance(value, self.value_type):
             raise CellError(u'type', u'Expecting {} but found {}',
                     self.value_type.__name__, value.__class__.__name__)
+
+    def validate_blank(self, value):
+        if self.blank:
+            return
+        if not value:
+            raise CellError(u'blank', u'Expecting nonempty value but found {}',
+                    self.value_repr(value))
 
     def validate_choices(self, value):
         if self.choices is None:
@@ -77,7 +86,7 @@ class Column(object):
                     self.value_repr(value), sheet._validate_unique_cache[self][value])
         sheet._validate_unique_cache[self][value] = row
 
-    def validate_validators(self, value):
+    def validate_pre_coerce_validators(self, value):
         if self.validators is None:
             return
         for validator in ensure_tuple(self.validators):
@@ -86,25 +95,53 @@ class Column(object):
             except ValidationError as e:
                 raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
 
-    def apply_choices(self, value):
-        if isinstance(self.choices, Mapping):
-            return self.choices[value]
-        else:
-            return value
+    def validate_post_coerce_validators(self, value):
+        if self.post_coerce_validators is None:
+            return
+        for validator in ensure_tuple(self.post_coerce_validators):
+            try:
+                validator(value)
+            except ValidationError as e:
+                raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
 
-    def do_import(self, sheet, row, value):
+    def apply_choices(self, value):
+        if not isinstance(self.choices, Mapping):
+            return value
+        return self.choices[value]
+
+    def apply_coercers(self, value):
+        if self.coercers is None:
+            return value
+        for coercer in ensure_tuple(self.coercers):
+            value = coercer(value)
+        return value
+
+    def do_pre_coerce_validation(self, sheet, row, value):
         self.validate_type(value)
         self.validate_choices(value)
-        self.validate_unique(sheet, row, value)
-        self.validate_validators(value)
+        self.validate_pre_coerce_validators(value)
+
+    def do_coerce(self, sheet, row, value):
         value = self.apply_choices(value)
+        value = self.apply_coercers(value)
+        return value
+
+    def do_post_ceorce_validation(self, sheet, row, value):
+        self.validate_blank(value)
+        self.validate_unique(sheet, row, value)
+        self.validate_post_coerce_validators(value)
+
+    def do_import(self, sheet, row, value):
+        self.do_pre_coerce_validation(sheet, row, value)
+        value = self.do_coerce(sheet, row, value)
+        self.do_post_ceorce_validation(sheet, row, value)
         return value
 
     def value_repr(self, value):
         if isinstance(value, basestring):
             return u'"{}"'.format(value)
         else:
-            return repr(value)
+            return unicode(repr(value), u'utf-8')
 
     def coerced_repr(self, value):
         return self.value_repr(value)
@@ -112,21 +149,14 @@ class Column(object):
 class TextColumn(Column):
     value_type = basestring
 
-    def __init__(self, label, nonempty=False, min_length=None, max_length=None, regex=None,
-            unique_slug=False, **kwargs):
-        super(TextColumn, self).__init__(label, **kwargs)
-        self.nonempty = nonempty
-        self.min_length = min_length
-        self.max_length = max_length
-        self.regex = regex
-        self.unique_slug = unique_slug
-
-    def validate_nonempty(self, value):
-        if not self.nonempty:
-            return
-        if not value:
-            raise CellError(u'nonempty', u'Expecting nonempty value but found {}',
-                    self.value_repr(value))
+    def __init__(self, label, min_length=None, max_length=None, regex=None, unique_slug=False,
+            **kwargs):
+        kwargs.setdefault(u'default', u'')
+        super(TextColumn, self).__init__(label, null=False, **kwargs)
+        self.min_length = min_length # pre coerce
+        self.max_length = max_length # pre coerce
+        self.regex = regex # pre coerce
+        self.unique_slug = unique_slug # pre coerce
 
     def validate_min_length(self, value):
         if self.min_length is None:
@@ -166,22 +196,20 @@ class TextColumn(Column):
         sheet._validate_unique_slug_cache[self][slug] = (row, value)
         return value
 
-    def do_import(self, sheet, row, value):
-        value = super(TextColumn, self).do_import(sheet, row, value)
-        self.validate_nonempty(value)
+    def do_pre_coerce_validation(self, sheet, row, value):
+        super(TextColumn, self).do_pre_coerce_validation(sheet, row, value)
         self.validate_min_length(value)
         self.validate_max_length(value)
         self.validate_regex(value)
         self.validate_unique_slug(sheet, row, value)
-        return value
 
 class NumericColumn(Column):
     value_type = Number
 
     def __init__(self, label, min_value=None, max_value=None, **kwargs):
         super(NumericColumn, self).__init__(label, **kwargs)
-        self.min_value = min_value
-        self.max_value = max_value
+        self.min_value = min_value # pre coerce
+        self.max_value = max_value # pre coerce
 
     def validate_min_value(self, value):
         if self.min_value is None:
@@ -199,11 +227,10 @@ class NumericColumn(Column):
                     u'Expecting value not bigger than {} but found {}',
                     self.max_value, self.value_repr(value))
 
-    def do_import(self, sheet, row, value):
-        value = super(NumericColumn, self).do_import(sheet, row, value)
+    def do_pre_coerce_validation(self, sheet, row, value):
+        super(NumericColumn, self).do_pre_coerce_validation(sheet, row, value)
         self.validate_min_value(value)
         self.validate_max_value(value)
-        return value
 
 class FloatColumn(NumericColumn):
     value_type = Real
@@ -222,21 +249,41 @@ class FieldChoicesColumn(Column):
     def coerced_repr(self, value):
         return self.field_choices._inverse[value]
 
+class ForeignKeyColumn(Column):
+    value_type = None
+
+    def __init__(self, label, to_model, to_field=u'pk', **kwargs):
+        super(ForeignKeyColumn, self).__init__(label, choices=None, **kwargs)
+        self.to_model = to_model
+        self.to_field = to_field
+
+    def apply_relation(self, sheet, value):
+        try:
+            obj = self.to_model.objects.get(**{self.to_field: value})
+        except self.to_model.DoesNotExist:
+            raise CellError(u'relation_not_found', u'There is no {} with {}="{}"',
+                    self.to_model.__name__, self.to_field, value)
+        except self.to_model.MultipleObjectsReturned:
+            raise CellError(u'relation_found_more', u'There are multiple {} with {}="{}"',
+                    self.to_model.__name__, self.to_field, value)
+        if obj in sheet.book.marked_for_deletion:
+            raise CellError(u'deleted', u'{} with {}="{}" was deleted',
+                    self.to_model.__name__, self.to_field, value)
+        return obj
+
+    def do_coerce(self, sheet, row, value):
+        value = super(ForeignKeyColumn, self).do_coerce(sheet, row, value)
+        value = self.apply_relation(sheet, value)
+        return value
+
 class ManyToManyColumn(Column):
     value_type = basestring
 
-    def __init__(self, label, to_model, to_field=u'pk', nonempty=None, **kwargs):
-        super(ManyToManyColumn, self).__init__(label, default=u'', choices=None, unique=None, **kwargs)
+    def __init__(self, label, to_model, to_field=u'pk', **kwargs):
+        super(ManyToManyColumn, self).__init__(label, default=u'', null=False, choices=None,
+                unique=False, **kwargs)
         self.to_model = to_model
         self.to_field = to_field
-        self.nonempty = nonempty
-
-    def validate_nonempty(self, value):
-        if not self.nonempty:
-            return
-        if not value:
-            raise CellError(u'nonempty', u'Expecting nonempty value but found {}',
-                    self.value_repr(value))
 
     def apply_relation(self, sheet, value):
         res = []
@@ -255,10 +302,9 @@ class ManyToManyColumn(Column):
             res.append(obj)
         return res
 
-    def do_import(self, sheet, row, value):
-        value = super(ManyToManyColumn, self).do_import(sheet, row, value)
+    def do_coerce(self, sheet, row, value):
+        value = super(ManyToManyColumn, self).do_coerce(sheet, row, value)
         value = self.apply_relation(sheet, value)
-        self.validate_nonempty(value)
         return value
 
 
@@ -283,13 +329,19 @@ class Sheet(object):
         if field in self.m2m:
             return list(getattr(obj, field).all())
         else:
-            return getattr(obj, field)
+            try:
+                return getattr(obj, field)
+            except ObjectDoesNotExist:
+                return None
 
     def obj_field_eq(self, obj, field, value):
         if field in self.m2m:
             return set(getattr(obj, field).all()) == set(value)
         else:
-            return getattr(obj, field) == value
+            try:
+                return getattr(obj, field) == value
+            except ObjectDoesNotExist:
+                return False
 
     def error(self, code, msg, *args, **kwargs):
         if code:
@@ -359,9 +411,8 @@ class Sheet(object):
             return
         if original and not self.obj_field_eq(original, column.field, value):
             inputed = self.importer.input_yes_no(
-                    u'{} {} in row {} changed {}:\n\t{} -> {}',
+                    u'{} in row {} changed {}:\n\t{} -> {}',
                     u'Is it correct?',
-                    self.model.__name__,
                     self.get_obj_repr(original),
                     row_idx+1,
                     column.field,
@@ -380,9 +431,8 @@ class Sheet(object):
                 other_value = values[other_column.label]
                 if not self.obj_field_eq(original, other_column.field, other_value):
                     inputed = self.importer.input_yes_no(
-                            u'{} {} in row {} changed {}:\n\t{} -> {}\nBut not {}:\n\t{}',
+                            u'{} in row {} changed {}:\n\t{} -> {}\nBut not {}:\n\t{}',
                             u'Is it correct?',
-                            self.model.__name__,
                             self.get_obj_repr(original),
                             row_idx+1,
                             other_column.field,
@@ -450,10 +500,10 @@ class Sheet(object):
                         was_changed = True
 
                 if was_changed and original:
-                    self.importer.write(2, u'Changed {}: {}', self.model.__name__, self.get_obj_repr(obj))
+                    self.importer.write(2, u'Changed {}', self.get_obj_repr(obj))
                     changed += 1
                 elif was_changed:
-                    self.importer.write(2, u'Created {}: {}', self.model.__name__, self.get_obj_repr(obj))
+                    self.importer.write(2, u'Created {}', self.get_obj_repr(obj))
                     created += 1
                 else:
                     unchanged += 1
@@ -470,15 +520,15 @@ class Sheet(object):
         for obj in originals.values():
             if self.delete_omitted:
                 inputed = self.importer.input_yes_no(
-                        u'{} {} was omitted.', u'Are you sure, you want to delete it?',
-                        self.model.__name__, self.get_obj_repr(obj), default=u'Y')
+                        u'{} was omitted.', u'Are you sure, you want to delete it?',
+                        self.get_obj_repr(obj), default=u'Y')
                 if inputed == u'Y':
                     self.book.marked_for_deletion.add(obj)
                     deleted += 1
                 else:
                     errors += 1
             else:
-                self.error(u'omitted', u'Omitted {}: {}', self.model.__name__, self.get_obj_repr(obj))
+                self.error(u'omitted', u'Omitted {}', self.get_obj_repr(obj))
                 errors += 1
 
         if errors:
@@ -491,7 +541,7 @@ class Sheet(object):
         return fields
 
     def get_obj_repr(self, obj):
-        return u'ID={}'.format(obj.pk)
+        return unicode(repr(obj), u'utf-8')
 
 class Book(object):
     sheets = None
@@ -638,7 +688,8 @@ class ObligeeTagSheet(Sheet):
     model = ObligeeTag
     delete_omitted = True
 
-    columns = Columns( # {{{
+    columns = Columns(
+            # {{{
             pk=IntegerColumn(u'ID', field=u'pk',
                 unique=True, min_value=1,
                 ),
@@ -647,19 +698,18 @@ class ObligeeTagSheet(Sheet):
                 confirm_changed=True,
                 ),
             name=TextColumn(u'Nazov', field=u'name',
-                unique_slug=True, nonempty=True, max_length=255,
+                unique_slug=True, max_length=255,
                 ),
-            ) # }}}
-
-    def get_obj_repr(self, obj):
-        return u'ID={} "{}"'.format(obj.pk, obj.key)
+            # }}}
+            )
 
 class ObligeeGroupSheet(Sheet):
     label = u'Hierarchia'
     model = ObligeeGroup
     delete_omitted = True
 
-    columns = Columns( # {{{
+    columns = Columns(
+            # {{{
             pk=IntegerColumn(u'ID', field=u'pk',
                 unique=True, min_value=1,
                 ),
@@ -668,51 +718,50 @@ class ObligeeGroupSheet(Sheet):
                 confirm_changed=True,
                 ),
             name=TextColumn(u'Nazov v hierarchii', field=u'name',
-                unique_slug=True, nonempty=True, max_length=255,
+                unique_slug=True, max_length=255,
                 ),
             description=TextColumn(u'Popis', field=u'description',
-                default=u'',
+                blank=True,
                 ),
-            ) # }}}
-
-    def get_obj_repr(self, obj):
-        return u'ID={} "{}"'.format(obj.pk, obj.key)
+            # }}}
+            )
 
 class ObligeeSheet(Sheet):
     label = u'Obligees'
     model = Obligee
     delete_omitted = False
 
-    columns = Columns( # {{{
+    columns = Columns(
+            # {{{
             pk=IntegerColumn(u'ID', field=u'pk',
                 unique=True, min_value=1,
                 ),
             official_name=TextColumn(u'Oficialny nazov', field=u'official_name',
-                nonempty=True,
+                max_length=255,
                 confirm_changed=True,
                 ),
             name=TextColumn(u'Rozlisovaci nazov nominativ', field=u'name',
-                unique_slug=True, nonempty=True,
+                unique_slug=True, max_length=255,
                 confirm_unchanged_if_changed=u'official_name',
                 ),
             name_genitive=TextColumn(u'Rozlisovaci nazov genitiv', field=u'name_genitive',
-                nonempty=True,
+                max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_dative=TextColumn(u'Rozlisovaci nazov dativ', field=u'name_dative',
-                nonempty=True,
+                max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_accusative=TextColumn(u'Rozlisovaci nazov akuzativ', field=u'name_accusative',
-                nonempty=True,
+                max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_locative=TextColumn(u'Rozlisovaci nazov lokal', field=u'name_locative',
-                nonempty=True,
+                max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
             name_instrumental=TextColumn(u'Rozlisovaci nazov instrumental', field=u'name_instrumental',
-                nonempty=True,
+                max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
             gender=FieldChoicesColumn(u'Rod', Obligee.GENDERS, field=u'gender',
@@ -724,23 +773,23 @@ class ObligeeSheet(Sheet):
                     },
                 ),
             ico=TextColumn(u'ICO', field=u'ico',
-                default=u'',
+                blank=True, max_length=32,
                 ),
             street=TextColumn(u'Adresa: Ulica s cislom', field=u'street',
-                nonempty=True,
+                max_length=255,
                 ),
             city=TextColumn(u'Adresa: Obec', field=u'city',
-                nonempty=True,
+                max_length=255,
                 ),
             zip=TextColumn(u'Adresa: PSC', field=u'zip',
-                regex=re.compile(r'^\d\d\d \d\d$'),
+                max_length=10, regex=re.compile(r'^\d\d\d \d\d$'),
                 ),
             iczsj=IntegerColumn(u'ICZSJ', # FIXME: foreign key
                 min_value=1,
                 ),
             emails=TextColumn(u'Adresa: Email', field=u'emails',
-                default=u'', validators=validate_comma_separated_emails,
-                # Override with dummy emails for local and dev server modes
+                blank=True, max_length=1024, validators=validate_comma_separated_emails,
+                # Overridden with dummy emails for local and dev server modes; See get_obj_fields()
                 ),
             latitude=FloatColumn(u'Lat', field=u'latitude',
                 min_value=-90.0, max_value=90.0,
@@ -749,10 +798,10 @@ class ObligeeSheet(Sheet):
                 min_value=-180.0, max_value=180.0,
                 ),
             tags=ManyToManyColumn(u'Tagy', ObligeeTag, field=u'tags',
-                to_field=u'key',
+                to_field=u'key', blank=True,
                 ),
             groups=ManyToManyColumn(u'Hierarchia', ObligeeGroup, field=u'groups',
-                to_field=u'key', nonempty=True,
+                to_field=u'key',
                 ),
             type=FieldChoicesColumn(u'Typ', Obligee.TYPES, field=u'type',
                 choices={
@@ -763,10 +812,10 @@ class ObligeeSheet(Sheet):
                     },
                 ),
             official_description=TextColumn(u'Oficialny popis', field=u'official_description',
-                default=u'',
+                blank=True,
                 ),
             simple_description=TextColumn(u'Zrozumitelny popis', field=u'simple_description',
-                default=u'',
+                blank=True,
                 ),
             status=FieldChoicesColumn(u'Stav', Obligee.STATUSES, field=u'status',
                 choices={
@@ -776,9 +825,10 @@ class ObligeeSheet(Sheet):
                 confirm_changed=True,
                 ),
             notes=TextColumn(u'Poznamka', field=u'notes',
-                default=u'',
+                blank=True,
                 ),
-            ) # }}}
+            # }}}
+            )
 
     def get_obj_fields(self, original, values, fields):
 
@@ -788,41 +838,35 @@ class ObligeeSheet(Sheet):
 
         return fields
 
-    def get_obj_repr(self, obj):
-        return u'ID={} "{}"'.format(obj.pk, obj.name)
-
 class ObligeeAliasSheet(Sheet):
     label = u'Aliasy'
-    model = None # FIXME
+    model = ObligeeAlias
     delete_omitted = True
 
-    columns = Columns( # {{{
-            pk=IntegerColumn(u'ID',
+    columns = Columns(
+            # {{{
+            pk=IntegerColumn(u'ID', field=u'pk',
                 unique=True, min_value=1,
                 ),
-            obligee_pk=IntegerColumn(u'ID institucie', # FIXME: foreign key
-                min_value=1,
+            obligee=ForeignKeyColumn(u'ID institucie', Obligee, field=u'obligee',
+                confirm_changed=True,
                 ),
             obligee_name=TextColumn(u'Rozlisovaci nazov institucie', # FIXME: overit vzhladom na ID institucie
-                nonempty=True,
                 ),
-            alias=TextColumn(u'Alternativny nazov',
-                unique_slug=True, nonempty=True,
+            name=TextColumn(u'Alternativny nazov', field=u'name',
+                unique_slug=True, max_length=255,
                 ),
-            description=TextColumn(u'Vysvetlenie',
-                default=u'',
+            description=TextColumn(u'Vysvetlenie', field=u'description',
+                blank=True,
                 ),
-            notes=TextColumn(u'Poznamka',
-                default=u'',
+            notes=TextColumn(u'Poznamka', field=u'notes',
+                blank=True,
                 ),
-            ) # }}}
-
-    def get_obj_fields(self, original, values, fields):
-        raise NotImplementedError
+            # }}}
+            )
 
 class ObligeeBook(Book):
-    #sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]
-    sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet]
+    sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]
 
     def do_import(self, filename):
 

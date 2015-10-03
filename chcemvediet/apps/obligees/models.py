@@ -17,7 +17,7 @@ class ObligeeTagQuerySet(QuerySet):
     def order_by_key(self):
         return self.order_by(u'key') # no tiebreaker, key is unique
     def order_by_name(self):
-        return self.order_by(u'name', u'pk')
+        return self.order_by(u'name') # no tiebreaker, name is unique
 
 class ObligeeTag(models.Model):
     # May NOT be empty
@@ -28,9 +28,9 @@ class ObligeeTag(models.Model):
                 """))
 
     # Should NOT be empty
-    name = models.CharField(max_length=255,
+    name = models.CharField(max_length=255, unique=True, db_index=True,
             help_text=squeeze(u"""
-                Human readable tag name.
+                Unique human readable tag name.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
@@ -45,8 +45,8 @@ class ObligeeTag(models.Model):
     class Meta:
         index_together = [
                 # [u'key'], -- defined on field
+                # [u'name'], -- defined on field
                 # [u'slug'], -- defined on field
-                [u'name', u'id'],
                 ]
 
     @decorate(prevent_bulk_create=True)
@@ -62,7 +62,7 @@ class ObligeeTag(models.Model):
         super(ObligeeTag, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.key)
 
 
 class ObligeeGroupQuerySet(QuerySet):
@@ -71,21 +71,21 @@ class ObligeeGroupQuerySet(QuerySet):
     def order_by_key(self):
         return self.order_by(u'key') # no tiebreaker, key is unique
     def order_by_name(self):
-        return self.order_by(u'name', u'pk')
+        return self.order_by(u'name') # no tiebreaker, name is unique
 
 class ObligeeGroup(models.Model):
     # May NOT be empty
     key = models.CharField(max_length=255, unique=True, db_index=True,
             help_text=squeeze(u"""
                 Unique key to identify the group. The key is a path of slash separated words each
-                of which represents a supergroup. Every word in the path should be a nonempty
+                of which represents a parent group. Every word in the path should be a nonempty
                 string and should only contain alphanumeric characters, underscores and hyphens.
                 """))
 
     # Should NOT be empty
-    name = models.CharField(max_length=255,
+    name = models.CharField(max_length=255, unique=True, db_index=True,
             help_text=squeeze(u"""
-                Human readable group name.
+                Unique human readable group name.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
@@ -106,8 +106,8 @@ class ObligeeGroup(models.Model):
     class Meta:
         index_together = [
                 # [u'key'], -- defined on field
+                # [u'name'], -- defined on field
                 # [u'slug'], -- defined on field
-                [u'name', u'id'],
                 ]
 
     @decorate(prevent_bulk_create=True)
@@ -123,7 +123,7 @@ class ObligeeGroup(models.Model):
         super(ObligeeGroup, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.key)
 
 
 class ObligeeQuerySet(QuerySet):
@@ -132,23 +132,20 @@ class ObligeeQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')
     def order_by_name(self):
-        return self.order_by(u'name', u'pk')
+        return self.order_by(u'name') # no tiebreaker, name is unique
 
 @register_history
 class Obligee(models.Model):
-    # FIXME: groups -- m2m relation
-    # FIXME: tags -- m2m relation
-    # FIXME: iczsj -- m2m relation -- import iczsj table
+    # FIXME: iczsj -- fk relation -- import iczsj table
 
     # Should NOT be empty
     official_name = models.CharField(max_length=255, help_text=u'Official obligee name.')
 
     # Should NOT be empty
-    name = models.CharField(max_length=255,
+    name = models.CharField(max_length=255, unique=True, db_index=True,
             help_text=squeeze(u"""
-                Human readable obligee name. If official obligee name is ambiguous, it should be
-                made more specific. There is no unique constrain on this field, because there is
-                one on the slug.
+                Unique human readable obligee name. If official obligee name is ambiguous, it
+                should be made more specific.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
@@ -241,8 +238,8 @@ class Obligee(models.Model):
         # production MySQL server and find a workaround for SQLite we use in development mode.
         # Alternatively, we can use some complex fulltext search engine like ElasticSearch.
         index_together = [
+                # [u'name'], -- defined on field
                 # [u'slug'], -- defined on field
-                [u'name', u'id'],
                 ]
 
     @staticmethod
@@ -271,4 +268,58 @@ class Obligee(models.Model):
         super(Obligee, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.name)
+
+
+class ObligeeAliasQuerySet(QuerySet):
+    def order_by_pk(self):
+        return self.order_by(u'pk')
+    def order_by_alias(self):
+        return self.order_by(u'name') # no tiebreaker, name is unique
+
+class ObligeeAlias(models.Model):
+    # May NOT be NULL
+    obligee = models.ForeignKey(Obligee, help_text=u'Obligee of which this is alias.')
+
+    # Should NOT be empty
+    name = models.CharField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique human readable obligee alias if the obligee has multiple common names.
+                """))
+
+    # Should NOT be empty; Read-only; Automaticly computed in save()
+    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+            help_text=squeeze(u"""
+                Unique slug to identify the obligee alias used in urls. Automaticly computed from
+                the obligee name. May not be changed manually.
+                """))
+
+    # May be empty
+    description = models.TextField(blank=True, help_text=u'Obligee alias description.')
+
+    # May be empty
+    notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
+
+    objects = ObligeeAliasQuerySet.as_manager()
+
+    class Meta:
+        verbose_name_plural = u'obligee aliases'
+        index_together = [
+                # [u'name'], -- defined on field
+                # [u'slug'], -- defined on field
+                ]
+
+    @decorate(prevent_bulk_create=True)
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get(u'update_fields', None)
+
+        # Generate and save slug if saving name
+        if update_fields is None or u'name' in update_fields:
+            self.slug = slugify(self.name)
+            if update_fields is not None:
+                update_fields.append(u'slug')
+
+        super(ObligeeAlias, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'[%s] %s' % (self.pk, self.name)

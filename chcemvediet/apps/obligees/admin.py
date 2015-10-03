@@ -5,7 +5,7 @@ from django.contrib import admin
 from poleno.utils.misc import decorate
 from poleno.utils.admin import admin_obj_format
 
-from .models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee
+from .models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee, ObligeeAlias
 
 @admin.register(ObligeeTag, site=admin.site)
 class ObligeeTagAdmin(admin.ModelAdmin):
@@ -74,9 +74,7 @@ class ObligeeAdmin(admin.ModelAdmin):
             u'=id',
             u'name',
             u'ico',
-            u'street',
             u'city',
-            u'zip',
             u'emails',
             u'tags__key',
             u'groups__key',
@@ -121,4 +119,34 @@ class HistoricalObligeeAdmin(admin.ModelAdmin):
             ]
     raw_id_fields = [
             u'history_user',
+            ]
+
+@admin.register(ObligeeAlias, site=admin.site)
+class ObligeeAliasAdmin(admin.ModelAdmin):
+    list_display = [
+            u'id',
+            decorate(
+                lambda o: admin_obj_format(o.obligee, u'{obj.name}'),
+                short_description=u'Obligee',
+                admin_order_field=u'obligee__name',
+                ),
+            u'name',
+            ]
+    list_filter = [
+            u'obligee__type',
+            u'obligee__status',
+            ]
+    search_fields = [
+            u'=id',
+            u'name',
+            u'obligee__name',
+            ]
+    ordering = [
+            u'id',
+            ]
+    readonly_fields = [
+            u'slug',
+            ]
+    raw_id_fields = [
+            u'obligee',
             ]
