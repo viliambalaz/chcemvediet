@@ -481,7 +481,7 @@ class Sheet(object):
                 original = originals.pop(values[self.columns.pk.label], None)
                 values = self.process_values(row_idx, values, original)
                 fields = {c.field: values[c.label] for c in self.columns.__dict__.values() if c.field}
-                fields = self.get_obj_fields(original, values, fields)
+                fields = self.get_obj_fields(original, values, fields, row_idx)
                 assert fields[u'pk'] == values[self.columns.pk.label]
 
                 # Save only if the instance is new or changed to prevent excessive change history.
@@ -537,7 +537,7 @@ class Sheet(object):
         self.importer.write(1, u'Imported model {}: {} created, {} changed, {} unchanged and {} deleted',
                 self.model.__name__, created, changed, unchanged, deleted)
 
-    def get_obj_fields(self, original, values, fields):
+    def get_obj_fields(self, original, values, fields, row_idx):
         return fields
 
     def get_obj_repr(self, obj):
@@ -830,7 +830,7 @@ class ObligeeSheet(Sheet):
             # }}}
             )
 
-    def get_obj_fields(self, original, values, fields):
+    def get_obj_fields(self, original, values, fields, row_idx):
 
         # Dummy emails for local and dev server modes
         if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
@@ -864,6 +864,19 @@ class ObligeeAliasSheet(Sheet):
                 ),
             # }}}
             )
+
+    def get_obj_fields(self, original, values, fields, row_idx):
+
+        # Check that obligee_name is obligee.name
+        column = self.columns.obligee_name
+        if values[column.label] != fields[u'obligee'].name:
+            self.error(u'obligee_name_mismatch',
+                    u'Invalid value in row {} of "{}.{}": Expecting {} but found {}',
+                    row_idx+1, self.label, column.label,
+                    column.coerced_repr(fields[u'obligee'].name),
+                    column.coerced_repr(values[column.label]))
+
+        return fields
 
 class ObligeeBook(Book):
     sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]

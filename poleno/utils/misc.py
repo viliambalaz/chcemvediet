@@ -98,8 +98,6 @@ def ensure_tuple(value):
         return value
     elif isinstance(value, list):
         return tuple(value)
-    elif value is None:
-        return ()
     else:
         return (value,)
 
