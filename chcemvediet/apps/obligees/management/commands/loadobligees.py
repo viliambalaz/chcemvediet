@@ -321,7 +321,6 @@ class Sheet(object):
     def __init__(self, book):
         self.book = book
         self.importer = book.importer
-        self.ws = book.wb[self.label]
         self.column_map = None
         self.m2m = {f.name for f, _ in self.model._meta.get_m2m_with_model()}
 
@@ -352,7 +351,7 @@ class Sheet(object):
         errors = 0
 
         self.column_map = {}
-        row = next(self.ws.rows, [])
+        row = next(self.book.wb[self.label].rows, [])
         for col_idx, column in enumerate(row):
             if column.value is not None and not column.value.startswith(u'#'):
                 self.column_map[column.value] = col_idx
@@ -463,6 +462,14 @@ class Sheet(object):
             raise RollingCommandError(errors)
         return res
 
+    def reset_model(self, model):
+        count = model.objects.count()
+        model.objects.all().delete()
+        self.importer.write(1, u'Reset {}: {} deleted', model.__name__, count)
+
+    def do_reset(self):
+        self.reset_model(self.model)
+
     def do_import(self):
         errors = 0
         self.importer.write(1, u'Importing {}...', self.model.__name__)
@@ -474,7 +481,7 @@ class Sheet(object):
 
         created, changed, unchanged, deleted = 0, 0, 0, 0
         originals = {o.pk: o for o in self.model.objects.all()}
-        for row_idx, row in enumerate(self.ws.rows):
+        for row_idx, row in enumerate(self.book.wb[self.label].rows):
             if row_idx == 0 or all(c.value is None for c in row):
                 continue
             try:
@@ -516,29 +523,31 @@ class Sheet(object):
         # delete anything if there were any import errors as we don't know which instances are
         # missing for real and which are missing because of parse errors. The instances will be
         # deleted only after all sheets are imported to prevent unintentional cascades.
-        if errors:
-            raise RollingCommandError(errors)
-        for obj in originals.values():
-            if self.delete_omitted:
-                inputed = self.importer.input_yes_no(
-                        u'{} was omitted.', u'Are you sure, you want to delete it?',
-                        self.get_obj_repr(obj), default=u'Y')
-                if inputed == u'Y':
-                    self.book.marked_for_deletion.add(obj)
-                    deleted += 1
+        if not errors:
+            for obj in originals.values():
+                if self.delete_omitted:
+                    inputed = self.importer.input_yes_no(
+                            u'{} was omitted.', u'Are you sure, you want to delete it?',
+                            self.get_obj_repr(obj), default=u'Y')
+                    if inputed == u'Y':
+                        self.book.marked_for_deletion.add(obj)
+                        deleted += 1
+                    else:
+                        errors += 1
                 else:
+                    self.error(u'omitted', u'Omitted {}', self.get_obj_repr(obj))
                     errors += 1
-            else:
-                self.error(u'omitted', u'Omitted {}', self.get_obj_repr(obj))
-                errors += 1
 
-        # Concluding checks after the sheet is imported
-        try:
-            self.concluding_checks()
-        except RollingCommandError as e:
-            errors += e.count
+        # Concluding checks after the sheet is imported. We skip concluding checks if there were
+        # any errors so far to make sure they will not get confused.
+        if not errors:
+            try:
+                self.concluding_checks()
+            except RollingCommandError as e:
+                errors += e.count
 
         if errors:
+            self.importer.write(1, u'Importing {} failed.', self.model.__name__)
             raise RollingCommandError(errors)
 
         self.importer.write(1, u'Imported {}: {} created, {} changed, {} unchanged and {} deleted',
@@ -562,11 +571,6 @@ class Book(object):
         self.actual_sheets = None
         self.marked_for_deletion = None
 
-    def reset_model(self, model):
-        count = model.objects.count()
-        model.objects.all().delete()
-        self.importer.write(1, u'Reset model {}: {} deleted', model.__name__, count)
-
     def validate_structure(self):
         errors = 0
 
@@ -587,6 +591,11 @@ class Book(object):
 
     def do_import(self, filename):
         errors = 0
+        sheets = [s(self) for s in self.sheets]
+
+        if self.importer.reset:
+            for sheet in reversed(sheets):
+                sheet.do_reset()
 
         try:
             self.wb = load_workbook(filename, read_only=True)
@@ -599,11 +608,11 @@ class Book(object):
             errors += e.count
 
         self.marked_for_deletion = set()
-        for sheet in self.sheets:
+        for sheet in sheets:
             if sheet.label not in self.actual_sheets:
                 continue
             try:
-                sheet(self).do_import()
+                sheet.do_import()
             except RollingCommandError as e:
                 errors += e.count
         for obj in self.marked_for_deletion:
@@ -863,6 +872,22 @@ class ObligeeSheet(Sheet):
             # }}}
             )
 
+    def do_reset(self):
+        count = Inforequest.objects.count()
+        if count:
+            inputed = self.importer.input_yes_no(squeeze(u"""
+                    Discarding current obligees will discard all existing inforequests as well.
+                    There are {} inforequests.
+                    """),
+                    u'Are you sure, you want to discard them?', count, default=u'N')
+            if inputed != u'Y':
+                raise CommandError(squeeze(u"""
+                        Existing inforequests prevented us from discarding current obligees.
+                        """))
+        self.reset_model(Obligee)
+        self.reset_model(HistoricalObligee)
+        self.reset_model(Inforequest)
+
     def get_obj_fields(self, original, values, fields, row_idx):
 
         # Dummy emails for local and dev server modes
@@ -918,27 +943,6 @@ class ObligeeAliasSheet(Sheet):
 
 class ObligeeBook(Book):
     sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]
-
-    def do_import(self, filename):
-
-        # Reset obligees if requested
-        if self.importer.reset:
-            count = Inforequest.objects.count()
-            if count:
-                inputed = self.importer.input_yes_no(squeeze(u"""
-                        Discarding current obligees will discard all existing inforequests as well.
-                        There are {} inforequests.
-                        """),
-                        u'Are you sure, you want to discard them?', count, default=u'N')
-                if inputed != u'Y':
-                    raise CommandError(squeeze(u"""
-                            Existing inforequests prevented us from discarding current obligees.
-                            """))
-            self.reset_model(Obligee)
-            self.reset_model(HistoricalObligee)
-            self.reset_model(Inforequest)
-
-        super(ObligeeBook, self).do_import(filename)
 
 
 class Command(BaseCommand):
