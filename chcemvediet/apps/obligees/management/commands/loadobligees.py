@@ -465,6 +465,7 @@ class Sheet(object):
 
     def do_import(self):
         errors = 0
+        self.importer.write(1, u'Importing {}...', self.model.__name__)
 
         try:
             self.validate_structure()
@@ -531,10 +532,16 @@ class Sheet(object):
                 self.error(u'omitted', u'Omitted {}', self.get_obj_repr(obj))
                 errors += 1
 
+        # Concluding checks after the sheet is imported
+        try:
+            self.concluding_checks()
+        except RollingCommandError as e:
+            errors += e.count
+
         if errors:
             raise RollingCommandError(errors)
 
-        self.importer.write(1, u'Imported model {}: {} created, {} changed, {} unchanged and {} deleted',
+        self.importer.write(1, u'Imported {}: {} created, {} changed, {} unchanged and {} deleted',
                 self.model.__name__, created, changed, unchanged, deleted)
 
     def get_obj_fields(self, original, values, fields, row_idx):
@@ -542,6 +549,9 @@ class Sheet(object):
 
     def get_obj_repr(self, obj):
         return unicode(repr(obj), u'utf-8')
+
+    def concluding_checks(self):
+        pass
 
 class Book(object):
     sheets = None
@@ -716,6 +726,7 @@ class ObligeeGroupSheet(Sheet):
             key=TextColumn(u'Kod', field=u'key',
                 unique=True, max_length=255, regex=re.compile(r'^[\w-]+(/[\w-]+)*$'),
                 confirm_changed=True,
+                # Checked that every subgroup has its parent group; See concluding_checks()
                 ),
             name=TextColumn(u'Nazov v hierarchii', field=u'name',
                 unique_slug=True, max_length=255,
@@ -725,6 +736,28 @@ class ObligeeGroupSheet(Sheet):
                 ),
             # }}}
             )
+
+    def concluding_checks(self):
+        errors = 0
+
+        # Check that every subgroup has its parent group
+        groups = {}
+        for group in ObligeeGroup.objects.all():
+            if group in self.book.marked_for_deletion:
+                continue
+            groups[group.key] = group
+        for key in groups:
+            if u'/' not in key:
+                continue
+            parent_key = key.rsplit(u'/', 1)[0]
+            if parent_key not in groups:
+                self.error(u'no_parent_group',
+                        u'{} has no parent group. Group "{}" not found.',
+                        self.get_obj_repr(groups[key]), parent_key)
+                errors += 1
+
+        if errors:
+            raise RollingCommandError(errors)
 
 class ObligeeSheet(Sheet):
     label = u'Obligees'
@@ -851,7 +884,8 @@ class ObligeeAliasSheet(Sheet):
             obligee=ForeignKeyColumn(u'ID institucie', Obligee, field=u'obligee',
                 confirm_changed=True,
                 ),
-            obligee_name=TextColumn(u'Rozlisovaci nazov institucie', # FIXME: overit vzhladom na ID institucie
+            obligee_name=TextColumn(u'Rozlisovaci nazov institucie',
+                # Checked that obligee_name is obligee.name; See get_obj_fields()
                 ),
             name=TextColumn(u'Alternativny nazov', field=u'name',
                 unique_slug=True, max_length=255,
@@ -866,6 +900,7 @@ class ObligeeAliasSheet(Sheet):
             )
 
     def get_obj_fields(self, original, values, fields, row_idx):
+        errors = 0
 
         # Check that obligee_name is obligee.name
         column = self.columns.obligee_name
@@ -875,7 +910,10 @@ class ObligeeAliasSheet(Sheet):
                     row_idx+1, self.label, column.label,
                     column.coerced_repr(fields[u'obligee'].name),
                     column.coerced_repr(values[column.label]))
+            errors += 1
 
+        if errors:
+            raise RollingCommandError(errors)
         return fields
 
 class ObligeeBook(Book):
