@@ -23,6 +23,8 @@ LANGUAGES = (
     )
 
 INSTALLED_APPS = (
+    # Project core app
+    u'chcemvediet',
     # For django itself:
     u'django.contrib.auth',
     u'django.contrib.contenttypes',
@@ -86,10 +88,6 @@ TEMPLATE_LOADERS = (
     (u'poleno.utils.template.TranslationLoader', u'poleno.utils.template.AppLoader'),
     )
 
-TEMPLATE_DIRS = (
-    os.path.join(PROJECT_PATH, u'chcemvediet/templates'),
-    )
-
 TEMPLATE_CONTEXT_PROCESSORS = (
     u'django.contrib.auth.context_processors.auth',
     u'django.core.context_processors.debug',
@@ -123,10 +121,6 @@ CRON_CLASSES = (
     u'chcemvediet.apps.inforequests.cron.add_expirations',
     u'chcemvediet.cron.clear_expired_sessions',
     u'chcemvediet.cron.send_admin_error_logs',
-    )
-
-LOCALE_PATHS = (
-    os.path.join(PROJECT_PATH, u'chcemvediet/locale'),
     )
 
 # FIXME: We should probably not use filebased cache on production environment
