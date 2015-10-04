@@ -127,7 +127,6 @@ CRON_CLASSES = (
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_PATH, u'chcemvediet/locale'),
-    os.path.join(PROJECT_PATH, u'chcemvediet/locale/3part/allauth'),
     )
 
 # FIXME: We should probably not use filebased cache on production environment
