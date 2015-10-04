@@ -121,4 +121,3 @@ class SignupFormTest(AccountsTestCaseMixin, TestCase):
         data = self._create_account_signup_data(zip=u'wrong')
         response = self.client.post(reverse(u'account_signup'), data, follow=True)
         self.assertFormError(response, u'form', u'zip', 'Enter a valid value.')
-

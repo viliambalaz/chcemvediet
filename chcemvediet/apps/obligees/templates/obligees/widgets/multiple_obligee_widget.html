@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 <div {% for k, v in widget_attrs.items %}{{ k }}="{{ v }}" {% endfor %}>
   <div class="obligee_widget_inputs">
     {% for input_attrs, obligee in inputs %}
@@ -19,7 +20,9 @@
     {% endfor %}
   </div>
   <div class="obligee_widget_skel">
-    {% include "obligees/widgets/obligee_widget_input.html" with input_attrs=skel_attrs obligee=None allow_delete=True %}
+    {% with input_attrs=skel_attrs obligee=None allow_delete=True %}
+      {% include "obligees/widgets/obligee_widget_input.html" %}
+    {% endwith %}
   </div>
   <div class="obligee_widget_buttons">
     <button class="btn obligee_widget_add">

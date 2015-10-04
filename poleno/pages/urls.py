@@ -4,6 +4,7 @@ from django.conf.urls import patterns, url
 
 from . import views
 
+
 urlparams = dict(
         lang=r'(?P<lang>\w+)',
         path=r'(?P<path>(?:|[a-z0-9/-]*/))',

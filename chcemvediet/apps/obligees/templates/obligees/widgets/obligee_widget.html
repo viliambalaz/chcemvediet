@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 <div {% for k, v in widget_attrs.items %}{{ k }}="{{ v }}" {% endfor %}>
   <div class="obligee_widget_inputs">
     {% include "obligees/widgets/obligee_widget_input.html" %}

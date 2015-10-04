@@ -6,6 +6,7 @@ from django.dispatch import receiver
 
 from .models import Profile
 
+
 @receiver(post_save, sender=User)
 def create_profile_on_user_post_save(sender, **kwargs):
     user = kwargs[u'instance']

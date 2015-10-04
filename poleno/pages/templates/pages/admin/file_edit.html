@@ -13,6 +13,7 @@
  %
 {% endcomment %}
 
+
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
   &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}
@@ -29,10 +30,20 @@
     {% csrf_token %}
     {% include "pages/admin/snippets/form.html" with form=form %}
     <div class="submit-row">
-      <button type="submit" class="button default" name="button" value="save" style="margin-left: 5px;">Save</button>
-      <button type="submit" class="button" name="button" value="save-and-continue">Save and continue editing</button>
+      <button type="submit" class="button default" name="button" value="save"
+              style="margin-left: 5px;">
+        Save
+      </button>
+      <button type="submit" class="button" name="button" value="save-and-continue">
+        Save and continue editing
+      </button>
       {% if not create %}
-        <p class="deletelink-box"><a class="deletelink" href="{% url "admin:pages_file_delete" lang page.lpath file.name %}">Delete</a></p>
+        <p class="deletelink-box">
+          <a class="deletelink"
+             href="{% url "admin:pages_file_delete" lang page.lpath file.name %}">
+            Delete
+          </a>
+        </p>
       {% endif %}
     </div>
   </form>

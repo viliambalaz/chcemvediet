@@ -11,6 +11,7 @@
  %
 {% endcomment %}
 
+
 {% block extrahead %}{{ block.super }}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script> {# {{{ #}
@@ -52,9 +53,14 @@
 {% endblock %}
 
 {% block content %}
-  <p>Real time: <span class="timewarp" data-timestamp="{{ timewarp.real_time|stringformat:"f" }}"></span></p>
+  <p>Real time:
+    <span class="timewarp" data-timestamp="{{ timewarp.real_time|stringformat:"f" }}"></span>
+  </p>
   {% if timewarp.is_warped %}
-    <p>Warped time: <span class="timewarp" data-timestamp="{{ timewarp.warped_time|stringformat:"f" }}" data-speedup="{{ timewarp.speedup|stringformat:"f" }}"></span></p>
+    <p>Warped time:
+      <span class="timewarp" data-timestamp="{{ timewarp.warped_time|stringformat:"f" }}"
+            data-speedup="{{ timewarp.speedup|stringformat:"f" }}"></span>
+    </p>
     <p>Speedup: {{ timewarp.speedup }}x</p>
   {% else %}
     <p>Warped time: &mdash;</p>
@@ -77,8 +83,13 @@
       {% endfor %}
     </fieldset>
     <div class="submit-row">
-      <button type="submit" class="button default" name="button" value="jump" style="margin-left: 5px;">Jump</button>
-      <button type="submit" class="button" name="button" value="reset">Reset</button>
+      <button type="submit" class="button default" name="button" value="jump"
+              style="margin-left: 5px;">
+        Jump
+      </button>
+      <button type="submit" class="button" name="button" value="reset">
+        Reset
+      </button>
     </div>
   </form>
 {% endblock %}

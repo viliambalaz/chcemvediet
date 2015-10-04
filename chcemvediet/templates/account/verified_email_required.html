@@ -9,7 +9,10 @@
  %
 {% endcomment %}
 
-{% block title %}{% trans 'account:verified_email_required:title' %} | {{ block.super }}{% endblock %}
+
+{% block title %}
+  {% trans 'account:verified_email_required:title' %} | {{ block.super }}
+{% endblock %}
 
 {% block content %}
   <h1>{% trans 'account:verified_email_required:heading' %}</h1>

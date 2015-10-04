@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 {% if action.deadline.is_deadline_missed %}
   Vaša lehota uplynula

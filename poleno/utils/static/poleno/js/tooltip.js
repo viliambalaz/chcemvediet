@@ -17,6 +17,8 @@ $(function(){
 			}
 		});
 	};
-	$(document).on('dom-changed', function(event){ tooltip(event.target); }); // Triggered by: poleno/js/ajax.js
+	$(document).on('dom-changed', function(event){ // Triggered by: poleno/js/ajax.js
+		tooltip(event.target);
+	});
 	tooltip(document);
 });

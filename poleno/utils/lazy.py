@@ -3,6 +3,7 @@
 from django.utils.encoding import force_text
 from django.utils.functional import lazy
 
+
 def lazy_decorator(*resultclasses):
     def actual_decorator(func):
         return lazy(func, *resultclasses)

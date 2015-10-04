@@ -4,10 +4,16 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.core.management.color import color_style
 
+from poleno.utils.misc import squeeze
+
 from ... import datacheck
 
+
 class Command(BaseCommand):
-    help = u'Runs all registered data checks and report any issues found. Use prefixes to filter checks by name.'
+    help = squeeze(u"""
+            Runs all registered data checks and report any issues found. Use prefixes to filter
+            checks by name.
+            """)
     args = u'[prefix] ...'
     option_list = BaseCommand.option_list + (
         make_option(u'--list', action=u'store_true', dest=u'list', default=False,
@@ -44,13 +50,18 @@ class Command(BaseCommand):
             output.append(u'Running all registered data checks.')
             output.append(u'')
 
-        issues = registry.run_checks(superficial=options[u'superficial'], autofix=options[u'autofix'])
+        issues = registry.run_checks(
+                superficial=options[u'superficial'], autofix=options[u'autofix'])
         autofixable = len([s for s in issues if s.autofixable])
         if autofixable:
             if options[u'autofix']:
-                output.append(u'Data checks identified %s issues, %s of them were autofixed.' % (len(issues), autofixable))
+                output.append(squeeze(u"""
+                    Data checks identified %s issues, %s of them were autofixed.
+                    """) % (len(issues), autofixable))
             else:
-                output.append(u'Data checks identified %s issues, %s of them can be autofixed (use --autofix).' % (len(issues), autofixable))
+                output.append(squeeze(u"""
+                    Data checks identified %s issues, %s of them can be autofixed (use --autofix).
+                    """) % (len(issues), autofixable))
         else:
             output.append(u'Data checks identified %s issues.' % len(issues))
 

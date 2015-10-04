@@ -71,7 +71,8 @@ $(function(){
  *     ``fail-target``: Selector of modal element to show if the request fails.
  *
  * Example:
- *     <button class="ajax ajax-modal-once" action="..." target="#done" fail-target="#fail">...</button>
+ *     <button class="ajax ajax-modal-once" action="..." target="#done"
+ *             fail-target="#fail">...</button>
  *     <div id="done" class="modal hide fade">This will be replaced with response data</div>
  *     <div id="fail" class="modal hide fade">Ajax failed.</div>
  */

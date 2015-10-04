@@ -16,6 +16,7 @@ from poleno.utils.views import secure_required
 
 from .signals import webhook_event
 
+
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @csrf_exempt
 @secure_required(raise_exception=True)
@@ -50,7 +51,8 @@ def webhook(request):
         post_string_encoded = u''.join(post_parts).encode('ascii','ignore')
         for webhook_key in webhook_keys:
             webhook_key_encoded = webhook_key.encode('ascii','ignore')
-            hash_string = b64encode(hmac.new(key=webhook_key_encoded, msg=post_string_encoded, digestmod=hashlib.sha1).digest())
+            hash_string = b64encode(hmac.new(key=webhook_key_encoded, msg=post_string_encoded,
+                    digestmod=hashlib.sha1).digest())
             if signature == hash_string:
                 break
         else:

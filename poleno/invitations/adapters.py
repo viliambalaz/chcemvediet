@@ -8,6 +8,7 @@ from poleno.utils.models import after_saved
 from . import app_settings
 from .models import Invitation
 
+
 class InvitationsAdapter(DefaultAccountAdapter):
 
     def _get_invitation(self, request):

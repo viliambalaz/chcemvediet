@@ -10,6 +10,7 @@
  %
 {% endcomment %}
 
+
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
   &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}
@@ -17,13 +18,20 @@
 {% endblock %}
 
 {% block content %}
-  <p>Are you sure you want to delete the page "{{ page.path }}"? All of the following subpages will be deleted as well:</p>
+  <p>
+    Are you sure you want to delete the page "{{ page.path }}"? All of the following subpages will
+    be deleted as well:
+  </p>
   <ul>
     {% for subpage in page.walk %}
       <li>
         {% spaceless %}
           <a href="{% url "admin:pages_edit" lang subpage.lpath %}">{{ subpage.path }}</a>
-          <span>{% if subpage.is_redirect %} → {{ subpage.redirect_path }}{% else %}: {{ subpage.title }}{% endif %}</span>
+          {% if subpage.is_redirect %}
+            <span> → {{ subpage.redirect_path }}</span>
+          {% else %}
+            <span>: {{ subpage.title }}</span>
+          {% endif %}
         {% endspaceless %}
       </li>
     {% endfor %}

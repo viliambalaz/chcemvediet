@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from .misc import Bunch
 
+
 class _Receiver(object):
     def __init__(self, model, func):
         self.sender = model.__class__

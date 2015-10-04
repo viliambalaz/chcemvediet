@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Odošle žiadosť inštitúcii.

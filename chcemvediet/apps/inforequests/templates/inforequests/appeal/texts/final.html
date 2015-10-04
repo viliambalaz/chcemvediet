@@ -12,23 +12,23 @@
  %
 {% endcomment %}
 
-<p>Vykonajte test tlače a dokončite odvolanie. </p>
+
+<p>Vykonajte test tlače a dokončite odvolanie.</p>
 
 {% if is_deadline_missed_at_today %}
   <div class="alert alert-block">
     <h4>Zmeškaný termin</h4>
     <p>
-    Termin na podanie odvolania vypršal pred {{ calendar_days_behind_at_today }}
-    kalendárnymi dnami.
+      Termin na podanie odvolania vypršal pred {{ calendar_days_behind_at_today }} kalendárnymi
+      dnami.
     </p>
   </div>
 {% elif is_deadline_missed_at_legal_date %}
   <div class="alert alert-block">
     <h4>Dátum po termíne</h4>
     <p>
-    Zadaný dátum odvolania {{ wizard.values.legal_date }} je
-    {{ calendar_days_behind_at_legal_date }} kalendárnych dni po termíne na podanie
-    odvolania.
+      Zadaný dátum odvolania {{ wizard.values.legal_date }} je
+      {{ calendar_days_behind_at_legal_date }} kalendárnych dni po termíne na podanie odvolania.
     </p>
   </div>
 {% endif %}

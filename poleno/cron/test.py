@@ -5,6 +5,7 @@ import contextlib
 
 from django.conf import settings
 
+
 @contextlib.contextmanager
 def mock_cron_jobs():
     u"""

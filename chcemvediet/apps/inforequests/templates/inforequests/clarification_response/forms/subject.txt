@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Doplnenie žiadosti o informacie.

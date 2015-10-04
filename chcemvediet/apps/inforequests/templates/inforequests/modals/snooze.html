@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 <form class="form-horizontal ajax" method="post"
       action="{% url 'inforequests:snooze' action=action %}">
   {% csrf_token %}

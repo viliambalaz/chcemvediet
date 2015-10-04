@@ -3,6 +3,7 @@
 {% load external_js from poleno.utils %}
 {% load javascript from pipeline %}
 
+
 {% block extrahead %}{{ block.super }}
   {% external_js %}
   {% javascript 'main' %}

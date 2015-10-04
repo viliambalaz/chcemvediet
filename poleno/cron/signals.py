@@ -6,6 +6,7 @@ from django_cron import CronJobLog
 
 from . import cron_logger
 
+
 @receiver(post_save, sender=CronJobLog)
 def log_to_logger_on_cronjoblog_post_save(sender, instance, **kwargs):
     u"""

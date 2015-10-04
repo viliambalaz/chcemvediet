@@ -8,6 +8,7 @@ from django.test import TestCase
 
 from poleno.utils.views import reverse
 
+
 @contextlib.contextmanager
 def override_signals(*signals):
     u"""

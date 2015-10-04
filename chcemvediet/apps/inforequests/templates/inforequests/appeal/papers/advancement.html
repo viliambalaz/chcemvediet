@@ -15,6 +15,7 @@
  %
 {% endcomment %}
 
+
 {% paragraph before=2 %}
   Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi povinná osoba doručila oznámenie
   {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif%}
@@ -39,14 +40,14 @@
   informáciami pri svojej činnosti pracuje, resp. ak sú predmetom jej činnosti. Dostatočným dôvodom
   na odmietnutie poskytnutia informácií nebude skutočnosť, že požadovanú informáciu má k dispozícii
   len organizačná zložka (súčasť) povinnej osoby alebo len odkaz na to, že táto nie je podľa
-  vnútorných predpisov povinná požadované informácie uschovávať.“ </em>
+  vnútorných predpisov povinná požadované informácie uschovávať.“</em>
 {% endparagraph %}
 {% paragraph editable=True %}
   {% paper_field step.reason %}
 {% endparagraph %}
 {% paragraph %}
   Podľa uvedeného mám teda dôvod sa domnievať, že povinná osoba uvedenú informáciu má alebo mala
-  k dispozícii a teda moju žiadosť nemala postupovať. 
+  k dispozícii a teda moju žiadosť nemala postupovať.
 {% endparagraph %}
 {% paragraph %}
   V zmysle uvedeneho rozsudku aj list povinnej osoby je potrebné považovať za rozhodnutie, ak jeho

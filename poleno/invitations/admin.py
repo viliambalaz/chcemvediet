@@ -7,6 +7,7 @@ from poleno.utils.admin import simple_list_filter_factory, admin_obj_format
 
 from .models import Invitation, InvitationSupply
 
+
 @admin.register(Invitation, site=admin.site)
 class InvitationAdmin(admin.ModelAdmin):
     date_hierarchy = u'created'
@@ -21,12 +22,14 @@ class InvitationAdmin(admin.ModelAdmin):
                 short_description=u'State',
                 ),
             decorate(
-                lambda o: admin_obj_format(o.invitor, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.invitor,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'Invitor',
                 admin_order_field=u'invitor__email',
                 ),
             decorate(
-                lambda o: admin_obj_format(o.invitee, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.invitee,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'Invitee',
                 admin_order_field=u'invitee__email',
                 ),
@@ -53,10 +56,16 @@ class InvitationAdmin(admin.ModelAdmin):
             u'-created',
             u'-id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'invitor',
             u'invitee',
             u'message',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):
@@ -67,10 +76,12 @@ class InvitationAdmin(admin.ModelAdmin):
 
 @admin.register(InvitationSupply, site=admin.site)
 class InvitationSupplyAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
-                lambda o: admin_obj_format(o.user, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.user,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'User',
                 admin_order_field=u'user__email',
                 ),
@@ -91,8 +102,14 @@ class InvitationSupplyAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'user',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):

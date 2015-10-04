@@ -13,6 +13,7 @@ from poleno.utils.misc import cached_method
 
 from .models import Obligee
 
+
 class ObligeeWidget(forms.Widget):
 
     def __init__(self, *args, **kwargs):

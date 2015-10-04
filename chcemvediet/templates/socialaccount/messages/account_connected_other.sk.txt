@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Účet sociálnej siete je už prepojený s iným užívateľom.

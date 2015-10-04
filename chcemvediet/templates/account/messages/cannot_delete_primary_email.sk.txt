@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Primárnu e-mailovú adresu ({{ email }}) nie je možné odobrať.

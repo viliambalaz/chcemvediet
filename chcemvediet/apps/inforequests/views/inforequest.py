@@ -13,6 +13,7 @@ from poleno.utils.forms import clean_button
 from chcemvediet.apps.inforequests.forms import InforequestForm
 from chcemvediet.apps.inforequests.models import InforequestDraft, Inforequest, Branch
 
+
 @require_http_methods([u'HEAD', u'GET'])
 @login_required
 def inforequest_index(request):
@@ -21,7 +22,9 @@ def inforequest_index(request):
             .owned_by(request.user)
             .order_by_submission_date()
             .select_undecided_emails_count()
-            .prefetch_related(Inforequest.prefetch_main_branch(None, Branch.objects.select_related(u'historicalobligee')))
+            .prefetch_related(
+                Inforequest.prefetch_main_branch(None,
+                    Branch.objects.select_related(u'historicalobligee')))
             )
     drafts = (InforequestDraft.objects
             .owned_by(request.user)
@@ -32,7 +35,9 @@ def inforequest_index(request):
             .closed()
             .owned_by(request.user)
             .order_by_submission_date()
-            .prefetch_related(Inforequest.prefetch_main_branch(None, Branch.objects.select_related(u'historicalobligee')))
+            .prefetch_related(
+                Inforequest.prefetch_main_branch(None,
+                    Branch.objects.select_related(u'historicalobligee')))
             )
 
     return render(request, u'inforequests/index/index.html', {
@@ -46,7 +51,8 @@ def inforequest_index(request):
 @verified_email_required
 def inforequest_create(request, draft_pk=None):
     template = u'inforequests/create/create.html'
-    draft = InforequestDraft.objects.owned_by(request.user).get_or_404(pk=draft_pk) if draft_pk else None
+    draft = (InforequestDraft.objects.owned_by(request.user)
+                .get_or_404(pk=draft_pk) if draft_pk else None)
     session = Session.objects.get(session_key=request.session.session_key)
     attached_to = (session, draft) if draft else (session,)
 
@@ -84,10 +90,12 @@ def inforequest_create(request, draft_pk=None):
 @require_http_methods([u'HEAD', u'GET'])
 @login_required
 def inforequest_detail(request, inforequest_slug, inforequest_pk):
-    inforequest = Inforequest.objects.owned_by(request.user).prefetch_detail().get_or_404(pk=inforequest_pk)
+    inforequest = (Inforequest.objects.owned_by(request.user).prefetch_detail()
+                    .get_or_404(pk=inforequest_pk))
 
     if inforequest_slug != inforequest.slug:
-        return HttpResponseRedirect(reverse(u'inforequests:detail', kwargs=dict(inforequest=inforequest)))
+        return HttpResponseRedirect(
+                reverse(u'inforequests:detail', kwargs=dict(inforequest=inforequest)))
 
     return render(request, u'inforequests/detail/detail.html', {
             u'inforequest': inforequest,

@@ -10,6 +10,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 {% filter squeeze %}
   {% if action.branch.can_add_clarification_response  %}

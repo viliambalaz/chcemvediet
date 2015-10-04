@@ -7,5 +7,6 @@
  %
 {% endcomment %}
 
-Email bol odmietnutý z dôvodu, že bola uvedená zlá adresa prijímateľa. To znamená, že emailová adresa inštitúcie nie je správna.
 
+Email bol odmietnutý z dôvodu, že bola uvedená zlá adresa prijímateľa. To znamená, že emailová
+adresa inštitúcie nie je správna.

@@ -9,6 +9,7 @@ from poleno.utils.models import QuerySet, join_lookup, after_saved
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze, decorate
 
+
 class BranchQuerySet(QuerySet):
     def main(self):
         return self.filter(advanced_by__isnull=True)
@@ -18,7 +19,7 @@ class BranchQuerySet(QuerySet):
         return self.order_by(u'pk')
 
 class Branch(models.Model):
-    # May NOT be NULL; Index is prefix of [inforequest, advanced_by] index, see index_together
+    # May NOT be NULL; Index is prefix of [inforequest, advanced_by] index
     inforequest = models.ForeignKey(u'Inforequest', db_index=False)
 
     # May NOT be NULL
@@ -27,12 +28,15 @@ class Branch(models.Model):
 
     # May NOT be NULL; Automaticly frozen in save() when creating a new object
     historicalobligee = models.ForeignKey(u'obligees.HistoricalObligee',
-            help_text=u'Frozen Obligee at the time the Inforequest was submitted or advanced to it.')
+            help_text=squeeze(u"""
+                Frozen Obligee at the time the Inforequest was submitted or advanced to it.
+                """))
 
     # Advancement action that advanced the inforequest to this obligee; None if it's inforequest
     # main branch. Inforequest must contain exactly one branch with ``advanced_by`` set to None;
-    # Index is prefix of [advanced_by, inforequest] index, see index_together
-    advanced_by = models.ForeignKey(u'Action', related_name=u'advanced_to_set', blank=True, null=True, db_index=False,
+    # Index is prefix of [advanced_by, inforequest] index
+    advanced_by = models.ForeignKey(u'Action', related_name=u'advanced_to_set',
+            blank=True, null=True, db_index=False,
             help_text=squeeze(u"""
                 NULL for main branches. The advancement action the inforequest was advanced by for
                 advanced branches. Every Inforequest must contain exactly one main branch.
@@ -47,7 +51,7 @@ class Branch(models.Model):
     # Backward relations added to other models:
     #
     #  -- Inforequest.branch_set
-    #     Should NOT be empty
+    #     May NOT be empty
     #
     #  -- Obligee.branch_set
     #     May be empty
@@ -58,6 +62,12 @@ class Branch(models.Model):
     #  -- Action.advanced_to_set
     #     May be empty
 
+    # Indexes:
+    #  -- inforequest, advanced_by: index_together
+    #  -- advanced_by, inforequest: index_together
+    #  -- obligee: ForeignKey
+    #  -- historicalobligee: ForeignKey
+
     objects = BranchQuerySet.as_manager()
 
     class Meta:
@@ -65,8 +75,6 @@ class Branch(models.Model):
         index_together = [
                 [u'inforequest', u'advanced_by'],
                 [u'advanced_by', u'inforequest'],
-                # [u'obligee'] -- ForeignKey defines index by default
-                # [u'historicalobligee'] -- ForeignKey defines index by default
                 ]
 
     @cached_property
@@ -318,7 +326,12 @@ class Branch(models.Model):
     def add_expiration_if_expired(self):
         if not self.last_action.has_obligee_deadline_missed:
             return
-        action_type = Action.TYPES.APPEAL_EXPIRATION if self.last_action.type == Action.TYPES.APPEAL else Action.TYPES.EXPIRATION
+
+        if self.last_action.type == Action.TYPES.APPEAL:
+            action_type = Action.TYPES.APPEAL_EXPIRATION
+        else:
+            action_type = Action.TYPES.EXPIRATION
+
         expiration = Action.create(
                 branch=self,
                 type=action_type,

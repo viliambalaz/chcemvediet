@@ -23,4 +23,3 @@ class ObligeesTestCaseMixin(TestCase):
 
     def _render(self, template, **context):
         return Template(template).render(Context(context))
-

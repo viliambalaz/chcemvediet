@@ -14,6 +14,7 @@ from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards import Step, Wizard
 from chcemvediet.apps.inforequests.models import Action
 
+
 class Main(Step):
     template = u'inforequests/clarification_response/main.html'
     text_template = u'inforequests/clarification_response/texts/main.html'
@@ -29,7 +30,8 @@ class Main(Step):
                 context=self.context(),
                 fields=[
                     forms.CharField(widget=forms.Textarea(attrs={
-                        u'placeholder': _(u'inforequests:clarification_response:Main:content:placeholder'),
+                        u'placeholder':
+                            _(u'inforequests:clarification_response:Main:content:placeholder'),
                         u'class': u'autosize',
                         u'cols': u'', u'rows': u'',
                         })),
@@ -46,17 +48,20 @@ class Main(Step):
                     self.wizard.draft,
                     Session.objects.get(session_key=self.wizard.request.session.session_key),
                     ),
-                upload_url_func=(lambda: reverse(u'inforequests:upload_attachment')),
-                download_url_func=(lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
+                upload_url_func=(
+                    lambda: reverse(u'inforequests:upload_attachment')),
+                download_url_func=(
+                    lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
                 )
 
     def clean(self):
         cleaned_data = super(Main, self).clean()
 
         if self.wizard.branch.inforequest.has_undecided_emails:
-            msg = squeeze(render_to_string(u'inforequests/clarification_response/messages/undecided_emails.txt', {
-                    u'inforequest': self.wizard.branch.inforequest,
-                    }))
+            msg = squeeze(render_to_string(
+                    u'inforequests/clarification_response/messages/undecided_emails.txt', {
+                        u'inforequest': self.wizard.branch.inforequest,
+                        }))
             self.add_error(None, msg)
 
         return cleaned_data
@@ -75,7 +80,8 @@ class Main(Step):
 
         if self.is_valid():
             res.globals.update({
-                u'subject': squeeze(render_to_string(u'inforequests/clarification_response/forms/subject.txt')),
+                u'subject': squeeze(render_to_string(
+                    u'inforequests/clarification_response/forms/subject.txt')),
                 u'content': self.fields[u'content'].finalize(self.cleaned_data[u'content']),
                 })
 

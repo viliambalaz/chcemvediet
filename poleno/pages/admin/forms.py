@@ -12,10 +12,11 @@ from django.utils.formats import date_format
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from poleno.utils.urls import reverse
-from poleno.utils.misc import Bunch, norm_new_lines
+from poleno.utils.misc import Bunch, norm_new_lines, squeeze
 from poleno.utils.translation import translation
 
 from .. import pages
+
 
 class FormSaveError(RuntimeError):
     pass
@@ -39,7 +40,8 @@ class LivePath(FakeField):
 
     def __init__(self, lang, field):
         super(LivePath, self).__init__(u'    • Details', format_html(
-            u'<span class="live-path" data-field="{field}" data-value="{value}" data-url="{url}">{content}</span>',
+            u'<span class="live-path" data-field="{field}" data-value="{value}" data-url="{url}">'+
+                u'{content}</span>',
             field=field.auto_id,
             url=reverse(u'admin:pages_live_path', args=[lang]),
             value=field.value(),
@@ -77,10 +79,15 @@ class PreviewFileInput(forms.FileInput):
 
         if isinstance(value, pages.File):
             if value.content_type.startswith(u'image/'):
-                preview = format_html(u'<a href="{0}"><img src="{0}?{1}" alt="{2}" style="max-width: 500px;"></a>', value.url, value.mtime, value)
+                preview = format_html(u"""
+                        <a href="{0}">
+                          <img src="{0}?{1}" alt="{2}" style="max-width: 500px;">
+                        </a>
+                        """, value.url, value.mtime, value)
             else:
                 preview = format_html(u'Current file: <a href="{0}">{1}</a>', value.url, value)
-            return format_html(u'<div style="margin-left: 106px;">{1}<br>Change: {0}</div>', change, preview)
+            return format_html(u'<div style="margin-left: 106px;">{1}<br>Change: {0}</div>',
+                    change, preview)
         return change
 
 
@@ -120,7 +127,10 @@ class PageEditForm(forms.Form):
             self.fields[u'parent'] = forms.CharField(
                 label=u'URL Path',
                 validators=[
-                    RegexValidator(pages.path_regex, u'Enter a valid path. It must be an absolute path with respect to the root page starting and ending with a slash.'),
+                    RegexValidator(pages.path_regex, squeeze(u"""
+                        Enter a valid path. It must be an absolute path with respect to the root
+                        page starting and ending with a slash.
+                        """)),
                     ],
                 widget=forms.TextInput(attrs={
                     u'class': u'popup-path',
@@ -139,7 +149,8 @@ class PageEditForm(forms.Form):
             self.fields[u'name'] = forms.CharField(
                 label=u'URL Name',
                 validators=[
-                    RegexValidator(pages.slug_regex, u'Enter a valid slug. Only letters, numbers and dashes are allowed.'),
+                    RegexValidator(pages.slug_regex,
+                        u'Enter a valid slug. Only letters, numbers and dashes are allowed.'),
                     ],
                 )
             if not create:
@@ -184,7 +195,10 @@ class PageEditForm(forms.Form):
                         label=u'Translation %s' % lang.upper(),
                         required=False,
                         validators=[
-                            RegexValidator(pages.path_regex, u'Enter a valid path. It must be an absolute path with respect to the root page starting and ending with a slash.'),
+                            RegexValidator(pages.path_regex, squeeze(u"""
+                                Enter a valid path. It must be an absolute path with respect to the
+                                root page starting and ending with a slash.
+                                """)),
                             ],
                         widget=forms.TextInput(attrs={
                             u'class': u'popup-path',
@@ -202,7 +216,10 @@ class PageEditForm(forms.Form):
             self.fields[u'redirect'] = forms.CharField(
                 label=u'Redirect',
                 validators=[
-                    RegexValidator(pages.path_regex, u'Enter a valid path. It must be an absolute path with respect to the root page starting and ending with a slash.'),
+                    RegexValidator(pages.path_regex, squeeze(u"""
+                        Enter a valid path. It must be an absolute path with respect to the root
+                        page starting and ending with a slash.
+                        """)),
                     ],
                 widget=forms.TextInput(attrs={
                     u'class': u'popup-path',
@@ -348,7 +365,9 @@ class FileEditForm(forms.Form):
         self.fields[u'name'] = forms.CharField(
             label=u'File Name',
             validators=[
-                RegexValidator(pages.file_regex, u'Enter a valid file name. Only letters, numbers, dashes and dots are allowed.'),
+                RegexValidator(pages.file_regex, squeeze(u"""
+                    Enter a valid file name. Only letters, numbers, dashes and dots are allowed.
+                    """)),
                 ],
             )
         if not create:

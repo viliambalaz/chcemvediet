@@ -17,6 +17,7 @@ from chcemvediet.apps.obligees.forms import MultipleObligeeWidget, MultipleOblig
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
 
+
 class ObligeeActionStep(Step):
     template = u'inforequests/obligee_action/wizard.html'
     form_template = u'main/snippets/form_horizontal.html'
@@ -49,7 +50,8 @@ class NotCategorized(ObligeeActionStep):
                 label=_(u'inforequests:obligee_action:NotCategorized:help_request:label'),
                 required=False,
                 widget=forms.Textarea(attrs={
-                    u'placeholder': _(u'inforequests:obligee_action:NotCategorized:help_request:placeholder'),
+                    u'placeholder':
+                        _(u'inforequests:obligee_action:NotCategorized:help_request:placeholder'),
                     u'class': u'input-block-level visible-if-wants-help',
                     }),
                 )
@@ -85,10 +87,13 @@ class Categorized(ObligeeActionStep):
 
         self.fields[u'legal_date'] = forms.DateField(
                 label=_(u'inforequests:obligee_action:Categorized:legal_date:label'),
-                help_text=render_to_string(u'inforequests/obligee_action/texts/categorized_legal_date_help.txt', self.context()),
+                help_text=render_to_string(
+                    u'inforequests/obligee_action/texts/categorized_legal_date_help.txt',
+                    self.context()),
                 localize=True,
                 widget=forms.DateInput(attrs={
-                    u'placeholder': _('inforequests:obligee_action:Categorized:legal_date:placeholder'),
+                    u'placeholder':
+                        _('inforequests:obligee_action:Categorized:legal_date:placeholder'),
                     u'class': u'datepicker',
                     }),
                 )
@@ -98,21 +103,31 @@ class Categorized(ObligeeActionStep):
                 max_length=255,
                 required=False,
                 widget=forms.TextInput(attrs={
-                    u'placeholder': _(u'inforequests:obligee_action:Categorized:file_number:placeholder'),
+                    u'placeholder':
+                        _(u'inforequests:obligee_action:Categorized:file_number:placeholder'),
                     u'class': u'span5',
                     }),
                 )
 
         branch = self.wizard.values[u'branch']
         if branch.last_action.delivered_date is None and branch.last_action.type in [
-                Action.TYPES.REQUEST, Action.TYPES.CLARIFICATION_RESPONSE, Action.TYPES.APPEAL, Action.TYPES.ADVANCED_REQUEST]:
+                Action.TYPES.REQUEST,
+                Action.TYPES.CLARIFICATION_RESPONSE,
+                Action.TYPES.APPEAL,
+                Action.TYPES.ADVANCED_REQUEST,
+                ]:
             self.fields[u'last_action_dd'] = forms.DateField(
-                    label=render_to_string(u'inforequests/obligee_action/texts/categorized_last_action_dd_label.txt', self.context()),
-                    help_text=render_to_string(u'inforequests/obligee_action/texts/categorized_last_action_dd_help.txt', self.context()),
+                    label=render_to_string(
+                        u'inforequests/obligee_action/texts/categorized_last_action_dd_label.txt',
+                        self.context()),
+                    help_text=render_to_string(
+                        u'inforequests/obligee_action/texts/categorized_last_action_dd_help.txt',
+                        self.context()),
                     localize=True,
                     required=False,
                     widget=forms.DateInput(attrs={
-                        u'placeholder': _('inforequests:obligee_action:Categorized:last_action_dd:placeholder'),
+                        u'placeholder':
+                            _('inforequests:obligee_action:Categorized:last_action_dd:placeholder'),
                         u'class': u'datepicker',
                         }),
                     )
@@ -128,24 +143,31 @@ class Categorized(ObligeeActionStep):
         if legal_date is not None:
             try:
                 if legal_date > delivered_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:legal_date:error:newer_than_delivered_date'))
+                    msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:newer_than_delivered_date')
+                    raise ValidationError(msg)
                 if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_previous'))
+                    msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_previous')
+                    raise ValidationError(msg)
                 if legal_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:legal_date:error:from_future'))
+                    msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:from_future')
+                    raise ValidationError(msg)
                 if legal_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_month'))
+                    msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_month')
+                    raise ValidationError(msg)
             except ValidationError as e:
                 self.add_error(u'legal_date', e)
 
         if last_action_dd is not None:
             try:
                 if legal_date and last_action_dd > legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:last_action_dd:error:newer_than_legal_date'))
+                    msg = _(u'inforequests:obligee_action:Categorized:last_action_dd:error:newer_than_legal_date')
+                    raise ValidationError(msg)
                 if last_action_dd < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:last_action_dd:error:older_than_last_action_legal_date'))
+                    msg = _(u'inforequests:obligee_action:Categorized:last_action_dd:error:older_than_last_action_legal_date')
+                    raise ValidationError(msg)
                 if last_action_dd > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:Categorized:last_action_dd:error:from_future'))
+                    msg = _(u'inforequests:obligee_action:Categorized:last_action_dd:error:from_future')
+                    raise ValidationError(msg)
                 pass
             except ValidationError as e:
                 self.add_error(u'last_action_dd', e)
@@ -165,7 +187,8 @@ class InvalidReversion(ObligeeActionStep):
         self.fields[u'help_request'] = forms.CharField(
                 label=_(u'inforequests:obligee_action:InvalidReversion:help_request:label'),
                 widget=forms.Textarea(attrs={
-                    u'placeholder': _(u'inforequests:obligee_action:InvalidReversion:help_request:placeholder'),
+                    u'placeholder':
+                        _(u'inforequests:obligee_action:InvalidReversion:help_request:placeholder'),
                     u'class': u'input-block-level',
                     }),
                 )
@@ -285,9 +308,12 @@ class ContainsAppealInfo(ObligeeActionStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (Action.DISCLOSURE_LEVELS.FULL, _(u'inforequests:obligee_action:ContainsAppealInfo:full')),
-                    (Action.DISCLOSURE_LEVELS.PARTIAL, _(u'inforequests:obligee_action:ContainsAppealInfo:partial')),
-                    (Action.DISCLOSURE_LEVELS.NONE, _(u'inforequests:obligee_action:ContainsAppealInfo:none')),
+                    (Action.DISCLOSURE_LEVELS.FULL,
+                        _(u'inforequests:obligee_action:ContainsAppealInfo:full')),
+                    (Action.DISCLOSURE_LEVELS.PARTIAL,
+                        _(u'inforequests:obligee_action:ContainsAppealInfo:partial')),
+                    (Action.DISCLOSURE_LEVELS.NONE,
+                        _(u'inforequests:obligee_action:ContainsAppealInfo:none')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -385,7 +411,8 @@ class IsItExtension(ObligeeActionStep):
                 max_value=15,
                 required=False,
                 widget=forms.NumberInput(attrs={
-                    u'placeholder': _(u'inforequests:obligee_action:IsItExtension:extension:placeholder'),
+                    u'placeholder':
+                        _(u'inforequests:obligee_action:IsItExtension:extension:placeholder'),
                     u'class': u'visible-if-extension',
                     }),
                 )
@@ -457,7 +484,8 @@ class IsItAdvancement(ObligeeActionStep):
                 required=False,
                 widget=MultipleObligeeWidget(input_attrs={
                     u'class': u'span5 visible-if-advancement',
-                    u'placeholder': _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
+                    u'placeholder':
+                        _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
                     }),
                 )
 
@@ -473,9 +501,11 @@ class IsItAdvancement(ObligeeActionStep):
                     raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
                 for obligee in advanced_to:
                     if obligee == branch.obligee:
-                        raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee'))
+                        msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
+                        raise ValidationError(msg)
                 if len(advanced_to) != len(set(advanced_to)):
-                    raise ValidationError(_(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee'))
+                    msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
+                    raise ValidationError(msg)
             except ValidationError as e:
                 self.add_error(u'advanced_to', e)
 
@@ -566,9 +596,12 @@ class ContainsInfo(ObligeeActionStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (Action.DISCLOSURE_LEVELS.FULL, _(u'inforequests:obligee_action:ContainsInfo:full')),
-                    (Action.DISCLOSURE_LEVELS.PARTIAL, _(u'inforequests:obligee_action:ContainsInfo:partial')),
-                    (Action.DISCLOSURE_LEVELS.NONE, _(u'inforequests:obligee_action:ContainsInfo:none')),
+                    (Action.DISCLOSURE_LEVELS.FULL,
+                        _(u'inforequests:obligee_action:ContainsInfo:full')),
+                    (Action.DISCLOSURE_LEVELS.PARTIAL,
+                        _(u'inforequests:obligee_action:ContainsInfo:partial')),
+                    (Action.DISCLOSURE_LEVELS.NONE,
+                        _(u'inforequests:obligee_action:ContainsInfo:none')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -734,15 +767,18 @@ class InputBasics(ObligeeActionStep):
                 label=_(u'inforequests:obligee_action:InputBasics:delivered_date:label'),
                 localize=True,
                 widget=forms.DateInput(attrs={
-                    u'placeholder': _('inforequests:obligee_action:InputBasics:delivered_date:placeholder'),
+                    u'placeholder':
+                        _('inforequests:obligee_action:InputBasics:delivered_date:placeholder'),
                     u'class': u'datepicker',
                     }),
                 )
 
         self.fields[u'attachments'] = AttachmentsField(
                 label=_(u'inforequests:obligee_action:InputBasics:attachments:label'),
-                upload_url_func=(lambda: reverse(u'inforequests:upload_attachment')),
-                download_url_func=(lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
+                upload_url_func=(
+                    lambda: reverse(u'inforequests:upload_attachment')),
+                download_url_func=(
+                    lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
                 attached_to=(
                     self.wizard.draft,
                     Session.objects.get(session_key=self.wizard.request.session.session_key),
@@ -757,11 +793,14 @@ class InputBasics(ObligeeActionStep):
         if delivered_date is not None:
             try:
                 if delivered_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_previous'))
+                    msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_previous')
+                    raise ValidationError(msg)
                 if delivered_date > local_today():
-                    raise ValidationError(_(u'inforequests:obligee_action:InputBasics:delivered_date:error:from_future'))
+                    msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:from_future')
+                    raise ValidationError(msg)
                 if delivered_date < local_today() - relativedelta(months=1):
-                    raise ValidationError(_(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month'))
+                    msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month')
+                    raise ValidationError(msg)
             except ValidationError as e:
                 self.add_error(u'delivered_date', e)
 

@@ -7,6 +7,12 @@
  %
 {% endcomment %}
 
-<p>Prosím, potvrďte, že adresa <a href="mailto:{{ confirmation.email_address.email }}">{{ confirmation.email_address.email }}</a>
-je e-mail pre užívateľa {{ confirmation.email_address.user.get_full_name }}.</p>
-<p>Na túto adresu budú zasielané všetky notifikácie.</p>
+
+<p>
+  Prosím, potvrďte, že adresa
+  <a href="mailto:{{ confirmation.email_address.email }}">{{ confirmation.email_address.email }}</a>
+  je e-mail pre užívateľa {{ confirmation.email_address.user.get_full_name }}.
+</p>
+<p>
+  Na túto adresu budú zasielané všetky notifikácie.
+</p>

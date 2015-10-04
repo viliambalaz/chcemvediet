@@ -23,7 +23,8 @@ def devtools_mock_response(request, inforequest_pk):
     inforequest = Inforequest.objects.owned_by(request.user).get_or_404(pk=inforequest_pk)
     outbound = inforequest.email_set.outbound().order_by_processed().last()
     sender = outbound.recipient_set.first() if outbound else None
-    address = (sender.name, sender.mail) if sender else inforequest.main_branch.obligee.emails_parsed[0]
+    address = ((sender.name, sender.mail) if sender
+            else inforequest.main_branch.obligee.emails_parsed[0])
     subject = u'Re: ' + outbound.subject if outbound else u'Mock Response'
     content = request.POST.get(u'content', None) or u'Mock Response'
 
@@ -43,7 +44,8 @@ def devtools_mock_response(request, inforequest_pk):
             status=Recipient.STATUSES.INBOUND,
             )
 
-    messages.success(request, u'Mock obligee response queued. It will be processed in a minute or two.')
+    messages.success(request,
+            u'Mock obligee response queued. It will be processed in a minute or two.')
     return HttpResponseRedirect(inforequest.get_absolute_url())
 
 @require_http_methods([u'POST'])

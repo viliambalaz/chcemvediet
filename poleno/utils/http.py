@@ -7,6 +7,7 @@ from django.http import HttpResponseNotModified, FileResponse, JsonResponse
 from django.views.static import was_modified_since
 from django.utils.http import http_date, urlquote
 
+
 def send_file_response(request, path, name, content_type, attachment=True):
     # Based on: django.views.static.serve
 
@@ -20,7 +21,8 @@ def send_file_response(request, path, name, content_type, attachment=True):
     statobj = os.stat(path)
     if not stat.S_ISREG(statobj.st_mode):
         raise OSError(u'Not a regular file: %s' % path)
-    if not was_modified_since(request.META.get(u'HTTP_IF_MODIFIED_SINCE'), statobj.st_mtime, statobj.st_size):
+    http_header = request.META.get(u'HTTP_IF_MODIFIED_SINCE')
+    if not was_modified_since(http_header, statobj.st_mtime, statobj.st_size):
         return HttpResponseNotModified()
     response = FileResponse(open(path, u'rb'), content_type=content_type)
     response[u'Last-Modified'] = http_date(statobj.st_mtime)

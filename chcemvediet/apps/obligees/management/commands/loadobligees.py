@@ -14,7 +14,8 @@ from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import squeeze, slugify, ensure_tuple
-from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee, ObligeeAlias
+from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup
+from chcemvediet.apps.obligees.models import Obligee, HistoricalObligee, ObligeeAlias
 from chcemvediet.apps.inforequests.models import Inforequest
 
 
@@ -488,7 +489,8 @@ class Sheet(object):
                 values = self.process_row(row_idx, row)
                 original = originals.pop(values[self.columns.pk.label], None)
                 values = self.process_values(row_idx, values, original)
-                fields = {c.field: values[c.label] for c in self.columns.__dict__.values() if c.field}
+                fields = {c.field: values[c.label]
+                        for c in self.columns.__dict__.values() if c.field}
                 fields = self.get_obj_fields(original, values, fields, row_idx)
                 assert fields[u'pk'] == values[self.columns.pk.label]
 
@@ -802,7 +804,8 @@ class ObligeeSheet(Sheet):
                 max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),
-            name_instrumental=TextColumn(u'Rozlisovaci nazov instrumental', field=u'name_instrumental',
+            name_instrumental=TextColumn(u'Rozlisovaci nazov instrumental',
+                field=u'name_instrumental',
                 max_length=255,
                 confirm_unchanged_if_changed=u'name',
                 ),

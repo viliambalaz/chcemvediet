@@ -23,6 +23,8 @@ $(function(){
 			}
 		});
 	};
-	$(document).on('dom-changed', function(event){ attach(event.target); }); // Triggered by: poleno/js/ajax.js
+	$(document).on('dom-changed', function(event){ // Triggered by: poleno/js/ajax.js
+		attach(event.target);
+	});
 	attach(document);
 });

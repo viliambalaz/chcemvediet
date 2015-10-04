@@ -32,6 +32,17 @@ class Region(models.Model): # "Kraj"
                 region name. May not be changed manually.
                 """))
 
+    # Backward relations:
+    #
+    #  -- district_set: by District.region
+    #     May be empty
+    #
+    #  -- municipality_set: by Municipality.region
+    #     May be empty
+    #
+    #  -- neighbourhood_set: by Neighbourhood.region
+    #     May be empty
+
     # Indexes:
     #  -- id:   primary_key
     #  -- name: unique
@@ -83,6 +94,19 @@ class District(models.Model): # "Okres"
 
     # May NOT be NULL
     region = models.ForeignKey(Region, help_text=u'Region the district belongs to.')
+
+    # Backward relations:
+    #
+    #  -- municipality_set: by Municipality.district
+    #     May be empty
+    #
+    #  -- neighbourhood_set: by Neighbourhood.district
+    #     May be empty
+
+    # Backward relations added to other models:
+    #
+    #  -- Region.district_set
+    #     May be empty
 
     # Indexes:
     #  -- id:     primary_key
@@ -139,6 +163,19 @@ class Municipality(models.Model): # "Obec"
     district = models.ForeignKey(District, help_text=u'District the municipality belongs to.')
     region = models.ForeignKey(Region, help_text=u'Region the municipality belongs to.')
 
+    # Backward relations:
+    #
+    #  -- neighbourhood_set: by Neighbourhood.municipality
+    #     May be empty
+
+    # Backward relations added to other models:
+    #
+    #  -- District.municipality_set
+    #     May be empty
+    #
+    #  -- Region.municipality_set
+    #     May be empty
+
     # Indexes:
     #  -- id:       primary_key
     #  -- name:     unique
@@ -193,9 +230,23 @@ class Neighbourhood(models.Model): # "Základná sídelná jednotka"
                 """))
 
     # May NOT be NULL
-    municipality = models.ForeignKey(Municipality, help_text=u'Municipality the neighbourhood belongs to.')
-    district = models.ForeignKey(District, help_text=u'District the neighbourhood belongs to.')
-    region = models.ForeignKey(Region, help_text=u'Region the neighbourhood belongs to.')
+    municipality = models.ForeignKey(Municipality,
+            help_text=u'Municipality the neighbourhood belongs to.')
+    district = models.ForeignKey(District,
+            help_text=u'District the neighbourhood belongs to.')
+    region = models.ForeignKey(Region,
+            help_text=u'Region the neighbourhood belongs to.')
+
+    # Backward relations added to other models:
+    #
+    #  -- Municipality.neighbourhood_set
+    #     May be empty
+    #
+    #  -- District.neighbourhood_set
+    #     May be empty
+    #
+    #  -- Region.neighbourhood_set
+    #     May be empty
 
     # Indexes:
     #  -- id:                 primary_key

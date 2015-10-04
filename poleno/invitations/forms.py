@@ -8,6 +8,7 @@ from poleno.utils.forms import ValidatorChain
 
 from .validators import validate_unused_emails
 
+
 class InviteForm(forms.Form):
     email = forms.CharField(
             label=_(u'invitations:InviteForm:email:label'),

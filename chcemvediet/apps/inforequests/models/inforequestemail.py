@@ -9,6 +9,7 @@ from poleno.mail.models import Message
 from poleno.utils.models import FieldChoices, QuerySet
 from poleno.utils.misc import squeeze
 
+
 class InforequestEmailQuerySet(QuerySet):
     def undecided(self):
         return self.filter(type=InforequestEmail.TYPES.UNDECIDED)
@@ -23,7 +24,7 @@ class InforequestEmailQuerySet(QuerySet):
 
 class InforequestEmail(models.Model):
     # May NOT be NULL; m2m ends; Indexes are prefixes of [inforequest, email] and
-    # [email, inforequest] indexes, respectively, see index_together
+    # [email, inforequest] indexes, respectively
     inforequest = models.ForeignKey(u'Inforequest', db_index=False)
     email = models.ForeignKey(u'mail.Message', db_index=False)
 
@@ -52,8 +53,15 @@ class InforequestEmail(models.Model):
     # Backward relations added to other models:
     #
     #  -- Inforequest.inforequestemail_set
+    #     May be empty
     #
     #  -- Message.inforequestemail_set
+    #     May be empty
+
+    # Indexes:
+    #  -- email, inforequest: index_together
+    #  -- inforequest, email: index_together
+    #  -- type, inforequest:  index_together
 
     objects = InforequestEmailQuerySet.as_manager()
 

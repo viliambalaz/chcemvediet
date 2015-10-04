@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import available_attrs
 
+
 def require_ajax(view):
     u"""
     Decorator to make a view only accept AJAX requests
@@ -39,7 +40,8 @@ def login_required(view=None, **kwargs):
 
         @login_required(raise_exception=True)
         def view(request, ...):
-            # We can assume now that the user is logged in. If he was not, he has got PermissionDenied.
+            # We can assume now that the user is logged in. If he was not, he has got
+            # PermissionDenied.
     """
     raise_exception = kwargs.pop(u'raise_exception', False)
     def check(user):

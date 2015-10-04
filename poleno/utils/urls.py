@@ -5,6 +5,7 @@ from collections import defaultdict
 from django.core.urlresolvers import get_urlconf, get_resolver, reverse as django_reverse
 from django.contrib.sites.models import Site
 
+
 reverse_adaptors = defaultdict(list)
 
 def reverse_adaptor(viewname, argname):

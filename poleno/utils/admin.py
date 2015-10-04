@@ -6,6 +6,7 @@ from django.contrib import admin
 
 from poleno.utils.urls import reverse
 
+
 def simple_list_filter_factory(filter_title, filter_parameter_name, filters):
     class SimpleListFilter(admin.SimpleListFilter):
         title = filter_title

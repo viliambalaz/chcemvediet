@@ -12,6 +12,7 @@ from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards import Step, SectionStep, DeadendStep, PaperStep, PrintStep
 from chcemvediet.apps.wizards.forms import PaperDateField
 
+
 class AppealStep(Step):
     template = u'inforequests/appeal/wizard.html'
 
@@ -42,10 +43,14 @@ class AppealFinalStep(AppealStep, PrintStep):
         legal_date = self.wizard.values[u'legal_date']
         if last_action.has_applicant_deadline:
             res.update({
-                    u'is_deadline_missed_at_today': last_action.deadline.is_deadline_missed,
-                    u'calendar_days_behind_at_today': last_action.deadline.calendar_days_behind,
-                    u'is_deadline_missed_at_legal_date': last_action.deadline.is_deadline_missed_at(legal_date),
-                    u'calendar_days_behind_at_legal_date': last_action.deadline.calendar_days_behind_at(legal_date),
+                    u'is_deadline_missed_at_today':
+                        last_action.deadline.is_deadline_missed,
+                    u'calendar_days_behind_at_today':
+                        last_action.deadline.calendar_days_behind,
+                    u'is_deadline_missed_at_legal_date':
+                        last_action.deadline.is_deadline_missed_at(legal_date),
+                    u'calendar_days_behind_at_legal_date':
+                        last_action.deadline.calendar_days_behind_at(legal_date),
                     })
 
         return res
@@ -78,11 +83,14 @@ class AppealPaperStep(AppealStep, PaperStep):
         if legal_date is not None:
             try:
                 if legal_date < branch.last_action.legal_date:
-                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:older_than_last_action'))
+                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:older_than_last_action')
+                    raise ValidationError(msg)
                 if legal_date < local_today():
-                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:from_past'))
+                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:from_past')
+                    raise ValidationError(msg)
                 if legal_date > local_today() + relativedelta(days=5):
-                    raise ValidationError(_(u'inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future'))
+                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future')
+                    raise ValidationError(msg)
             except ValidationError as e:
                 self.add_error(u'legal_date', e)
 

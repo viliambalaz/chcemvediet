@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}{% trans 'accounts:profile:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
@@ -30,9 +31,14 @@
     <p class="span10">{{ user.profile.zip }}</p>
   </div>
   <p>
-    <a class="btn" href="{% url 'account_change_password' %}">{% trans 'accounts:profile:change_password' %}</a>
-    <a class="btn" href="{% url 'account_email' %}">{% trans 'accounts:profile:manage_emails' %}</a>
-    <a class="btn" href="{% url 'socialaccount_connections' %}">{% trans 'accounts:profile:manage_connections' %}</a>
+    <a class="btn" href="{% url 'account_change_password' %}">
+      {% trans 'accounts:profile:change_password' %}
+    </a>
+    <a class="btn" href="{% url 'account_email' %}">
+      {% trans 'accounts:profile:manage_emails' %}
+    </a>
+    <a class="btn" href="{% url 'socialaccount_connections' %}">
+      {% trans 'accounts:profile:manage_connections' %}
+    </a>
   </p>
 {% endblock %}
-

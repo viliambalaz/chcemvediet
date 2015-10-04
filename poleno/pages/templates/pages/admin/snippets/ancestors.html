@@ -8,6 +8,7 @@
  %
 {% endcomment %}
 
+
 {% for ancestor in page.ancestors %}
   {% if ancestor.is_disabled %}<del>{% endif %}
     <a href="{% url "admin:pages_edit" ancestor.lang ancestor.lpath %}">{{ ancestor.label }}</a>

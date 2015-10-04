@@ -7,8 +7,10 @@ from optparse import make_option
 from django.core.management import call_command
 from django.core.management.base import NoArgsCommand
 from poleno.utils.date import utc_now
+from poleno.utils.misc import squeeze
 
 from django_cron.models import CronJobLog
+
 
 class Command(NoArgsCommand):
     default_interval = 60
@@ -18,10 +20,15 @@ class Command(NoArgsCommand):
         executing all sheduled cron jobs.""")
 
     option_list = NoArgsCommand.option_list + (
-        make_option(u'--interval', action=u'store', type=u'int', dest=u'interval', default=default_interval,
-            help=u'Interval in seconds how often to check if there are jobs to run. Defaults to %d secons.' % default_interval),
+        make_option(u'--interval', action=u'store', type=u'int', dest=u'interval',
+            default=default_interval, help=squeeze(u"""
+                Interval in seconds how often to check if there are jobs to run. Defaults to %d
+                secons.
+                """) % default_interval),
         make_option(u'--clearlogs', action=u'store_true', dest=u'clearlogs', default=False,
-            help=u'Clear cron logs before running the server like no cron jobs have ever been run yet.'),
+            help=squeeze(u"""
+                Clear cron logs before running the server like no cron jobs have ever been run yet.
+                """)),
         )
 
     def handle_noargs(self, **options):

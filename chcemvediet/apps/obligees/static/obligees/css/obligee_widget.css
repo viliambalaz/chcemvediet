@@ -9,5 +9,6 @@
 .obligee_widget_skel { display: none; }
 .obligee_widget_add { float: right; margin-top: 10px; }
 .obligee_widget_del { position: absolute; top: 2px; right: -25px; }
-.obligee_widget_del { font-size: 20px; line-height: 20px; font-weight: bold; opacity: 0.4; text-shadow: 0 1px 0 #fff; background: none; border: none; }
+.obligee_widget_del { font-size: 20px; line-height: 20px; font-weight: bold; opacity: 0.4;
+    text-shadow: 0 1px 0 #fff; background: none; border: none; }
 .obligee_widget_del:hover { opacity: 0.6; }

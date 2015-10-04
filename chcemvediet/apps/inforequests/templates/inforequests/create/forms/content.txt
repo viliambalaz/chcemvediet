@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango :#}
+{% load squeeze from poleno.utils %}
 
 {% comment %}
  %
@@ -13,14 +14,30 @@
  %
 {% endcomment %}
 
+
 {% if finalize %}
-Povinná osoba: {{ obligee.name }}, {{ obligee.street }}, {{ obligee.city }} {{ obligee.zip }}, {{ obligee.emails }}
-Žiadateľ: {{ user.get_full_name }}, {{ user.profile.street }}, {{ user.profile.city }} {{ user.profile.zip }}, {{ unique_email }}
+{% filter squeeze %}
+Povinná osoba:
+  {{ obligee.name }},
+  {{ obligee.street }},
+  {{ obligee.city }} {{ obligee.zip }},
+  {{ obligee.emails }}
+{% endfilter %}
+{% filter squeeze %}
+Žiadateľ:
+  {{ user.get_full_name }},
+  {{ user.profile.street }},
+  {{ user.profile.city }} {{ user.profile.zip }},
+  {{ unique_email }}
+{% endfilter %}
 {% endif %}
 
 Dobrý deň,
 
-na základe zákona č. 211/2000 Z. z. o slobodnom prístupe k informáciám v znení neskorších predpisov žiadam o nasledovné informácie:
+{% filter squeeze %}
+na základe zákona č. 211/2000 Z. z. o slobodnom prístupe k informáciám v znení neskorších predpisov
+žiadam o nasledovné informácie:
+{% endfilter %}
 
 {{ inputs.0 }}
 

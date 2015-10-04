@@ -9,12 +9,14 @@
  %
 {% endcomment %}
 
+
 <h4>{% trans 'inforequests:accordion:heading' %}</h4>
 <div id="accordion-actions" class="accordion">
   {% for action in last_action.action_path %}
     <div class="accordion-group">
       <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-actions" href="#accordion-action-{{ action.pk }}">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-actions"
+           href="#accordion-action-{{ action.pk }}">
           {{ action.get_type_display }}
         </a>
       </div>

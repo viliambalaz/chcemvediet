@@ -7,7 +7,9 @@ from poleno.utils.forms import EditableSpan
 from chcemvediet.apps.wizards.forms import PaperCharField, OptionalSectionCheckboxField
 from chcemvediet.apps.inforequests.models import Action
 
-from .common import AppealStep, AppealSectionStep, AppealDeadendStep, AppealPaperStep, AppealFinalStep
+from .common import AppealStep
+from .common import AppealSectionStep, AppealDeadendStep, AppealPaperStep, AppealFinalStep
+
 
 class RefusalStep(AppealStep):
 
@@ -140,9 +142,12 @@ class SanitizationLevel(SanitizationStep):
         self.fields[u'sanitization_level'] = forms.ChoiceField(
                 label=u' ',
                 choices=(
-                    (u'overly-sanitized',   _(u'inforequests:appeal:SanitizationLevel:OverlySanitized')),
-                    (u'missing-document',   _(u'inforequests:appeal:SanitizationLevel:MissingDocument')),
-                    (u'properly-sanitized', _(u'inforequests:appeal:SanitizationLevel:ProperlySanitized')),
+                    (u'overly-sanitized',
+                        _(u'inforequests:appeal:SanitizationLevel:OverlySanitized')),
+                    (u'missing-document',
+                        _(u'inforequests:appeal:SanitizationLevel:MissingDocument')),
+                    (u'properly-sanitized',
+                        _(u'inforequests:appeal:SanitizationLevel:ProperlySanitized')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -259,7 +264,8 @@ class ConfidentialFallbackReason(AppealSectionStep, ReasonStep):
     def add_fields(self):
         super(ConfidentialFallbackReason, self).add_fields()
         self.fields[u'confidential_fallback'] = OptionalSectionCheckboxField(required=False)
-        self.fields[u'confidential_fallback_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        self.fields[u'confidential_fallback_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(ConfidentialFallbackReason, self).paper_fields(paper)
@@ -289,11 +295,13 @@ class ConfidentialNotConfidentialReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(ConfidentialNotConfidentialReason, self).add_fields()
-        self.fields[u'confidential_not_confidential_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        self.fields[u'confidential_not_confidential_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(ConfidentialNotConfidentialReason, self).paper_fields(paper)
-        paper.fields[u'confidential_not_confidential_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        paper.fields[u'confidential_not_confidential_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
 class ConfidentialNotConfidential(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
@@ -344,7 +352,8 @@ class PersonalFallbackReason(AppealSectionStep, ReasonStep):
     def add_fields(self):
         super(PersonalFallbackReason, self).add_fields()
         self.fields[u'personal_fallback'] = OptionalSectionCheckboxField(required=False)
-        self.fields[u'personal_fallback_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        self.fields[u'personal_fallback_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(PersonalFallbackReason, self).paper_fields(paper)
@@ -374,11 +383,13 @@ class PersonalOfficerReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(PersonalOfficerReason, self).add_fields()
-        self.fields[u'personal_officer_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        self.fields[u'personal_officer_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(PersonalOfficerReason, self).paper_fields(paper)
-        paper.fields[u'personal_officer_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        paper.fields[u'personal_officer_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
 class PersonalOfficer(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
@@ -429,7 +440,8 @@ class BusinessSecretFallbackReason(AppealSectionStep, ReasonStep):
     def add_fields(self):
         super(BusinessSecretFallbackReason, self).add_fields()
         self.fields[u'business_secret_fallback'] = OptionalSectionCheckboxField(required=False)
-        self.fields[u'business_secret_fallback_reason'] = PaperCharField(required=False, widget=EditableSpan())
+        self.fields[u'business_secret_fallback_reason'] = PaperCharField(
+                required=False, widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(BusinessSecretFallbackReason, self).paper_fields(paper)
@@ -460,12 +472,14 @@ class BusinessSecretDefinitionReason(AppealSectionStep, ReasonStep):
     def add_fields(self):
         super(BusinessSecretDefinitionReason, self).add_fields()
         for choice in self.wizard.values[u'business_secret_definition']:
-            self.fields[u'business_secret_definition_reason_' + choice] = PaperCharField(widget=EditableSpan())
+            self.fields[u'business_secret_definition_reason_' + choice] = PaperCharField(
+                    widget=EditableSpan())
 
     def paper_fields(self, paper):
         super(BusinessSecretDefinitionReason, self).paper_fields(paper)
         for choice in self.wizard.values[u'business_secret_definition']:
-            paper.fields[u'business_secret_definition_reason_' + choice] = PaperCharField(widget=EditableSpan())
+            paper.fields[u'business_secret_definition_reason_' + choice] = PaperCharField(
+                    widget=EditableSpan())
 
     def get_global_fields(self):
         res = super(BusinessSecretDefinitionReason, self).get_global_fields()
@@ -616,7 +630,8 @@ class DoesNotProvidePublicFundsReason(AppealSectionStep, ReasonStep):
 
     def paper_fields(self, paper):
         super(DoesNotProvidePublicFundsReason, self).paper_fields(paper)
-        paper.fields[u'does_not_provide_public_funds_reason'] = PaperCharField(widget=EditableSpan())
+        paper.fields[u'does_not_provide_public_funds_reason'] = PaperCharField(
+                widget=EditableSpan())
 
 class DoesNotProvidePublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE

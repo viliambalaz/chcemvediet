@@ -5,6 +5,7 @@ from chcemvediet.apps.wizards.forms import PaperCharField
 
 from .common import AppealStep, AppealSectionStep, AppealPaperStep, AppealFinalStep
 
+
 class Paper(AppealPaperStep):
     post_step_class = AppealFinalStep
 

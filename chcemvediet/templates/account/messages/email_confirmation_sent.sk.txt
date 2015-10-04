@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Overovací e-mail bol odoslaný na {{ email }}.

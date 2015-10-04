@@ -7,6 +7,14 @@
  %
 {% endcomment %}
 
-<p>Please confirm that <a href="mailto:{{ confirmation.email_address.email }}">{{ confirmation.email_address.email }}</a>
-is an e-mail address for user {{ confirmation.email_address.user.get_full_name }}.</p>
-<p>This address will be used for sending all e-mail notifications.</p>
+
+<p>
+  Please confirm that
+  <a href="mailto:{{ confirmation.email_address.email }}">
+    {{ confirmation.email_address.email }}
+  </a>
+  is an e-mail address for user {{ confirmation.email_address.user.get_full_name }}.
+</p>
+<p>
+  This address will be used for sending all e-mail notifications.
+</p>

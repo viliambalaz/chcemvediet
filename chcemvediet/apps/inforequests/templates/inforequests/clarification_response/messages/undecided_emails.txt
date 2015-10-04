@@ -7,6 +7,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 FIXME Clarification response sa neda poslat, kym nezaradite nove maily
 {% endautoescape %}

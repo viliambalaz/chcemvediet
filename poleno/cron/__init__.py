@@ -4,6 +4,7 @@ import logging
 
 from django_cron import CronJobBase, Schedule
 
+
 default_app_config = 'poleno.cron.apps.CronConfig'
 cron_logger = logging.getLogger(u'poleno.cron')
 

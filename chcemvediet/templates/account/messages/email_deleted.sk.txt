@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 E-mailová adresa {{ email }} bola odobrana.

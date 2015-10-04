@@ -4,6 +4,7 @@ from django.core.management.base import NoArgsCommand
 
 from django_cron.models import CronJobLog
 
+
 class Command(NoArgsCommand):
     help = u'Clean cron logs.'
 

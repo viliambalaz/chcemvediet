@@ -3,6 +3,7 @@
 from django.template.loader import render_to_string
 from django.contrib import messages
 
+
 def render_message(request, level, template, context=None, **kwargs):
     u"""
     Render the template and use the result to create and queue a ``django.contrib.messages``

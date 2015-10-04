@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}{% trans 'inforequests:index:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
@@ -30,17 +31,27 @@
       <tbody>
         {% for inforequest in inforequests %}
           <tr>
-            <td><a href="{{ inforequest.get_absolute_url }}">{{ inforequest.main_branch.historicalobligee.name }}</a></td>
-            <td><a href="{{ inforequest.get_absolute_url }}">{{ inforequest.subject }}</a></td>
+            <td>
+              <a href="{{ inforequest.get_absolute_url }}">
+                {{ inforequest.main_branch.historicalobligee.name }}
+              </a>
+            </td>
+            <td>
+              <a href="{{ inforequest.get_absolute_url }}">{{ inforequest.subject }}</a>
+            </td>
             <td>
               {% if inforequest.has_undecided_emails %}
                 <span class="with-tooltip" data-toggle="tooltip" data-placement="right"
-                      title="{% spaceless %}{% include "inforequests/index/tooltips/new_mail.txt" %}{% endspaceless %}">
+                      title="{% spaceless %}
+                        {% include "inforequests/index/tooltips/new_mail.txt" %}
+                        {% endspaceless %}">
                   <i class="icon-envelope"></i> {% trans 'inforequests:index:new_mail' %}
                 </span>
               {% endif %}
             </td>
-            <td>{{ inforequest.submission_date }}</td>
+            <td>
+              {{ inforequest.submission_date }}
+            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -54,7 +65,7 @@
     </a>
   </div>
   {% if drafts %}
-    <h2>{% trans 'inforequests:index:drafts:heading' %}</h1>
+    <h2>{% trans 'inforequests:index:drafts:heading' %}</h2>
     {% include "inforequests/index/texts/drafts.html" %}
     <table class="table table-striped">
       <thead>
@@ -91,7 +102,7 @@
     </table>
   {% endif %}
   {% if closed_inforequests %}
-    <h2>{% trans 'inforequests:index:closed:heading' %}</h1>
+    <h2>{% trans 'inforequests:index:closed:heading' %}</h2>
     {% include "inforequests/index/texts/closed.html" %}
     <table class="table table-striped">
       <thead>
@@ -104,9 +115,17 @@
       <tbody>
         {% for inforequest in closed_inforequests %}
           <tr>
-            <td><a href="{{ inforequest.get_absolute_url }}">{{ inforequest.main_branch.historicalobligee.name }}</a></td>
-            <td><a href="{{ inforequest.get_absolute_url }}">{{ inforequest.subject }}</a></td>
-            <td>{{ inforequest.submission_date }}</td>
+            <td>
+              <a href="{{ inforequest.get_absolute_url }}">
+                {{ inforequest.main_branch.historicalobligee.name }}
+              </a>
+            </td>
+            <td>
+              <a href="{{ inforequest.get_absolute_url }}">{{ inforequest.subject }}</a>
+            </td>
+            <td>
+              {{ inforequest.submission_date }}
+            </td>
           </tr>
         {% endfor %}
       </tbody>

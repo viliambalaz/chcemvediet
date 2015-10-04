@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
+
 Primárny e-mail bol nastavený.

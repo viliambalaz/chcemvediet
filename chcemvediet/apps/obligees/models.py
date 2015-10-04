@@ -22,33 +22,36 @@ class ObligeeTagQuerySet(QuerySet):
 
 class ObligeeTag(models.Model):
     # May NOT be empty
-    key = models.CharField(max_length=255, unique=True, db_index=True,
+    key = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique key to identify the tag. Should contain only alphanumeric characters,
                 underscores and hyphens.
                 """))
 
     # Should NOT be empty
-    name = models.CharField(max_length=255, unique=True, db_index=True,
+    name = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique human readable tag name.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
-    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+    slug = models.SlugField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique slug to identify the tag used in urls. Automaticly computed from the tag
                 name. May not be changed manually.
                 """))
 
-    objects = ObligeeTagQuerySet.as_manager()
+    # Backward relations:
+    #
+    #  -- obligee_set: by Obligee.tags
+    #     May be empty
 
-    class Meta:
-        index_together = [
-                # [u'key'], -- defined on field
-                # [u'name'], -- defined on field
-                # [u'slug'], -- defined on field
-                ]
+    # Indexes:
+    #  -- key:  unique
+    #  -- name: unique
+    #  -- slug: unique
+
+    objects = ObligeeTagQuerySet.as_manager()
 
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):
@@ -76,7 +79,7 @@ class ObligeeGroupQuerySet(QuerySet):
 
 class ObligeeGroup(models.Model):
     # May NOT be empty
-    key = models.CharField(max_length=255, unique=True, db_index=True,
+    key = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique key to identify the group. The key is a path of slash separated words each
                 of which represents a parent group. Every word in the path should be a nonempty
@@ -84,13 +87,13 @@ class ObligeeGroup(models.Model):
                 """))
 
     # Should NOT be empty
-    name = models.CharField(max_length=255, unique=True, db_index=True,
+    name = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique human readable group name.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
-    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+    slug = models.SlugField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique slug to identify the group used in urls. Automaticly computed from the group
                 name. May not be changed manually.
@@ -102,14 +105,17 @@ class ObligeeGroup(models.Model):
                 Human readable group description.
                 """))
 
-    objects = ObligeeGroupQuerySet.as_manager()
+    # Backward relations:
+    #
+    #  -- obligee_set: by Obligee.groups
+    #     May be empty
 
-    class Meta:
-        index_together = [
-                # [u'key'], -- defined on field
-                # [u'name'], -- defined on field
-                # [u'slug'], -- defined on field
-                ]
+    # Indexes:
+    #  -- key:  unique
+    #  -- name: unique
+    #  -- slug: unique
+
+    objects = ObligeeGroupQuerySet.as_manager()
 
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):
@@ -139,21 +145,29 @@ class ObligeeQuerySet(QuerySet):
 class Obligee(models.Model):
     # FIXME: iczsj -- fk relation -- import iczsj table
 
+    # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we can't use the slug index for
+    # searching. Eventually, we need to define a fulltext index for "slug" or "name" and use
+    # ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not support
+    # ``__contains`` and MySQL supports fulltext indexes for InnoDB tables only since version
+    # 5.6.4, but our server has only MySQL 5.5.x so far. We need to upgrate our production MySQL
+    # server and find a workaround for SQLite we use in development mode. Alternatively, we can use
+    # some complex fulltext search engine like ElasticSearch.
+
     # Should NOT be empty
     official_name = models.CharField(max_length=255, help_text=u'Official obligee name.')
 
     # Should NOT be empty
-    name = models.CharField(max_length=255, unique=True, db_index=True,
+    name = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique human readable obligee name. If official obligee name is ambiguous, it
                 should be made more specific.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
-    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+    slug = models.SlugField(max_length=255, unique=True,
             help_text=squeeze(u"""
-                Unique slug to identify the obligee used in urls. Automaticly computed from the obligee
-                name. May not be changed manually.
+                Unique slug to identify the obligee used in urls. Automaticly computed from the
+                obligee name. May not be changed manually.
                 """))
 
     # Should NOT be empty
@@ -170,15 +184,20 @@ class Obligee(models.Model):
             (u'NEUTER',    3, _(u'obligees:Obligee:gender:NEUTER')),
             (u'PLURALE',   4, _(u'obligees:Obligee:gender:PLURALE')), # Pomnožné
             )
-    gender = models.SmallIntegerField(choices=GENDERS._choices, help_text=u'Obligee name grammar gender.')
+    gender = models.SmallIntegerField(choices=GENDERS._choices,
+            help_text=u'Obligee name grammar gender.')
 
     # May be empty
-    ico = models.CharField(blank=True, max_length=32, help_text=u'Legal identification number if known.')
+    ico = models.CharField(blank=True, max_length=32,
+            help_text=u'Legal identification number if known.')
 
     # Should NOT be empty
-    street = models.CharField(max_length=255, help_text=u'Street and number part of postal address.')
-    city = models.CharField(max_length=255, help_text=u'City part of postal address.')
-    zip = models.CharField(max_length=10, help_text=u'Zip part of postal address.')
+    street = models.CharField(max_length=255,
+            help_text=u'Street and number part of postal address.')
+    city = models.CharField(max_length=255,
+            help_text=u'City part of postal address.')
+    zip = models.CharField(max_length=10,
+            help_text=u'Zip part of postal address.')
 
     # May be empty
     emails = models.CharField(blank=True, max_length=1024,
@@ -204,11 +223,14 @@ class Obligee(models.Model):
             (u'SECTION_3', 3, _(u'obligees:Obligee:type:SECTION_3')),
             (u'SECTION_4', 4, _(u'obligees:Obligee:type:SECTION_4')),
             )
-    type = models.SmallIntegerField(choices=TYPES._choices, help_text=u'Obligee type according to §2.')
+    type = models.SmallIntegerField(choices=TYPES._choices,
+            help_text=u'Obligee type according to §2.')
 
     # May be empty
-    official_description = models.TextField(blank=True, help_text=u'Official obligee description.')
-    simple_description = models.TextField(blank=True, help_text=u'Human readable obligee description.')
+    official_description = models.TextField(blank=True,
+            help_text=u'Official obligee description.')
+    simple_description = models.TextField(blank=True,
+            help_text=u'Human readable obligee description.')
 
     # May NOT be NULL
     STATUSES = FieldChoices(
@@ -222,26 +244,36 @@ class Obligee(models.Model):
                 """))
 
     # May be empty
-    notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
+    notes = models.TextField(blank=True,
+            help_text=u'Internal freetext notes. Not shown to the user.')
 
-    # Added by ``@register_history``:
-    #  -- history: simple_history.manager.HistoryManager
+    # Backward relations:
+    #
+    #  -- history: HistoryManager added by @register_history
     #     Returns instance historical snapshots as HistoricalObligee model.
+    #
+    #  -- obligeealias_set: by ObligeeAlias.obligee
+    #     May be empty
+    #
+    #  -- branch_set: by Branch.obligee
+    #     May be empty
+    #
+    #  -- inforequestdraft_set: by InforequestDraft.obligee
+    #     May be empty
+
+    # Backward relations added to other models:
+    #
+    #  -- ObligeeTag.obligee_set
+    #     May be empty
+    #
+    #  -- ObligeeGroup.obligee_set
+    #     May be empty
+
+    # Indexes:
+    #  -- name: unique
+    #  -- slug: unique
 
     objects = ObligeeQuerySet.as_manager()
-
-    class Meta:
-        # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we can't use the slug index for
-        # searching. Eventually, we need to define a fulltext index for "slug" or "name" and use
-        # ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not
-        # support ``__contains`` and MySQL supports fulltext indexes for InnoDB tables only since
-        # version 5.6.4, but our server has only MySQL 5.5.x so far. We need to upgrate our
-        # production MySQL server and find a workaround for SQLite we use in development mode.
-        # Alternatively, we can use some complex fulltext search engine like ElasticSearch.
-        index_together = [
-                # [u'name'], -- defined on field
-                # [u'slug'], -- defined on field
-                ]
 
     @staticmethod
     def dummy_email(name, tpl):
@@ -283,13 +315,13 @@ class ObligeeAlias(models.Model):
     obligee = models.ForeignKey(Obligee, help_text=u'Obligee of which this is alias.')
 
     # Should NOT be empty
-    name = models.CharField(max_length=255, unique=True, db_index=True,
+    name = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique human readable obligee alias if the obligee has multiple common names.
                 """))
 
     # Should NOT be empty; Read-only; Automaticly computed in save()
-    slug = models.SlugField(max_length=255, unique=True, db_index=True,
+    slug = models.SlugField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique slug to identify the obligee alias used in urls. Automaticly computed from
                 the obligee name. May not be changed manually.
@@ -299,16 +331,23 @@ class ObligeeAlias(models.Model):
     description = models.TextField(blank=True, help_text=u'Obligee alias description.')
 
     # May be empty
-    notes = models.TextField(blank=True, help_text=u'Internal freetext notes. Not shown to the user.')
+    notes = models.TextField(blank=True,
+            help_text=u'Internal freetext notes. Not shown to the user.')
+
+    # Backward relations added to other models:
+    #
+    #  -- Obligee.obligeealias_set
+    #     May be empty
+
+    # Indexes:
+    #  -- obligee: ForeignKey
+    #  -- name:    unique
+    #  -- slug:    unique
 
     objects = ObligeeAliasQuerySet.as_manager()
 
     class Meta:
         verbose_name_plural = u'obligee aliases'
-        index_together = [
-                # [u'name'], -- defined on field
-                # [u'slug'], -- defined on field
-                ]
 
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):

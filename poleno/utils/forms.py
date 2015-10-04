@@ -15,6 +15,7 @@ from django.utils.html import format_html
 
 from poleno.utils.html import merge_html_attrs
 
+
 def clean_button(post, clean_values, default_value=None, key=u'button'):
     u"""
     Djago forms do not care about buttons. To distinguish which submit button was pressed, we need
@@ -62,7 +63,10 @@ class AutoSuppressedSelect(forms.Select):
         If there are many books, you get:
             <select class="class-for-selectbox" name="...">...</select>
         If there is ony one book, you get:
-            <span class="class-for-plain-text"><input type="hidden" name="..." value="...">...</span>
+            <span class="class-for-plain-text">
+              <input type="hidden" name="..." value="...">
+              ...
+            </span>
     """
     def __init__(self, *args, **kwargs):
         self.suppressed_attrs = kwargs.pop(u'suppressed_attrs', {})
@@ -73,7 +77,8 @@ class AutoSuppressedSelect(forms.Select):
         if len(all_choices) == 1:
             option_value, option_label = all_choices[0]
             if not isinstance(option_label, (list, tuple)): # The choice is not a group
-                return format_html(u'<span{0}><input type="hidden" name="{1}" value="{2}">{3}</span>',
+                return format_html(
+                        u'<span{0}><input type="hidden" name="{1}" value="{2}">{3}</span>',
                         flatatt(self.suppressed_attrs), name, option_value, option_label)
         return super(AutoSuppressedSelect, self).render(name, value, attrs, choices)
 
@@ -144,7 +149,8 @@ class CompositeTextField(forms.MultiValueField):
 class PrefixedForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(PrefixedForm, self).__init__(*args, **kwargs)
-        self.prefix = u'%s%s%s' % (self.prefix or u'', u'-' if self.prefix else u'', self.__class__.__name__.lower())
+        self.prefix = u'%s%s%s' % (self.prefix or u'', u'-' if self.prefix else u'',
+                self.__class__.__name__.lower())
 
 class ValidatorChain(object):
     u"""
@@ -168,7 +174,8 @@ class EditableSpan(forms.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
             value = u''
-        span_attrs = merge_html_attrs(self.attrs, attrs, contenteditable=u'true', class_=u'editable-span')
+        span_attrs = merge_html_attrs(self.attrs, attrs,
+                contenteditable=u'true', class_=u'editable-span')
         input_attrs = dict(type=u'hidden', name=name, value=force_text(value))
         return format_html(u'<span{0}>{1}</span><input{2} />',
                 flatatt(span_attrs), force_text(value), flatatt(input_attrs))
@@ -178,7 +185,8 @@ def validate_formatted_email(value):
     try:
         validate_email(address)
     except ValidationError:
-        raise ValidationError(_(u'utils:validate_formatted_email:error:invalid {0}').format(address))
+        msg = _(u'utils:validate_formatted_email:error:invalid {0}')
+        raise ValidationError(msg.format(address))
 
 def validate_comma_separated_emails(value):
     parsed = getaddresses([value])
@@ -186,4 +194,5 @@ def validate_comma_separated_emails(value):
         try:
             validate_email(address)
         except ValidationError:
-            raise ValidationError(_(u'utils:validate_comma_separated_emails:error:invalid {0}').format(address))
+            msg = _(u'utils:validate_comma_separated_emails:error:invalid {0}')
+            raise ValidationError(msg.format(address))

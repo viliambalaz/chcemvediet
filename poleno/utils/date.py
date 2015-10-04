@@ -5,6 +5,7 @@ import pytz
 
 from django.utils import timezone
 
+
 # All functions assume that settings.USE_TZ is True.
 
 def local_now(tz=None):
@@ -48,7 +49,8 @@ def local_datetime_from_local(*args, **kwargs):
         local_datetime_from_local(date, time, [from_tz], [tz])
         local_datetime_from_local(date, [hour], [minute], [second], [microsecond], [from_tz], [tz])
         local_datetime_from_local(year, month, day, time, [from_tz], [tz])
-        local_datetime_from_local(year, month, day, [hour], [minute], [second], [microsecond], [from_tz], [tz])
+        local_datetime_from_local(year, month, day, [hour], [minute], [second],
+                                                               [microsecond], [from_tz], [tz])
 
     Where ``datetime``, ``date`` and ``time`` may be given formatted as strings or as the
     respective objects. Similarly all other values may be given as numbers or strings containing
@@ -117,7 +119,8 @@ def utc_datetime_from_local(*args, **kwargs):
         utc_datetime_from_local(date, time, [from_tz])
         utc_datetime_from_local(date, [hour], [minute], [second], [microsecond], [from_tz])
         utc_datetime_from_local(year, month, day, time, [from_tz])
-        utc_datetime_from_local(year, month, day, [hour], [minute], [second], [microsecond], [from_tz])
+        utc_datetime_from_local(year, month, day, [hour], [minute], [second],
+                                                               [microsecond], [from_tz])
 
     Where ``datetime``, ``date`` and ``time`` may be given formatted as strings or as the
     respective objects. Similarly all other values may be given as numbers or strings containing

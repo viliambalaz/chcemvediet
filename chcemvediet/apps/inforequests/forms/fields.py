@@ -9,6 +9,7 @@ from multiselectfield import MultiSelectFormField
 
 from chcemvediet.apps.inforequests.models import Action
 
+
 class BranchField(forms.TypedChoiceField):
 
     def __init__(self, *args, **kwargs):

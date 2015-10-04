@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% block addbreadcrumbs %}
   &rsaquo; {{ lang }}
 {% endblock %}
@@ -30,11 +31,16 @@
         <tr class="{% cycle 'row1' 'row2' %}">
           <td>
             {% if page.is_disabled %}<del>{% endif %}
-              {% if is_popup %}
-                <strong><a class="popup-select" href="#" data-target="{{ popup_target }}" data-value="{{ page.path }}">{{ page.path }}</a></strong>
-              {% else %}
-                <strong><a href="{% url "admin:pages_edit" lang page.lpath %}">{{ page.path }}</a></strong>
-              {% endif %}
+              <strong>
+                {% if is_popup %}
+                  <a class="popup-select" href="#" data-target="{{ popup_target }}"
+                     data-value="{{ page.path }}">
+                    {{ page.path }}
+                  </a>
+                {% else %}
+                  <a href="{% url "admin:pages_edit" lang page.lpath %}">{{ page.path }}</a>
+                {% endif %}
+              </strong>
               {% if page.is_redirect %} → {{ page.redirect_path }}{% endif %}
             {% if page.is_disabled %}</del>{% endif %}
           </td>
@@ -48,9 +54,26 @@
           {% if not is_popup %}
             <td>
               <ul class="object-tools" style="margin: 0;">
-                <li><a href="{% url "admin:pages_edit" lang page.lpath %}">Edit</a></li>
-                <li><a href="{% url "admin:pages_create" lang page.lpath %}" {% if page.is_redirect %}style="visibility: hidden;"{% endif %}>Add Subpage</a></li>
-                <li><a href="{{ page.url }}" {% if page.is_redirect or page.is_disabled %}style="visibility: hidden;"{% endif %}>View</a></li>
+                <li>
+                  <a href="{% url "admin:pages_edit" lang page.lpath %}">Edit</a>
+                </li>
+                <li>
+                  {% if page.is_redirect %}
+                    <a href="{% url "admin:pages_create" lang page.lpath %}"
+                       style="visibility: hidden;">
+                      Add Subpage
+                    </a>
+                  {% else %}
+                    <a href="{% url "admin:pages_create" lang page.lpath %}">Add Subpage</a>
+                  {% endif %}
+                </li>
+                <li>
+                  {% if page.is_redirect or page.is_disabled %}
+                    <a href="{{ page.url }}" style="visibility: hidden;">View</a>
+                  {% else %}
+                    <a href="{{ page.url }}">View</a>
+                  {% endif %}
+                </li>
               </ul>
             </td>
           {% endif %}

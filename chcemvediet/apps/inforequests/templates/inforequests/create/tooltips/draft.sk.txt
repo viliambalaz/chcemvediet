@@ -7,4 +7,6 @@
  %
 {% endcomment %}
 
-Uloží rozpracovanú žiadosť. K rozpracovanej žiadosti sa môžete neskôr vrátiť, dokonca aj po odhlásení.
+
+Uloží rozpracovanú žiadosť. K rozpracovanej žiadosti sa môžete neskôr vrátiť, dokonca aj po
+odhlásení.

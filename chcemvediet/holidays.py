@@ -22,4 +22,3 @@ HOLIDAYS = HolidaySet(
         FixedHoliday(day=25, month=12, first_year=1994, last_year=None),  # Prvý sviatok vianočný
         FixedHoliday(day=26, month=12, first_year=1994, last_year=None),  # Druhý sviatok vianočný
         )
-

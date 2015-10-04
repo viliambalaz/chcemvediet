@@ -8,7 +8,8 @@ from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
 from chcemvediet.apps.wizards.views import wizard_view
 from chcemvediet.apps.inforequests.forms import SnoozeForm
-from chcemvediet.apps.inforequests.forms import AppealWizard, ClarificationResponseWizard, ObligeeActionWizard
+from chcemvediet.apps.inforequests.forms import AppealWizard, ClarificationResponseWizard
+from chcemvediet.apps.inforequests.forms import ObligeeActionWizard
 from chcemvediet.apps.inforequests.models import Inforequest, Action
 
 from .shortcuts import render_form, json_form, json_success
@@ -18,7 +19,8 @@ from .shortcuts import render_form, json_form, json_success
 @transaction.atomic
 @login_required(raise_exception=True)
 def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
-    inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
+    inforequest = (Inforequest.objects
+            .not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk))
     inforequestemail = inforequest.inforequestemail_set.undecided().oldest().get_or_none()
     email = inforequestemail.email if inforequestemail is not None else None
 
@@ -33,7 +35,8 @@ def obligee_action(request, inforequest_slug, inforequest_pk, step_idx=None):
 @transaction.atomic
 @login_required(raise_exception=True)
 def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
-    inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
+    inforequest = (Inforequest.objects
+            .not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk))
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if not branch.can_add_clarification_response:
@@ -48,7 +51,8 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
 @transaction.atomic
 @login_required(raise_exception=True)
 def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
-    inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
+    inforequest = (Inforequest.objects
+            .not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk))
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if not branch.can_add_appeal:
@@ -64,7 +68,8 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
 @transaction.atomic
 @login_required(raise_exception=True)
 def snooze(request, inforequest_slug, inforequest_pk, branch_pk, action_pk):
-    inforequest = Inforequest.objects.not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk)
+    inforequest = (Inforequest.objects
+            .not_closed().owned_by(request.user).get_or_404(pk=inforequest_pk))
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
     action = branch.last_action
 

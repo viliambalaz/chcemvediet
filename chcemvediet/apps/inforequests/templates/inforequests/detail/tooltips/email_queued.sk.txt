@@ -7,5 +7,5 @@
  %
 {% endcomment %}
 
-Email so žiadosťou je zaradený v našom systéme. Bude odoslaný za okamih.
 
+Email so žiadosťou je zaradený v našom systéme. Bude odoslaný za okamih.

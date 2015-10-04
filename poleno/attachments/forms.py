@@ -11,6 +11,7 @@ from poleno.utils.misc import cached_method
 
 from .models import Attachment
 
+
 class AttachmentsWidget(forms.TextInput):
 
     def __init__(self, *args, **kwargs):

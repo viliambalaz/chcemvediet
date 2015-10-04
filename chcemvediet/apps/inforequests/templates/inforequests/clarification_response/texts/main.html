@@ -11,6 +11,7 @@
  %
 {% endcomment %}
 
+
 <p>
   <span style="color: red;">FIXME</span>
 </p>
@@ -19,8 +20,8 @@
   <div class="alert alert-block">
     <h4>Zmeškaný termin</h4>
     <p>
-    Termin na doplnenie žiadosti vypršal pred
-    {{ last_action.deadline.calendar_days_behind }} kalendárnymi dnami.
+      Termin na doplnenie žiadosti vypršal pred {{ last_action.deadline.calendar_days_behind }}
+      kalendárnymi dnami.
     </p>
   </div>
 {% endif %}

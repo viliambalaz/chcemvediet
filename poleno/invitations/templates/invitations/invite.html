@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}{% trans 'invitations:invite:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
@@ -20,12 +21,20 @@
       <div class="control-group">
         <label class="control-label">{% trans 'invitations:invite:supply' %}:</label>
         <div class="controls">
-          <span class="suppressed-control">{% if user.invitationsupply.unlimited %}{% trans 'invitations:invite:unlimited' %}{% else %}{{ user.invitationsupply.supply }}{% endif %}</span>
+          <span class="suppressed-control">
+            {% if user.invitationsupply.unlimited %}
+              {% trans 'invitations:invite:unlimited' %}
+            {% else %}
+              {{ user.invitationsupply.supply }}
+            {% endif %}
+          </span>
         </div>
       </div>
       {% include "main/snippets/form_horizontal.html" with form=form %}
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{% trans 'invitations:invite:submit' %}</button>
+        <button type="submit" class="btn btn-primary">
+          {% trans 'invitations:invite:submit' %}
+        </button>
       </div>
     </form>
   {% else %}

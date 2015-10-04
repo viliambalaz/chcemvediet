@@ -5,6 +5,7 @@ from chcemvediet.apps.wizards.forms import PaperCharField
 
 from .common import AppealStep, AppealPaperStep, AppealFinalStep
 
+
 class Paper(AppealPaperStep):
     text_template = u'inforequests/appeal/texts/fallback.html'
     content_template = u'inforequests/appeal/papers/fallback.html'

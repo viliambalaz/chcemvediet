@@ -15,6 +15,7 @@ from poleno.utils.misc import guess_extension
 from .base import BaseTransport
 from ..models import Message, Recipient
 
+
 class ImapTransport(BaseTransport):
     def __init__(self, **kwargs):
         super(ImapTransport, self).__init__(**kwargs)

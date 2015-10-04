@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 
 from poleno.cron import cron_job, cron_logger
 
+
 @cron_job(run_at_times=settings.CRON_UNIMPORTANT_MAINTENANCE_TIMES)
 def clear_expired_sessions():
     call_command(u'clearsessions')

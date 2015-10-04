@@ -16,6 +16,7 @@ from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
 from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify
 
+
 class InforequestQuerySet(QuerySet):
     def owned_by(self, user):
         return self.filter(applicant=user)
@@ -43,8 +44,10 @@ class InforequestQuerySet(QuerySet):
         Prefetches various relations to use with views.inforequest.detail view.
         """
         return (self
-            .prefetch_related(Inforequest.prefetch_branches(None, Branch.objects.select_related(u'historicalobligee')))
-            .prefetch_related(Branch.prefetch_actions(u'branches', Action.objects.select_related(u'email')))
+            .prefetch_related(Inforequest.prefetch_branches(None,
+                Branch.objects.select_related(u'historicalobligee')))
+            .prefetch_related(Branch.prefetch_actions(u'branches',
+                Action.objects.select_related(u'email')))
             .prefetch_related(Message.prefetch_recipients(u'branches__actions__email'))
             .prefetch_related(Action.prefetch_attachments(u'branches__actions'))
             .prefetch_related(Inforequest.prefetch_undecided_emails())
@@ -77,7 +80,7 @@ class Inforequest(models.Model):
 
     # May NOT be empty; Unique; Read-only; Automaticly computed in save() when creating a new
     # instance.
-    unique_email = models.EmailField(max_length=255, unique=True, db_index=True,
+    unique_email = models.EmailField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique email address used to identify which obligee email belongs to which
                 inforequest. If the inforequest was advanced to other obligees, the same email
@@ -128,13 +131,16 @@ class Inforequest(models.Model):
     #  -- Message.inforequest_set
     #     May be empty; Should NOT have more than one item
 
+    # Indexes:
+    #  -- applicant: ForeignKey
+    #  -- unique_email: unique
+    #  -- submission_date, id: index_together
+
     objects = InforequestQuerySet.as_manager()
 
     class Meta:
         index_together = [
                 [u'submission_date', u'id'],
-                # [u'applicant'] -- ForeignKey defines index by default
-                # [u'unique_email'] -- defined on field
                 ]
 
     @cached_property
@@ -176,8 +182,9 @@ class Inforequest(models.Model):
         u"""
         Cached inforequest main branch. The inforequest should have exactly one main branch. Raises
         Branch.DoesNotExist if the inforequest has no main branch and Branch.MultipleObjectsReturned
-        if it has more than one main branch. May be prefetched with ``prefetch_related(Inforequest.prefetch_main_branch())``
-        queryset method. Takes advantage of ``Inforequest.branches`` if it is already fetched.
+        if it has more than one main branch. May be prefetched with
+        ``prefetch_related(Inforequest.prefetch_main_branch())`` queryset method. Takes advantage
+        of ``Inforequest.branches`` if it is already fetched.
         """
         if u'_main_branch' in self.__dict__:
             res = self._main_branch
@@ -209,7 +216,8 @@ class Inforequest(models.Model):
         queryset = queryset.filter(type=InforequestEmail.TYPES.UNDECIDED)
         queryset = queryset.order_by_email()
         queryset = queryset.select_related(u'email')
-        return Prefetch(join_lookup(path, u'inforequestemail_set'), queryset, to_attr=u'_undecided_emails')
+        return Prefetch(join_lookup(path, u'inforequestemail_set'),
+                queryset, to_attr=u'_undecided_emails')
 
     @cached_property
     def undecided_emails(self):
@@ -227,8 +235,8 @@ class Inforequest(models.Model):
     def undecided_emails_count(self):
         u"""
         Cached number of undecided emails assigned to the inforequest. May be prefetched with
-        ``select_undecided_emails_count()`` queryset method, Takes advantage of ``Inforequest.undecided_emails``
-        if it is already fetched.
+        ``select_undecided_emails_count()`` queryset method, Takes advantage of
+        ``Inforequest.undecided_emails`` if it is already fetched.
         """
         if u'undecided_emails' in self.__dict__:
             return len(self.undecided_emails)
@@ -295,14 +303,16 @@ class Inforequest(models.Model):
             u')'.format(
                 through = quote_name(InforequestEmail._meta.db_table),
                 through_pk = quote_name(InforequestEmail._meta.pk.column),
-                through_inforequest = quote_name(InforequestEmail._meta.get_field(u'inforequest').column),
+                through_inforequest = quote_name(
+                    InforequestEmail._meta.get_field(u'inforequest').column),
                 through_email = quote_name(InforequestEmail._meta.get_field(u'email').column),
                 message = quote_name(Message._meta.db_table),
                 message_pk = quote_name(Message._meta.pk.column),
                 message_processed = quote_name(Message._meta.get_field(u'processed').column),
                 )
             ])
-        return Prefetch(join_lookup(path, u'inforequestemail_set'), queryset, to_attr=u'_newest_undecided_email')
+        return Prefetch(join_lookup(path, u'inforequestemail_set'),
+                queryset, to_attr=u'_newest_undecided_email')
 
     @cached_property
     def newest_undecided_email(self):
@@ -503,23 +513,25 @@ class Inforequest(models.Model):
         self.save(update_fields=[u'last_undecided_email_reminder'])
 
     def send_obligee_deadline_reminder(self, action):
-        self._send_notification(u'inforequests/mails/obligee_deadline_reminder', u'#a%s' % action.pk, {
-                u'action': action,
-                })
+        self._send_notification(
+                u'inforequests/mails/obligee_deadline_reminder', u'#a%s' % action.pk, {
+                    u'action': action,
+                    })
 
         action.last_deadline_reminder = utc_now()
         action.save(update_fields=[u'last_deadline_reminder'])
 
     def send_applicant_deadline_reminder(self, action):
-        self._send_notification(u'inforequests/mails/applicant_deadline_reminder', u'#a%s' % action.pk, {
-                u'action': action,
-                })
+        self._send_notification(u'inforequests/mails/applicant_deadline_reminder',
+                u'#a%s' % action.pk, {
+                    u'action': action,
+                    })
 
         action.last_deadline_reminder = utc_now()
         action.save(update_fields=[u'last_deadline_reminder'])
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.subject[:30])
 
 @datacheck.register
 def datachecks(superficial, autofix):

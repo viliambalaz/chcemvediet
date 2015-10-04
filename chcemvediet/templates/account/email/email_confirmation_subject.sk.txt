@@ -10,6 +10,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 Potvrdenie e-mailovej adresy
 {% endautoescape %}

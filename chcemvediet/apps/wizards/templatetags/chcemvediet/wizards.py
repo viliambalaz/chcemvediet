@@ -11,6 +11,7 @@ from poleno.utils.template import Library
 from poleno.utils.misc import Bunch
 from poleno.utils.html import format_html_tag
 
+
 register = Library()
 
 @register.simple_tag(takes_context=True)

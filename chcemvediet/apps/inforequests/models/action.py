@@ -18,6 +18,7 @@ from poleno.utils.models import FieldChoices, QuerySet, join_lookup, after_saved
 from poleno.utils.date import utc_now, local_today
 from poleno.utils.misc import Bunch, squeeze, decorate
 
+
 class ActionQuerySet(QuerySet):
     # Applicant actions
     def applicant_actions(self):
@@ -147,7 +148,8 @@ class Action(models.Model):
             (u'PLAIN_TEXT', 1, u'Plain Text'),
             (u'HTML',       2, u'HTML'),
             )
-    content_type = models.SmallIntegerField(choices=CONTENT_TYPES._choices, default=CONTENT_TYPES.PLAIN_TEXT,
+    content_type = models.SmallIntegerField(choices=CONTENT_TYPES._choices,
+            default=CONTENT_TYPES.PLAIN_TEXT,
             help_text=squeeze(u"""
                 Mandatory choice for action content type. Supported formats are plain text and html
                 code. The html code is assumed to be safe. It is passed to the client without
@@ -217,7 +219,8 @@ class Action(models.Model):
             (u'PARTIAL', 2, _(u'inforequests:Action:disclosure_level:PARTIAL')),
             (u'FULL',    3, _(u'inforequests:Action:disclosure_level:FULL')),
             )
-    disclosure_level = models.SmallIntegerField(choices=DISCLOSURE_LEVELS._choices, blank=True, null=True,
+    disclosure_level = models.SmallIntegerField(choices=DISCLOSURE_LEVELS._choices,
+            blank=True, null=True,
             help_text=squeeze(u"""
                 Mandatory choice for obligee actions that may disclose the information, NULL
                 otherwise. Specifies if the obligee disclosed any requested information by this
@@ -254,18 +257,22 @@ class Action(models.Model):
     # Backward relations added to other models:
     #
     #  -- Branch.action_set
-    #     Should NOT be empty
+    #     May NOT be empty; The first action of every main branch must be REQUEST and the first
+    #     action of every advanced branch ADVANCED_REQUEST.
     #
     #  -- Message.action
-    #     May be undefined
+    #     May raise DoesNotExist
+
+    # Indexes:
+    #  -- branch:      ForeignKey
+    #  -- email:       OneToOneField
+    #  -- created, id: index_together
 
     objects = ActionQuerySet.as_manager()
 
     class Meta:
         index_together = [
                 [u'created', u'id'],
-                # [u'branch'] -- ForeignKey defines index by default
-                # [u'email'] -- OneToOneField defines index by default
                 ]
 
     @staticmethod
@@ -342,7 +349,8 @@ class Action(models.Model):
         Whether the applicant may snooze for 3 calendar days sinde today such that the total snooze
         since the deadline date will not be more than 8 calendar days.
         """
-        return self.has_obligee_deadline_snooze_missed and 8 - self.deadline.calendar_days_behind >= 3
+        return (self.has_obligee_deadline_snooze_missed
+                and 8 - self.deadline.calendar_days_behind >= 3)
 
     @cached_property
     def deadline(self):
@@ -482,7 +490,7 @@ class Action(models.Model):
         self.save(update_fields=[u'email'])
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.get_type_display())
 
 @datacheck.register
 def datachecks(superficial, autofix):
@@ -491,7 +499,8 @@ def datachecks(superficial, autofix):
     """
     actions = (Action.objects
             .filter(email__isnull=False)
-            .annotate(Count(u'branch__inforequest__email_set', only=Q(branch__inforequest__email_set=F(u'email'))))
+            .annotate(Count(u'branch__inforequest__email_set',
+                only=Q(branch__inforequest__email_set=F(u'email'))))
             .filter(branch__inforequest__email_set__count=0)
             )
 

@@ -9,6 +9,7 @@ from django_cron.models import CronJobLog
 from poleno.cron import cron_job, cron_logger
 from poleno.utils.date import utc_now
 
+
 @cron_job(run_at_times=settings.CRON_UNIMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
 def clear_old_cronlogs():

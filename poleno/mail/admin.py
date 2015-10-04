@@ -7,6 +7,7 @@ from poleno.utils.admin import simple_list_filter_factory
 
 from .models import Message, Recipient
 
+
 class RecipientInline(admin.TabularInline):
     model = Recipient
     extra = 0
@@ -53,6 +54,12 @@ class MessageAdmin(admin.ModelAdmin):
     ordering = [
             u'-created',
             u'-id',
+            ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
+    raw_id_fields = [
             ]
     inlines = [
             RecipientInline,

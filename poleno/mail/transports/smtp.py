@@ -4,6 +4,7 @@ from django.core.mail import get_connection, EmailMultiAlternatives, EmailMessag
 
 from .base import BaseTransport
 
+
 class SmtpTransport(BaseTransport):
     def __init__(self, *args, **kwargs):
         super(SmtpTransport, self).__init__(*args, **kwargs)

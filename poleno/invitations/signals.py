@@ -6,6 +6,7 @@ from django.dispatch import receiver
 
 from .models import InvitationSupply
 
+
 @receiver(post_save, sender=User)
 def create_invitationsupply_on_user_post_save(sender, **kwargs):
     user = kwargs[u'instance']

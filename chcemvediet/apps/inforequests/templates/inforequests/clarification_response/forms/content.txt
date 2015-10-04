@@ -15,9 +15,22 @@
  %
 {% endcomment %}
 
+
 {% if finalize %}
-Povinná osoba: {{ branch.obligee.name }}, {{ branch.obligee.street }}, {{ branch.obligee.city }} {{ branch.obligee.zip }}, {{ branch.obligee.emails }}
-Žiadateľ: {{ inforequest.applicant.get_full_name }}, {{ inforequest.applicant.profile.street }}, {{ inforequest.applicant.profile.city }} {{ inforequest.applicant.profile.zip }}, {{ inforequest.unique_email }}
+{% filter squeeze %}
+Povinná osoba:
+  {{ branch.obligee.name }},
+  {{ branch.obligee.street }},
+  {{ branch.obligee.city }} {{ branch.obligee.zip }},
+  {{ branch.obligee.emails }}
+{% endfilter %}
+{% filter squeeze %}
+Žiadateľ:
+  {{ inforequest.applicant.get_full_name }},
+  {{ inforequest.applicant.profile.street }},
+  {{ inforequest.applicant.profile.city }} {{ inforequest.applicant.profile.zip }},
+  {{ inforequest.unique_email }}
+{% endfilter %}
 {% endif %}
 
 Dobrý deň,

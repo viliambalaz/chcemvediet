@@ -12,14 +12,17 @@
  %
 {% endcomment %}
 
+
 <div id="#accordion-email" class="accordion">
   <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-email" href="#accordion-email-{{ email.pk }}">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-email"
+         href="#accordion-email-{{ email.pk }}">
         {% trans 'inforequests:obligee_action:email:email:heading' %}
       </a>
     </div>
-    <div id="accordion-email-{{ email.pk }}" class="accordion-body collapse {% if step.is_first %}in{% endif %}">
+    <div id="accordion-email-{{ email.pk }}"
+         class="accordion-body collapse {% if step.is_first %}in{% endif %}">
       <div class="accordion-inner">
         <div class="row-fluid">
           <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
@@ -49,7 +52,9 @@
         </div>
         {% if email.attachments %}
           <div class="row-fluid">
-            <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:attachments' %}:</p>
+            <p class="span2 text-right">
+              {% trans 'inforequests:obligee_action:email:attachments' %}:
+            </p>
             <p class="span10">
               {% for attachment in email.attachments %}
                 <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">

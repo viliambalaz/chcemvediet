@@ -7,13 +7,15 @@ from poleno.utils.admin import admin_obj_format
 
 from .models import WizardDraft
 
+
 @admin.register(WizardDraft, site=admin.site)
 class WizardDraftAdmin(admin.ModelAdmin):
     date_hierarchy = u'modified'
     list_display = [
             u'id',
             decorate(
-                lambda o: admin_obj_format(o.owner, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.owner,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'Owner',
                 admin_order_field=u'owner__email',
                 ),
@@ -33,8 +35,14 @@ class WizardDraftAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'owner',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):

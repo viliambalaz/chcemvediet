@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% if wizard.values.branch.last_action.type == ACTION_TYPES.REQUEST %}
   Dátum doručenia žiadosti
 {% elif wizard.values.branch.last_action.type == ACTION_TYPES.CLARIFICATION_RESPONSE %}

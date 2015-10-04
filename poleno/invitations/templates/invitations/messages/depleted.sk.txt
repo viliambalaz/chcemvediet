@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
-Vyčerpané pozvánky. 
+
+Vyčerpané pozvánky.

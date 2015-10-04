@@ -8,27 +8,39 @@
  %
 {% endcomment %}
 
+
 <div class="row">
   <p class="span2 text-right">{% trans 'inforequests:detail:request:applicant' %}:</p>
   <div class="span10">
-    <p>{{ inforequest.applicant_name }}</p>
-    <p>{{ inforequest.applicant_street }}<br>
-      {{ inforequest.applicant_zip }} {{ inforequest.applicant_city }}</p>
+    <p>
+      {{ inforequest.applicant_name }}
+    </p>
+    <p>
+      {{ inforequest.applicant_street }}<br>
+      {{ inforequest.applicant_zip }} {{ inforequest.applicant_city }}
+    </p>
   </div>
 </div>
 <div class="row">
   <p class="span2 text-right">{% trans 'inforequests:detail:request:obligee' %}:</p>
   <div class="span10">
-    <p>{{ inforequest.main_branch.historicalobligee.name }}</p>
-    <p>{{ inforequest.main_branch.historicalobligee.street }}<br>
-      {{ inforequest.main_branch.historicalobligee.zip }} {{ inforequest.main_branch.historicalobligee.city }}</p>
+    <p>
+      {{ inforequest.main_branch.historicalobligee.name }}
+    </p>
+    <p>
+      {{ inforequest.main_branch.historicalobligee.street }}<br>
+      {{ inforequest.main_branch.historicalobligee.zip }}
+      {{ inforequest.main_branch.historicalobligee.city }}
+    </p>
   </div>
 </div>
 <div class="row">
   <p class="span2 text-right">{% trans 'inforequests:detail:request:unique_email' %}:</p>
   <p class="span10">{{ inforequest.unique_email }}
     <i class="icon-question-sign with-tooltip" data-toggle="tooltip" data-placement="right"
-       title="{% spaceless %}{% include "inforequests/detail/tooltips/unique_email.txt" %}{% endspaceless %}"></i>
+       title="{% spaceless %}
+         {% include "inforequests/detail/tooltips/unique_email.txt" %}
+         {% endspaceless %}"></i>
   </p>
 </div>
 <div class="row">

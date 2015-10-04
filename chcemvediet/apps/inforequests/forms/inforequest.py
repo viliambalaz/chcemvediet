@@ -76,11 +76,13 @@ class InforequestForm(PrefixedForm):
 
     def save(self):
         assert self.is_valid()
-        subject_finalize = lambda inforequest: self.fields[u'subject'].finalize(self.cleaned_data[u'subject'])
-        content_finalize = lambda inforequest: self.fields[u'content'].finalize(self.cleaned_data[u'content'], dict(
-                unique_email=inforequest.unique_email,
-                obligee=self.cleaned_data[u'obligee'],
-                ))
+        subject_finalize = lambda inforequest: self.fields[u'subject'].finalize(
+                self.cleaned_data[u'subject'])
+        content_finalize = lambda inforequest: self.fields[u'content'].finalize(
+                self.cleaned_data[u'content'], dict(
+                    unique_email=inforequest.unique_email,
+                    obligee=self.cleaned_data[u'obligee'],
+                    ))
         inforequest = Inforequest.create(
                 applicant=self.user,
                 subject=self.cleaned_data[u'subject'][0],

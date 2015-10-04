@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}{% trans 'inforequests:create:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
@@ -29,16 +30,22 @@
         </div>
         {% include "main/snippets/form_horizontal.html" with form=form %}
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary with-tooltip" name="button" value="submit" data-toggle="tooltip"
-                  title="{% spaceless %}{% include "inforequests/create/tooltips/submit.txt" %}{% endspaceless %}">
+          <button type="submit" class="btn btn-primary with-tooltip" name="button" value="submit"
+                  data-toggle="tooltip" title="{% spaceless %}
+                    {% include "inforequests/create/tooltips/submit.txt" %}
+                    {% endspaceless %}">
             <i class="icon-envelope icon-white"></i> {% trans 'inforequests:create:submit' %}
           </button>
-          <button type="submit" class="btn with-tooltip" name="button" value="draft" data-toggle="tooltip"
-                  title="{% spaceless %}{% include "inforequests/create/tooltips/draft.txt" %}{% endspaceless %}">
+          <button type="submit" class="btn with-tooltip" name="button" value="draft"
+                  data-toggle="tooltip" title="{% spaceless %}
+                    {% include "inforequests/create/tooltips/draft.txt" %}
+                    {% endspaceless %}">
             <i class="icon-file"></i> {% trans 'inforequests:create:draft' %}
           </button>
-          <a class="btn pull-right with-tooltip" href="{% url 'inforequests:index' %}" data-toggle="tooltip"
-             title="{% spaceless %}{% include "inforequests/create/tooltips/cancel.txt" %}{% endspaceless %}">
+          <a class="btn pull-right with-tooltip" href="{% url 'inforequests:index' %}"
+             data-toggle="tooltip" title="{% spaceless %}
+               {% include "inforequests/create/tooltips/cancel.txt" %}
+               {% endspaceless %}">
             <i class="icon-remove"></i> {% trans 'inforequests:create:cancel' %}
           </a>
         </div>

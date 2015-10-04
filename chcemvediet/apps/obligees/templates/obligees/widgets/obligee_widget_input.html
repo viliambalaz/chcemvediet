@@ -10,6 +10,7 @@
  %
 {% endcomment %}
 
+
 <div class="obligee_widget_input">
   {% if allow_delete %}
     <button class="obligee_widget_del">&times;</button>
@@ -21,8 +22,12 @@
     </div>
   </label>
   <div class="obligee_widget_details {% if not obligee %}obligee_widget_hide{% endif %}">
-    <span class="obligee_widget_street">{{ obligee.street }}</span><br>
-    <span class="obligee_widget_zip">{{ obligee.zip }}</span> <span class="obligee_widget_city">{{ obligee.city }}</span><br>
-    {% trans 'obligees:obligee_widget:email' %}: <span class="obligee_widget_email">{{ obligee.emails }}</span>
+    <span class="obligee_widget_street">{{ obligee.street }}</span>
+    <br>
+    <span class="obligee_widget_zip">{{ obligee.zip }}</span>
+    <span class="obligee_widget_city">{{ obligee.city }}</span>
+    <br>
+    {% trans 'obligees:obligee_widget:email' %}:
+    <span class="obligee_widget_email">{{ obligee.emails }}</span>
   </div>
 </div>

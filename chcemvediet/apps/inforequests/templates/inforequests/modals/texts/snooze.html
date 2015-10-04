@@ -9,18 +9,19 @@
  %
 {% endcomment %}
 
-<p>
-Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre {{ branch.historicalobligee.name }}
-{% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name }}{% endif %}
-bola {{ action.deadline.value }}
-{% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
-dni od {{ action.deadline.base_date }}.
-Lehota uplynula {{ action.deadline.deadline_date }}.
-Od vtedy prešlo {{ action.deadline.calendar_days_behind }} kalendárnych dni.
-</p>
 
 <p>
-Skôr než vykonáte ďalšiu akciu, môžete poskytnúť inštitúcii ešte pár dni na odpoveď. Niekedy to je
-vhodné, ak viete, že inštitúcia je pomalá alebo dúfate, že ešte vám stále môže prísť požadovaná
-informácia. Po uplynutí aj týcto dni vás chcemvediet.sk znova upozorní.
+  Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
+  {{ branch.historicalobligee.name }}
+  {% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name }}{% endif %}
+  bola {{ action.deadline.value }}
+  {% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
+  dni od {{ action.deadline.base_date }}.
+  Lehota uplynula {{ action.deadline.deadline_date }}.
+  Od vtedy prešlo {{ action.deadline.calendar_days_behind }} kalendárnych dni.
+</p>
+<p>
+  Skôr než vykonáte ďalšiu akciu, môžete poskytnúť inštitúcii ešte pár dni na odpoveď. Niekedy to
+  je vhodné, ak viete, že inštitúcia je pomalá alebo dúfate, že ešte vám stále môže prísť
+  požadovaná informácia. Po uplynutí aj týcto dni vás chcemvediet.sk znova upozorní.
 </p>

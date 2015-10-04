@@ -10,6 +10,7 @@ from poleno.utils.urls import reverse
 from poleno.utils.translation import translation
 from poleno.pages.pages import File, Page
 
+
 register = Library()
 
 @register.simple_tag(takes_context=True)

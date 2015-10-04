@@ -13,7 +13,8 @@
  *  -- JQuery Cookie
  *
  * Example:
- *     <input class="fileupload" type="file" name="files" multiple data-url="..." data-field="#field" data-target="#target">
+ *     <input class="fileupload" type="file" name="files" multiple
+ *            data-url="..." data-field="#field" data-target="#target">
  *
  *     <span id="target">
  *       <span class="fileupload-template hide">...</span>
@@ -58,6 +59,8 @@ $(function(){
 		$(label).hide(300, function(){ $(this).remove(); });
 		$(field).val($(field).val().replace(','+attachment+',', ','));
 	});
-	$(document).on('dom-changed', function(event){ attach(event.target); }); // Triggered by: poleno/js/ajax.js
+	$(document).on('dom-changed', function(event){ // Triggered by: poleno/js/ajax.js
+		attach(event.target);
+	});
 	attach(document);
 });

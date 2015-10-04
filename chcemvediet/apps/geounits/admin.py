@@ -10,6 +10,7 @@ from .models import Region, District, Municipality, Neighbourhood
 
 @admin.register(Region, site=admin.site)
 class RegionAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'name',
@@ -23,14 +24,19 @@ class RegionAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
     raw_id_fields = [
             ]
+    inlines = [
+            ]
 
 @admin.register(District, site=admin.site)
 class DistrictAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'name',
@@ -52,15 +58,20 @@ class DistrictAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
     raw_id_fields = [
             u'region',
             ]
+    inlines = [
+            ]
 
 @admin.register(Municipality, site=admin.site)
 class MunicipalityAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'name',
@@ -90,6 +101,8 @@ class MunicipalityAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
@@ -97,9 +110,12 @@ class MunicipalityAdmin(admin.ModelAdmin):
             u'district',
             u'region',
             ]
+    inlines = [
+            ]
 
 @admin.register(Neighbourhood, site=admin.site)
 class NeighbourhoodAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'name',
@@ -136,6 +152,8 @@ class NeighbourhoodAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
@@ -143,4 +161,6 @@ class NeighbourhoodAdmin(admin.ModelAdmin):
             u'municipality',
             u'district',
             u'region',
+            ]
+    inlines = [
             ]

@@ -14,6 +14,7 @@ from poleno.utils.translation import translation
 
 from .models import Inforequest, InforequestEmail
 
+
 @receiver(message_received)
 def assign_email_on_message_received(sender, message, **kwargs):
     if message.received_for:

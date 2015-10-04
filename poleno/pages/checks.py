@@ -12,6 +12,7 @@ from poleno import datacheck
 
 from . import pages
 
+
 def _check_rec(lang, basedir, rootdir, curdir, autofix):
     filenames = set(os.listdir(curdir))
 
@@ -38,11 +39,14 @@ def _check_rec(lang, basedir, rootdir, curdir, autofix):
                         try:
                             trans_page = pages.Page(trans_path, trans_lang)
                         except pages.InvalidPageError as e:
-                            yield datacheck.Error(u'Page /%s has invalid %s translation: %s', filerel, trans_lang.upper(), e)
+                            yield datacheck.Error(u'Page /%s has invalid %s translation: %s',
+                                    filerel, trans_lang.upper(), e)
                         else:
                             if trans_page.path != trans_path:
-                                yield datacheck.Warning(u'Page /%s %s translation is %s but its canonical form is %s',
-                                        filerel, trans_lang.upper(), trans_path, trans_page.path, autofixable=True)
+                                yield datacheck.Warning(
+                                        u'Page /%s %s translation is %s but its canonical form is %s',
+                                        filerel, trans_lang.upper(), trans_path, trans_page.path,
+                                        autofixable=True)
                                 if autofix:
                                     config_fixes[trans_key] = trans_page.path
                 if config_fixes:
@@ -86,11 +90,17 @@ def _check_rec(lang, basedir, rootdir, curdir, autofix):
                 if not target.startswith(rootdir + os.sep) and target != rootdir:
                     yield datacheck.Error(u'Redirect /%s goes outside root dir %s', filerel, link)
                 elif not os.path.isdir(target):
-                    yield datacheck.Error(u'Redirect /%s points to %s which expands to %s which is not a directory', filerel, link, target_path)
+                    yield datacheck.Error(
+                            u'Redirect /%s points to %s which expands to %s which is not a directory',
+                            filerel, link, target_path)
                 elif not pages.path_regex.match(target_path):
-                    yield datacheck.Error(u'Redirect /%s points to %s which expands to %s which is not a valid path', filerel, link, target_path)
+                    yield datacheck.Error(
+                            u'Redirect /%s points to %s which expands to %s which is not a valid path',
+                            filerel, link, target_path)
                 elif link != target_link:
-                    yield datacheck.Warning(u'Redirect /%s points to %s but its canonical form is %s', filerel, link, target_link, autofixable=True)
+                    yield datacheck.Warning(
+                            u'Redirect /%s points to %s but its canonical form is %s',
+                            filerel, link, target_link, autofixable=True)
                     if autofix:
                         os.remove(filepath)
                         os.symlink(target_link, filepath)

@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 <div class="well">
   <h4>{{ action.get_type_display }}</h4>
   {% if action.legal_date %}
@@ -67,32 +68,44 @@
             {% endif %}
             {% if recipient.status == recipient.STATUSES.QUEUED %}
               <span class="label with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_queued.txt" %}{% endspaceless %}">
+                    title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_queued.txt" %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% elif recipient.status == recipient.STATUSES.REJECTED %}
-              <span class="label label-important with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_rejected.txt" %}{% endspaceless %}">
+              <span class="label label-important with-tooltip" data-toggle="tooltip"
+                    data-placement="right" title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_rejected.txt" %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% elif recipient.status == recipient.STATUSES.INVALID %}
-              <span class="label label-important with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_invalid.txt"   %}{% endspaceless %}">
+              <span class="label label-important with-tooltip" data-toggle="tooltip"
+                    data-placement="right" title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_invalid.txt"   %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% elif recipient.status == recipient.STATUSES.SENT %}
-              <span class="label label-info with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_sent.txt" %}{% endspaceless %}">
+              <span class="label label-info with-tooltip" data-toggle="tooltip"
+                    data-placement="right" title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_sent.txt" %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% elif recipient.status == recipient.STATUSES.DELIVERED %}
-              <span class="label label-success with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_delivered.txt" %}{% endspaceless %}">
+              <span class="label label-success with-tooltip" data-toggle="tooltip"
+                    data-placement="right" title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_delivered.txt" %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% elif recipient.status == recipient.STATUSES.OPENED %}
-              <span class="label label-success with-tooltip" data-toggle="tooltip" data-placement="right"
-                    title="{% spaceless %}{% include "inforequests/detail/tooltips/email_opened.txt" %}{% endspaceless %}">
+              <span class="label label-success with-tooltip" data-toggle="tooltip"
+                    data-placement="right" title="{% spaceless %}
+                      {% include "inforequests/detail/tooltips/email_opened.txt" %}
+                      {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
             {% endif %}
@@ -151,7 +164,9 @@
               action="{% url 'inforequests:snooze' action=action %}"
               data-type="html" data-target="#snooze-{{ action.pk }}-modal"
               data-fail-target="#ajax-fail-modal" data-toggle="tooltip" data-placement="right"
-              title="{% spaceless %}{% include "inforequests/detail/tooltips/snooze.txt" %}{% endspaceless %}">
+              title="{% spaceless %}
+                {% include "inforequests/detail/tooltips/snooze.txt" %}
+                {% endspaceless %}">
         {% trans 'inforequests:detail:action:snooze' %}
       </button>
       <span id="snooze-{{ action.pk }}-modal" class="modal ajax-operations hide fade"
@@ -160,14 +175,18 @@
     {% if branch.can_add_clarification_response %}
       <a class="btn btn-primary with-tooltip" data-toggle="tooltip" data-placement="right"
          href="{% url 'inforequests:clarification_response' branch=branch %}"
-         title="{% spaceless %}{% include "inforequests/detail/tooltips/clarification_response.txt" %}{% endspaceless %}">
+         title="{% spaceless %}
+           {% include "inforequests/detail/tooltips/clarification_response.txt" %}
+           {% endspaceless %}">
         {% trans 'inforequests:detail:action:clarification_response' %}
       </a>
     {% endif %}
     {% if branch.can_add_appeal %}
       <a class="btn btn-primary with-tooltip" data-toggle="tooltip" data-placement="right"
          href="{% url 'inforequests:appeal' branch=branch %}"
-         title="{% spaceless %}{% include "inforequests/detail/tooltips/appeal.txt" %}{% endspaceless %}">
+         title="{% spaceless %}
+           {% include "inforequests/detail/tooltips/appeal.txt" %}
+           {% endspaceless %}">
         {% trans 'inforequests:detail:action:appeal' %}
       </a>
     {% endif %}
@@ -177,9 +196,13 @@
       <div class="row-fluid">
         <p class="span2 text-right">{% trans 'inforequests:detail:action:advanced_to' %}:</p>
         <div class="span10">
-          <p>{{ sub_branch.historicalobligee.name }}</p>
-          <p>{{ sub_branch.historicalobligee.street }}<br>
-            {{ sub_branch.historicalobligee.zip }} {{ sub_branch.historicalobligee.city }}</p>
+          <p>
+            {{ sub_branch.historicalobligee.name }}
+          </p>
+          <p>
+            {{ sub_branch.historicalobligee.street }}<br>
+            {{ sub_branch.historicalobligee.zip }} {{ sub_branch.historicalobligee.city }}
+          </p>
         </div>
       </div>
       {% include "inforequests/detail/branch.html" with branch=sub_branch %}

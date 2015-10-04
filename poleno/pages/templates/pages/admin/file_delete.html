@@ -11,6 +11,7 @@
  %
 {% endcomment %}
 
+
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
   &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}

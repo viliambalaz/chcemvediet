@@ -13,11 +13,13 @@ from unidecode import unidecode
 
 from django.utils.decorators import available_attrs
 
+
 class Bunch(object):
     u"""
     Simple object with defened attributes.
 
-    Source: http://code.activestate.com/recipes/52308-the-simple-but-handy-collector-of-a-bunch-of-named/
+    Source:
+    http://code.activestate.com/recipes/52308-the-simple-but-handy-collector-of-a-bunch-of-named/
 
     Example:
         b = Bunch(key=value)
@@ -127,9 +129,9 @@ def flatten(l):
 
 def guess_extension(content_type, default=None):
     u"""
-    Guesses file extention based on file content type. Wrapper around ``mimetypes.guess_extension`` to
-    return ``default`` extension if the given content type is not known by ``mimetypes`` module, and to
-    fix stupid guesses like: "text/plain" -> ".ksh".
+    Guesses file extention based on file content type. Wrapper around ``mimetypes.guess_extension``
+    to return ``default`` extension if the given content type is not known by ``mimetypes`` module,
+    and to fix stupid guesses like: "text/plain" -> ".ksh".
 
     See: http://bugs.python.org/issue1043134
 
@@ -286,7 +288,8 @@ def print_invocations(func=None):
         print_invocations.level = 0
     @wraps(func, assigned=available_attrs(func))
     def wrapped_func(*args, **kwargs):
-        print(u'%s>%s: args=%r kwargs=%r' % (u'  '*print_invocations.level, func.__name__, args, kwargs))
+        print(u'%s>%s: args=%r kwargs=%r' % (
+                u'  '*print_invocations.level, func.__name__, args, kwargs))
         print_invocations.level += 1
         res = func(*args, **kwargs)
         print_invocations.level -= 1

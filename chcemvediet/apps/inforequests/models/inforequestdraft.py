@@ -11,6 +11,7 @@ from poleno.attachments.models import Attachment
 from poleno.utils.models import QuerySet, join_lookup
 from poleno.utils.misc import squeeze
 
+
 class InforequestDraftQuerySet(QuerySet):
     def owned_by(self, user):
         return self.filter(applicant=user)
@@ -35,7 +36,8 @@ class InforequestDraft(models.Model):
     content = JSONField(blank=True, default=())
 
     # May be empty
-    attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
+    attachment_set = generic.GenericRelation(u'attachments.Attachment',
+            content_type_field=u'generic_type', object_id_field=u'generic_id')
 
     # Backward relations added to other models:
     #
@@ -45,13 +47,11 @@ class InforequestDraft(models.Model):
     #  -- Obligee.inforequestdraft_set
     #     May be empty
 
-    objects = InforequestDraftQuerySet.as_manager()
+    # Indexes:
+    #  -- applicant: ForeignKey
+    #  -- obligee:   ForeignKey
 
-    class Meta:
-        index_together = [
-                # [u'applicant'] -- ForeignKey defines index by default
-                # [u'obligee'] -- ForeignKey defines index by default
-                ]
+    objects = InforequestDraftQuerySet.as_manager()
 
     @staticmethod
     def prefetch_attachments(path=None, queryset=None):

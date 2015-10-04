@@ -13,6 +13,7 @@ from poleno.utils.misc import nop
 
 from .models import Inforequest, Branch, Action
 
+
 @cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
 def undecided_email_reminder():

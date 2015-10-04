@@ -10,6 +10,7 @@ from poleno.utils.date import utc_now
 
 from .models import WizardDraft
 
+
 @cron_job(run_at_times=settings.CRON_UNIMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
 def delete_old_drafts():

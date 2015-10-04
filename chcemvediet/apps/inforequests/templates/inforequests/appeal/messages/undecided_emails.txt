@@ -7,6 +7,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 FIXME Appeal sa neda podat, kym nezaradite nove maily
 {% endautoescape %}

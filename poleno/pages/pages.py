@@ -17,6 +17,7 @@ from django.utils.translation import get_language
 from poleno.utils.urls import reverse
 from poleno.utils.translation import translation
 
+
 path_regex = re.compile(r'^/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*$')
 slug_regex = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
 file_regex = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*(?:[.][a-z0-9]+)+$')
@@ -350,7 +351,8 @@ class Page(object):
                     if os.path.islink(filepath):
                         link = os.readlink(pagedir)
                         if u'/@/' in link:
-                            new_link = os.path.relpath(self._rootdir, curdir) + u'/@/' + link.split(u'/@/', 1)[1]
+                            new_link = (os.path.relpath(self._rootdir, curdir)
+                                    + u'/@/' + link.split(u'/@/', 1)[1])
                             if new_link != link:
                                 os.remove(pagedir)
                                 os.symlink(new_link, pagedir)
@@ -459,7 +461,9 @@ class Page(object):
                     try:
                         res.append(self.subpage(file))
                     except InvalidPageError as e:
-                        logging.getLogger(u'poleno.pages').error(u'Page /%s%s%s/ is broken: %s', self._lang, self._path, file, e)
+                        logger = logging.getLogger(u'poleno.pages')
+                        logger.error(u'Page /%s%s%s/ is broken: %s',
+                                self._lang, self._path, file, e)
         res.sort()
         return res
 
@@ -534,7 +538,9 @@ class Page(object):
     def title(self):
         if self._config is None:
             return None
-        return self._config.get(u'title') or self._name.replace(u'-', u' ').capitalize() or u'(unnamed)'
+        return (self._config.get(u'title')
+                or self._name.replace(u'-', u' ').capitalize()
+                or u'(unnamed)')
 
     @cached_property
     def label(self):
@@ -589,11 +595,13 @@ class Page(object):
         try:
             page = Page(path, lang)
         except PageError as e:
-            logging.getLogger(u'poleno.pages').error(u'Page /%s%s has broken translation: /%s%s: %s',
+            logger = logging.getLogger(u'poleno.pages')
+            logger.error(u'Page /%s%s has broken translation: /%s%s: %s',
                     self._lang, self._path, lang, fix_slashes(path), e.message)
             return None
         if page.path != path:
-            logging.getLogger(u'poleno.pages').warning(u'Page /%s%s has redirected translation: /%s%s -> /%s%s',
+            logger = logging.getLogger(u'poleno.pages')
+            logging.warning(u'Page /%s%s has redirected translation: /%s%s -> /%s%s',
                     self._lang, self._path, lang, fix_slashes(path), page.lang, page.path)
         return page
 
@@ -625,7 +633,8 @@ class Page(object):
         if not slug_regex.match(name):
             raise PageNameError(u'Invalid page name: "%s"' % name)
         if raw_config is not None and entries:
-            raise ParseConfigError(u'Cannot set raw config and individual options at the same time.')
+            raise ParseConfigError(
+                    u'Cannot set raw config and individual options at the same time.')
 
         path = self._path + name + u'/'
         pagedir = os.path.join(self._pagedir, name)
@@ -669,7 +678,8 @@ class Page(object):
             raise PageNameError(u'Target page already exists: %s' % path)
 
         os.rename(self._pagedir, pagedir)
-        os.symlink(os.path.relpath(self._rootdir, os.path.dirname(self._pagedir)) + u'/@' + path, self._pagedir)
+        os.symlink(os.path.relpath(self._rootdir, os.path.dirname(self._pagedir))
+                + u'/@' + path, self._pagedir)
         self._fix_redirects(pagedir)
 
         return Page(path, self._lang)
@@ -684,13 +694,15 @@ class Page(object):
             raise PageRedirectError(e)
 
         os.remove(self._pagedir)
-        os.symlink(os.path.relpath(self._rootdir, os.path.dirname(self._pagedir)) + u'/@' + target.path, self._pagedir)
+        os.symlink(os.path.relpath(self._rootdir, os.path.dirname(self._pagedir))
+                + u'/@' + target.path, self._pagedir)
 
     def save_config(self, raw_config=None, **entries):
         if self._redirect is not None:
             raise PageError(u'Cannot save config for a redirect.')
         if raw_config is not None and entries:
-            raise ParseConfigError(u'Cannot change raw config and individual options at the same time.')
+            raise ParseConfigError(
+                    u'Cannot change raw config and individual options at the same time.')
 
         if raw_config is not None:
             self._config.read_from_string(raw_config)
@@ -736,7 +748,9 @@ class Page(object):
                 try:
                     res.append(self.file(file))
                 except InvalidFileError as e:
-                    logging.getLogger(u'poleno.pages').error(u'Page /%s%s file "%s" is broken: %s', self._lang, self._path, file, e)
+                    logger = logging.getLogger(u'poleno.pages')
+                    logger.error(u'Page /%s%s file "%s" is broken: %s',
+                            self._lang, self._path, file, e)
         res.sort()
         return res
 

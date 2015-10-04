@@ -13,6 +13,7 @@ from django.http import JsonResponse
 
 from .models import Obligee
 
+
 @require_http_methods([u'HEAD', u'GET'])
 def index(request):
     obligees = Obligee.objects.pending().order_by_name()

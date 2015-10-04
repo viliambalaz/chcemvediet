@@ -14,5 +14,6 @@
  %
 {% endcomment %}
 
+
 {% if rozklad %}Rozklad{% else %}Odvolanie{% endif %} voči
 {% if fiktivne %}fiktívnemu{% endif %} rozhodnutiu o neposkytnutí informácie

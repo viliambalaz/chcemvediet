@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
-No free invitiations available. 
+
+No free invitiations available.

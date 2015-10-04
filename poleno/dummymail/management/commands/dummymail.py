@@ -12,6 +12,7 @@ from twisted.python import log
 
 from django.core.management.base import NoArgsCommand
 
+
 class Command(NoArgsCommand):
     # Default ports
     default_outgoing_smtp_port = 1025
@@ -69,16 +70,20 @@ class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option(u'--out-smtp-port', action=u'store', type=u'int', dest=u'outgoing_smtp_port',
             default=default_outgoing_smtp_port,
-            help=u'Port to use for the outgoing SMTP server. Defaults to %d.' % default_outgoing_smtp_port),
+            help=u'Port to use for the outgoing SMTP server. Defaults to %d.'
+                % default_outgoing_smtp_port),
         make_option(u'--out-imap-port', action=u'store', type=u'int', dest=u'outgoing_imap_port',
             default=default_outgoing_imap_port,
-            help=u'Port to use for the outgoing IMAP server. Defaults to %d.' % default_outgoing_imap_port),
+            help=u'Port to use for the outgoing IMAP server. Defaults to %d.'
+                % default_outgoing_imap_port),
         make_option(u'--in-smtp-port', action=u'store', type=u'int', dest=u'incoming_smtp_port',
             default=default_incoming_smtp_port,
-            help=u'Port to use for the incoming SMTP server. Defaults to %d.' % default_incoming_smtp_port),
+            help=u'Port to use for the incoming SMTP server. Defaults to %d.'
+                % default_incoming_smtp_port),
         make_option(u'--in-imap-port', action=u'store', type=u'int', dest=u'incoming_imap_port',
             default=default_incoming_imap_port,
-            help=u'Port to use for the incoming IMAP server. Defaults to %d.' % default_incoming_imap_port),
+            help=u'Port to use for the incoming IMAP server. Defaults to %d.'
+                % default_incoming_imap_port),
         )
 
     def handle_noargs(self, **options):

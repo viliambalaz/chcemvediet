@@ -10,4 +10,5 @@
  %
 {% endcomment %}
 
+
 Ziadost o informacie podla 211/2000 Z.z. {{ inputs.0 }}

@@ -13,6 +13,7 @@ from poleno.utils.misc import nop
 from .models import Message
 from .signals import message_sent, message_received
 
+
 @cron_job(run_every_mins=1)
 def mail():
     # Get inbound mail
@@ -49,7 +50,8 @@ def mail():
                 nop() # To let tests raise testing exception here.
             cron_logger.info(u'Processed received email: %s' % repr(message))
         except Exception:
-            cron_logger.error(u'Processing received email failed: %s\n%s' % (repr(message), traceback.format_exc()))
+            cron_logger.error(u'Processing received email failed: %s\n%s'
+                    % (repr(message), traceback.format_exc()))
 
     # Send outbound mail; At most 10 messages in one batch
     path = getattr(settings, u'EMAIL_OUTBOUND_TRANSPORT', None)
@@ -74,4 +76,5 @@ def mail():
                             nop() # To let tests raise testing exception here.
                         cron_logger.info(u'Sent email: %s' % repr(message))
                     except Exception:
-                        cron_logger.error(u'Seding email failed: %s\n%s' % (repr(message), traceback.format_exc()))
+                        cron_logger.error(u'Seding email failed: %s\n%s'
+                                % (repr(message), traceback.format_exc()))

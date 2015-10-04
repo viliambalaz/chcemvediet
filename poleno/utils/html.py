@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.html import format_html, format_html_join
 
+
 def merge_html_attrs(*args, **kwargs):
     u"""
     Merges html tag attributes from multiple dictionaries and keyword arguments. If multiple
@@ -13,7 +14,8 @@ def merge_html_attrs(*args, **kwargs):
         >>> a = {'href': '#', 'title': 'Title'}
         >>> b = {'class': 'btn', 'style': 'color: red;'}
         >>> merge_html_attrs(a, b, alt='Go', class_='btn-go', style='border: 1px;')
-        {'href': '#', 'title': 'Title', 'class': 'btn btn-go', style: 'color: red; border: 1px;', alt: 'Go'}
+        {'href': '#', 'title': 'Title', 'class': 'btn btn-go', style: 'color: red;
+                border: 1px;', alt: 'Go'}
 
     """
     attrs = {}

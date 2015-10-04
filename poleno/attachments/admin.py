@@ -9,6 +9,7 @@ from poleno.utils.admin import admin_obj_format
 from .views import download
 from .models import Attachment
 
+
 @admin.register(Attachment, site=admin.site)
 class AttachmentAdmin(admin.ModelAdmin):
     date_hierarchy = u'created'
@@ -51,6 +52,12 @@ class AttachmentAdmin(admin.ModelAdmin):
             ]
     exclude = [
             u'file',
+            ]
+    readonly_fields = [
+            ]
+    raw_id_fields = [
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):

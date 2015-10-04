@@ -16,7 +16,8 @@ $(function(){
 				.append($('<div>').append($('<iframe>').attr('name', target)))
 				.split({orientation: 'vertical', limit: 0})
 				.resizable({handles: 's'})
-				.after($('<button type="button" class="button" style="float: right;">Refresh Preview</button>').click(function(){
+				.after($('<button type="button" class="button" style="float: right;">'+
+						'Refresh Preview</button>').click(function(){
 					form.find('textarea').val(widget.find('textarea').val());
 					form.submit();
 				}));

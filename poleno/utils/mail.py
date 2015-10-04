@@ -7,6 +7,7 @@ from django.contrib.sites.models import Site
 
 from poleno.utils.misc import squeeze
 
+
 def render_mail(template_prefix, dictionary=None, context_instance=None, **kwargs):
     u"""
     Create ``django.core.mail.EmailMessage`` object ready to be sent with ``msg.send()`` method.
@@ -21,7 +22,9 @@ def render_mail(template_prefix, dictionary=None, context_instance=None, **kwarg
     Based on: Django-allauth's allauth.DefaultAccountAdapter.render_mail method.
 
     Examples:
-        render_mail('app/mail', from_email='My Name <me@example.com>', to=['Your Name <you@example.com>'])
+        render_mail('app/mail',
+                    from_email='My Name <me@example.com>',
+                    to=['Your Name <you@example.com>'])
     """
     site = Site.objects.get_current()
     subject = render_to_string(u'%s_subject.txt' % template_prefix, dictionary, context_instance)

@@ -124,8 +124,10 @@ class Timewarp(object):
         if not self._enabled:
             self._enabled = True
             self._remap_modules({a: b for a, b in self._remap})
-            copy_reg.pickle(datetime_orig.date, lambda d: (_WarpedDatetime.date,) + d.__reduce__()[1:])
-            copy_reg.pickle(datetime_orig.datetime, lambda d: (_WarpedDatetime.datetime,) + d.__reduce__()[1:])
+            copy_reg.pickle(datetime_orig.date,
+                    lambda d: (_WarpedDatetime.date,) + d.__reduce__()[1:])
+            copy_reg.pickle(datetime_orig.datetime,
+                    lambda d: (_WarpedDatetime.datetime,) + d.__reduce__()[1:])
 
     def disable(self):
         if self._enabled:
@@ -211,7 +213,8 @@ class Timewarp(object):
             raise RuntimeError(u'Timewarp is disabled.')
         cache.set_many({
             u'timewarp.warped_from': self.real_time,
-            u'timewarp.warped_to': time_orig.mktime(date.timetuple()) if date is not None else self.warped_time,
+            u'timewarp.warped_to': time_orig.mktime(date.timetuple())
+                if date is not None else self.warped_time,
             u'timewarp.speedup': speed if speed is not None else self.speedup,
             }, timeout=None)
         self._lastupdate = None

@@ -16,6 +16,7 @@ from poleno.utils.misc import squeeze as squeeze_func
 from poleno.utils.date import utc_date as utc_date_func, local_date as local_date_func
 from poleno.utils.translation import translation
 
+
 register = Library()
 
 @register.filter
@@ -266,11 +267,15 @@ def external_css():
     u"""
     Render links to external css styles. Uses settins.EXTERNAL_CSS to get their list.
     """
-    return u'\n'.join(format_html(u'<link href="{0}" rel="stylesheet">', url) for url in settings.EXTERNAL_CSS)
+    return u'\n'.join(
+            format_html(u'<link href="{0}" rel="stylesheet">', url)
+            for url in settings.EXTERNAL_CSS)
 
 @register.simple_tag
 def external_js():
     u"""
     Render links to external javascript. Uses settins.EXTERNAL_JS to get their list.
     """
-    return u'\n'.join(format_html(u'<script src="{0}"></script>', url) for url in settings.EXTERNAL_JS)
+    return u'\n'.join(
+            format_html(u'<script src="{0}"></script>', url)
+            for url in settings.EXTERNAL_JS)

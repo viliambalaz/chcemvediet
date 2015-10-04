@@ -9,6 +9,7 @@ from poleno.attachments.models import Attachment
 
 from ...models import Message, Recipient
 
+
 webhook_event = Signal(providing_args=['event_type', 'data'])
 
 @receiver(webhook_event)

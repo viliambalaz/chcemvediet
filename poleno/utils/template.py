@@ -15,6 +15,7 @@ from django.utils.translation import get_language
 from .lazy import lazy_decorator
 from .misc import squeeze
 
+
 @lazy_decorator(unicode)
 def lazy_render_to_string(*args, **kwargs):
     return render_to_string(*args, **kwargs)
@@ -39,8 +40,10 @@ class TranslationLoader(BaseLoader):
     'settings.py' as follows:
 
         TEMPLATE_LOADERS = (
-            ('poleno.utils.template.TranslationLoader', 'django.template.loaders.filesystem.Loader'),
-            ('poleno.utils.template.TranslationLoader', 'django.template.loaders.app_directories.Loader'),
+            ('poleno.utils.template.TranslationLoader',
+                'django.template.loaders.filesystem.Loader'),
+            ('poleno.utils.template.TranslationLoader',
+                'django.template.loaders.app_directories.Loader'),
         )
     """
     is_usable = True
@@ -109,14 +112,16 @@ class Library(template.Library):
 
     def simple_pair_tag(self, func=None, takes_context=None, name=None):
 
-        def compiler(parser, token, params, varargs, varkw, defaults, name, takes_context, node_class):
+        def compiler(parser, token, params, varargs, varkw, defaults,
+                name, takes_context, node_class):
             if params[0] == 'content':
                 params = params[1:]
             else:
                 raise TemplateSyntaxError(u'The first argument of "%s" must be "content"' % name)
 
             bits = token.split_contents()[1:]
-            args, kwargs = parse_bits(parser, bits, params, varargs, varkw, defaults, takes_context, name)
+            args, kwargs = parse_bits(parser, bits, params, varargs, varkw, defaults,
+                    takes_context, name)
             nodelist = parser.parse((u'end' + name,))
             parser.delete_first_token()
             return node_class(takes_context, nodelist, args, kwargs)

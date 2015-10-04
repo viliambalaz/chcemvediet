@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
   &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=create %}
@@ -48,7 +49,11 @@
               <tr class="{% cycle 'row1' 'row2' %}">
                 <td>
                   {% if subpage.is_disabled %}<del>{% endif %}
-                    <strong><a href="{% url "admin:pages_edit" lang subpage.lpath %}">{{ subpage.path }}</a></strong>
+                    <strong>
+                      <a href="{% url "admin:pages_edit" lang subpage.lpath %}">
+                        {{ subpage.path }}
+                      </a>
+                    </strong>
                   {% if subpage.is_disabled %}</del>{% endif %}
                   {% if subpage.is_redirect %} → {{ subpage.redirect_path }}{% endif %}
                 </td>
@@ -61,8 +66,16 @@
                 </td>
                 <td>
                   <ul class="object-tools" style="margin: 0;">
-                    <li><a href="{% url "admin:pages_edit" lang subpage.lpath %}">Edit</a></li>
-                    <li><a href="{{ subpage.url }}" {% if subpage.is_redirect or subpage.is_disabled %}style="visibility: hidden;"{% endif %}>View</a></li>
+                    <li>
+                      <a href="{% url "admin:pages_edit" lang subpage.lpath %}">Edit</a>
+                    </li>
+                    <li>
+                      {% if subpage.is_redirect or subpage.is_disabled %}
+                        <a href="{{ subpage.url }}" style="visibility: hidden;">View</a>
+                      {% else %}
+                        <a href="{{ subpage.url }}">View</a>
+                      {% endif %}
+                    </li>
                   </ul>
                 </td>
               </tr>
@@ -87,12 +100,24 @@
           <tbody>
             {% for file in page.files %}
               <tr class="{% cycle 'row1' 'row2' %}">
-                <td><strong><a href="{% url "admin:pages_file_edit" lang page.lpath file.name %}">{{ file.name }}</a></strong></td>
-                <td>{{ file.content_type }}</td>
+                <td>
+                  <strong>
+                    <a href="{% url "admin:pages_file_edit" lang page.lpath file.name %}">
+                      {{ file.name }}
+                    </a>
+                  </strong>
+                </td>
+                <td>
+                  {{ file.content_type }}
+                </td>
                 <td>
                   <ul class="object-tools" style="margin: 0;">
-                    <li><a href="{% url "admin:pages_file_edit" lang page.lpath file.name %}">Edit</a></li>
-                    <li><a href="{{ file.url }}">View</a></li>
+                    <li>
+                      <a href="{% url "admin:pages_file_edit" lang page.lpath file.name %}">Edit</a>
+                    </li>
+                    <li>
+                      <a href="{{ file.url }}">View</a>
+                    </li>
                   </ul>
                 </td>
               </tr>
@@ -106,10 +131,17 @@
       <div style="clear: both;"></div>
     {% endif %}
     <div class="submit-row">
-      <button type="submit" class="button default" name="button" value="save" style="margin-left: 5px;">Save</button>
-      <button type="submit" class="button" name="button" value="save-and-continue">Save and continue editing</button>
+      <button type="submit" class="button default" name="button" value="save"
+              style="margin-left: 5px;">
+        Save
+      </button>
+      <button type="submit" class="button" name="button" value="save-and-continue">
+        Save and continue editing
+      </button>
       {% if not create and not page.is_root %}
-        <p class="deletelink-box"><a class="deletelink" href="{% url "admin:pages_delete" lang page.lpath %}">Delete</a></p>
+        <p class="deletelink-box">
+          <a class="deletelink" href="{% url "admin:pages_delete" lang page.lpath %}">Delete</a>
+        </p>
       {% endif %}
     </div>
   </form>

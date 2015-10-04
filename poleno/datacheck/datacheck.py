@@ -3,6 +3,7 @@
 import functools
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
+
 class Issue(object):
 
     def __init__(self, level, msg, *args, **kwargs):

@@ -15,6 +15,7 @@ from poleno.utils.models import QuerySet
 from poleno.utils.date import utc_now, utc_datetime_from_local
 from poleno.utils.misc import random_string, squeeze, decorate
 
+
 class AttachmentQuerySet(QuerySet):
     def attached_to(self, *args):
         u"""
@@ -42,7 +43,7 @@ class AttachmentQuerySet(QuerySet):
         return self.order_by(u'pk')
 
 class Attachment(models.Model):
-    # May NOT be NULL; Generic relation; Index is prefix of [generic_type, generic_id] index, see index_together
+    # May NOT be NULL; Generic relation; Index is prefix of [generic_type, generic_id] index
     generic_type = models.ForeignKey(ContentType, db_index=False)
     generic_id = models.CharField(max_length=255)
     generic_object = generic.GenericForeignKey(u'generic_type', u'generic_id')
@@ -75,6 +76,9 @@ class Attachment(models.Model):
                 Attachment file size in bytes. Automatically computed when creating a new object.
                 """))
 
+    # Indexes:
+    #  -- generic_type, generic_id: index_together
+
     objects = AttachmentQuerySet.as_manager()
 
     class Meta:
@@ -88,7 +92,8 @@ class Attachment(models.Model):
             self.file.open(u'rb')
             return self.file.read()
         except IOError:
-            logging.getLogger(u'poleno.attachments').error(u"%r is missing its file: '%s'.", self, self.file.name)
+            logger = logging.getLogger(u'poleno.attachments')
+            logger.error(u"%r is missing its file: '%s'.", self, self.file.name)
             raise
         finally:
             self.file.close()
@@ -137,13 +142,18 @@ def datachecks(superficial, autofix):
             finally:
                 attachment.file.close()
         except IOError:
-            yield datacheck.Error(u'%r is missing its file: "%s".', attachment, attachment.file.name)
+            yield datacheck.Error(u'%r is missing its file: "%s".',
+                    attachment, attachment.file.name)
 
     field = Attachment._meta.get_field(u'file')
     if not field.storage.exists(field.upload_to):
         return
     for file_name in field.storage.listdir(field.upload_to)[1]:
         attachment_name = u'%s/%s' % (field.upload_to, file_name)
-        timedelta = utc_now() - utc_datetime_from_local(field.storage.modified_time(attachment_name))
+        modified_time = utc_datetime_from_local(field.storage.modified_time(attachment_name))
+        timedelta = utc_now() - modified_time
         if timedelta > datetime.timedelta(days=5) and attachment_name not in attachment_names:
-            yield datacheck.Info(u'There is no Attachment instance for file: "%s". The file is %d days old, so you can probably remove it.', attachment_name, timedelta.days)
+            yield datacheck.Info(squeeze(u"""
+                    There is no Attachment instance for file: "%s". The file is %d days old, so you
+                    can probably remove it.
+                    """), attachment_name, timedelta.days)

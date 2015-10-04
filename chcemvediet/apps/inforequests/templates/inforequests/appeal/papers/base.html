@@ -17,6 +17,7 @@
  %
 {% endcomment %}
 
+
 <div>
   {# Initialize paragraphs #}
   {% paragraph before=0 after=0 %}{% endparagraph %}
@@ -47,12 +48,13 @@
   {% endblock %}
   {% block appeal-subtitle %}
     <div style="text-align: center;">
-      {% if fiktivne %}
-        <small>voči fiktívnemu rozhodnutiu o neposkytnutí informácie
-          (§ 18 ods. 3 zák. 211/2000 Z. z.)</small>
-      {% else %}
-        <small>voči rozhodnutiu o neposkytnutí informácie</small>
-      {% endif %}
+      <small>
+        {% if fiktivne %}
+          voči fiktívnemu rozhodnutiu o neposkytnutí informácie (§ 18 ods. 3 zák. 211/2000 Z. z.)
+        {% else %}
+          voči rozhodnutiu o neposkytnutí informácie
+        {% endif %}
+      </small>
     </div>
   {% endblock %}
   {% block appeal %}
@@ -62,7 +64,9 @@
       {% if rozklad %}rozklad{% else %}odvolanie{% endif %}
       voči {% if fiktivne %}fiktívnemu{% endif %} rozhodnutiu
       {% obligee_declension branch.obligee "genitive" %}
-      (ďalej len „povinná osoba”){% if not fiktivne and last_action.file_number %} číslo {{ last_action.file_number}}{% endif%},
+      (ďalej len „povinná osoba”){% if not fiktivne and last_action.file_number %}
+        číslo {{ last_action.file_number}}
+      {% endif%},
       {% if fiktivne %}
         ku ktorému došlo
         {% if not_at_all %}nesprístupnením{% else %}len čiastočným sprístupnením{% endif%}
@@ -86,7 +90,9 @@
   {% block reasoning %}
     {% for substep in wizard.steps %}
       {% if substep.section_template %}
-        {% include substep.section_template with reason_number_on_paper=substep.reason_number_on_paper %}
+        {% with reason_number_on_paper=substep.reason_number_on_paper %}
+          {% include substep.section_template %}
+        {% endwith %}
       {% endif %}
     {% endfor %}
   {% endblock %}

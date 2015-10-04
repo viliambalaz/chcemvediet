@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 Vyplňte prosím dátum úkonu, čiže dátum, ktorým je datovaný
 {% if email %}email{% else %}list{% endif %}.
 

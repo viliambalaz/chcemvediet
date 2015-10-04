@@ -7,4 +7,5 @@
  %
 {% endcomment %}
 
-Your inforequest has an e-mail waiting for your decision.  
+
+Your inforequest has an e-mail waiting for your decision.

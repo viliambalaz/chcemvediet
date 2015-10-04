@@ -14,6 +14,7 @@ from poleno.utils.misc import decorate
 
 from .pages import File, Page, InvalidFileError, InvalidPageError
 
+
 def change_lang(lang, path):
     page = Page(path)
     tranlation = page.translation(lang)
@@ -32,7 +33,8 @@ def view(request, path):
         return HttpResponseNotFound()
 
     if page.lpath != path:
-        logging.getLogger(u'poleno.pages').warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
+        logger = logging.getLogger(u'poleno.pages')
+        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
                 page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
 
     if page.is_disabled:
@@ -52,7 +54,8 @@ def alternatives(request, lang, path):
         return HttpResponseNotFound()
 
     if page.lpath != path:
-        logging.getLogger(u'poleno.pages').warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
+        logger = logging.getLogger(u'poleno.pages')
+        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
                 lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
 
     if page.is_disabled:
@@ -83,7 +86,8 @@ def file(request, path, name):
         return HttpResponseNotFound()
 
     if page.lpath != path:
-        logging.getLogger(u'poleno.pages').warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
+        logger = logging.getLogger(u'poleno.pages')
+        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
                 page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
 
     try:
@@ -94,4 +98,5 @@ def file(request, path, name):
     if page.lpath != path:
         return HttpResponseRedirect(reverse(u'pages:file', args=[page.lpath, name]))
 
-    return send_file_response(request, file.filepath, file.name, file.content_type, attachment=False)
+    return send_file_response(request, file.filepath, file.name,
+            file.content_type, attachment=False)

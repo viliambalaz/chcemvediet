@@ -13,6 +13,7 @@ from poleno.utils.messages import render_message
 from . import forms, UserMayNotInvite
 from .models import Invitation
 
+
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 @login_required
 def invite(request):
@@ -28,7 +29,9 @@ def invite(request):
             except UserMayNotInvite:
                 render_message(request, messages.ERROR, u'invitations/messages/depleted.txt')
             else:
-                render_message(request, messages.SUCCESS, u'invitations/messages/invited.txt', {u'email': email})
+                render_message(request, messages.SUCCESS, u'invitations/messages/invited.txt', {
+                    u'email': email,
+                    })
             return HttpResponseRedirect(reverse(u'invitations:invite'))
 
     else:

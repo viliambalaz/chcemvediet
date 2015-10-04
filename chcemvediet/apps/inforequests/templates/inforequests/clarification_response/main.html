@@ -13,9 +13,12 @@
  %
 {% endcomment %}
 
+
 {% block body-form %}
   <div class="control-group">
-    <label class="control-label">{% trans 'inforequests:clarification_response:applicant_label' %}:</label>
+    <label class="control-label">
+      {% trans 'inforequests:clarification_response:applicant_label' %}:
+    </label>
     <div class="controls">
       <div class="suppressed-control">
         {{ inforequest.applicant.get_full_name }}<br>
@@ -25,13 +28,18 @@
     </div>
   </div>
   <div class="control-group">
-    <label class="control-label">{% trans 'inforequests:clarification_response:obligee' %}:</label>
+    <label class="control-label">
+      {% trans 'inforequests:clarification_response:obligee' %}:
+    </label>
     <div class="controls">
       <div class="suppressed-control">
         {{ branch.obligee.name }}<br>
         {{ branch.obligee.street }}<br>
         {{ branch.obligee.zip }} {{ branch.obligee.city }}<br>
-        E-mail: {% for r in branch.collect_obligee_emails %}{{ r.1 }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        E-mail:
+        {% for r in branch.collect_obligee_emails %}
+          {{ r.1 }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>

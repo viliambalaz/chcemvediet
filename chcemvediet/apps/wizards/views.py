@@ -6,6 +6,7 @@ from poleno.utils.forms import clean_button
 
 from . import WizzardRollback
 
+
 def wizard_view(wizard_class, request, index, *args, **kwargs):
     try:
         wizard = wizard_class(request, index, *args, **kwargs)

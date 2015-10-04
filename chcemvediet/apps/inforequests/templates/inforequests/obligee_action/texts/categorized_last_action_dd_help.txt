@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% if wizard.values.branch.last_action.type == ACTION_TYPES.REQUEST %}
   Vyplňte prosím dátum, kedy inštitúcia prijala Vašu žiadosť, čiže deň, kedy inštitúcia Vašu
   žiadosť oficiálne vzala na vedomie a zaregistrovala.

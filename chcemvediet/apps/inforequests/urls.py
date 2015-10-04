@@ -9,6 +9,7 @@ from poleno.utils.lazy import lazy_concat, lazy_format
 
 from . import views
 
+
 parts = {
     u'inforequest_pk':         r'(?P<inforequest_pk>\d+)/',
     u'inforequest_slug_pk': r'(?:(?P<inforequest_slug>[a-z0-9-]+)-)?(?P<inforequest_pk>\d+)/',

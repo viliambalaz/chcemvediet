@@ -7,12 +7,15 @@ from poleno.utils.admin import admin_obj_format
 
 from .models import Profile
 
+
 @admin.register(Profile, site=admin.site)
 class ProfileAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
-                lambda o: admin_obj_format(o.user, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.user,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'User',
                 admin_order_field=u'user__email',
                 ),
@@ -34,8 +37,14 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'user',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):

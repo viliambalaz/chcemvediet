@@ -1,7 +1,8 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.template import Template, Context
 from django.shortcuts import render
 from django.contrib import admin
@@ -13,6 +14,7 @@ from . import forms
 from ..pages import File, Page, InvalidFileError, InvalidPageError, PageOrigin
 from ..urls import urlparams
 
+
 @admin.site.register_view(u'pages/index/', urlname=u'pages_languages', visible=False)
 @require_http_methods([u'HEAD', u'GET'])
 def languages(request):
@@ -20,7 +22,8 @@ def languages(request):
             u'title': u'Select pages language',
             })
 
-@admin.site.register_view(u'pages/index/{lang}/'.format(**urlparams), urlname=u'pages_index', visible=False)
+@admin.site.register_view(u'pages/index/{lang}/'.format(**urlparams),
+        urlname=u'pages_index', visible=False)
 @require_http_methods([u'HEAD', u'GET'])
 def index(request, lang):
     pages = Page(u'/', lang).walk()
@@ -62,7 +65,8 @@ def create_or_edit(request, lang, path, create):
                     if button == u'save':
                         return HttpResponseRedirect(reverse(u'admin:pages_index', args=[lang]))
                     else: # save-and-continue
-                        return HttpResponseRedirect(reverse(u'admin:pages_edit', args=[lang, new_page.lpath]))
+                        return HttpResponseRedirect(
+                                reverse(u'admin:pages_edit', args=[lang, new_page.lpath]))
 
         else: # Invalid button
             return HttpResponseBadRequest()
@@ -78,15 +82,18 @@ def create_or_edit(request, lang, path, create):
             u'form': form,
             })
 
-@admin.site.register_view(u'pages/edit/{lang}/{path}'.format(**urlparams), urlname=u'pages_edit', visible=False)
+@admin.site.register_view(u'pages/edit/{lang}/{path}'.format(**urlparams),
+        urlname=u'pages_edit', visible=False)
 def edit(request, lang, path):
     return create_or_edit(request, lang, path, create=False)
 
-@admin.site.register_view(u'pages/create/{lang}/{path}'.format(**urlparams), urlname=u'pages_create', visible=False)
+@admin.site.register_view(u'pages/create/{lang}/{path}'.format(**urlparams),
+        urlname=u'pages_create', visible=False)
 def create(request, lang, path):
     return create_or_edit(request, lang, path, create=True)
 
-@admin.site.register_view(u'pages/delete/{lang}/{path}'.format(**urlparams), urlname=u'pages_delete', visible=False)
+@admin.site.register_view(u'pages/delete/{lang}/{path}'.format(**urlparams),
+        urlname=u'pages_delete', visible=False)
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 def delete(request, lang, path):
     try:
@@ -114,7 +121,8 @@ def delete(request, lang, path):
             u'page': page,
             })
 
-@admin.site.register_view(u'pages/live_path/{lang}/'.format(**urlparams), urlname=u'pages_live_path', visible=False)
+@admin.site.register_view(u'pages/live_path/{lang}/'.format(**urlparams),
+        urlname=u'pages_live_path', visible=False)
 @require_http_methods([u'HEAD', u'GET'])
 def live_path(request, lang):
     path = request.GET.get(u'path', None)
@@ -160,9 +168,11 @@ def file_create_or_edit(request, lang, path, name, create):
                     pass
                 else:
                     if button == u'save':
-                        return HttpResponseRedirect(reverse(u'admin:pages_edit', args=[lang, page.lpath]))
+                        return HttpResponseRedirect(reverse(u'admin:pages_edit',
+                                args=[lang, page.lpath]))
                     else: # save-and-continue
-                        return HttpResponseRedirect(reverse(u'admin:pages_file_edit', args=[lang, page.lpath, new_file.name]))
+                        return HttpResponseRedirect(reverse(u'admin:pages_file_edit',
+                                args=[lang, page.lpath, new_file.name]))
 
         else: # Invalid button
             return HttpResponseBadRequest()
@@ -179,15 +189,18 @@ def file_create_or_edit(request, lang, path, name, create):
             u'form': form,
             })
 
-@admin.site.register_view(u'pages/file/edit/{lang}/{path}{name}'.format(**urlparams), urlname=u'pages_file_edit', visible=False)
+@admin.site.register_view(u'pages/file/edit/{lang}/{path}{name}'.format(**urlparams),
+        urlname=u'pages_file_edit', visible=False)
 def file_edit(request, lang, path, name):
     return file_create_or_edit(request, lang, path, name, create=False)
 
-@admin.site.register_view(u'pages/file/create/{lang}/{path}'.format(**urlparams), urlname=u'pages_file_create', visible=False)
+@admin.site.register_view(u'pages/file/create/{lang}/{path}'.format(**urlparams),
+        urlname=u'pages_file_create', visible=False)
 def file_create(request, lang, path):
     return file_create_or_edit(request, lang, path, None, create=True)
 
-@admin.site.register_view(u'pages/file/delete/{lang}/{path}{name}'.format(**urlparams), urlname=u'pages_file_delete', visible=False)
+@admin.site.register_view(u'pages/file/delete/{lang}/{path}{name}'.format(**urlparams),
+        urlname=u'pages_file_delete', visible=False)
 @require_http_methods([u'HEAD', u'GET', u'POST'])
 def file_delete(request, lang, path, name):
     try:

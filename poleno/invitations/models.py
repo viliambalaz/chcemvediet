@@ -17,6 +17,7 @@ from poleno.utils.misc import squeeze, decorate, random_string
 
 from . import app_settings, UserMayNotInvite
 
+
 class InvitationQuerySet(QuerySet):
     def accepted(self):
         return self.filter(accepted__isnull=False)
@@ -35,7 +36,7 @@ class Invitation(models.Model):
                 """))
 
     # May NOT be empty; Unique; Automaticly generated in save() when creating a new instance.
-    key = models.CharField(max_length=255, unique=True, db_index=True,
+    key = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
                 Unique key to identify the invitation. It's used in the invitation URL.
                 """))
@@ -73,7 +74,8 @@ class Invitation(models.Model):
                 """))
 
     # May be NULL
-    message = models.OneToOneField(u'mail.Message', blank=True, null=True, on_delete=models.SET_NULL,
+    message = models.OneToOneField(u'mail.Message', blank=True, null=True,
+            on_delete=models.SET_NULL,
             help_text=squeeze(u"""
                 The e-mail message the invitation was sent by. NULL if the invitation was sent
                 manually by the admin without sending any e-mail.
@@ -90,15 +92,13 @@ class Invitation(models.Model):
     #  -- Message.invitation
     #     May raise DoesNotExist
 
-    objects = InvitationQuerySet.as_manager()
+    # Indexes:
+    #  -- key:     unique
+    #  -- invitor: ForeignKey
+    #  -- invitee: ForeignKey
+    #  -- message: OneToOneField
 
-    class Meta:
-        index_together = [
-                # [u'key'] -- defined on field
-                # [u'invitor'] -- ForeignKey defines index by default
-                # [u'invitee'] -- ForeignKey defines index by default
-                # [u'message'] -- ForeignKey defines index by default
-                ]
+    objects = InvitationQuerySet.as_manager()
 
     @cached_property
     def is_accepted(self):
@@ -123,7 +123,8 @@ class Invitation(models.Model):
             if self.created is None:
                 self.created = utc_now()
             if self.valid_to is None:
-                self.valid_to = self.created + datetime.timedelta(days=app_settings.DEFAULT_VALIDITY)
+                delta = datetime.timedelta(days=app_settings.DEFAULT_VALIDITY)
+                self.valid_to = self.created + delta
 
         super(Invitation, self).save(*args, **kwargs)
 
@@ -190,13 +191,13 @@ class InvitationSupply(models.Model):
     #  -- User.invitationsupply
     #     May raise DoesNotExist
 
+    # Indexes:
+    #  -- user: OneToOneField
+
     objects = InvitationSupplyQuerySet.as_manager()
 
     class Meta:
         verbose_name_plural = u'invitation supplies'
-        index_together = [
-                # [u'user'] -- ForeignKey defines index by default
-                ]
 
     @cached_property
     def can_use_invitations(self):

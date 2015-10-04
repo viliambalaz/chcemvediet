@@ -12,6 +12,7 @@ from poleno.attachments.models import Attachment
 
 from .models import Message, Recipient
 
+
 class EmailBackend(BaseEmailBackend):
 
     def send_messages(self, email_messages):

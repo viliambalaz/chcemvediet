@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% autoescape off %}
 Lehota na odpoveď od inštitúcie uplynula
 {% endautoescape %}

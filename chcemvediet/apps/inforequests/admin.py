@@ -7,13 +7,15 @@ from poleno.utils.admin import simple_list_filter_factory, admin_obj_format
 
 from .models import Inforequest, InforequestDraft, InforequestEmail, Branch, Action
 
+
 @admin.register(Inforequest, site=admin.site)
 class InforequestAdmin(admin.ModelAdmin):
     date_hierarchy = u'submission_date'
     list_display = [
             u'id',
             decorate(
-                lambda o: admin_obj_format(o.applicant, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.applicant,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'Applicant',
                 admin_order_field=u'applicant__email',
                 ),
@@ -52,23 +54,32 @@ class InforequestAdmin(admin.ModelAdmin):
             u'-submission_date',
             u'-id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'applicant',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):
         queryset = super(InforequestAdmin, self).get_queryset(request)
         queryset = queryset.select_related(u'applicant')
         queryset = queryset.select_undecided_emails_count()
-        queryset = queryset.prefetch_related(Inforequest.prefetch_main_branch(None, Branch.objects.select_related(u'obligee')))
+        queryset = queryset.prefetch_related(
+                Inforequest.prefetch_main_branch(None, Branch.objects.select_related(u'obligee')))
         return queryset
 
 @admin.register(InforequestDraft, site=admin.site)
 class InforequestDraftAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
-                lambda o: admin_obj_format(o.applicant, u'{obj.first_name} {obj.last_name} <{obj.email}>'),
+                lambda o: admin_obj_format(o.applicant,
+                    u'{obj.first_name} {obj.last_name} <{obj.email}>'),
                 short_description=u'Applicant',
                 admin_order_field=u'applicant__email',
                 ),
@@ -90,9 +101,15 @@ class InforequestDraftAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'applicant',
             u'obligee',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):
@@ -103,6 +120,7 @@ class InforequestDraftAdmin(admin.ModelAdmin):
 
 @admin.register(InforequestEmail, site=admin.site)
 class InforequestEmailAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
@@ -128,9 +146,15 @@ class InforequestEmailAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'inforequest',
             u'email',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):
@@ -141,6 +165,7 @@ class InforequestEmailAdmin(admin.ModelAdmin):
 
 @admin.register(Branch, site=admin.site)
 class BranchAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
@@ -174,11 +199,17 @@ class BranchAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'inforequest',
             u'obligee',
             u'historicalobligee',
             u'advanced_by',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):
@@ -219,9 +250,15 @@ class ActionAdmin(admin.ModelAdmin):
             u'-created',
             u'-id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'branch',
             u'email',
+            ]
+    inlines = [
             ]
 
     def get_queryset(self, request):

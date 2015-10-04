@@ -12,6 +12,7 @@ from .advancement import AdvancementAppeal
 from .expiration import ExpirationAppeal
 from .fallback import FallbackAppeal
 
+
 class Dispatcher(AppealStep):
 
     def pre_transition(self):
@@ -117,18 +118,22 @@ class AppealWizard(Wizard):
             if actions[Action.TYPES.CLARIFICATION_REQUEST]:
                 requests = [a for i, a in actions[Action.TYPES.CLARIFICATION_REQUEST]]
                 responses = [a for i, a in actions[Action.TYPES.CLARIFICATION_RESPONSE]]
-                clause(u'clarification', clarification_requests=requests, clarification_responses=responses)
+                clause(u'clarification',
+                        clarification_requests=requests, clarification_responses=responses)
             if actions[Action.TYPES.EXTENSION]:
                 extensions = [a for i, a in actions[Action.TYPES.EXTENSION]]
                 clause(u'extension', extensions=extensions)
             if actions[Action.TYPES.APPEAL]:
                 index, appeal = actions[Action.TYPES.APPEAL][0]
                 previous = branch.actions[index-1] if index else None
-                not_at_all = previous.disclosure_level not in [Action.DISCLOSURE_LEVELS.PARTIAL, Action.DISCLOSURE_LEVELS.FULL]
+                not_at_all = previous.disclosure_level not in [
+                        Action.DISCLOSURE_LEVELS.PARTIAL, Action.DISCLOSURE_LEVELS.FULL]
                 if previous.type == Action.TYPES.ADVANCEMENT:
-                    clause(u'advancement-appeal', advancement=previous, appeal=appeal, not_at_all=not_at_all)
+                    clause(u'advancement-appeal',
+                            advancement=previous, appeal=appeal, not_at_all=not_at_all)
                 elif previous.type == Action.TYPES.DISCLOSURE:
-                    clause(u'disclosure-appeal', disclosure=previous, appeal=appeal, not_at_all=not_at_all)
+                    clause(u'disclosure-appeal',
+                            disclosure=previous, appeal=appeal, not_at_all=not_at_all)
                 elif previous.type == Action.TYPES.REFUSAL:
                     clause(u'refusal-appeal', refusal=previous, appeal=appeal)
                 elif previous.type == Action.TYPES.EXPIRATION:

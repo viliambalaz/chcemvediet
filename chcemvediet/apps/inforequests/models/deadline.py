@@ -8,6 +8,7 @@ from poleno.workdays import workdays
 from poleno.utils.date import local_today
 from poleno.utils.misc import Bunch
 
+
 class Deadline(object):
 
     TYPES = Bunch(
@@ -161,7 +162,8 @@ class Deadline(object):
                 u'CD' if self.is_in_calendar_days else u'WD',
                 u'Applicant' if self.is_obligee_deadline else u'Obligee',
                 self.base_date,
-                u' +{0} CD'.format(self.snooze_in_calendar_days) if self.snooze_date != self.deadline_date else u'',
+                u' +{0} CD'.format(self.snooze_in_calendar_days)
+                    if self.snooze_date != self.deadline_date else u'',
                 )
 
     def __repr__(self):

@@ -7,6 +7,7 @@ from jsonfield import JSONField
 
 from poleno.utils.models import QuerySet
 
+
 class WizardDraftQuerySet(QuerySet):
     def owned_by(self, user):
         return self.filter(owner=user)
@@ -28,12 +29,19 @@ class WizardDraft(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     # May be empty; Backward generic relation
-    attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
+    attachment_set = generic.GenericRelation(u'attachments.Attachment',
+            content_type_field=u'generic_type', object_id_field=u'generic_id')
+
+    # Backward relations added to other models:
+    #
+    #  -- User.wizarddraft_set
+    #     May be empty
+
+    # Indexes:
+    #  -- id:    primary_key
+    #  -- owner: ForeignKey
 
     objects = WizardDraftQuerySet.as_manager()
 
-    class Meta:
-        index_together = [
-                # [u'id'] -- Primary key defines unique index by default
-                # [u'owner'] -- ForeignKey defines index by default
-                ]
+    def __unicode__(self):
+        return u'%s' % self.pk

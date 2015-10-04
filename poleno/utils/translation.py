@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import get_language, activate
 
+
 class translation(object):
     u"""
     Django management commands have disabled translations by default. You can call this function

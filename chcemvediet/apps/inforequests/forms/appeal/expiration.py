@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from .common import AppealStep, AppealPaperStep, AppealFinalStep
 
+
 class Paper(AppealPaperStep):
     text_template = u'inforequests/appeal/texts/expiration.html'
     content_template = u'inforequests/appeal/papers/expiration.html'

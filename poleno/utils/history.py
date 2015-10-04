@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import simple_history
 
+
 def register_history(model=None, **kwargs):
     u"""
     Wrapper for ``simple_history.register`` to work as a decorator.

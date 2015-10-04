@@ -10,6 +10,7 @@
  %
 {% endcomment %}
 
+
 <li {% if request|page_active:'/o-projekte' or request|page_active:'/about' %}class="active"{% endif %}>
   <a href="{% page 'sk:/o-projekte' 'en:/about' %}">{% trans 'main:menu:about' %}</a>
 </li>

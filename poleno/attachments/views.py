@@ -9,6 +9,7 @@ from poleno.utils.http import send_file_response
 
 from .models import Attachment
 
+
 def upload(request, generic_object, download_url_func):
     res = []
     for file in request.FILES.getlist(u'files'):

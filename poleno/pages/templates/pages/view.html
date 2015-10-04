@@ -8,13 +8,16 @@
  %
 {% endcomment %}
 
+
 {% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
 
 {% block content %}
   {% if page.ancestors %}
     <ul class="breadcrumb">
       {% for ancestor in page.ancestors %}
-        <li><a href="{{ ancestor.url }}">{{ ancestor.label }}</a> <span class="divider">/</span></li>
+        <li>
+          <a href="{{ ancestor.url }}">{{ ancestor.label }}</a> <span class="divider">/</span>
+        </li>
       {% endfor %}
       <li class="active">{{ page.label }}</li>
     </ul>
@@ -27,7 +30,11 @@
       <ul class="nav nav-tabs nav-stacked" style="margin-top: 4em;">
         {% for subpage in page.subpages %}
           {% if not subpage.is_redirect and not subpage.is_disabled %}
-            <li><a href="{{ subpage.url }}"><i class="icon-chevron-right pull-right"></i>{{ subpage.label }}</a></li>
+            <li>
+              <a href="{{ subpage.url }}">
+                <i class="icon-chevron-right pull-right"></i>{{ subpage.label }}
+              </a>
+            </li>
           {% endif %}
         {% endfor %}
       </ul>

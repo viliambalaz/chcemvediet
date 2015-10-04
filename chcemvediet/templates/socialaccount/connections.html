@@ -9,6 +9,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}{% trans 'socialaccount:connections:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
@@ -20,7 +21,7 @@
       {% if form.non_field_errors %}
         <div class="control-group error">
           <div class="controls">
-            <span class="help-block">{{ form.non_field_errors|join:" " }}<span>
+            <span class="help-block">{{ form.non_field_errors|join:" " }}</span>
           </div>
         </div>
       {% endif %}
@@ -29,13 +30,16 @@
           {% for base_account in form.accounts %}
             <label class="radio">
               <input type="radio" name="account" value="{{ base_account.pk }}">
-              {{ base_account.get_provider_account.get_brand.name }}: {{ base_account.get_provider_account }}
+              {{ base_account.get_provider_account.get_brand.name }}:
+              {{ base_account.get_provider_account }}
             </label>
           {% endfor %}
         </div>
       </div>
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{% trans 'socialaccount:connections:remove' %}</button>
+        <button type="submit" class="btn btn-primary">
+          {% trans 'socialaccount:connections:remove' %}
+        </button>
       </div>
     </form>
   {% else %}
@@ -45,7 +49,9 @@
   <h3>{% trans 'socialaccount:connections:add:heading' %}</h3>
   {% include "socialaccount/texts/connections_add.html" %}
   <div class="row">
-    <p class="span2 text-right" style="padding-top: 5px;">{% trans 'socialaccount:connections:add:social_buttons' %}:</p>
+    <p class="span2 text-right" style="padding-top: 5px;">
+      {% trans 'socialaccount:connections:add:social_buttons' %}:
+    </p>
     <p class="span10">
       {% include "account/snippets/social_login_buttons.html" with process="connect" %}
     </p>

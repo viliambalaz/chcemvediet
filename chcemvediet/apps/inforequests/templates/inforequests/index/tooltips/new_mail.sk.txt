@@ -7,5 +7,5 @@
  %
 {% endcomment %}
 
-K Vašej žiadosti sme zaregistrovali email, ktorý čaká na Vaše rozhodnutie.
 
+K Vašej žiadosti sme zaregistrovali email, ktorý čaká na Vaše rozhodnutie.

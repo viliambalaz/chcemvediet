@@ -7,8 +7,10 @@ from poleno.utils.admin import admin_obj_format
 
 from .models import ObligeeTag, ObligeeGroup, Obligee, HistoricalObligee, ObligeeAlias
 
+
 @admin.register(ObligeeTag, site=admin.site)
 class ObligeeTagAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'key',
@@ -24,12 +26,19 @@ class ObligeeTagAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
+            ]
+    raw_id_fields = [
+            ]
+    inlines = [
             ]
 
 @admin.register(ObligeeGroup, site=admin.site)
 class ObligeeGroupAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'key',
@@ -45,12 +54,19 @@ class ObligeeGroupAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
+            ]
+    raw_id_fields = [
+            ]
+    inlines = [
             ]
 
 @admin.register(Obligee, site=admin.site)
 class ObligeeAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             u'name',
@@ -82,12 +98,16 @@ class ObligeeAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
     raw_id_fields = [
             u'tags',
             u'groups',
+            ]
+    inlines = [
             ]
 
 @admin.register(HistoricalObligee, site=admin.site)
@@ -117,12 +137,19 @@ class HistoricalObligeeAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
+    readonly_fields = [
+            ]
     raw_id_fields = [
             u'history_user',
+            ]
+    inlines = [
             ]
 
 @admin.register(ObligeeAlias, site=admin.site)
 class ObligeeAliasAdmin(admin.ModelAdmin):
+    date_hierarchy = None
     list_display = [
             u'id',
             decorate(
@@ -144,9 +171,13 @@ class ObligeeAliasAdmin(admin.ModelAdmin):
     ordering = [
             u'id',
             ]
+    exclude = [
+            ]
     readonly_fields = [
             u'slug',
             ]
     raw_id_fields = [
             u'obligee',
+            ]
+    inlines = [
             ]

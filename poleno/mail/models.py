@@ -15,6 +15,7 @@ from poleno.attachments.models import Attachment
 from poleno.utils.models import FieldChoices, QuerySet, join_lookup
 from poleno.utils.misc import squeeze
 
+
 class MessageQuerySet(QuerySet):
     def inbound(self):
         return self.filter(type=Message.TYPES.INBOUND)
@@ -45,7 +46,7 @@ class Message(models.Model):
                 Date and time the message object was created,
                 """))
 
-    # NOT NULL for processed messages; NULL for queued messages; For index see index_together
+    # NOT NULL for processed messages; NULL for queued messages
     processed = models.DateTimeField(blank=True, null=True,
             help_text=squeeze(u"""
                 Date and time the message was sent or received and processed. Leave blank if you
@@ -96,12 +97,17 @@ class Message(models.Model):
                 """))
 
     # May be empty; Backward generic relation
-    attachment_set = generic.GenericRelation(u'attachments.Attachment', content_type_field=u'generic_type', object_id_field=u'generic_id')
+    attachment_set = generic.GenericRelation(u'attachments.Attachment',
+            content_type_field=u'generic_type', object_id_field=u'generic_id')
 
     # Backward relations:
     #
     #  -- recipient_set: by Recipient.message
     #     Should NOT be empty
+
+    # Indexes:
+    #  -- processed, id: index_together
+    #  -- created, id:   index_together
 
     objects = MessageQuerySet.as_manager()
 
@@ -203,6 +209,7 @@ class Message(models.Model):
     def __unicode__(self):
         return u'%s' % self.pk
 
+
 class RecipientQuerySet(QuerySet):
     def to(self):
         return self.filter(type=Recipient.TYPES.TO)
@@ -286,13 +293,11 @@ class Recipient(models.Model):
     #  -- Message.recipient_set
     #     Should NOT be empty
 
-    objects = RecipientQuerySet.as_manager()
+    # Indexes:
+    #  -- message:   ForeignKey
+    #  -- remote_id: on field
 
-    class Meta:
-        index_together = [
-                # [u'message'] -- ForeignKey defines index by default
-                # [u'remote_id'] -- defined on field
-                ]
+    objects = RecipientQuerySet.as_manager()
 
     @property
     def formatted(self):
@@ -303,4 +308,4 @@ class Recipient(models.Model):
         self.name, self.mail = parseaddr(value)
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return u'[%s] %s' % (self.pk, self.mail)

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils.html import format_html
 from django.utils.dateformat import format
 
+
 class PaperField(forms.Field):
 
     def __init__(self, *args, **kwargs):

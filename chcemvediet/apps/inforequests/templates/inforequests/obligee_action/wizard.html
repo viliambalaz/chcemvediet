@@ -12,6 +12,7 @@
  %
 {% endcomment %}
 
+
 {% block title %}
   {% if email %}
     {% trans 'inforequests:obligee_action:email:title' %}
@@ -45,9 +46,13 @@
     </div>
     <div class="span4">
       {% if wizard.values.branch %}
-        {% include "inforequests/accordion/accordion.html" with last_action=wizard.values.branch.last_action %}
+        {% with last_action=wizard.values.branch.last_action %}
+          {% include "inforequests/accordion/accordion.html" %}
+        {% endwith %}
       {% else %}
-        {% include "inforequests/accordion/accordion.html" with last_action=inforequest.main_branch.last_action %}
+        {% with last_action=inforequest.main_branch.last_action %}
+          {% include "inforequests/accordion/accordion.html" %}
+        {% endwith %}
       {% endif %}
     </div>
   </div>
