@@ -11,6 +11,7 @@ from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
 from poleno.utils.misc import squeeze, decorate, slugify
 
+
 class ObligeeTagQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')

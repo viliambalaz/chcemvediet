@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     # Local to the project
     u'chcemvediet.apps.wizards',
     u'chcemvediet.apps.accounts',
+    u'chcemvediet.apps.geounits',
     u'chcemvediet.apps.obligees',
     u'chcemvediet.apps.inforequests',
 )
