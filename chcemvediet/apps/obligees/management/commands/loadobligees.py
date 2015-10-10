@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 from numbers import Number, Real, Integral
-from collections import Mapping, defaultdict
+from collections import Mapping, defaultdict, OrderedDict
 from optparse import make_option
 from openpyxl import load_workbook
 
@@ -13,10 +13,17 @@ from django.db import transaction
 from django.conf import settings
 
 from poleno.utils.forms import validate_comma_separated_emails
-from poleno.utils.misc import squeeze, slugify, ensure_tuple
+from poleno.utils.misc import squeeze, slugify, ensure_tuple, Bunch
 from chcemvediet.apps.obligees.models import ObligeeTag, ObligeeGroup
 from chcemvediet.apps.obligees.models import Obligee, HistoricalObligee, ObligeeAlias
 from chcemvediet.apps.inforequests.models import Inforequest
+
+
+def common_repr(value):
+    if isinstance(value, basestring):
+        return u'"{}"'.format(value)
+    else:
+        return unicode(repr(value), u'utf-8')
 
 
 class RollingCommandError(CommandError):
@@ -34,14 +41,23 @@ class CellError(Exception):
         super(CellError, self).__init__(msg.format(*args, **kwargs))
 
 
+class Columns(object):
+
+    def __init__(self, **kwargs):
+        for name, column in kwargs.items():
+            column.name = name
+            if column.field is not None:
+                column.field.name = name
+                column.field.column = column
+        vars(self).update(kwargs)
+
 class Column(object):
     value_type = None
 
-    def __init__(self, label, field=None, default=None, null=False, blank=False, choices=None,
-            unique=False, validators=None, coercers=None, post_coerce_validators=None,
-            confirm_changed=None, confirm_unchanged_if_changed=None):
+    def __init__(self, label, default=None, null=False, blank=False, choices=None, unique=False,
+            validators=None, coercers=None, post_coerce_validators=None, field=None):
+        self.name = None
         self.label = label
-        self.field = field
         self.default = default # pre coerce
         self.null = null # pre coerce
         self.blank = blank # post coerce
@@ -50,8 +66,7 @@ class Column(object):
         self.validators = validators # pre coerce
         self.coercers = coercers # coerce
         self.post_coerce_validators = post_coerce_validators # post coerce
-        self.confirm_changed = confirm_changed # post row
-        self.confirm_unchanged_if_changed = confirm_unchanged_if_changed # post row
+        self.field = field
 
     def validate_type(self, value):
         if self.value_type is None:
@@ -62,13 +77,6 @@ class Column(object):
             raise CellError(u'type', u'Expecting {} but found {}',
                     self.value_type.__name__, value.__class__.__name__)
 
-    def validate_blank(self, value):
-        if self.blank:
-            return
-        if not value:
-            raise CellError(u'blank', u'Expecting nonempty value but found {}',
-                    self.value_repr(value))
-
     def validate_choices(self, value):
         if self.choices is None:
             return
@@ -76,16 +84,6 @@ class Column(object):
             raise CellError(u'choices', u'Expecting one of {} but found {}',
                     u', '.join(self.value_repr(c) for c in self.choices),
                     self.value_repr(value))
-
-    def validate_unique(self, sheet, row, value):
-        if not self.unique:
-            return
-        if not hasattr(sheet, u'_validate_unique_cache'):
-            sheet._validate_unique_cache = defaultdict(dict)
-        if value in sheet._validate_unique_cache[self]:
-            raise CellError(u'unique', u'Expecting unique value but {} is in row {} as well',
-                    self.value_repr(value), sheet._validate_unique_cache[self][value])
-        sheet._validate_unique_cache[self][value] = row
 
     def validate_pre_coerce_validators(self, value):
         if self.validators is None:
@@ -96,14 +94,10 @@ class Column(object):
             except ValidationError as e:
                 raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
 
-    def validate_post_coerce_validators(self, value):
-        if self.post_coerce_validators is None:
-            return
-        for validator in ensure_tuple(self.post_coerce_validators):
-            try:
-                validator(value)
-            except ValidationError as e:
-                raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
+    def do_pre_coerce_validation(self, sheet, row_idx, value):
+        self.validate_type(value)
+        self.validate_choices(value)
+        self.validate_pre_coerce_validators(value)
 
     def apply_choices(self, value):
         if not isinstance(self.choices, Mapping):
@@ -117,35 +111,53 @@ class Column(object):
             value = coercer(value)
         return value
 
-    def do_pre_coerce_validation(self, sheet, row, value):
-        self.validate_type(value)
-        self.validate_choices(value)
-        self.validate_pre_coerce_validators(value)
-
-    def do_coerce(self, sheet, row, value):
+    def do_coerce(self, sheet, row_idx, value):
         value = self.apply_choices(value)
         value = self.apply_coercers(value)
         return value
 
-    def do_post_ceorce_validation(self, sheet, row, value):
+    def validate_blank(self, value):
+        if self.blank:
+            return
+        if not value:
+            raise CellError(u'blank', u'Expecting nonempty value but found {}',
+                    self.coerced_repr(value))
+
+    def validate_unique(self, sheet, row_idx, value):
+        if not self.unique:
+            return
+        if not hasattr(sheet, u'_validate_unique_cache'):
+            sheet._validate_unique_cache = defaultdict(dict)
+        if value in sheet._validate_unique_cache[self]:
+            raise CellError(u'unique', u'Expecting unique value but {} is in row {} as well',
+                    self.coerced_repr(value), sheet._validate_unique_cache[self][value])
+        sheet._validate_unique_cache[self][value] = row_idx
+
+    def validate_post_coerce_validators(self, value):
+        if self.post_coerce_validators is None:
+            return
+        for validator in ensure_tuple(self.post_coerce_validators):
+            try:
+                validator(value)
+            except ValidationError as e:
+                raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
+
+    def do_post_ceorce_validation(self, sheet, row_idx, value):
         self.validate_blank(value)
-        self.validate_unique(sheet, row, value)
+        self.validate_unique(sheet, row_idx, value)
         self.validate_post_coerce_validators(value)
 
-    def do_import(self, sheet, row, value):
-        self.do_pre_coerce_validation(sheet, row, value)
-        value = self.do_coerce(sheet, row, value)
-        self.do_post_ceorce_validation(sheet, row, value)
+    def do_import(self, sheet, row_idx, value):
+        self.do_pre_coerce_validation(sheet, row_idx, value)
+        value = self.do_coerce(sheet, row_idx, value)
+        self.do_post_ceorce_validation(sheet, row_idx, value)
         return value
 
     def value_repr(self, value):
-        if isinstance(value, basestring):
-            return u'"{}"'.format(value)
-        else:
-            return unicode(repr(value), u'utf-8')
+        return common_repr(value)
 
     def coerced_repr(self, value):
-        return self.value_repr(value)
+        return common_repr(value)
 
 class TextColumn(Column):
     value_type = basestring
@@ -183,7 +195,7 @@ class TextColumn(Column):
                     u'Expecting value matching "{}" but found {}',
                     self.regex.pattern, self.value_repr(value))
 
-    def validate_unique_slug(self, sheet, row, value):
+    def validate_unique_slug(self, sheet, row_idx, value):
         if not self.unique_slug:
             return
         if not hasattr(sheet, u'_validate_unique_slug_cache'):
@@ -194,15 +206,15 @@ class TextColumn(Column):
             raise CellError(u'unique_slug',
                     u'Expecting value with unique slug but {} has the same slug as {} in row {}',
                     self.value_repr(value), self.value_repr(other_value), other_row)
-        sheet._validate_unique_slug_cache[self][slug] = (row, value)
+        sheet._validate_unique_slug_cache[self][slug] = (row_idx, value)
         return value
 
-    def do_pre_coerce_validation(self, sheet, row, value):
-        super(TextColumn, self).do_pre_coerce_validation(sheet, row, value)
+    def do_pre_coerce_validation(self, sheet, row_idx, value):
+        super(TextColumn, self).do_pre_coerce_validation(sheet, row_idx, value)
         self.validate_min_length(value)
         self.validate_max_length(value)
         self.validate_regex(value)
-        self.validate_unique_slug(sheet, row, value)
+        self.validate_unique_slug(sheet, row_idx, value)
 
 class NumericColumn(Column):
     value_type = Number
@@ -228,8 +240,8 @@ class NumericColumn(Column):
                     u'Expecting value not bigger than {} but found {}',
                     self.max_value, self.value_repr(value))
 
-    def do_pre_coerce_validation(self, sheet, row, value):
-        super(NumericColumn, self).do_pre_coerce_validation(sheet, row, value)
+    def do_pre_coerce_validation(self, sheet, row_idx, value):
+        super(NumericColumn, self).do_pre_coerce_validation(sheet, row_idx, value)
         self.validate_min_value(value)
         self.validate_max_value(value)
 
@@ -260,58 +272,138 @@ class ForeignKeyColumn(Column):
 
     def apply_relation(self, sheet, value):
         try:
-            obj = self.to_model.objects.get(**{self.to_field: value})
+            obj = self.to_model.objects.get(**{self.to_field: unicode(value)})
         except self.to_model.DoesNotExist:
-            raise CellError(u'relation_not_found', u'There is no {} with {}="{}"',
-                    self.to_model.__name__, self.to_field, value)
+            raise CellError(u'relation_not_found', u'There is no {} with {}={}',
+                    self.to_model.__name__, self.to_field, self.value_repr(value))
         except self.to_model.MultipleObjectsReturned:
-            raise CellError(u'relation_found_more', u'There are multiple {} with {}="{}"',
-                    self.to_model.__name__, self.to_field, value)
+            raise CellError(u'relation_found_more', u'There are multiple {} with {}={}',
+                    self.to_model.__name__, self.to_field, self.value_repr(value))
+        except Exception as e:
+            raise CellError(u'relation_type', u'Invalid value {} for {}: {}',
+                    self.value_repr(value), self.to_field, e)
         if obj in sheet.book.marked_for_deletion:
-            raise CellError(u'deleted', u'{} with {}="{}" was deleted',
-                    self.to_model.__name__, self.to_field, value)
+            raise CellError(u'deleted', u'{} with {}={} was deleted',
+                    self.to_model.__name__, self.to_field, self.value_repr(value))
         return obj
 
-    def do_coerce(self, sheet, row, value):
-        value = super(ForeignKeyColumn, self).do_coerce(sheet, row, value)
+    def do_coerce(self, sheet, row_idx, value):
+        value = super(ForeignKeyColumn, self).do_coerce(sheet, row_idx, value)
         value = self.apply_relation(sheet, value)
         return value
 
-class ManyToManyColumn(Column):
+class ManyToManyColumn(ForeignKeyColumn):
     value_type = basestring
 
-    def __init__(self, label, to_model, to_field=u'pk', **kwargs):
-        super(ManyToManyColumn, self).__init__(label, default=u'', null=False, choices=None,
-                unique=False, **kwargs)
-        self.to_model = to_model
-        self.to_field = to_field
+    def __init__(self, label, to_model, **kwargs):
+        kwargs.setdefault(u'default', u'')
+        super(ManyToManyColumn, self).__init__(label, to_model, null=False, unique=False, **kwargs)
 
     def apply_relation(self, sheet, value):
         res = []
         for key in value.split():
-            try:
-                obj = self.to_model.objects.get(**{self.to_field: key})
-            except self.to_model.DoesNotExist:
-                raise CellError(u'relation_not_found', u'There is no {} with {}="{}"',
-                        self.to_model.__name__, self.to_field, key)
-            except self.to_model.MultipleObjectsReturned:
-                raise CellError(u'relation_found_more', u'There are multiple {} with {}="{}"',
-                        self.to_model.__name__, self.to_field, key)
-            if obj in sheet.book.marked_for_deletion:
-                raise CellError(u'deleted', u'{} with {}="{}" was deleted',
-                        self.to_model.__name__, self.to_field, key)
+            obj = super(ManyToManyColumn, self).apply_relation(sheet, key)
             res.append(obj)
         return res
 
-    def do_coerce(self, sheet, row, value):
-        value = super(ManyToManyColumn, self).do_coerce(sheet, row, value)
-        value = self.apply_relation(sheet, value)
+
+class Field(object):
+    is_related = False
+
+    def __init__(self, confirm_changed=None, confirm_unchanged_if_changed=None):
+        self.name = None
+        self.column = None
+        self.confirm_changed = confirm_changed
+        self.confirm_unchanged_if_changed = confirm_unchanged_if_changed
+
+    def do_confirm_changed(self, sheet, row_idx, value, original):
+        if not self.confirm_changed:
+            return
+        if original and self.has_changed(original, value):
+            inputed = sheet.importer.input_yes_no(
+                    u'{} in row {} changed {}:\n\t{} -> {}',
+                    u'Is it correct?',
+                    sheet.obj_repr(original), row_idx, self.name,
+                    self.value_repr(self.value_from_obj(original)),
+                    self.value_repr(value),
+                    default=u'Y')
+            if inputed != u'Y':
+                raise RollingCommandError
+
+    def do_confirm_unchanged_if_changed(self, sheet, row_idx, value, values, original):
+        if not self.confirm_unchanged_if_changed:
+            return
+        if original and not self.has_changed(original, value):
+            for other_name in ensure_tuple(self.confirm_unchanged_if_changed):
+                other_field = sheet.columns.__dict__[other_name].field
+                other_value = other_field.value_from_dict(values)
+                if other_field.has_changed(original, other_value):
+                    inputed = sheet.importer.input_yes_no(
+                            u'{} in row {} changed {}:\n\t{} -> {}\nBut not {}:\n\t{}',
+                            u'Is it correct?',
+                            sheet.obj_repr(original), row_idx, other_field.name,
+                            other_field.value_repr(other_field.value_from_obj(original)),
+                            other_field.value_repr(other_value),
+                            self.name, self.value_repr(value),
+                            default=u'Y')
+                    if inputed != u'Y':
+                        raise RollingCommandError
+                    return
+
+    def do_import(self, sheet, row_idx, values, original):
+        value = self.value_from_dict(values)
+        self.do_confirm_changed(sheet, row_idx, value, original)
+        self.do_confirm_unchanged_if_changed(sheet, row_idx, value, values, original)
         return value
 
+    def value_from_obj(self, obj):
+        return getattr(obj, self.name)
 
-class Columns(object):
-    def __init__(self, **kwargs):
-        vars(self).update(kwargs)
+    def value_from_dict(self, values):
+        return values[self.column.label]
+
+    def value_repr(self, value):
+        return common_repr(value)
+
+    def has_changed(self, obj, value):
+        return getattr(obj, self.name) != value
+
+    def save(self, obj, value):
+        setattr(obj, self.name, value)
+
+class FieldChoicesField(Field):
+
+    def __init__(self, field_choices, **kwargs):
+        super(FieldChoicesField, self).__init__(**kwargs)
+        self.field_choices = field_choices
+
+    def value_repr(self, value):
+        return self.field_choices._inverse[value]
+
+class ForeignKeyField(Field):
+    is_related = False
+
+    def value_from_obj(self, obj):
+        try:
+            return getattr(obj, self.name)
+        except ObjectDoesNotExist:
+            return None
+
+    def has_changed(self, obj, value):
+        try:
+            return getattr(obj, self.name) != value
+        except ObjectDoesNotExist:
+            return True
+
+class ManyToManyField(Field):
+    is_related = True
+
+    def value_from_obj(self, obj):
+        return list(getattr(obj, self.name).all())
+
+    def has_changed(self, obj, value):
+        return set(getattr(obj, self.name).all()) != set(value)
+
 
 class Sheet(object):
     label = None
@@ -323,30 +415,23 @@ class Sheet(object):
         self.book = book
         self.importer = book.importer
         self.column_map = None
-        self.m2m = {f.name for f, _ in self.model._meta.get_m2m_with_model()}
-
-    def obj_field(self, obj, field):
-        if field in self.m2m:
-            return list(getattr(obj, field).all())
-        else:
-            try:
-                return getattr(obj, field)
-            except ObjectDoesNotExist:
-                return None
-
-    def obj_field_eq(self, obj, field, value):
-        if field in self.m2m:
-            return set(getattr(obj, field).all()) == set(value)
-        else:
-            try:
-                return getattr(obj, field) == value
-            except ObjectDoesNotExist:
-                return False
 
     def error(self, code, msg, *args, **kwargs):
         if code:
             code = (self.label, code)
         self.importer.error(code, msg, *args, **kwargs)
+
+    def cell_error(self, code, row_idx, column, msg, *args, **kwargs):
+        self.error((column.label, code), u'Invalid value in row {} of "{}.{}": {}',
+                row_idx, self.label, column.label, msg.format(*args, **kwargs))
+
+    def reset_model(self, model):
+        count = model.objects.count()
+        model.objects.all().delete()
+        self.importer.write(1, u'Reset {}: {} deleted', model.__name__, count)
+
+    def do_reset(self):
+        self.reset_model(self.model)
 
     def validate_structure(self):
         errors = 0
@@ -375,9 +460,7 @@ class Sheet(object):
         try:
             col_idx = self.column_map[column.label]
         except KeyError:
-            self.error((column.label, u'missing'),
-                    u'Invalid value in row {} of "{}.{}": Missing column',
-                    row_idx+1, self.label, column.label)
+            self.cell_error(u'missing', row_idx, column, u'Missing column')
             raise RollingCommandError
 
         try:
@@ -388,10 +471,9 @@ class Sheet(object):
             value = column.default
 
         try:
-            return column.do_import(self, row_idx+1, value)
+            return column.do_import(self, row_idx, value)
         except CellError as e:
-            self.error((column.label, e.code), u'Invalid value in row {} of "{}.{}": {}',
-                    row_idx+1, self.label, column.label, e)
+            self.cell_error(e.code, row_idx, column, u'{}', e)
             raise RollingCommandError
 
     def process_row(self, row_idx, row):
@@ -406,170 +488,125 @@ class Sheet(object):
             raise RollingCommandError(errors)
         return res
 
-    def confirm_changed(self, value, original, row_idx, column):
-        if not column.confirm_changed:
-            return
-        if original and not self.obj_field_eq(original, column.field, value):
-            inputed = self.importer.input_yes_no(
-                    u'{} in row {} changed {}:\n\t{} -> {}',
-                    u'Is it correct?',
-                    self.get_obj_repr(original),
-                    row_idx+1,
-                    column.field,
-                    column.coerced_repr(self.obj_field(original, column.field)),
-                    column.coerced_repr(value),
-                    default=u'Y')
-            if inputed != u'Y':
-                raise RollingCommandError
-
-    def confirm_unchanged_if_changed(self, value, values, original, row_idx, column):
-        if not column.confirm_unchanged_if_changed:
-            return
-        if original and self.obj_field_eq(original, column.field, value):
-            for other_column in ensure_tuple(column.confirm_unchanged_if_changed):
-                other_column = self.columns.__dict__[other_column]
-                other_value = values[other_column.label]
-                if not self.obj_field_eq(original, other_column.field, other_value):
-                    inputed = self.importer.input_yes_no(
-                            u'{} in row {} changed {}:\n\t{} -> {}\nBut not {}:\n\t{}',
-                            u'Is it correct?',
-                            self.get_obj_repr(original),
-                            row_idx+1,
-                            other_column.field,
-                            other_column.coerced_repr(self.obj_field(original, other_column.field)),
-                            other_column.coerced_repr(other_value),
-                            column.field,
-                            column.coerced_repr(value),
-                            default=u'Y')
-                    if inputed != u'Y':
-                        raise RollingCommandError
-                    return
-
-    def process_value(self, value, values, original, row_idx, column):
-        self.confirm_changed(value, original, row_idx, column)
-        self.confirm_unchanged_if_changed(value, values, original, row_idx, column)
-        return value
-
-    def process_values(self, row_idx, values, original):
+    def process_rows(self, rows):
+        res = OrderedDict()
         errors = 0
-        res = {}
-        for column in self.columns.__dict__.values():
+        for row_idx, row in enumerate(rows, start=1):
+            if row_idx == 1 or all(c.value is None for c in row):
+                continue
             try:
-                value = values[column.label]
-                res[column.label] = self.process_value(value, values, original, row_idx, column)
+                res[row_idx] = self.process_row(row_idx, row)
             except RollingCommandError as e:
                 errors += e.count
         if errors:
             raise RollingCommandError(errors)
         return res
 
-    def reset_model(self, model):
-        count = model.objects.count()
-        model.objects.all().delete()
-        self.importer.write(1, u'Reset {}: {} deleted', model.__name__, count)
+    def process_fields(self, row_idx, values, original):
+        res = {}
+        errors = 0
+        for column in self.columns.__dict__.values():
+            if column.field is not None:
+                field = column.field
+                try:
+                    res[field.name] = field.do_import(self, row_idx, values, original)
+                except RollingCommandError as e:
+                    errors += e.count
+        if errors:
+            raise RollingCommandError(errors)
+        return res
 
-    def do_reset(self):
-        self.reset_model(self.model)
+    def save_object(self, fields, original):
+        # Save only if the instance is new or changed to prevent excessive change history. Many to
+        # many relations may only be saved after the instance is created.
+        obj = original or self.model()
+        has_changed = False
+        for column in self.columns.__dict__.values():
+            if column.field is not None:
+                field = column.field
+                value = fields[field.name]
+                if not field.is_related and field.has_changed(obj, value):
+                    field.save(obj, value)
+                    has_changed = True
+        if has_changed:
+            obj.save()
+        for column in self.columns.__dict__.values():
+            if column.field is not None:
+                field = column.field
+                value = fields[field.name]
+                if field.is_related and field.has_changed(obj, value):
+                    field.save(obj, value)
+                    has_changed = True
+        return obj, has_changed
+
+    def save_objects(self, rows):
+        errors = 0
+        stats = Bunch(created=0, changed=0, unchanged=0, deleted=0)
+        originals = {o.pk: o for o in self.model.objects.all()}
+        for row_idx, values in rows.items():
+            try:
+                pk = values[self.columns.pk.label]
+                original = originals.pop(pk, None)
+                fields = self.process_fields(row_idx, values, original)
+                assert fields[u'pk'] == pk
+
+                obj, has_changed = self.save_object(fields, original)
+                if has_changed and original:
+                    self.importer.write(2, u'Changed {}', self.obj_repr(obj))
+                    stats.changed += 1
+                elif has_changed:
+                    self.importer.write(2, u'Created {}', self.obj_repr(obj))
+                    stats.created += 1
+                else:
+                    stats.unchanged += 1
+            except RollingCommandError as e:
+                errors += e.count
+        # Mark omitted instances for deletion or add an error if delete is not permitted. Don't
+        # delete anything if there were any errors as we don't know which instances are missing for
+        # real and which are missing because of errors. The instances will be deleted only after
+        # all sheets are imported to prevent unintentional cascades.
+        if errors:
+            raise RollingCommandError(errors)
+        for obj in originals.values():
+            if self.delete_omitted:
+                inputed = self.importer.input_yes_no(
+                        u'{} was omitted.', u'Are you sure, you want to delete it?',
+                        self.obj_repr(obj), default=u'Y')
+                if inputed == u'Y':
+                    self.book.marked_for_deletion.add(obj)
+                    stats.deleted += 1
+                else:
+                    errors += 1
+            else:
+                self.error(u'omitted', u'Omitted {}', self.obj_repr(obj))
+                errors += 1
+        if errors:
+            raise RollingCommandError(errors)
+        return stats
 
     def do_import(self):
-        errors = 0
         self.importer.write(1, u'Importing {}...', self.model.__name__)
 
         try:
             self.validate_structure()
-        except RollingCommandError as e:
-            errors += e.count
-
-        created, changed, unchanged, deleted = 0, 0, 0, 0
-        originals = {o.pk: o for o in self.model.objects.all()}
-        for row_idx, row in enumerate(self.book.wb[self.label].rows):
-            if row_idx == 0 or all(c.value is None for c in row):
-                continue
-            try:
-                values = self.process_row(row_idx, row)
-                original = originals.pop(values[self.columns.pk.label], None)
-                values = self.process_values(row_idx, values, original)
-                fields = {c.field: values[c.label]
-                        for c in self.columns.__dict__.values() if c.field}
-                fields = self.get_obj_fields(original, values, fields, row_idx)
-                assert fields[u'pk'] == values[self.columns.pk.label]
-
-                # Save only if the instance is new or changed to prevent excessive change history.
-                # Many to many relations may only be saved after the instance is created.
-                obj = original or self.model()
-                was_changed = False
-                for field, value in fields.items():
-                    if field not in self.m2m and not self.obj_field_eq(obj, field, value):
-                        setattr(obj, field, value)
-                        was_changed = True
-                if was_changed:
-                    obj.save()
-                for field, value in fields.items():
-                    if field in self.m2m and not self.obj_field_eq(obj, field, value):
-                        setattr(obj, field, value)
-                        was_changed = True
-
-                if was_changed and original:
-                    self.importer.write(2, u'Changed {}', self.get_obj_repr(obj))
-                    changed += 1
-                elif was_changed:
-                    self.importer.write(2, u'Created {}', self.get_obj_repr(obj))
-                    created += 1
-                else:
-                    unchanged += 1
-
-            except RollingCommandError as e:
-                errors += e.count
-
-        # Mark omitted instances for deletion or add an error if delete is not permitted. Don't
-        # delete anything if there were any import errors as we don't know which instances are
-        # missing for real and which are missing because of parse errors. The instances will be
-        # deleted only after all sheets are imported to prevent unintentional cascades.
-        if not errors:
-            for obj in originals.values():
-                if self.delete_omitted:
-                    inputed = self.importer.input_yes_no(
-                            u'{} was omitted.', u'Are you sure, you want to delete it?',
-                            self.get_obj_repr(obj), default=u'Y')
-                    if inputed == u'Y':
-                        self.book.marked_for_deletion.add(obj)
-                        deleted += 1
-                    else:
-                        errors += 1
-                else:
-                    self.error(u'omitted', u'Omitted {}', self.get_obj_repr(obj))
-                    errors += 1
-
-        # Concluding checks after the sheet is imported. We skip concluding checks if there were
-        # any errors so far to make sure they will not get confused.
-        if not errors:
-            try:
-                self.concluding_checks()
-            except RollingCommandError as e:
-                errors += e.count
-
-        if errors:
+            rows = self.process_rows(self.book.wb[self.label].rows)
+            stats = self.save_objects(rows)
+        except RollingCommandError:
             self.importer.write(1, u'Importing {} failed.', self.model.__name__)
-            raise RollingCommandError(errors)
+            raise
 
         self.importer.write(1, u'Imported {}: {} created, {} changed, {} unchanged and {} deleted',
-                self.model.__name__, created, changed, unchanged, deleted)
+                self.model.__name__, stats.created, stats.changed, stats.unchanged, stats.deleted)
 
-    def get_obj_fields(self, original, values, fields, row_idx):
-        return fields
-
-    def get_obj_repr(self, obj):
-        return unicode(repr(obj), u'utf-8')
-
-    def concluding_checks(self):
-        pass
+    def obj_repr(self, obj):
+        return common_repr(obj)
 
 class Book(object):
     sheets = None
 
-    def __init__(self, importer):
+    def __init__(self, importer, wb):
         self.importer = importer
-        self.wb = None
+        self.wb = wb
         self.actual_sheets = None
         self.marked_for_deletion = None
 
@@ -591,23 +628,17 @@ class Book(object):
         if errors:
             raise RollingCommandError(errors)
 
-    def do_import(self, filename):
+    def do_import(self):
         errors = 0
-        sheets = [s(self) for s in self.sheets]
-
-        if self.importer.reset:
-            for sheet in reversed(sheets):
-                sheet.do_reset()
-
-        try:
-            self.wb = load_workbook(filename, read_only=True)
-        except Exception as e:
-            raise CommandError(u'Could not read input file: {}'.format(e))
-
         try:
             self.validate_structure()
         except RollingCommandError as e:
             errors += e.count
+
+        sheets = [s(self) for s in self.sheets]
+        if self.importer.reset:
+            for sheet in reversed(sheets):
+                sheet.do_reset()
 
         self.marked_for_deletion = set()
         for sheet in sheets:
@@ -695,7 +726,12 @@ class Importer(object):
         else:
             self.write(0, u'Importing: {}', filename)
 
-        self.book(self).do_import(filename)
+        try:
+            wb = load_workbook(filename, read_only=True)
+        except Exception as e:
+            raise CommandError(u'Could not read input file: {}'.format(e))
+
+        self.book(self, wb).do_import()
 
         if self.dry_run:
             self.write(0, u'Rolled back (dry run)')
@@ -711,15 +747,17 @@ class ObligeeTagSheet(Sheet):
 
     columns = Columns(
             # {{{
-            pk=IntegerColumn(u'ID', field=u'pk',
+            pk=IntegerColumn(u'ID',
                 unique=True, min_value=1,
+                field=Field(),
                 ),
-            key=TextColumn(u'Kod', field=u'key',
+            key=TextColumn(u'Kod',
                 unique=True, max_length=255, regex=re.compile(r'^[\w-]+$'),
-                confirm_changed=True,
+                field=Field(confirm_changed=True),
                 ),
-            name=TextColumn(u'Nazov', field=u'name',
+            name=TextColumn(u'Nazov',
                 unique_slug=True, max_length=255,
+                field=Field(),
                 ),
             # }}}
             )
@@ -731,44 +769,50 @@ class ObligeeGroupSheet(Sheet):
 
     columns = Columns(
             # {{{
-            pk=IntegerColumn(u'ID', field=u'pk',
+            pk=IntegerColumn(u'ID',
                 unique=True, min_value=1,
+                field=Field(),
                 ),
-            key=TextColumn(u'Kod', field=u'key',
+            key=TextColumn(u'Kod',
+                # Checked that every subgroup has its parent group; See process_rows()
                 unique=True, max_length=255, regex=re.compile(r'^[\w-]+(/[\w-]+)*$'),
-                confirm_changed=True,
-                # Checked that every subgroup has its parent group; See concluding_checks()
+                field=Field(confirm_changed=True),
                 ),
-            name=TextColumn(u'Nazov v hierarchii', field=u'name',
+            name=TextColumn(u'Nazov v hierarchii',
                 unique_slug=True, max_length=255,
+                field=Field(),
                 ),
-            description=TextColumn(u'Popis', field=u'description',
+            description=TextColumn(u'Popis',
                 blank=True,
+                field=Field(),
                 ),
             # }}}
             )
 
-    def concluding_checks(self):
+    def process_rows(self, rows):
+        rows = super(ObligeeGroupSheet, self).process_rows(rows)
         errors = 0
 
         # Check that every subgroup has its parent group
-        groups = {}
-        for group in ObligeeGroup.objects.all():
-            if group in self.book.marked_for_deletion:
-                continue
-            groups[group.key] = group
-        for key in groups:
+        keys = set()
+        for values in rows.values():
+            key = values[self.columns.key.label]
+            keys.add(key)
+        for row_idx, values in rows.items():
+            key = values[self.columns.key.label]
             if u'/' not in key:
                 continue
             parent_key = key.rsplit(u'/', 1)[0]
-            if parent_key not in groups:
-                self.error(u'no_parent_group',
-                        u'{} has no parent group. Group "{}" not found.',
-                        self.get_obj_repr(groups[key]), parent_key)
+            if parent_key not in keys:
+                self.cell_error(u'no_parent_group', row_idx, self.columns.key,
+                        u'Group {} has no parent; Group {} not found',
+                        self.columns.key.coerced_repr(key),
+                        self.columns.key.coerced_repr(parent_key))
                 errors += 1
 
         if errors:
             raise RollingCommandError(errors)
+        return rows
 
 class ObligeeSheet(Sheet):
     label = u'Obligees'
@@ -777,100 +821,114 @@ class ObligeeSheet(Sheet):
 
     columns = Columns(
             # {{{
-            pk=IntegerColumn(u'ID', field=u'pk',
+            pk=IntegerColumn(u'ID',
                 unique=True, min_value=1,
+                field=Field(),
                 ),
-            official_name=TextColumn(u'Oficialny nazov', field=u'official_name',
+            official_name=TextColumn(u'Oficialny nazov',
                 max_length=255,
-                confirm_changed=True,
+                field=Field(confirm_changed=True),
                 ),
-            name=TextColumn(u'Rozlisovaci nazov nominativ', field=u'name',
+            name=TextColumn(u'Rozlisovaci nazov nominativ',
                 unique_slug=True, max_length=255,
-                confirm_unchanged_if_changed=u'official_name',
+                field=Field(confirm_unchanged_if_changed=u'official_name'),
                 ),
-            name_genitive=TextColumn(u'Rozlisovaci nazov genitiv', field=u'name_genitive',
+            name_genitive=TextColumn(u'Rozlisovaci nazov genitiv',
                 max_length=255,
-                confirm_unchanged_if_changed=u'name',
+                field=Field(confirm_unchanged_if_changed=u'name'),
                 ),
-            name_dative=TextColumn(u'Rozlisovaci nazov dativ', field=u'name_dative',
+            name_dative=TextColumn(u'Rozlisovaci nazov dativ',
                 max_length=255,
-                confirm_unchanged_if_changed=u'name',
+                field=Field(confirm_unchanged_if_changed=u'name'),
                 ),
-            name_accusative=TextColumn(u'Rozlisovaci nazov akuzativ', field=u'name_accusative',
+            name_accusative=TextColumn(u'Rozlisovaci nazov akuzativ',
                 max_length=255,
-                confirm_unchanged_if_changed=u'name',
+                field=Field(confirm_unchanged_if_changed=u'name'),
                 ),
-            name_locative=TextColumn(u'Rozlisovaci nazov lokal', field=u'name_locative',
+            name_locative=TextColumn(u'Rozlisovaci nazov lokal',
                 max_length=255,
-                confirm_unchanged_if_changed=u'name',
+                field=Field(confirm_unchanged_if_changed=u'name'),
                 ),
             name_instrumental=TextColumn(u'Rozlisovaci nazov instrumental',
-                field=u'name_instrumental',
                 max_length=255,
-                confirm_unchanged_if_changed=u'name',
+                field=Field(confirm_unchanged_if_changed=u'name'),
                 ),
-            gender=FieldChoicesColumn(u'Rod', Obligee.GENDERS, field=u'gender',
+            gender=FieldChoicesColumn(u'Rod', Obligee.GENDERS,
                 choices={
                     u'muzsky': Obligee.GENDERS.MASCULINE,
                     u'zensky': Obligee.GENDERS.FEMININE,
                     u'stredny': Obligee.GENDERS.NEUTER,
                     u'pomnozny': Obligee.GENDERS.PLURALE,
                     },
+                field=FieldChoicesField(Obligee.GENDERS),
                 ),
-            ico=TextColumn(u'ICO', field=u'ico',
+            ico=TextColumn(u'ICO',
                 blank=True, max_length=32,
+                field=Field(),
                 ),
-            street=TextColumn(u'Adresa: Ulica s cislom', field=u'street',
+            street=TextColumn(u'Adresa: Ulica s cislom',
                 max_length=255,
+                field=Field(),
                 ),
-            city=TextColumn(u'Adresa: Obec', field=u'city',
+            city=TextColumn(u'Adresa: Obec',
                 max_length=255,
+                field=Field(),
                 ),
-            zip=TextColumn(u'Adresa: PSC', field=u'zip',
+            zip=TextColumn(u'Adresa: PSC',
                 max_length=10, regex=re.compile(r'^\d\d\d \d\d$'),
+                field=Field(),
                 ),
             iczsj=IntegerColumn(u'ICZSJ', # FIXME: foreign key
                 min_value=1,
                 ),
-            emails=TextColumn(u'Adresa: Email', field=u'emails',
+            emails=TextColumn(u'Adresa: Email',
+                # Overridden with dummy emails for local and dev server modes; See process_row()
                 blank=True, max_length=1024, validators=validate_comma_separated_emails,
-                # Overridden with dummy emails for local and dev server modes; See get_obj_fields()
+                field=Field(),
                 ),
-            latitude=FloatColumn(u'Lat', field=u'latitude',
+            latitude=FloatColumn(u'Lat',
                 min_value=-90.0, max_value=90.0,
+                field=Field(),
                 ),
-            longitude=FloatColumn(u'Lon', field=u'longitude',
+            longitude=FloatColumn(u'Lon',
                 min_value=-180.0, max_value=180.0,
+                field=Field(),
                 ),
-            tags=ManyToManyColumn(u'Tagy', ObligeeTag, field=u'tags',
+            tags=ManyToManyColumn(u'Tagy', ObligeeTag,
                 to_field=u'key', blank=True,
+                field=ManyToManyField(),
                 ),
-            groups=ManyToManyColumn(u'Hierarchia', ObligeeGroup, field=u'groups',
+            groups=ManyToManyColumn(u'Hierarchia', ObligeeGroup,
                 to_field=u'key',
+                field=ManyToManyField(),
                 ),
-            type=FieldChoicesColumn(u'Typ', Obligee.TYPES, field=u'type',
+            type=FieldChoicesColumn(u'Typ', Obligee.TYPES,
                 choices={
                     u'odsek 1': Obligee.TYPES.SECTION_1,
                     u'odsek 2': Obligee.TYPES.SECTION_2,
                     u'odsek 3': Obligee.TYPES.SECTION_3,
                     u'odsek 4': Obligee.TYPES.SECTION_4,
                     },
+                field=FieldChoicesField(Obligee.TYPES),
                 ),
-            official_description=TextColumn(u'Oficialny popis', field=u'official_description',
+            official_description=TextColumn(u'Oficialny popis',
                 blank=True,
+                field=Field(),
                 ),
-            simple_description=TextColumn(u'Zrozumitelny popis', field=u'simple_description',
+            simple_description=TextColumn(u'Zrozumitelny popis',
                 blank=True,
+                field=Field(),
                 ),
-            status=FieldChoicesColumn(u'Stav', Obligee.STATUSES, field=u'status',
+            status=FieldChoicesColumn(u'Stav', Obligee.STATUSES,
                 choices={
                     u'aktivny': Obligee.STATUSES.PENDING,
                     u'neaktivny': Obligee.STATUSES.DISSOLVED,
                     },
-                confirm_changed=True,
+                field=FieldChoicesField(Obligee.STATUSES, confirm_changed=True),
                 ),
-            notes=TextColumn(u'Poznamka', field=u'notes',
+            notes=TextColumn(u'Poznamka',
                 blank=True,
+                field=Field(),
                 ),
             # }}}
             )
@@ -891,13 +949,16 @@ class ObligeeSheet(Sheet):
         self.reset_model(HistoricalObligee)
         self.reset_model(Inforequest)
 
-    def get_obj_fields(self, original, values, fields, row_idx):
+    def process_row(self, row_idx, row):
+        values = super(ObligeeSheet, self).process_row(row_idx, row)
 
         # Dummy emails for local and dev server modes
         if hasattr(settings, u'OBLIGEE_DUMMY_MAIL'):
-            fields[u'emails'] = Obligee.dummy_email(fields[u'name'], settings.OBLIGEE_DUMMY_MAIL)
+            name = values[self.columns.name.label]
+            dummy_email = Obligee.dummy_email(name, settings.OBLIGEE_DUMMY_MAIL)
+            values[self.columns.emails.label] = dummy_email
 
-        return fields
+        return values
 
 class ObligeeAliasSheet(Sheet):
     label = u'Aliasy'
@@ -906,43 +967,45 @@ class ObligeeAliasSheet(Sheet):
 
     columns = Columns(
             # {{{
-            pk=IntegerColumn(u'ID', field=u'pk',
+            pk=IntegerColumn(u'ID',
                 unique=True, min_value=1,
+                field=Field(),
                 ),
-            obligee=ForeignKeyColumn(u'ID institucie', Obligee, field=u'obligee',
-                confirm_changed=True,
+            obligee=ForeignKeyColumn(u'ID institucie', Obligee,
+                field=ForeignKeyField(confirm_changed=True),
                 ),
             obligee_name=TextColumn(u'Rozlisovaci nazov institucie',
-                # Checked that obligee_name is obligee.name; See get_obj_fields()
+                # Checked that obligee_name is obligee.name; See process_row()
                 ),
-            name=TextColumn(u'Alternativny nazov', field=u'name',
+            name=TextColumn(u'Alternativny nazov',
                 unique_slug=True, max_length=255,
+                field=Field(),
                 ),
-            description=TextColumn(u'Vysvetlenie', field=u'description',
+            description=TextColumn(u'Vysvetlenie',
                 blank=True,
+                field=Field(),
                 ),
-            notes=TextColumn(u'Poznamka', field=u'notes',
+            notes=TextColumn(u'Poznamka',
                 blank=True,
+                field=Field(),
                 ),
             # }}}
             )
 
-    def get_obj_fields(self, original, values, fields, row_idx):
-        errors = 0
+    def process_row(self, row_idx, row):
+        values = super(ObligeeAliasSheet, self).process_row(row_idx, row)
 
         # Check that obligee_name is obligee.name
-        column = self.columns.obligee_name
-        if values[column.label] != fields[u'obligee'].name:
-            self.error(u'obligee_name_mismatch',
-                    u'Invalid value in row {} of "{}.{}": Expecting {} but found {}',
-                    row_idx+1, self.label, column.label,
-                    column.coerced_repr(fields[u'obligee'].name),
-                    column.coerced_repr(values[column.label]))
-            errors += 1
+        value = values[self.columns.obligee_name.label]
+        obligee = values[self.columns.obligee.label]
+        if value != obligee.name:
+            self.cell_error(u'obligee_name', row_idx, self.columns.obligee_name,
+                    u'Expecting {} but found {}',
+                    self.columns.obligee_name.coerced_repr(obligee.name),
+                    self.columns.obligee_name.coerced_repr(value))
+            raise RollingCommandError
 
-        if errors:
-            raise RollingCommandError(errors)
-        return fields
+        return values
 
 class ObligeeBook(Book):
     sheets = [ObligeeTagSheet, ObligeeGroupSheet, ObligeeSheet, ObligeeAliasSheet]
