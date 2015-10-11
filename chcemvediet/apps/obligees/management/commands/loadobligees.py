@@ -9,8 +9,11 @@ from openpyxl import load_workbook
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from django.core.management.color import color_style
-from django.db import transaction
+from django.db import transaction, DEFAULT_DB_ALIAS
 from django.conf import settings
+from django.contrib.admin.utils import NestedObjects
+from django.utils.text import capfirst
+from django.utils.encoding import force_text
 
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.misc import squeeze, slugify, ensure_tuple, Bunch
@@ -26,19 +29,18 @@ def common_repr(value):
         return unicode(repr(value), u'utf-8')
 
 
-class RollingCommandError(CommandError):
+class RollingError(Exception):
     def __init__(self, count=1):
         self.count = count
-        super(CommandError, self).__init__(
-                u'Detected {} errors; Rolled back'.format(count))
-
-class RollbackDryRun(Exception):
-    pass
+        super(RollingError, self).__init__()
 
 class CellError(Exception):
     def __init__(self, code, msg, *args, **kwargs):
         self.code = code
         super(CellError, self).__init__(msg.format(*args, **kwargs))
+
+class RollbackDryRun(Exception):
+    pass
 
 
 class Columns(object):
@@ -283,7 +285,7 @@ class ForeignKeyColumn(Column):
             raise CellError(u'relation_type', u'Invalid value {} for {}: {}',
                     self.value_repr(value), self.to_field, e)
         if obj in sheet.book.marked_for_deletion:
-            raise CellError(u'deleted', u'{} with {}={} was deleted',
+            raise CellError(u'deleted', u'{} with {}={} was omitted and is going to be deleted',
                     self.to_model.__name__, self.to_field, self.value_repr(value))
         return obj
 
@@ -328,7 +330,7 @@ class Field(object):
                     self.value_repr(value),
                     default=u'Y')
             if inputed != u'Y':
-                raise RollingCommandError
+                raise RollingError
 
     def do_confirm_unchanged_if_changed(self, sheet, row_idx, value, values, original):
         if not self.confirm_unchanged_if_changed:
@@ -347,7 +349,7 @@ class Field(object):
                             self.name, self.value_repr(value),
                             default=u'Y')
                     if inputed != u'Y':
-                        raise RollingCommandError
+                        raise RollingError
                     return
 
     def do_import(self, sheet, row_idx, values, original):
@@ -408,6 +410,7 @@ class ManyToManyField(Field):
 class Sheet(object):
     label = None
     model = None
+    ignore_superfluous_columns = False
     delete_omitted = None
     columns = None
 
@@ -449,19 +452,20 @@ class Sheet(object):
         for column in missing_columns:
             self.error(None, u'Sheet "{}" does not contain required column: {}', self.label, column)
             errors += 1
-        for column in superfluous_columns:
-            self.error(None, u'Sheet "{}" contains unexpected column: {}', self.label, column)
-            errors += 1
+        if not self.ignore_superfluous_columns:
+            for column in superfluous_columns:
+                self.error(None, u'Sheet "{}" contains unexpected column: {}', self.label, column)
+                errors += 1
 
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
 
     def process_cell(self, row_idx, row, column):
         try:
             col_idx = self.column_map[column.label]
         except KeyError:
             self.cell_error(u'missing', row_idx, column, u'Missing column')
-            raise RollingCommandError
+            raise RollingError
 
         try:
             value = row[col_idx].value
@@ -474,7 +478,7 @@ class Sheet(object):
             return column.do_import(self, row_idx, value)
         except CellError as e:
             self.cell_error(e.code, row_idx, column, u'{}', e)
-            raise RollingCommandError
+            raise RollingError
 
     def process_row(self, row_idx, row):
         res = {}
@@ -482,10 +486,10 @@ class Sheet(object):
         for column in self.columns.__dict__.values():
             try:
                 res[column.label] = self.process_cell(row_idx, row, column)
-            except RollingCommandError as e:
+            except RollingError as e:
                 errors += e.count
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         return res
 
     def process_rows(self, rows):
@@ -496,10 +500,10 @@ class Sheet(object):
                 continue
             try:
                 res[row_idx] = self.process_row(row_idx, row)
-            except RollingCommandError as e:
+            except RollingError as e:
                 errors += e.count
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         return res
 
     def process_fields(self, row_idx, values, original):
@@ -510,10 +514,10 @@ class Sheet(object):
                 field = column.field
                 try:
                     res[field.name] = field.do_import(self, row_idx, values, original)
-                except RollingCommandError as e:
+                except RollingError as e:
                     errors += e.count
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         return res
 
     def save_object(self, fields, original):
@@ -559,44 +563,73 @@ class Sheet(object):
                     stats.created += 1
                 else:
                     stats.unchanged += 1
-            except RollingCommandError as e:
+            except RollingError as e:
                 errors += e.count
         # Mark omitted instances for deletion or add an error if delete is not permitted. Don't
         # delete anything if there were any errors as we don't know which instances are missing for
         # real and which are missing because of errors. The instances will be deleted only after
         # all sheets are imported to prevent unintentional cascades.
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         for obj in originals.values():
             if self.delete_omitted:
-                inputed = self.importer.input_yes_no(
-                        u'{} was omitted.', u'Are you sure, you want to delete it?',
-                        self.obj_repr(obj), default=u'Y')
-                if inputed == u'Y':
-                    self.book.marked_for_deletion.add(obj)
-                    stats.deleted += 1
-                else:
-                    errors += 1
+                self.book.marked_for_deletion[obj] = self
+                stats.deleted += 1
             else:
                 self.error(u'omitted', u'Omitted {}', self.obj_repr(obj))
                 errors += 1
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         return stats
 
     def do_import(self):
         self.importer.write(1, u'Importing {}...', self.model.__name__)
+        errors = 0
 
         try:
             self.validate_structure()
+        except RollingError as e:
+            errors += e.count
+
+        try:
             rows = self.process_rows(self.book.wb[self.label].rows)
             stats = self.save_objects(rows)
-        except RollingCommandError:
-            self.importer.write(1, u'Importing {} failed.', self.model.__name__)
-            raise
+        except RollingError as e:
+            errors += e.count
 
-        self.importer.write(1, u'Imported {}: {} created, {} changed, {} unchanged and {} deleted',
+        if errors:
+            self.importer.write(1, u'Importing {} failed.', self.model.__name__)
+            raise RollingError(errors)
+
+        self.importer.write(1,
+                u'Imported {}: {} created, {} changed, {} unchanged and {} marked for deletion',
                 self.model.__name__, stats.created, stats.changed, stats.unchanged, stats.deleted)
+
+    def _collect_related_format(self, collected, level=0):
+        res = []
+        for obj in collected:
+            if isinstance(obj, list):
+                res.extend(self._collect_related_format(obj, level=level+1))
+            else:
+                res.append(u'\n{} -- {}: {}'.format(u'    '*level,
+                        capfirst(obj._meta.verbose_name), force_text(obj)))
+        return res
+
+    def _collect_related(self, obj):
+        collector = NestedObjects(using=DEFAULT_DB_ALIAS)
+        collector.collect([obj])
+        collected = collector.nested()
+        return u''.join(self._collect_related_format(collected))
+
+    def delete_object(self, obj):
+        inputed = self.importer.input_yes_no(
+                u'{} was omitted. All the following related items will be deleted with it:{}',
+                u'Are you sure, you want to delete it?',
+                self.obj_repr(obj), self._collect_related(obj),
+                default=u'N')
+        if inputed != u'Y':
+            raise RollingError
+        obj.delete()
 
     def obj_repr(self, obj):
         return common_repr(obj)
@@ -611,48 +644,57 @@ class Book(object):
         self.marked_for_deletion = None
 
     def validate_structure(self):
-        errors = 0
-
         expected_sheets = set(s.label for s in self.sheets)
         found_sheets = {n for n in self.wb.get_sheet_names() if not n.startswith(u'#')}
         missing_sheets = expected_sheets - found_sheets
         superfluous_sheets = found_sheets - expected_sheets
         self.actual_sheets = expected_sheets & found_sheets
-        for sheet in missing_sheets:
-            self.importer.error(None, u'The file does not contain required sheet: {}', sheet)
-            errors += 1
-        for sheet in superfluous_sheets:
-            self.importer.error(None, u'The file contains unexpected sheet: {}', sheet)
-            errors += 1
-
-        if errors:
-            raise RollingCommandError(errors)
+        if superfluous_sheets:
+            inputed = self.importer.input_yes_no(
+                    u'The file contains the following unexpected sheets:{}',
+                    u'Ignore them?',
+                    u''.join(u'\n\t-- {}'.format(s) for s in superfluous_sheets),
+                    default=u'Y')
+            if inputed != u'Y':
+                raise CommandError(u'The file contains unexpected sheets')
+        if missing_sheets:
+            inputed = self.importer.input_yes_no(
+                    u'The file does not contain the following required sheets:{}\n'
+                    u'It contains only the following sheets:{}',
+                    u'Skip the missing sheets and import only the present ones?',
+                    u''.join(u'\n\t-- {}'.format(s) for s in missing_sheets),
+                    u''.join(u'\n\t-- {}'.format(s) for s in self.actual_sheets),
+                    default=u'Y')
+            if inputed != u'Y':
+                raise CommandError(u'The file does not contain required sheets')
 
     def do_import(self):
         errors = 0
-        try:
-            self.validate_structure()
-        except RollingCommandError as e:
-            errors += e.count
+        self.validate_structure()
 
         sheets = [s(self) for s in self.sheets]
         if self.importer.reset:
             for sheet in reversed(sheets):
-                sheet.do_reset()
+                if sheet.label in self.actual_sheets:
+                    sheet.do_reset()
 
-        self.marked_for_deletion = set()
+        self.marked_for_deletion = OrderedDict()
         for sheet in sheets:
-            if sheet.label not in self.actual_sheets:
-                continue
+            if sheet.label in self.actual_sheets:
+                try:
+                    sheet.do_import()
+                except RollingError as e:
+                    errors += e.count
+
+        self.importer.write(1, u'Deleting...')
+        for obj, sheet in reversed(self.marked_for_deletion.items()):
             try:
-                sheet.do_import()
-            except RollingCommandError as e:
+                sheet.delete_object(obj)
+            except RollingError as e:
                 errors += e.count
-        for obj in self.marked_for_deletion:
-            obj.delete()
 
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
 
 class Importer(object):
 
@@ -731,7 +773,10 @@ class Importer(object):
         except Exception as e:
             raise CommandError(u'Could not read input file: {}'.format(e))
 
-        self.book(self, wb).do_import()
+        try:
+            self.book(self, wb).do_import()
+        except RollingError as e:
+            raise CommandError(u'Detected {} errors; Rolled back'.format(e.count))
 
         if self.dry_run:
             self.write(0, u'Rolled back (dry run)')
@@ -811,7 +856,7 @@ class ObligeeGroupSheet(Sheet):
                 errors += 1
 
         if errors:
-            raise RollingCommandError(errors)
+            raise RollingError(errors)
         return rows
 
 class ObligeeSheet(Sheet):
@@ -1003,7 +1048,7 @@ class ObligeeAliasSheet(Sheet):
                     u'Expecting {} but found {}',
                     self.columns.obligee_name.coerced_repr(obligee.name),
                     self.columns.obligee_name.coerced_repr(value))
-            raise RollingCommandError
+            raise RollingError
 
         return values
 
@@ -1036,7 +1081,7 @@ class Command(BaseCommand):
         try:
             importer = Importer(ObligeeBook, options, self.stdout)
             importer.do_import(args[0])
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, EOFError):
             self.stdout.write(u'\n')
             raise CommandError(u'Aborted')
         except RollbackDryRun:
