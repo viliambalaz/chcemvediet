@@ -10,6 +10,7 @@ from poleno.utils.models import FieldChoices, QuerySet
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
 from poleno.utils.misc import squeeze, decorate, slugify
+from chcemvediet.apps.geounits.models import Neighbourhood
 
 
 class ObligeeTagQuerySet(QuerySet):
@@ -143,8 +144,6 @@ class ObligeeQuerySet(QuerySet):
 
 @register_history
 class Obligee(models.Model):
-    # FIXME: iczsj -- fk relation -- import iczsj table
-
     # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we can't use the slug index for
     # searching. Eventually, we need to define a fulltext index for "slug" or "name" and use
     # ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not support
@@ -198,6 +197,10 @@ class Obligee(models.Model):
             help_text=u'City part of postal address.')
     zip = models.CharField(max_length=10,
             help_text=u'Zip part of postal address.')
+
+    # May NOT be NULL
+    iczsj = models.ForeignKey(Neighbourhood,
+            help_text=u'City neighbourhood the obligee address is in.')
 
     # May be empty
     emails = models.CharField(blank=True, max_length=1024,
