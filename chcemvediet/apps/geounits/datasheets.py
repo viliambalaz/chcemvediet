@@ -3,7 +3,7 @@
 from collections import defaultdict
 
 from poleno.datasheets import Field, ForeignKeyField
-from poleno.datasheets import Columns, Column, TextColumn, ForeignKeyColumn
+from poleno.datasheets import Columns, TextColumn, ForeignKeyColumn
 from poleno.datasheets import RollingError, Sheet
 from poleno.utils.misc import slugify
 
@@ -36,19 +36,16 @@ class GeounitsSheet(Sheet):
             raise RollingError(errors)
         return rows
 
-    def check_unique_slugs(self, rows, column, group_column=None):
+    def check_unique_slugs(self, rows, column):
         errors = 0
 
         seen = {}
         for row_idx, values in rows.items():
             value = values[column.label]
-            key = slugify(value)
-            if group_column:
-                group = values[group_column.label]
-                key = (group, key)
-            if key in seen:
+            slug = slugify(value)
+            if slug in seen:
                 del rows[row_idx]
-                other_row, other_value = seen[key]
+                other_row, other_value = seen[slug]
                 self.cell_error(u'unique_slug', row_idx, column,
                         u'Expecting value with unique slug but {} has the same slug as {} in row {}',
                         column.coerced_repr(value),
@@ -56,7 +53,7 @@ class GeounitsSheet(Sheet):
                         other_row)
                 errors += 1
             else:
-                seen[key] = (row_idx, value)
+                seen[slug] = (row_idx, value)
 
         if errors:
             raise RollingError(errors)
@@ -196,8 +193,10 @@ class NeighbourhoodSheet(GeounitsSheet):
                 field=Field(),
                 ),
             name=TextColumn(u'NAZZSJ',
-                # Append suffix to ambiguous names; see process_rows()
-                # Check that names witin a municipality have unique slugs; see process_rows()
+                max_length=255,
+                field=Field(),
+                ),
+            cadastre=TextColumn(u'NAZUTJ',
                 max_length=255,
                 field=Field(),
                 ),
@@ -213,32 +212,10 @@ class NeighbourhoodSheet(GeounitsSheet):
             # }}}
             )
 
-    def make_names_unique(self, rows):
-        groups = defaultdict(list)
-        for row_idx, values in rows.items():
-            municipality = values[self.columns.municipality.label]
-            name = values[self.columns.name.label]
-            slug = slugify(name)
-            groups[(municipality, slug)].append(row_idx)
-        for group in groups.values():
-            if len(group) > 1:
-                for counter, row_idx in enumerate(group, start=1):
-                    name = rows[row_idx][self.columns.name.label]
-                    new_name = u'{} {}'.format(name, counter)
-                    rows[row_idx][self.columns.name.label] = new_name
-        return rows
-
     def process_rows(self, rows):
         rows = super(NeighbourhoodSheet, self).process_rows(rows)
 
         # Skip duplicate rows ignoring inconsistencies
         rows = self.merge_duplicate_rows(rows, check_columns=[])
-
-        # Append suffix to ambiguous names
-        rows = self.make_names_unique(rows)
-
-        # Check that names have unique slugs
-        rows = self.check_unique_slugs(rows, self.columns.name,
-                group_column=self.columns.municipality)
 
         return rows
