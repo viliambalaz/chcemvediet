@@ -20,4 +20,5 @@ class DataBook(Book):
             ]
 
 class Command(LoadSheetsCommand):
+    help = u'Loads .xlsx file with obligees and geounits'
     book = DataBook

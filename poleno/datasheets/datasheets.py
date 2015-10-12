@@ -412,7 +412,7 @@ class Importer(object):
 
 
 class LoadSheetsCommand(BaseCommand):
-    help = u'Loads .xlsx file with obligees'
+    help = u'Loads .xlsx file with data'
     args = u'file'
     option_list = BaseCommand.option_list + (
         make_option(u'--dry-run', action=u'store_true', default=False,
