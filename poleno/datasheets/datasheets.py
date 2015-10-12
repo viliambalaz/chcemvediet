@@ -421,7 +421,8 @@ class LoadSheetsCommand(BaseCommand):
                 """)),
         make_option(u'--reset', action=u'store_true', default=False,
             help=squeeze(u"""
-                Discard current obligees before imporing the file.
+                Discard current data before imporing the file. Only data from sheets present in the
+                file are discarded. Data from missing sheets are left untouched.
                 """)),
         make_option(u'--assume', choices=[u'yes', u'no', u'default'],
             help=squeeze(u"""
