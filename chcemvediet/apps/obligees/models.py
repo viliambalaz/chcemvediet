@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import escape
 
+from poleno import datacheck
 from poleno.utils.models import FieldChoices, QuerySet
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
@@ -68,6 +69,9 @@ class ObligeeTag(models.Model):
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.key)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
 
 
 class ObligeeGroupQuerySet(QuerySet):
@@ -132,6 +136,9 @@ class ObligeeGroup(models.Model):
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.key)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
 
 
 class ObligeeQuerySet(QuerySet):
@@ -306,6 +313,9 @@ class Obligee(models.Model):
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
 
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
+
 
 class ObligeeAliasQuerySet(QuerySet):
     def order_by_pk(self):
@@ -366,3 +376,22 @@ class ObligeeAlias(models.Model):
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
+
+
+@datacheck.register
+def datachecks(superficial, autofix):
+    u"""
+    Checks that all obligee subgroups have their parent groups.
+    """
+    groups = ObligeeGroup.objects.all()
+    keys = set(g.key for g in groups)
+    for group in groups:
+        if u'/' not in group.key:
+            continue
+        parent_key = group.key.rsplit(u'/', 1)[0]
+        if parent_key not in keys:
+            yield datacheck.Error(u'{} has key="{}" but thare is no group with key="{}"'.format(
+                    group, group.key, parent_key))

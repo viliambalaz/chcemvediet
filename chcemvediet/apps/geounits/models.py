@@ -1,7 +1,9 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.db.models import Q, F
 
+from poleno import datacheck
 from poleno.utils.models import QuerySet
 from poleno.utils.misc import squeeze, decorate, slugify
 
@@ -64,6 +66,9 @@ class Region(models.Model): # "Kraj"
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
 
 
 class DistrictQuerySet(QuerySet):
@@ -130,6 +135,9 @@ class District(models.Model): # "Okres"
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
 
 
 class MunicipalityQuerySet(QuerySet):
@@ -200,6 +208,9 @@ class Municipality(models.Model): # "Obec"
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
 
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
+
 
 class NeighbourhoodQuerySet(QuerySet):
     def order_by_pk(self):
@@ -254,3 +265,60 @@ class Neighbourhood(models.Model): # "Základná sídelná jednotka"
 
     def __unicode__(self):
         return u'[%s] %s' % (self.pk, self.name)
+
+    def __format__(self, format):
+        return unicode(repr(self), u'utf-8')
+
+
+@datacheck.register
+def datachecks(superficial, autofix):
+    u"""
+    Checks that Region, District, Municipality and Neighbourhood relations are consistent.
+    """
+    # Checks that municipality.region is municipality.district.region
+    municipalities = (Municipality.objects
+            .filter(~Q(district__region=F(u'region')))
+            .select_related(u'district')
+            )
+    if superficial:
+        municipalities = municipalities[:5+1]
+    issues = [u'{} has region_id="{}" but district.region_id="{}"'.format(
+            m, m.region_id, m.district.region_id) for m in municipalities]
+    if superficial and issues:
+        if len(issues) > 5:
+            issues[-1] = u'More municipalities have invalid region references'
+        issues = [u'; '.join(issues)]
+    for issue in issues:
+        yield datacheck.Error(issue + u'.')
+
+    # Checks that neighbourhood.district is neighbourhood.municipality.district
+    neighbourhoods = (Neighbourhood.objects
+            .filter(~Q(municipality__district=F(u'district')))
+            .select_related(u'municipality')
+            )
+    if superficial:
+        neighbourhoods = neighbourhoods[:5+1]
+    issues = [u'{} has district_id="{}" but municipality.district_id="{}"'.format(
+            n, n.district_id, n.municipality.district_id) for n in neighbourhoods]
+    if superficial and issues:
+        if len(issues) > 5:
+            issues[-1] = u'More neighbourhoods have invalid district references'
+        issues = [u'; '.join(issues)]
+    for issue in issues:
+        yield datacheck.Error(issue + u'.')
+
+    # Checks that neighbourhood.region is neighbourhood.district.region
+    neighbourhoods = (Neighbourhood.objects
+            .filter(~Q(district__region=F(u'region')))
+            .select_related(u'district')
+            )
+    if superficial:
+        neighbourhoods = neighbourhoods[:5+1]
+    issues = [u'{} has region_id="{}" but district.region_id="{}"'.format(
+            n, n.region_id, n.district.region_id) for n in neighbourhoods]
+    if superficial and issues:
+        if len(issues) > 5:
+            issues[-1] = u'More neighbourhoods have invalid region references'
+        issues = [u'; '.join(issues)]
+    for issue in issues:
+        yield datacheck.Error(issue + u'.')
