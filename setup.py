@@ -311,12 +311,6 @@ def load_fixtures(configure):
     res.append(u'fixtures/sites_site.json')
     res.append(u'fixtures/auth_user.json')
     res.append(u'fixtures/socialaccount_socialapp.json')
-
-    # Production mode uses real obligee data configured manually.
-    server_mode = configure.get(u'server_mode')
-    if server_mode != u'production':
-        res.append(u'fixtures/obligees_obligee.json')
-
     return res
 
 def create_or_sync_database(configure):
@@ -329,6 +323,7 @@ def create_or_sync_database(configure):
     except DatabaseError:
         call(u'Create DB:', [u'env/bin/python', u'manage.py', u'migrate'])
         call(u'Load DB fixtures:', [u'env/bin/python', u'manage.py', u'loaddata'] + load_fixtures(configure))
+        call(u'Load datasheets:', [u'env/bin/python', u'manage.py', u'loadsheets', u'fixtures/datasheets.xlsx'])
     else:
         call(u'Migrate DB:', [u'env/bin/python', u'manage.py', u'migrate'])
 
@@ -387,7 +382,7 @@ def configure_dummy_obligee_emails(configure):
                 obligee.save()
 
 def compile_locales(configure):
-    for cwd in [u'poleno/attachments/', u'poleno/invitations/', u'poleno/mail/', u'poleno/pages/', u'poleno/utils/', u'./']:
+    for cwd in [u'poleno/attachments/', u'poleno/invitations/', u'poleno/mail/', u'poleno/pages/', u'poleno/utils/', u'chcemvediet/']:
         rel = os.path.relpath(u'.', cwd)
         call(u'Compiling locales:', [os.path.join(rel, u'env/bin/python'), os.path.join(rel, u'manage.py'), u'compilemessages'], cwd=cwd)
 
