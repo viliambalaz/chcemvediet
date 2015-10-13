@@ -41,9 +41,10 @@ class Sheet(object):
     delete_omitted = True
     columns = None
 
-    def __init__(self, book):
+    def __init__(self, book, ws):
         self.book = book
         self.importer = book.importer
+        self.ws = ws
         self.column_map = None
 
     def error(self, code, msg, *args, **kwargs):
@@ -67,9 +68,15 @@ class Sheet(object):
         errors = 0
 
         self.column_map = {}
-        row = next(self.book.wb[self.label].rows, [])
+        row = next(self.ws.rows, [])
         for col_idx, column in enumerate(row):
-            if column.value is not None and not column.value.startswith(u'#'):
+            if column.value is None or column.value.startswith(u'#'):
+                continue
+            if column.value in self.column_map:
+                self.error(None, u'Sheet "{}" contains duplicate column: {}',
+                        self.label, column.value)
+                errors += 1
+            else:
                 self.column_map[column.value] = col_idx
 
         expected_columns = set(c.label for c in self.columns.__dict__.values())
@@ -219,7 +226,7 @@ class Sheet(object):
             errors += e.count
 
         try:
-            rows = self.process_rows(self.book.wb[self.label].rows)
+            rows = self.process_rows(self.ws.rows)
             stats = self.save_objects(rows)
         except RollingError as e:
             errors += e.count
@@ -264,54 +271,66 @@ class Sheet(object):
 class Book(object):
     sheets = None
 
-    def __init__(self, importer, wb):
+    def __init__(self, importer, wbs):
         self.importer = importer
-        self.wb = wb
-        self.actual_sheets = None
+        self.wbs = wbs
         self.marked_for_deletion = None
+        self.sheet_map = None
 
     def validate_structure(self):
+        self.sheet_map = {}
+        for wb in self.wbs:
+            for sheet in wb.get_sheet_names():
+                if sheet.startswith(u'#'):
+                    continue
+                if sheet in self.sheet_map:
+                    raise CommandError(u'The files contain duplicate sheet: {}'.format(sheet))
+                self.sheet_map[sheet] = wb[sheet]
+
         expected_sheets = set(s.label for s in self.sheets)
-        found_sheets = {n for n in self.wb.get_sheet_names() if not n.startswith(u'#')}
+        found_sheets = set(self.sheet_map.keys())
         missing_sheets = expected_sheets - found_sheets
         superfluous_sheets = found_sheets - expected_sheets
-        self.actual_sheets = expected_sheets & found_sheets
+        actual_sheets = expected_sheets & found_sheets
         if superfluous_sheets:
             inputed = self.importer.input_yes_no(
-                    u'The file contains the following unexpected sheets:{}',
+                    u'The files contain the following unexpected sheets:{}',
                     u'Ignore them?',
                     u''.join(u'\n\t-- {}'.format(s) for s in superfluous_sheets),
                     default=u'Y')
             if inputed != u'Y':
-                raise CommandError(u'The file contains unexpected sheets')
+                raise CommandError(u'The files contain unexpected sheets')
         if missing_sheets:
             inputed = self.importer.input_yes_no(
-                    u'The file contains only the following sheets:{}\n'
+                    u'The files contain only the following sheets:{}\n'
                     u'The following sheets are missing:{}',
                     u'Skip missing sheets and import only the present ones?',
-                    u''.join(u'\n\t-- {}'.format(s) for s in self.actual_sheets),
+                    u''.join(u'\n\t-- {}'.format(s) for s in actual_sheets),
                     u''.join(u'\n\t-- {}'.format(s) for s in missing_sheets),
                     default=u'Y')
             if inputed != u'Y':
-                raise CommandError(u'The file does not contain required sheets')
+                raise CommandError(u'The files do not contain required sheets')
 
     def do_import(self):
         errors = 0
         self.validate_structure()
 
-        sheets = [s(self) for s in self.sheets]
+        sheets = []
+        for sheet in self.sheets:
+            if sheet.label in self.sheet_map:
+                ws = self.sheet_map[sheet.label]
+                sheets.append(sheet(self, ws))
+
         if self.importer.reset:
             for sheet in reversed(sheets):
-                if sheet.label in self.actual_sheets:
-                    sheet.do_reset()
+                sheet.do_reset()
 
         self.marked_for_deletion = OrderedDict()
         for sheet in sheets:
-            if sheet.label in self.actual_sheets:
-                try:
-                    sheet.do_import()
-                except RollingError as e:
-                    errors += e.count
+            try:
+                sheet.do_import()
+            except RollingError as e:
+                errors += e.count
 
         for obj, sheet in reversed(self.marked_for_deletion.items()):
             try:
@@ -388,19 +407,22 @@ class Importer(object):
             self.stdout.write(self.color_style.ERROR(u'Error: {}'.format(error)))
 
     @transaction.atomic
-    def do_import(self, filename):
+    def do_import(self, filenames):
         if self.dry_run:
-            self.write(0, u'Importing: {} (dry run)', filename)
+            self.write(0, u'Importing: {} (dry run)', u', '.join(filenames))
         else:
-            self.write(0, u'Importing: {}', filename)
+            self.write(0, u'Importing: {}', u', '.join(filenames))
+
+        wbs = []
+        for filename in filenames:
+            try:
+                wb = load_workbook(filename, read_only=True)
+            except Exception as e:
+                raise CommandError(u'Could not read input file: {}'.format(e))
+            wbs.append(wb)
 
         try:
-            wb = load_workbook(filename, read_only=True)
-        except Exception as e:
-            raise CommandError(u'Could not read input file: {}'.format(e))
-
-        try:
-            self.book(self, wb).do_import()
+            self.book(self, wbs).do_import()
         except RollingError as e:
             raise CommandError(u'Detected {} errors; Rolled back'.format(e.count))
 
@@ -412,17 +434,18 @@ class Importer(object):
 
 
 class LoadSheetsCommand(BaseCommand):
-    help = u'Loads .xlsx file with data'
-    args = u'file'
+    help = u'Loads .xlsx files with data'
+    args = u'file [file ...]'
     option_list = BaseCommand.option_list + (
         make_option(u'--dry-run', action=u'store_true', default=False,
             help=squeeze(u"""
-                Just show if the file would be imported correctly. Rollback all changes at the end.
+                Just show if the files would be imported correctly. Rollback all changes at the
+                end.
                 """)),
         make_option(u'--reset', action=u'store_true', default=False,
             help=squeeze(u"""
-                Discard current data before imporing the file. Only data from sheets present in the
-                file are discarded. Data from missing sheets are left untouched.
+                Discard current data before imporing the files. Only data from sheets present in
+                the files are discarded. Data from missing sheets are left untouched.
                 """)),
         make_option(u'--assume', choices=[u'yes', u'no', u'default'],
             help=squeeze(u"""
@@ -433,12 +456,12 @@ class LoadSheetsCommand(BaseCommand):
     book = None
 
     def handle(self, *args, **options):
-        if len(args) != 1:
-            raise CommandError(u'Expecting exactly one argument')
+        if not args:
+            raise CommandError(u'No file specified.')
 
         try:
             importer = self.importer(self.book, options, self.stdout)
-            importer.do_import(args[0])
+            importer.do_import(args)
         except (KeyboardInterrupt, EOFError):
             self.stdout.write(u'\n')
             raise CommandError(u'Aborted')
