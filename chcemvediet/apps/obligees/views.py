@@ -37,7 +37,7 @@ def autocomplete(request):
     term = unidecode(term).lower() # transliterate unicode to ascii
     words = (w for w in re.split(r'[^a-z0-9]+', term) if w)
 
-    query = reduce(operator.and_, (Q(slug__contains=u'-'+w) for w in words), Q())
+    query = reduce(operator.and_, (Q(slug__contains=w) for w in words), Q())
     obligees = Obligee.objects.pending().filter(query).order_by_name()[:10]
 
     data = [{
