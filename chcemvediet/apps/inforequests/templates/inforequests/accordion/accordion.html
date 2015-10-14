@@ -26,7 +26,7 @@
             <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
             {{ action.legal_date }}<br>
           {% endif %}
-          {% if action.type == action.TYPES.EXTENSION %}
+          {% if action.type == ACTION_TYPES.EXTENSION %}
             <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
             {% include "inforequests/accordion/texts/extension.html" %}<br>
           {% endif %}

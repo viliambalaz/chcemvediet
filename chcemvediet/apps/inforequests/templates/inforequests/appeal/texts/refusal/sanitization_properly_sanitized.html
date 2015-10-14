@@ -23,11 +23,11 @@
   <span style="color: red;">FIXME</span> Cele zle, nezdovodnene dovody:
   {% for reason in step.reasons_with_empty_sections %}
     {% filter squeeze %}
-      {% if reason == last_action.REFUSAL_REASONS.BUSINESS_SECRET %}
+      {% if reason == ACTION_REFUSAL_REASONS.BUSINESS_SECRET %}
         obchodné tajomstvo
-      {% elif reason == last_action.REFUSAL_REASONS.PERSONAL %}
+      {% elif reason == ACTION_REFUSAL_REASONS.PERSONAL %}
         osobné údaje podliehajúce ochrane
-      {% elif reason == last_action.REFUSAL_REASONS.CONFIDENTIAL %}
+      {% elif reason == ACTION_REFUSAL_REASONS.CONFIDENTIAL %}
         utajovaná skutočnosť
       {% endif %}
     {% endfilter %}{% if forloop.revcounter > 2 %},

@@ -33,7 +33,7 @@
       <p class="span10">{{ action.delivered_date }}</p>
     </div>
   {% endif %}
-  {% if action.type == action.TYPES.EXTENSION %}
+  {% if action.type == ACTION_TYPES.EXTENSION %}
     <div class="row-fluid">
       <p class="span2 text-right">{% trans 'inforequests:detail:action:extension' %}:</p>
       <p class="span10">{% include "inforequests/detail/texts/extension.html" %}</p>
@@ -66,42 +66,42 @@
             {% else %}
               <span>{{ recipient.formatted }}</span>
             {% endif %}
-            {% if recipient.status == recipient.STATUSES.QUEUED %}
+            {% if recipient.status == RECIPIENT_STATUSES.QUEUED %}
               <span class="label with-tooltip" data-toggle="tooltip" data-placement="right"
                     title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_queued.txt" %}
                       {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
-            {% elif recipient.status == recipient.STATUSES.REJECTED %}
+            {% elif recipient.status == RECIPIENT_STATUSES.REJECTED %}
               <span class="label label-important with-tooltip" data-toggle="tooltip"
                     data-placement="right" title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_rejected.txt" %}
                       {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
-            {% elif recipient.status == recipient.STATUSES.INVALID %}
+            {% elif recipient.status == RECIPIENT_STATUSES.INVALID %}
               <span class="label label-important with-tooltip" data-toggle="tooltip"
                     data-placement="right" title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_invalid.txt"   %}
                       {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
-            {% elif recipient.status == recipient.STATUSES.SENT %}
+            {% elif recipient.status == RECIPIENT_STATUSES.SENT %}
               <span class="label label-info with-tooltip" data-toggle="tooltip"
                     data-placement="right" title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_sent.txt" %}
                       {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
-            {% elif recipient.status == recipient.STATUSES.DELIVERED %}
+            {% elif recipient.status == RECIPIENT_STATUSES.DELIVERED %}
               <span class="label label-success with-tooltip" data-toggle="tooltip"
                     data-placement="right" title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_delivered.txt" %}
                       {% endspaceless %}">
                 {{ recipient.get_status_display }}
               </span>
-            {% elif recipient.status == recipient.STATUSES.OPENED %}
+            {% elif recipient.status == RECIPIENT_STATUSES.OPENED %}
               <span class="label label-success with-tooltip" data-toggle="tooltip"
                     data-placement="right" title="{% spaceless %}
                       {% include "inforequests/detail/tooltips/email_opened.txt" %}

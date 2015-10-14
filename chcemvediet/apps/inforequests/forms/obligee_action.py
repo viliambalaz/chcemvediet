@@ -878,8 +878,6 @@ class ObligeeActionWizard(Wizard):
         res.update({
                 u'inforequest': self.inforequest,
                 u'email': self.email,
-                u'ACTION_TYPES': Action.TYPES,
-                u'DISCLOSURE_LEVELS': Action.DISCLOSURE_LEVELS,
                 })
         return res
 

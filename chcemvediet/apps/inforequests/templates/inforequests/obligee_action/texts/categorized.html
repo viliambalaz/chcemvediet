@@ -7,8 +7,6 @@
  %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
- %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
- %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
  %
 {% endcomment %}
 
@@ -38,13 +36,13 @@
     Odpoveď sa zaradí ako <b>potvrdenie prijatia žiadosti</b>. Inštitúcia vám potvrdila, že prijala
     vašu žiadosť. Teraz čakajte na ďalšiu reakciu inštitúcie.
   {% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
-    {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
+    {% if wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.NONE %}
       Odpoveď sa zaradí ako nesprístupnienie informácií (bez vydania rozhodnutia).
       <span style="color: red;">FIXME</span>
-    {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
+    {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.PARTIAL %}
       Odpoveď sa zaradí ako čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
       <span style="color: red;">FIXME</span>
-    {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
+    {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.FULL %}
       Odpoveď sa zaradí ako <b>sprístupnienie informácií</b>. Inštitúcia vám sprístupnila
       informácie, ktoré ste požadovali, v plnom rozsahu. Gratulujeme!
     {% endif %}

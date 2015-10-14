@@ -7,8 +7,6 @@
  %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
- %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
- %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
  %
 {% endcomment %}
 
@@ -26,11 +24,11 @@ Tentoraz je to dátum, ktorý označuje deň, kedy inštitúcia sformulovala
 {% elif wizard.values.action == ACTION_TYPES.CONFIRMATION %}
   potvrdenie prijatia žiadosti.
 {% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
-  {% if wizard.values.disclosure_level == DISCLOSURE_LEVELS.NONE %}
+  {% if wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.NONE %}
     nesprístupnienie informácií (bez vydania rozhodnutia).
-  {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.PARTIAL %}
+  {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.PARTIAL %}
     čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
-  {% elif wizard.values.disclosure_level == DISCLOSURE_LEVELS.FULL %}
+  {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.FULL %}
     sprístupnienie informácií.
   {% endif %}
 {% elif wizard.values.action == ACTION_TYPES.EXTENSION %}

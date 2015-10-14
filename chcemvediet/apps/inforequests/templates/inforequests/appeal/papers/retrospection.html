@@ -29,13 +29,13 @@
       Dňa {{ clause.confirmation.delivered_date|date:"d.m.Y" }} mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       potvrdenie o prijati žiadosti.
@@ -57,13 +57,13 @@
       ma
       {% if not clause.obligee %}
         povinná osoba vyzvala
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} vyzval
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} vyzvala
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} vyzvalo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} vyzvali
       {% endif %}
       na doplnenie žiadosti, ktorú som dňa
@@ -97,13 +97,13 @@
       mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       oznámenie o predĺžení lehoty na vybavenie žiadosti.
@@ -113,13 +113,13 @@
       Dňa {{ clause.advancement.delivered_date|date:"d.m.Y" }} mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       oznámenie o postúpeni žiadosti
@@ -143,13 +143,13 @@
       Dňa {{ clause.disclosure.delivered_date|date:"d.m.Y" }} mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       rozhodnutie o sprístupnení informácie, ktoré však nebolo
@@ -163,13 +163,13 @@
       Dňa {{ clause.refusal.delivered_date|date:"d.m.Y" }} mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       rozhodnutie o nesprístupnení informácie, voči ktorému som sa dňa
@@ -201,13 +201,13 @@
       Dňa {{ clause.advancement.delivered_date|date:"d.m.Y" }} mi
       {% if not clause.obligee %}
         povinná osoba doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
         {{ clause.obligee.name }} doručil
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
         {{ clause.obligee.name }} doručila
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
         {{ clause.obligee.name }} doručilo
-      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+      {% elif clause.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
         {{ clause.obligee.name }} doručili
       {% endif %}
       oznámenie o postúpení žiadosti

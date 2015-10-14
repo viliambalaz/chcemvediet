@@ -43,13 +43,13 @@ o poskytnutie informácie: {{ inforequest.subject }}.
   žiadosti {{ branch.historicalobligee.name_dative }}.
 {% endif %}
 Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi
-{% if branch.obligee.gender == branch.obligee.GENDERS.MASCULINE %}
+{% if branch.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
   {{ branch.obligee.name }} doručil
-{% elif branch.obligee.gender == branch.obligee.GENDERS.FEMININE %}
+{% elif branch.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
   {{ branch.obligee.name }} doručila
-{% elif branch.obligee.gender == branch.obligee.GENDERS.NEUTER %}
+{% elif branch.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
   {{ branch.obligee.name }} doručilo
-{% elif branch.obligee.gender == branch.obligee.GENDERS.PLURALE %}
+{% elif branch.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
   {{ branch.obligee.name }} doručili
 {% endif %}
 výzvu {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif %}

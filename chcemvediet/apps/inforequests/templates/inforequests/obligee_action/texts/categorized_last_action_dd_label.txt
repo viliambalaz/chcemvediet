@@ -7,8 +7,6 @@
  %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.Categorized
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- email: poleno.mail.models.Message | None
- %  -- ACTION_TYPES: chcemvediet.apps.inforequests.models.Action.TYPES
- %  -- DISCLOSURE_LEVELS: chcemvediet.apps.inforequests.models.Action.DISCLOSURE_LEVELS
  %
 {% endcomment %}
 
