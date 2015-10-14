@@ -12,7 +12,7 @@ from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
-from chcemvediet.apps.wizards import Bottom, Step, Wizard
+from chcemvediet.apps.wizards.wizard import Bottom, Step, Wizard
 from chcemvediet.apps.obligees.forms import MultipleObligeeWidget, MultipleObligeeField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField

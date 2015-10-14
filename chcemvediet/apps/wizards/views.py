@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
 from poleno.utils.forms import clean_button
 
-from . import WizzardRollback
+from .wizard import WizzardRollback
 
 
 def wizard_view(wizard_class, request, index, *args, **kwargs):

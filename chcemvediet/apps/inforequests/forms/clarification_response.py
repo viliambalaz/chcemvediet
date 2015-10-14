@@ -11,7 +11,7 @@ from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import Step, Wizard
+from chcemvediet.apps.wizards.wizard import Step, Wizard
 from chcemvediet.apps.inforequests.models import Action
 
 

@@ -1,7 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from poleno.utils.urls import reverse
-from chcemvediet.apps.wizards import Wizard
+from chcemvediet.apps.wizards.wizard import Wizard
 from chcemvediet.apps.inforequests.models import Action
 
 from .common import AppealStep

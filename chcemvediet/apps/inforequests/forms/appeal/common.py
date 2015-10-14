@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze
-from chcemvediet.apps.wizards import Step, SectionStep, DeadendStep, PaperStep, PrintStep
+from chcemvediet.apps.wizards.wizard import Step, SectionStep, DeadendStep, PaperStep, PrintStep
 from chcemvediet.apps.wizards.forms import PaperDateField
 
 
