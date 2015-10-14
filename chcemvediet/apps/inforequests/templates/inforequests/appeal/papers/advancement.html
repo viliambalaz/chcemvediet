@@ -1,6 +1,5 @@
 {# vim: set filetype=htmldjango :#}
 {% load paper_field paragraph from chcemvediet.wizards %}
-{% load obligee_declension from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -22,11 +21,11 @@
   o postúpeni žiadosti
   {% for subbranch in last_action.advanced_to_set.all %}
     {% if forloop.revcounter == 1 %}
-      {% obligee_declension subbranch.historicalobligee "dative" %}.
+      {{ subbranch.historicalobligee.name_dative }}.
     {% elif forloop.revcounter == 2 %}
-      {% obligee_declension subbranch.historicalobligee "dative" %} a
+      {{ subbranch.historicalobligee.name_dative }} a
     {% else %}
-      {% obligee_declension subbranch.historicalobligee "dative" %},
+      {{ subbranch.historicalobligee.name_dative }},
     {% endif %}
   {% endfor %}
   Oznámenie

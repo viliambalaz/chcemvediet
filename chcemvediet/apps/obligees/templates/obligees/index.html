@@ -46,7 +46,7 @@
           <li class="disabled"><span>{{ obligee_page.number }}</span></li>
         {% else %}
           {% if obligee_page.number|add:i > 0 %}
-            {% obligee_page.number|add:i <= obligee_page.paginator.num_pages %}
+            {% if obligee_page.number|add:i <= obligee_page.paginator.num_pages %}
               <li>
                 <a href="?page={{ obligee_page.number|add:i }}">{{ obligee_page.number|add:i }}</a>
               </li>

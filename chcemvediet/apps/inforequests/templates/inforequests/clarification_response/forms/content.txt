@@ -1,6 +1,5 @@
 {# vim: set filetype=htmldjango :#}
 {% load squeeze from poleno.utils %}
-{% load obligee_declension obligee_gender from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -37,15 +36,22 @@ Dobrý deň,
 
 {% filter squeeze %}
 dňa {{ inforequest.submission_date|date:"d.m.Y" }} som formou emailu požiadal
-{% obligee_declension inforequest.main_branch.historicalobligee "accusative" %}
+{{ inforequest.main_branch.historicalobligee.name_accusative }}
 o poskytnutie informácie: {{ inforequest.subject }}.
 {% if not branch.is_main %}
   Dňa {{ branch.advanced_by.delivered_date|date:"d.m.Y" }} mi bolo doručené oznámenie o postúpení
-  žiadosti {% obligee_declension branch.historicalobligee "dative" %}.
+  žiadosti {{ branch.historicalobligee.name_dative }}.
 {% endif %}
 Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi
-{% obligee_declension branch.obligee "nominative" %}
-{% obligee_gender branch.obligee "doručil" "doručila" "doručilo" "doručili" %}
+{% if branch.obligee.gender == branch.obligee.GENDERS.MASCULINE %}
+  {{ branch.obligee.name }} doručil
+{% elif branch.obligee.gender == branch.obligee.GENDERS.FEMININE %}
+  {{ branch.obligee.name }} doručila
+{% elif branch.obligee.gender == branch.obligee.GENDERS.NEUTER %}
+  {{ branch.obligee.name }} doručilo
+{% elif branch.obligee.gender == branch.obligee.GENDERS.PLURALE %}
+  {{ branch.obligee.name }} doručili
+{% endif %}
 výzvu {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif %}
 na doplnenie žiadosti.
 {% endfilter %}

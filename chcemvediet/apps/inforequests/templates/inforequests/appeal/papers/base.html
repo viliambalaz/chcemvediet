@@ -1,6 +1,5 @@
 {# vim: set filetype=htmldjango :#}
 {% load paper_field paragraph from chcemvediet.wizards %}
-{% load obligee_declension from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -63,7 +62,7 @@
       „zákon o slobode inforácií” alebo len „zákon”) podávam
       {% if rozklad %}rozklad{% else %}odvolanie{% endif %}
       voči {% if fiktivne %}fiktívnemu{% endif %} rozhodnutiu
-      {% obligee_declension branch.obligee "genitive" %}
+      {{ branch.obligee.name_genitive }}
       (ďalej len „povinná osoba”){% if not fiktivne and last_action.file_number %}
         číslo {{ last_action.file_number}}
       {% endif%},

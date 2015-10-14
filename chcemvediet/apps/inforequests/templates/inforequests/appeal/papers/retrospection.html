@@ -1,6 +1,5 @@
 {# vim: set filetype=htmldjango :#}
 {% load paragraph from chcemvediet.wizards %}
-{% load obligee_declension obligee_gender from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -15,7 +14,11 @@
   {% if clause.key == "request" %}
     {% paragraph before=2 %}
       Dňa {{ clause.inforequest.submission_date|date:"d.m.Y" }} som formou emailu požiadal
-      {% obligee_declension clause.obligee "accusative" "povinnú osobu" %}
+      {% if not clause.obligee %}
+        povinnú osobu
+      {% else %}
+        {{ clause.obligee.name_accusative }}
+      {% endif %}
       o poskytnutie nasledovnej informácie:
     {% endparagraph %}
     {% paragraph before=2 after=2 %}
@@ -24,8 +27,17 @@
   {% elif clause.key == "confirmation" %}
     {% paragraph before=0 after=0 %}
       Dňa {{ clause.confirmation.delivered_date|date:"d.m.Y" }} mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       potvrdenie o prijati žiadosti.
     {% endparagraph %}
   {% elif clause.key == "clarification" %}
@@ -43,8 +55,17 @@
         {% endif %}
       {% endfor %}
       ma
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "vyzval" "vyzvala" "vyzvalo" "vyzvali" %}
+      {% if not clause.obligee %}
+        povinná osoba vyzvala
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} vyzval
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} vyzvala
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} vyzvalo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} vyzvali
+      {% endif %}
       na doplnenie žiadosti, ktorú som dňa
       {% for clarification_response in clause.clarification_responses %}
         {% if forloop.revcounter == 1 %}
@@ -74,23 +95,41 @@
         {% endif %}
       {% endfor %}
       mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       oznámenie o predĺžení lehoty na vybavenie žiadosti.
     {% endparagraph %}
   {% elif clause.key == "advancement-appeal" %}
     {% paragraph before=0 after=0 %}
       Dňa {{ clause.advancement.delivered_date|date:"d.m.Y" }} mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       oznámenie o postúpeni žiadosti
       {% for subbranch in clause.advancement.advanced_to_set.all %}
         {% if forloop.revcounter == 1 %}
-          {% obligee_declension subbranch.historicalobligee "dative" %}.
+          {{ subbranch.historicalobligee.name_dative }}.
         {% elif forloop.revcounter == 2 %}
-          {% obligee_declension subbranch.historicalobligee "dative" %} a
+          {{ subbranch.historicalobligee.name_dative }} a
         {% else %}
-          {% obligee_declension subbranch.historicalobligee "dative" %},
+          {{ subbranch.historicalobligee.name_dative }},
         {% endif %}
       {% endfor %}
       Oznámenie
@@ -102,8 +141,17 @@
   {% elif clause.key == "disclosure-appeal" %}
     {% paragraph before=0 after=0 %}
       Dňa {{ clause.disclosure.delivered_date|date:"d.m.Y" }} mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       rozhodnutie o sprístupnení informácie, ktoré však nebolo
       {% if clause.not_at_all %}ani len čiastočným{% else %}úplným{% endif%}
       sprístupnením žiadanej informácie. Voči
@@ -113,8 +161,17 @@
   {% elif clause.key == "refusal-appeal" %}
     {% paragraph before=0 after=0 %}
       Dňa {{ clause.refusal.delivered_date|date:"d.m.Y" }} mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       rozhodnutie o nesprístupnení informácie, voči ktorému som sa dňa
       {{ clause.appeal.sent_date|date:"d.m.Y" }} odvolal.
     {% endparagraph %}
@@ -132,22 +189,35 @@
   {% elif clause.key == "remandment" %}
     {% paragraph before=0 after=1 %}
       Dňa {{ clause.remandment.delivered_date|date:"d.m.Y" }} mi odvolací orgán
-      {% obligee_declension clause.obligee "genitive" "povinnej osoby" %}
+      {% if not clause.obligee %}
+        povinnej osoby
+      {% else %}
+        {{ clause.obligee.name_genitive }}
+      {% endif %}
       doručil rozhodnutie o vyhovení odvolaniu a vrátení veci na opätovné konanie.
     {% endparagraph %}
   {% elif clause.key == "advancement" %}
     {% paragraph before=0 after=1 %}
       Dňa {{ clause.advancement.delivered_date|date:"d.m.Y" }} mi
-      {% obligee_declension clause.obligee "nominative" "povinná osoba" %}
-      {% obligee_gender clause.obligee "doručil" "doručila" "doručilo" "doručili" %}
+      {% if not clause.obligee %}
+        povinná osoba doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.MASCULINE %}
+        {{ clause.obligee.name }} doručil
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.FEMININE %}
+        {{ clause.obligee.name }} doručila
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.NEUTER %}
+        {{ clause.obligee.name }} doručilo
+      {% elif clause.obligee.gender == clause.obligee.GENDERS.PLURALE %}
+        {{ clause.obligee.name }} doručili
+      {% endif %}
       oznámenie o postúpení žiadosti
       {% for subbranch in clause.advancement.advanced_to_set.all %}
         {% if forloop.revcounter == 1 %}
-          {% obligee_declension subbranch.historicalobligee "dative" %}.
+          {{ subbranch.historicalobligee.name_dative }}.
         {% elif forloop.revcounter == 2 %}
-          {% obligee_declension subbranch.historicalobligee "dative" %} a
+          {{ subbranch.historicalobligee.name_dative }} a
         {% else %}
-          {% obligee_declension subbranch.historicalobligee "dative" %},
+          {{ subbranch.historicalobligee.name_dative }},
         {% endif %}
       {% endfor %}
     {% endparagraph %}

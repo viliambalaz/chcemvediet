@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango :#}
-{% load obligee_declension from chcemvediet.inforequests %}
 
 {% comment %}
  %
@@ -20,11 +19,11 @@
     Odpoveď sa zaradí ako <b>postúpenie žiadosti</b>. Inštitúcia postúpila vašu žiadosť
     {% for obligee in wizard.values.advanced_to %}
       {% if forloop.revcounter == 1 %}
-        {% obligee_declension obligee "dative" %}.
+        {{ obligee.name_dative }}.
       {% elif forloop.revcounter == 2 %}
-        {% obligee_declension obligee "dative" %} a
+        {{ obligee.name_dative }} a
       {% else %}
-        {% obligee_declension obligee "dative" %},
+        {{ obligee.name_dative }},
       {% endif %}
     {% endfor %}
     Vy nemusíte už urobiť žiadnu akciu, čakajte na odpoveď od novej inštitúcie.
