@@ -50,9 +50,14 @@ class RefusalReasonField(MultiSelectFormField):
 
     def __init__(self, *args, **kwargs):
         self.allow_no_reason = kwargs.pop(u'allow_no_reason', True)
+        self.section_3 = kwargs.pop(u'section_3', False)
         kwargs.setdefault(u'label', u' ')
 
         choices = Action.REFUSAL_REASONS._choices
+        if not self.section_3:
+            # Only obligees defined in section 3 (of §2) may refuse to disclose information saying
+            # they are not obliged to provide such information.
+            choices = [(k, v) for k, v in choices if k != Action.REFUSAL_REASONS.DOES_NOT_PROVIDE]
         if self.allow_no_reason:
             choices = choices + [(u'none', _(u'inforequests:RefusalReasonField:no_reason'))]
 

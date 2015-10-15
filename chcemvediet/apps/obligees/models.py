@@ -234,7 +234,10 @@ class Obligee(models.Model):
             (u'SECTION_4', 4, _(u'obligees:Obligee:type:SECTION_4')),
             )
     type = models.SmallIntegerField(choices=TYPES._choices,
-            help_text=u'Obligee type according to §2.')
+            help_text=squeeze(u"""
+                Obligee type according to §2. Obligees defined in section 3 are obliged to disclose
+                some information only.
+                """))
 
     # May be empty
     official_description = models.TextField(blank=True,

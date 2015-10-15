@@ -13,6 +13,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
 from chcemvediet.apps.wizards.wizard import Bottom, Step, Wizard
+from chcemvediet.apps.obligees.models import Obligee
 from chcemvediet.apps.obligees.forms import MultipleObligeeWidget, MultipleObligeeField
 from chcemvediet.apps.inforequests.models import Action, InforequestEmail
 from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
@@ -206,7 +207,10 @@ class ReversionReasons(ObligeeActionStep):
 
     def add_fields(self):
         super(ReversionReasons, self).add_fields()
-        self.fields[u'refusal_reason'] = RefusalReasonField()
+        branch = self.wizard.values[u'branch']
+        self.fields[u'refusal_reason'] = RefusalReasonField(
+                section_3=(branch.obligee.type == Obligee.TYPES.SECTION_3),
+                )
 
     def post_transition(self):
         res = super(ReversionReasons, self).post_transition()
@@ -371,7 +375,10 @@ class DisclosureReasons(ObligeeActionStep):
 
     def add_fields(self):
         super(DisclosureReasons, self).add_fields()
-        self.fields[u'refusal_reason'] = RefusalReasonField()
+        branch = self.wizard.values[u'branch']
+        self.fields[u'refusal_reason'] = RefusalReasonField(
+                section_3=(branch.obligee.type == Obligee.TYPES.SECTION_3),
+                )
 
     def post_transition(self):
         res = super(DisclosureReasons, self).post_transition()
@@ -546,7 +553,10 @@ class RefusalReasons(ObligeeActionStep):
 
     def add_fields(self):
         super(RefusalReasons, self).add_fields()
-        self.fields[u'refusal_reason'] = RefusalReasonField()
+        branch = self.wizard.values[u'branch']
+        self.fields[u'refusal_reason'] = RefusalReasonField(
+                section_3=(branch.obligee.type == Obligee.TYPES.SECTION_3),
+                )
 
     def post_transition(self):
         res = super(RefusalReasons, self).post_transition()
