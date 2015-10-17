@@ -6,6 +6,7 @@
 /.htpasswd
 /setup.json
 /shell.py
+/private/
 /env/
 /cache/
 /static/
