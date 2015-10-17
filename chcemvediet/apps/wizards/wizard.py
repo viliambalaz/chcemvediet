@@ -176,10 +176,13 @@ class Wizard(object):
 
     def _step_data(self, step, prefixed=False):
         res = {}
-        for field, value in self.draft.data.get(step.key, {}).items():
+        step_values = self.draft.data.get(step.key, {})
+        global_values = self.draft.data.get(u'global', {})
+        for field, value in step_values.items():
             res[field] = value
         for field in step.get_global_fields():
-            res[field] = self.draft.data.get(u'global', {}).get(field, None)
+            if field in global_values:
+                res[field] = global_values[field]
         if prefixed:
             res = {self.add_prefix(f): v for f, v in res.items()}
         return res
@@ -215,12 +218,12 @@ class Wizard(object):
             if accessible:
                 step.add_fields()
                 step.initial = self._step_data(step)
-                if len(self.steps) < current_index:
-                    step.data = self._step_data(step, prefixed=True)
-                    step.is_bound = True
                 if len(self.steps) == current_index and request.method == u'POST':
                     step.data = request.POST
                     step.is_bound = True
+                else:
+                    step.data = self._step_data(step, prefixed=True)
+                    step.is_bound = bool(step.data)
                 if not step.is_valid():
                     accessible = False
             self.steps.append(step)
