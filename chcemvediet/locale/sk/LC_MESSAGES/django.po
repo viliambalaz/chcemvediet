@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-04 20:19+0200\n"
+"POT-Creation-Date: 2015-10-17 03:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,6 +74,15 @@ msgstr "Spravovať e-maily"
 msgid "accounts:profile:manage_connections"
 msgstr "Spravovať pripojenia"
 
+msgid "inforequests:appeal:advancement:Reason:label"
+msgstr "Postúpenie žiadosti"
+
+msgid "inforequests:appeal:AppealFinalStep:label"
+msgstr "Dokončenie odvolania"
+
+msgid "inforequests:appeal:AppealPaperStep:label"
+msgstr "Kontrola odvolania"
+
 msgid "inforequests:appeal:AppealPaperStep:legal_date:placeholder"
 msgstr "dd.mm.yyyy"
 
@@ -86,59 +95,140 @@ msgstr "Nesmie byť z minulosti."
 msgid "inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "Nesmie byť viac ako 5 dní z budúcnosti."
 
-msgid "inforequests:appeal:SanitizationLevel:OverlySanitized"
+msgid "inforequests:appeal:disclosure:Reason:label"
+msgstr "Nesprístupnenie"
+
+msgid "inforequests:appeal:expiration:Paper:label"
+msgstr "Uplynutie lehoty"
+
+msgid "inforequests:appeal:fallback:Paper:label"
+msgstr "Vlastné odvolanie"
+
+msgid "inforequests:appeal:refusal:SanitizationProperlySanitized:label"
+msgstr "Začiernenie citlivých informácií"
+
+msgid "inforequests:appeal:refusal:SanitizationMissingDocument:label"
+msgstr "Začiernenie citlivých informácií"
+
+msgid "inforequests:appeal:refusal:SanitizationOverlySanitized:label"
+msgstr "Začiernenie citlivých informácií"
+
+msgid "inforequests:appeal:refusal:SanitizationLevel:label"
+msgstr "Začiernenie citlivých informácií"
+
+msgid "inforequests:appeal:refusal:SanitizationLevel:OverlySanitized"
 msgstr "Áno, bolo vyčiernené viac."
 
-msgid "inforequests:appeal:SanitizationLevel:MissingDocument"
+msgid "inforequests:appeal:refusal:SanitizationLevel:MissingDocument"
 msgstr "Áno, niečo úplne chýbalo."
 
-msgid "inforequests:appeal:SanitizationLevel:ProperlySanitized"
+msgid "inforequests:appeal:refusal:SanitizationLevel:ProperlySanitized"
 msgstr "Nie, vyčiernenie bolo korektné."
 
-msgid "inforequests:appeal:OtherReasonValid:yes"
+msgid "inforequests:appeal:refusal:OtherReasonInvalidReason:label"
+msgstr "Iný dôvod"
+
+msgid "inforequests:appeal:refusal:OtherReasonValidReason:label"
+msgstr "Iný dôvod"
+
+msgid "inforequests:appeal:refusal:OtherReasonValid:label"
+msgstr "Iný dôvod"
+
+msgid "inforequests:appeal:refusal:OtherReasonValid:yes"
 msgstr "Áno, jedná sa o dôvod uvedený v zákone."
 
-msgid "inforequests:appeal:OtherReasonValid:no"
+msgid "inforequests:appeal:refusal:OtherReasonValid:no"
 msgstr "Nie, jedná sa o nesúvisiace vyjadrenie."
 
-msgid "inforequests:appeal:ConfidentialNotConfidential:yes"
+msgid "inforequests:appeal:refusal:ConfidentialFallbackReason:label"
+msgstr "Utajovaná skutočnosť"
+
+msgid "inforequests:appeal:refusal:ConfidentialNotConfidentialReason:label"
+msgstr "Utajovaná skutočnosť"
+
+msgid "inforequests:appeal:refusal:ConfidentialNotConfidential:label"
+msgstr "Utajovaná skutočnosť"
+
+msgid "inforequests:appeal:refusal:ConfidentialNotConfidential:yes"
 msgstr "Áno, dá sa zaradiť"
 
-msgid "inforequests:appeal:ConfidentialNotConfidential:no"
+msgid "inforequests:appeal:refusal:ConfidentialNotConfidential:no"
 msgstr "Nie, nedá sa zaradiť "
 
-msgid "inforequests:appeal:PersonalOfficer:yes"
+msgid "inforequests:appeal:refusal:PersonalFallbackReason:label"
+msgstr "Osobné údaje"
+
+msgid "inforequests:appeal:refusal:PersonalOfficerReason:label"
+msgstr "Osobné údaje"
+
+msgid "inforequests:appeal:refusal:PersonalOfficer:label"
+msgstr "Osobné údaje"
+
+msgid "inforequests:appeal:refusal:PersonalOfficer:yes"
 msgstr "Áno, týkajú sa verejných zamestnancov"
 
-msgid "inforequests:appeal:PersonalOfficer:no"
+msgid "inforequests:appeal:refusal:PersonalOfficer:no"
 msgstr "Nie, týkajú sa iných osôb"
 
-msgid "inforequests:appeal:BusinessSecretDefinition:comercial"
+msgid "inforequests:appeal:refusal:BusinessSecretFallbackReason:label"
+msgstr "Obchodné tajomstvo"
+
+msgid "inforequests:appeal:refusal:BusinessSecretDefinitionReason:label"
+msgstr "Obchodné tajomstvo"
+
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:label"
+msgstr "Obchodné tajomstvo"
+
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:comercial"
 msgstr "Nie je skutočnosť obchodnej, výrobnej alebo technickej povahy súvisiaca s podnikom,"
 
-msgid "inforequests:appeal:BusinessSecretDefinition:value"
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:value"
 msgstr "Nemá skutočnú alebo aspoň potenciálnu materiálnu alebo nemateriálnu hodnotu,"
 
-msgid "inforequests:appeal:BusinessSecretDefinition:common"
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:common"
 msgstr "Je v príslušných obchodných kruhoch bežne dostupná,"
 
-msgid "inforequests:appeal:BusinessSecretDefinition:will"
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:will"
 msgstr "Nie je podľa vôle podnikateľa utajená,"
 
-msgid "inforequests:appeal:BusinessSecretDefinition:ensured"
+msgid "inforequests:appeal:refusal:BusinessSecretDefinition:ensured"
 msgstr "Podnikateľ zodpovedajúcim spôsobom jej utajenie nezabezpečuje."
 
-msgid "inforequests:appeal:BusinessSecretPublicFunds:yes"
+msgid "inforequests:appeal:refusal:BusinessSecretPublicFunds:label"
+msgstr "Obchodné tajomstvo"
+
+msgid "inforequests:appeal:refusal:BusinessSecretPublicFunds:yes"
 msgstr "Áno, súvisí"
 
-msgid "inforequests:appeal:BusinessSecretPublicFunds:no"
+msgid "inforequests:appeal:refusal:BusinessSecretPublicFunds:no"
 msgstr "Nie, nesúvisí"
 
-msgid "inforequests:appeal:DoesNotProvidePublicFunds:yes"
+msgid "inforequests:appeal:refusal:CopyrightReason:label"
+msgstr "Autorské právo"
+
+msgid "inforequests:appeal:refusal:DoesNotCreateReason:label"
+msgstr "Informáciu nevytvára"
+
+msgid "inforequests:appeal:refusal:DoesNotProvideFallbackReason:label"
+msgstr "Informáciu neposkytuje"
+
+msgid "inforequests:appeal:refusal:DoesNotProvidePublicFundsReason:label"
+msgstr "Informáciu neposkytuje"
+
+msgid "inforequests:appeal:refusal:DoesNotProvidePublicFunds:label"
+msgstr "Informáciu neposkytuje"
+
+msgid "inforequests:appeal:refusal:DoesNotProvidePublicFunds:yes"
 msgstr "Áno, súvisí"
 
-msgid "inforequests:appeal:DoesNotProvidePublicFunds:no"
+msgid "inforequests:appeal:refusal:DoesNotProvidePublicFunds:no"
 msgstr "Nie, nesúvisí"
+
+msgid "inforequests:appeal:refusal:DoesNotHaveReason:label"
+msgstr "Informáciu nemá"
+
+msgid "inforequests:appeal:refusal_no_reason:Paper:label"
+msgstr "Bez udania dôvodu"
 
 msgid "inforequests:clarification_response:Main:content:label"
 msgstr "Odpoveď"
@@ -179,6 +269,9 @@ msgstr "Uveďte čo najkonkrétnejšie, o aké informácie máte záujem."
 msgid "inforequests:InforequestForm:attachments:label"
 msgstr "Prílohy"
 
+msgid "inforequests:obligee_action:NotCategorized:label"
+msgstr "Nezaradené"
+
 msgid "inforequests:obligee_action:NotCategorized:help"
 msgstr "Áno, odpoveď nejako súvisí, chcem, aby mi admin pomohol identifikovať odpoveď inštitúcie."
 
@@ -190,6 +283,9 @@ msgstr "Správa pre admina"
 
 msgid "inforequests:obligee_action:NotCategorized:help_request:placeholder"
 msgstr "Popíšte adminovi, čomu ste nerozumeli"
+
+msgid "inforequests:obligee_action:Categorized:label"
+msgstr "Zaradené"
 
 msgid "inforequests:obligee_action:Categorized:legal_date:label"
 msgstr "Dátum úkonu"
@@ -227,17 +323,29 @@ msgstr "Nesmie byť starší ako dátum prílušného úkonu."
 msgid "inforequests:obligee_action:Categorized:last_action_dd:error:from_future"
 msgstr "Nesmie byť z budúcnosti."
 
+msgid "inforequests:obligee_action:InvalidReversion:label"
+msgstr "Chyba"
+
 msgid "inforequests:obligee_action:InvalidReversion:help_request:label"
 msgstr "Správa pre admina"
 
 msgid "inforequests:obligee_action:InvalidReversion:help_request:placeholder"
 msgstr "Popíšte adminovi, čo sa stalo"
 
+msgid "inforequests:obligee_action:ReversionReasons:label"
+msgstr "Predĺženie lehoty"
+
+msgid "inforequests:obligee_action:WasItReturned:label"
+msgstr "Vrátenie"
+
 msgid "inforequests:obligee_action:WasItReturned:yes"
 msgstr "Áno, vracia"
 
 msgid "inforequests:obligee_action:WasItReturned:no"
 msgstr "Nie, nevracia"
+
+msgid "inforequests:obligee_action:WasItAccepted:label"
+msgstr "Uznané argumenty"
 
 msgid "inforequests:obligee_action:WasItAccepted:all"
 msgstr "Áno, všetky"
@@ -248,6 +356,9 @@ msgstr "Niektoré"
 msgid "inforequests:obligee_action:WasItAccepted:none"
 msgstr "Žiadne"
 
+msgid "inforequests:obligee_action:ContainsAppealInfo:label"
+msgstr "Informácie"
+
 msgid "inforequests:obligee_action:ContainsAppealInfo:full"
 msgstr "Áno, som úplne spokojný"
 
@@ -257,11 +368,20 @@ msgstr "Čiastočne"
 msgid "inforequests:obligee_action:ContainsAppealInfo:none"
 msgstr "Vôbec"
 
+msgid "inforequests:obligee_action:IsItAppealDecision:label"
+msgstr "Rozhodnutie"
+
 msgid "inforequests:obligee_action:IsItAppealDecision:yes"
 msgstr "Áno, má"
 
 msgid "inforequests:obligee_action:IsItAppealDecision:no"
 msgstr "Nie, nemá"
+
+msgid "inforequests:obligee_action:DisclosureReasons:label"
+msgstr "Dôvody"
+
+msgid "inforequests:obligee_action:IsItExtension:label"
+msgstr "Predĺženie lehoty"
 
 msgid "inforequests:obligee_action:IsItExtension:yes"
 msgstr "Áno, v liste sa spomína predĺženie lehoty."
@@ -277,6 +397,9 @@ msgstr "Vyplňte počet dní, o ktoré inštitúcia predlžuje lehotu."
 
 msgid "inforequests:obligee_action:IsItExtension:extension:placeholder"
 msgstr "Kalendárne dni"
+
+msgid "inforequests:obligee_action:IsItAdvancement:label"
+msgstr "Postúpenie žiadosti"
 
 msgid "inforequests:obligee_action:IsItAdvancement:yes"
 msgstr "Áno, inštitúcia postupuje moju žiadosť inej inštitúcii."
@@ -299,11 +422,20 @@ msgstr "Nemožno postúpiť tej istej inštitúcii."
 msgid "inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee"
 msgstr "Nemožno postúpiť dvakrát tej istej inštitúcii."
 
+msgid "inforequests:obligee_action:RefusalReasons:label"
+msgstr "Dôvody"
+
+msgid "inforequests:obligee_action:IsItDecision:label"
+msgstr "Rozhodnutie"
+
 msgid "inforequests:obligee_action:IsItDecision:yes"
 msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie."
 
 msgid "inforequests:obligee_action:IsItDecision:no"
 msgstr "Nie, neobsahuje to dokument s nadpisom rozhodnutie."
+
+msgid "inforequests:obligee_action:ContainsInfo:label"
+msgstr "Informácie"
 
 msgid "inforequests:obligee_action:ContainsInfo:full"
 msgstr "Áno, inštitúcia mi poslala požadované informácie."
@@ -314,11 +446,17 @@ msgstr "Inštitúcia mi poslala požadované informácie len čiastočne."
 msgid "inforequests:obligee_action:ContainsInfo:none"
 msgstr "Nie, inštitúcia mi neposlala žiadne z informácií, o ktoré som žiadal."
 
+msgid "inforequests:obligee_action:IsOnTopic:label"
+msgstr "K veci"
+
 msgid "inforequests:obligee_action:IsOnTopic:yes"
 msgstr "Áno, týka sa mojej žiadosti."
 
 msgid "inforequests:obligee_action:IsOnTopic:no"
 msgstr "Nie, vôbec sa mojej žiadosti netýka."
+
+msgid "inforequests:obligee_action:IsItConfirmation:label"
+msgstr "Potvrdenie"
 
 msgid "inforequests:obligee_action:IsItConfirmation:yes"
 msgstr "Áno, inštitúcia mi v liste len potvrdila, že dostala moju žiadosť."
@@ -326,11 +464,17 @@ msgstr "Áno, inštitúcia mi v liste len potvrdila, že dostala moju žiadosť.
 msgid "inforequests:obligee_action:IsItConfirmation:no"
 msgstr "Nie, list od inštitúcie nie je potvrdením prijatia žiadosti."
 
+msgid "inforequests:obligee_action:IsItQuestion:label"
+msgstr "Otázka"
+
 msgid "inforequests:obligee_action:IsItQuestion:yes"
 msgstr "Áno, je to otázka"
 
 msgid "inforequests:obligee_action:IsItQuestion:no"
 msgstr "Nie, nie je to otázka"
+
+msgid "inforequests:obligee_action:InputBasics:label"
+msgstr "Aká odpoveď od inštitúcie vám prišla?"
 
 msgid "inforequests:obligee_action:InputBasics:delivered_date:label"
 msgstr "Dátum doručenia"
@@ -349,6 +493,9 @@ msgstr "Zadajte prosím dnešný dátum, alebo starší. Dátum nesmie byť v bu
 
 msgid "inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month"
 msgstr "Nesmie byť starší ako 1 mesiac."
+
+msgid "inforequests:obligee_action:SelectBranch:label"
+msgstr "Ktorá inštitúcia vám odpovedala?"
 
 msgid "inforequests:obligee_action:SelectBranch:branch:label"
 msgstr "Inštitúcia"

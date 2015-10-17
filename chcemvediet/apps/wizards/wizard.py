@@ -24,6 +24,7 @@ class Transition(object):
         self.next = None
 
 class Step(forms.Form):
+    label = u''
     base_template = u'wizards/wizard.html'
     template = None
     text_template = None

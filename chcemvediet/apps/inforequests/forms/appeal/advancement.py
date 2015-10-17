@@ -1,6 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from poleno.utils.forms import EditableSpan
+from django.utils.translation import ugettext_lazy as _
 from chcemvediet.apps.wizards.forms import PaperCharField
 
 from .common import AppealStep, AppealSectionStep, AppealPaperStep, AppealFinalStep
@@ -10,6 +11,7 @@ class Paper(AppealPaperStep):
     post_step_class = AppealFinalStep
 
 class Reason(AppealSectionStep):
+    label = _(u'inforequests:appeal:advancement:Reason:label')
     text_template = u'inforequests/appeal/texts/advancement.html'
     section_template = u'inforequests/appeal/papers/advancement.html'
     global_fields = [u'reason']

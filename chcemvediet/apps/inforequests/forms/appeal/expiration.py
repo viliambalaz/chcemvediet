@@ -1,9 +1,12 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
+
 from .common import AppealStep, AppealPaperStep, AppealFinalStep
 
 
 class Paper(AppealPaperStep):
+    label = _(u'inforequests:appeal:expiration:Paper:label')
     text_template = u'inforequests/appeal/texts/expiration.html'
     content_template = u'inforequests/appeal/papers/expiration.html'
     post_step_class = AppealFinalStep

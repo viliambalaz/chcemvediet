@@ -26,6 +26,7 @@ class ObligeeActionStep(Step):
 # Epilogue
 
 class NotCategorized(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:NotCategorized:label')
     text_template = u'inforequests/obligee_action/texts/not_categorized.html'
     global_fields = [u'help_request']
     post_step_class = Bottom
@@ -79,6 +80,7 @@ class NotCategorized(ObligeeActionStep):
         return res
 
 class Categorized(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:Categorized:label')
     text_template = u'inforequests/obligee_action/texts/categorized.html'
     global_fields = [u'legal_date', u'file_number', u'last_action_dd']
     post_step_class = Bottom
@@ -178,6 +180,7 @@ class Categorized(ObligeeActionStep):
 # Post Appeal
 
 class InvalidReversion(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:InvalidReversion:label')
     text_template = u'inforequests/obligee_action/texts/invalid_reversion.html'
     global_fields = [u'help_request']
     post_step_class = Bottom
@@ -202,6 +205,7 @@ class InvalidReversion(ObligeeActionStep):
         return res
 
 class ReversionReasons(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:ReversionReasons:label')
     text_template = u'inforequests/obligee_action/texts/reversion_reasons.html'
     global_fields = [u'refusal_reason']
 
@@ -241,6 +245,7 @@ class DisclosureLevelFork(ObligeeActionStep):
         return res
 
 class WasItReturned(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:WasItReturned:label')
     text_template = u'inforequests/obligee_action/texts/was_returned.html'
 
     def add_fields(self):
@@ -271,6 +276,7 @@ class WasItReturned(ObligeeActionStep):
         return res
 
 class WasItAccepted(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:WasItAccepted:label')
     text_template = u'inforequests/obligee_action/texts/was_accepted.html'
 
     def add_fields(self):
@@ -301,6 +307,7 @@ class WasItAccepted(ObligeeActionStep):
         return res
 
 class ContainsAppealInfo(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:ContainsAppealInfo:label')
     text_template = u'inforequests/obligee_action/texts/contains_appeal_info.html'
     global_fields = [u'disclosure_level']
     post_step_class = WasItAccepted
@@ -323,6 +330,7 @@ class ContainsAppealInfo(ObligeeActionStep):
                 )
 
 class IsItAppealDecision(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItAppealDecision:label')
     text_template = u'inforequests/obligee_action/texts/is_appeal_decision.html'
 
     def add_fields(self):
@@ -370,6 +378,7 @@ class CanAddAppealDecision(ObligeeActionStep):
 # Pre Appeal
 
 class DisclosureReasons(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:DisclosureReasons:label')
     text_template = u'inforequests/obligee_action/texts/disclosure_reasons.html'
     global_fields = [u'refusal_reason']
 
@@ -390,6 +399,7 @@ class DisclosureReasons(ObligeeActionStep):
         return res
 
 class IsItExtension(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItExtension:label')
     text_template = u'inforequests/obligee_action/texts/is_extension.html'
     global_fields = [u'extension']
 
@@ -465,6 +475,7 @@ class CanAddExtension(ObligeeActionStep):
         return res
 
 class IsItAdvancement(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItAdvancement:label')
     text_template = u'inforequests/obligee_action/texts/is_advancement.html'
     global_fields = [u'advanced_to']
 
@@ -548,6 +559,7 @@ class CanAddAdvancement(ObligeeActionStep):
         return res
 
 class RefusalReasons(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:RefusalReasons:label')
     text_template = u'inforequests/obligee_action/texts/refusal_reasons.html'
     global_fields = [u'refusal_reason']
 
@@ -568,6 +580,7 @@ class RefusalReasons(ObligeeActionStep):
         return res
 
 class IsItDecision(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItDecision:label')
     text_template = u'inforequests/obligee_action/texts/is_decision.html'
 
     def add_fields(self):
@@ -596,6 +609,7 @@ class IsItDecision(ObligeeActionStep):
         return res
 
 class ContainsInfo(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:ContainsInfo:label')
     text_template = u'inforequests/obligee_action/texts/contains_info.html'
     global_fields = [u'disclosure_level']
 
@@ -631,6 +645,7 @@ class ContainsInfo(ObligeeActionStep):
         return res
 
 class IsOnTopic(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsOnTopic:label')
     text_template = u'inforequests/obligee_action/texts/is_on_topic.html'
 
     def add_fields(self):
@@ -674,6 +689,7 @@ class CanAddDecision(ObligeeActionStep):
         return res
 
 class IsItConfirmation(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItConfirmation:label')
     text_template = u'inforequests/obligee_action/texts/is_confirmation.html'
 
     def add_fields(self):
@@ -719,6 +735,7 @@ class CanAddConfirmation(ObligeeActionStep):
         return res
 
 class IsItQuestion(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:IsItQuestion:label')
     text_template = u'inforequests/obligee_action/texts/is_question.html'
 
     def add_fields(self):
@@ -766,6 +783,7 @@ class CanAddClarificationRequest(ObligeeActionStep):
 # Prologue
 
 class InputBasics(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:InputBasics:label')
     text_template = u'inforequests/obligee_action/texts/basics.html'
     global_fields = [u'delivered_date', u'attachments']
     post_step_class = CanAddClarificationRequest
@@ -840,6 +858,7 @@ class IsByEmail(ObligeeActionStep):
         return res
 
 class SelectBranch(ObligeeActionStep):
+    label = _(u'inforequests:obligee_action:SelectBranch:label')
     text_template = u'inforequests/obligee_action/texts/branch.html'
     global_fields = [u'branch']
     post_step_class = IsByEmail

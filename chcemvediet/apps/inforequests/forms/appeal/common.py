@@ -23,6 +23,7 @@ class AppealDeadendStep(AppealStep, DeadendStep):
     pass
 
 class AppealFinalStep(AppealStep, PrintStep):
+    label = _(u'inforequests:appeal:AppealFinalStep:label')
     text_template = u'inforequests/appeal/texts/final.html'
 
     def clean(self):
@@ -56,6 +57,7 @@ class AppealFinalStep(AppealStep, PrintStep):
         return res
 
 class AppealPaperStep(AppealStep, PaperStep):
+    label = _(u'inforequests:appeal:AppealPaperStep:label')
     text_template = u'inforequests/appeal/texts/paper.html'
     subject_template = u'inforequests/appeal/papers/subject.txt'
     content_template = u'inforequests/appeal/papers/base.html'

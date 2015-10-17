@@ -23,6 +23,24 @@
           {% endif %}
         {% endblock %}
       </h1>
+      {% block header-steps %}
+        {% if wizard.steps|length > 1 %}
+          <div>
+            {% for other_step in wizard.steps %}
+              <a class="with-tooltip" href="{{ other_step.get_url }}" data-toggle="tooltip"
+                 title="{{ other_step.label }}">
+                {% if other_step == step %}
+                  <span class="badge badge-info">{{ other_step.index|add:1 }}</span>
+                {% elif other_step.accessible  %}
+                  <span class="badge badge-success">{{ other_step.index|add:1 }}</span>
+                {% else %}
+                  <span class="badge">{{ other_step.index|add:1 }}</span>
+                {% endif %}
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endblock %}
     {% endblock %}
     {% block body-plus-footer %}
       {% block body %}

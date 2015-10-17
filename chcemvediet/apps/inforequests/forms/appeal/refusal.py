@@ -103,9 +103,11 @@ class SanitizationEnd(SanitizationStep):
     pre_step_class = Paper
 
 class SanitizationProperlySanitized(AppealDeadendStep, SanitizationStep):
+    label = _(u'inforequests:appeal:refusal:SanitizationProperlySanitized:label')
     text_template = u'inforequests/appeal/texts/refusal/sanitization_properly_sanitized.html'
 
 class SanitizationMissingDocument(AppealSectionStep, SanitizationStep):
+    label = _(u'inforequests:appeal:refusal:SanitizationMissingDocument:label')
     text_template = u'inforequests/appeal/texts/refusal/sanitization_missing_document.html'
     section_template = u'inforequests/appeal/papers/refusal/sanitization_missing_document.html'
     global_fields = [u'sanitization_missing_document']
@@ -120,6 +122,7 @@ class SanitizationMissingDocument(AppealSectionStep, SanitizationStep):
         paper.fields[u'sanitization_missing_document'] = PaperCharField(widget=EditableSpan())
 
 class SanitizationOverlySanitized(AppealSectionStep, SanitizationStep):
+    label = _(u'inforequests:appeal:refusal:SanitizationOverlySanitized:label')
     text_template = u'inforequests/appeal/texts/refusal/sanitization_overly_sanitized.html'
     section_template = u'inforequests/appeal/papers/refusal/sanitization_overly_sanitized.html'
     global_fields = [u'sanitization_overly_sanitized']
@@ -134,6 +137,7 @@ class SanitizationOverlySanitized(AppealSectionStep, SanitizationStep):
         paper.fields[u'sanitization_overly_sanitized'] = PaperCharField(widget=EditableSpan())
 
 class SanitizationLevel(SanitizationStep):
+    label = _(u'inforequests:appeal:refusal:SanitizationLevel:label')
     text_template = u'inforequests/appeal/texts/refusal/sanitization_level.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -143,11 +147,11 @@ class SanitizationLevel(SanitizationStep):
                 label=u' ',
                 choices=(
                     (u'overly-sanitized',
-                        _(u'inforequests:appeal:SanitizationLevel:OverlySanitized')),
+                        _(u'inforequests:appeal:refusal:SanitizationLevel:OverlySanitized')),
                     (u'missing-document',
-                        _(u'inforequests:appeal:SanitizationLevel:MissingDocument')),
+                        _(u'inforequests:appeal:refusal:SanitizationLevel:MissingDocument')),
                     (u'properly-sanitized',
-                        _(u'inforequests:appeal:SanitizationLevel:ProperlySanitized')),
+                        _(u'inforequests:appeal:refusal:SanitizationLevel:ProperlySanitized')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -187,6 +191,7 @@ class OtherReasonEnd(ReasonStep):
 
 class OtherReasonInvalidReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.OTHER_REASON
+    label = _(u'inforequests:appeal:refusal:OtherReasonInvalidReason:label')
     text_template = u'inforequests/appeal/texts/refusal/other_reason_invalid_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/other_reason_invalid_reason.html'
     global_fields = [u'other_reason_invalid_reason']
@@ -202,6 +207,7 @@ class OtherReasonInvalidReason(AppealSectionStep, ReasonStep):
 
 class OtherReasonValidReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.OTHER_REASON
+    label = _(u'inforequests:appeal:refusal:OtherReasonValidReason:label')
     text_template = u'inforequests/appeal/texts/refusal/other_reason_valid_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/other_reason_valid_reason.html'
     global_fields = [u'other_reason_valid_reason']
@@ -217,6 +223,7 @@ class OtherReasonValidReason(AppealSectionStep, ReasonStep):
 
 class OtherReasonValid(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.OTHER_REASON
+    label = _(u'inforequests:appeal:refusal:OtherReasonValid:label')
     text_template = u'inforequests/appeal/texts/refusal/other_reason_valid.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -226,8 +233,8 @@ class OtherReasonValid(ReasonStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (1, _(u'inforequests:appeal:OtherReasonValid:yes')),
-                    (0, _(u'inforequests:appeal:OtherReasonValid:no')),
+                    (1, _(u'inforequests:appeal:refusal:OtherReasonValid:yes')),
+                    (0, _(u'inforequests:appeal:refusal:OtherReasonValid:no')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -256,6 +263,7 @@ class ConfidentialEnd(ReasonStep):
 
 class ConfidentialFallbackReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
+    label = _(u'inforequests:appeal:refusal:ConfidentialFallbackReason:label')
     text_template = u'inforequests/appeal/texts/refusal/confidential_fallback_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/confidential_fallback_reason.html'
     global_fields = [u'confidential_fallback', u'confidential_fallback_reason']
@@ -288,6 +296,7 @@ class ConfidentialFallbackReason(AppealSectionStep, ReasonStep):
 
 class ConfidentialNotConfidentialReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
+    label = _(u'inforequests:appeal:refusal:ConfidentialNotConfidentialReason:label')
     text_template = u'inforequests/appeal/texts/refusal/confidential_not_confidential_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/confidential_not_confidential_reason.html'
     global_fields = [u'confidential_not_confidential_reason']
@@ -305,6 +314,7 @@ class ConfidentialNotConfidentialReason(AppealSectionStep, ReasonStep):
 
 class ConfidentialNotConfidential(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
+    label = _(u'inforequests:appeal:refusal:ConfidentialNotConfidential:label')
     text_template = u'inforequests/appeal/texts/refusal/confidential_not_confidential.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -314,8 +324,8 @@ class ConfidentialNotConfidential(ReasonStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (1, _(u'inforequests:appeal:ConfidentialNotConfidential:yes')),
-                    (0, _(u'inforequests:appeal:ConfidentialNotConfidential:no')),
+                    (1, _(u'inforequests:appeal:refusal:ConfidentialNotConfidential:yes')),
+                    (0, _(u'inforequests:appeal:refusal:ConfidentialNotConfidential:no')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -344,6 +354,7 @@ class PersonalEnd(ReasonStep):
 
 class PersonalFallbackReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
+    label = _(u'inforequests:appeal:refusal:PersonalFallbackReason:label')
     text_template = u'inforequests/appeal/texts/refusal/personal_fallback_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/personal_fallback_reason.html'
     global_fields = [u'personal_fallback', u'personal_fallback_reason']
@@ -376,6 +387,7 @@ class PersonalFallbackReason(AppealSectionStep, ReasonStep):
 
 class PersonalOfficerReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
+    label = _(u'inforequests:appeal:refusal:PersonalOfficerReason:label')
     text_template = u'inforequests/appeal/texts/refusal/personal_officer_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/personal_officer_reason.html'
     global_fields = [u'personal_officer_reason']
@@ -393,6 +405,7 @@ class PersonalOfficerReason(AppealSectionStep, ReasonStep):
 
 class PersonalOfficer(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
+    label = _(u'inforequests:appeal:refusal:PersonalOfficer:label')
     text_template = u'inforequests/appeal/texts/refusal/personal_officer.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -402,8 +415,8 @@ class PersonalOfficer(ReasonStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (1, _(u'inforequests:appeal:PersonalOfficer:yes')),
-                    (0, _(u'inforequests:appeal:PersonalOfficer:no')),
+                    (1, _(u'inforequests:appeal:refusal:PersonalOfficer:yes')),
+                    (0, _(u'inforequests:appeal:refusal:PersonalOfficer:no')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -432,6 +445,7 @@ class BusinessSecretEnd(ReasonStep):
 
 class BusinessSecretFallbackReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
+    label = _(u'inforequests:appeal:refusal:BusinessSecretFallbackReason:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_fallback_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/business_secret_fallback_reason.html'
     global_fields = [u'business_secret_fallback', u'business_secret_fallback_reason']
@@ -464,6 +478,7 @@ class BusinessSecretFallbackReason(AppealSectionStep, ReasonStep):
 
 class BusinessSecretDefinitionReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
+    label = _(u'inforequests:appeal:refusal:BusinessSecretDefinitionReason:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_definition_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/business_secret_definition_reason.html'
     # For ``global_fields`` see ``get_global_fields()``
@@ -489,6 +504,7 @@ class BusinessSecretDefinitionReason(AppealSectionStep, ReasonStep):
 
 class BusinessSecretDefinition(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
+    label = _(u'inforequests:appeal:refusal:BusinessSecretDefinition:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_definition.html'
     form_template = u'main/snippets/form_horizontal.html'
     global_fields = [u'business_secret_definition']
@@ -499,11 +515,16 @@ class BusinessSecretDefinition(ReasonStep):
                 label=u' ',
                 required=False,
                 choices=(
-                    (u'comercial', _(u'inforequests:appeal:BusinessSecretDefinition:comercial')),
-                    (u'value',     _(u'inforequests:appeal:BusinessSecretDefinition:value')),
-                    (u'common',    _(u'inforequests:appeal:BusinessSecretDefinition:common')),
-                    (u'will',      _(u'inforequests:appeal:BusinessSecretDefinition:will')),
-                    (u'ensured',   _(u'inforequests:appeal:BusinessSecretDefinition:ensured')),
+                    (u'comercial',
+                        _(u'inforequests:appeal:refusal:BusinessSecretDefinition:comercial')),
+                    (u'value',
+                        _(u'inforequests:appeal:refusal:BusinessSecretDefinition:value')),
+                    (u'common',
+                        _(u'inforequests:appeal:refusal:BusinessSecretDefinition:common')),
+                    (u'will',
+                        _(u'inforequests:appeal:refusal:BusinessSecretDefinition:will')),
+                    (u'ensured',
+                        _(u'inforequests:appeal:refusal:BusinessSecretDefinition:ensured')),
                     ),
                 widget=forms.CheckboxSelectMultiple(),
                 )
@@ -524,6 +545,7 @@ class BusinessSecretDefinition(ReasonStep):
 
 class BusinessSecretPublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
+    label = _(u'inforequests:appeal:refusal:BusinessSecretPublicFunds:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_public_funds.html'
     form_template = u'main/snippets/form_horizontal.html'
     global_fields = [u'business_secret_public_funds']
@@ -535,8 +557,8 @@ class BusinessSecretPublicFunds(ReasonStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (1, _(u'inforequests:appeal:BusinessSecretPublicFunds:yes')),
-                    (0, _(u'inforequests:appeal:BusinessSecretPublicFunds:no')),
+                    (1, _(u'inforequests:appeal:refusal:BusinessSecretPublicFunds:yes')),
+                    (0, _(u'inforequests:appeal:refusal:BusinessSecretPublicFunds:no')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -553,6 +575,7 @@ class CopyrightEnd(ReasonStep):
 
 class CopyrightReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.COPYRIGHT
+    label = _(u'inforequests:appeal:refusal:CopyrightReason:label')
     text_template = u'inforequests/appeal/texts/refusal/copyright_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/copyright_reason.html'
     global_fields = [u'copyright_reason']
@@ -578,6 +601,7 @@ class DoesNotCreateEnd(ReasonStep):
 
 class DoesNotCreateReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_CREATE
+    label = _(u'inforequests:appeal:refusal:DoesNotCreateReason:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_create_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/does_not_create_reason.html'
     global_fields = [u'does_not_create_reason']
@@ -603,6 +627,7 @@ class DoesNotProvideEnd(ReasonStep):
 
 class DoesNotProvideFallbackReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
+    label = _(u'inforequests:appeal:refusal:DoesNotProvideFallbackReason:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_provide_fallback_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/does_not_provide_fallback_reason.html'
     global_fields = [u'does_not_provide_fallback_reason']
@@ -619,6 +644,7 @@ class DoesNotProvideFallbackReason(AppealSectionStep, ReasonStep):
 
 class DoesNotProvidePublicFundsReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
+    label = _(u'inforequests:appeal:refusal:DoesNotProvidePublicFundsReason:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_provide_public_funds_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/does_not_provide_public_funds_reason.html'
     global_fields = [u'does_not_provide_public_funds_reason']
@@ -635,6 +661,7 @@ class DoesNotProvidePublicFundsReason(AppealSectionStep, ReasonStep):
 
 class DoesNotProvidePublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
+    label = _(u'inforequests:appeal:refusal:DoesNotProvidePublicFunds:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_provide_public_funds.html'
     form_template = u'main/snippets/form_horizontal.html'
 
@@ -644,8 +671,8 @@ class DoesNotProvidePublicFunds(ReasonStep):
                 label=u' ',
                 coerce=int,
                 choices=(
-                    (1, _(u'inforequests:appeal:DoesNotProvidePublicFunds:yes')),
-                    (0, _(u'inforequests:appeal:DoesNotProvidePublicFunds:no')),
+                    (1, _(u'inforequests:appeal:refusal:DoesNotProvidePublicFunds:yes')),
+                    (0, _(u'inforequests:appeal:refusal:DoesNotProvidePublicFunds:no')),
                     ),
                 widget=forms.RadioSelect(),
                 )
@@ -674,6 +701,7 @@ class DoesNotHaveEnd(ReasonStep):
 
 class DoesNotHaveReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_HAVE
+    label = _(u'inforequests:appeal:refusal:DoesNotHaveReason:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_have_reason.html'
     section_template = u'inforequests/appeal/papers/refusal/does_not_have_reason.html'
     global_fields = [u'does_not_have_reason']
