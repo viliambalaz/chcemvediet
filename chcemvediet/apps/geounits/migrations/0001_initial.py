@@ -1,8 +1,41 @@
+# vim: expandtab
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models, migrations
 
+
+def dummy_iczsj_forward(apps, schema_editor):
+    Region = apps.get_model(u'geounits', u'Region')
+    region = Region(id=u'1', name=u'dummy', slug=u'dummy')
+    region.save()
+
+    District = apps.get_model(u'geounits', u'District')
+    district = District(id=u'1', name=u'dummy', slug=u'dummy', region=region)
+    district.save()
+
+    Municipality = apps.get_model(u'geounits', u'Municipality')
+    municipality = Municipality(id=u'1', name=u'dummy', slug=u'dummy',
+            district=district, region=region)
+    municipality.save()
+
+    Neighbourhood = apps.get_model(u'geounits', u'Neighbourhood')
+    neighbourhood = Neighbourhood(id=u'1', name=u'dummy',
+            municipality=municipality, district=district, region=region)
+    neighbourhood.save()
+
+def dummy_iczsj_backward(apps, schema_editor):
+    Neighbourhood = apps.get_model(u'geounits', u'Neighbourhood')
+    Neighbourhood.objects.filter(name=u'dummy').delete()
+
+    Municipality = apps.get_model(u'geounits', u'Municipality')
+    Municipality.objects.filter(name=u'dummy').delete()
+
+    District = apps.get_model(u'geounits', u'District')
+    District.objects.filter(name=u'dummy').delete()
+
+    Region = apps.get_model(u'geounits', u'Region')
+    Region.objects.filter(name=u'dummy').delete()
 
 class Migration(migrations.Migration):
 
@@ -79,4 +112,5 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(help_text='Region the district belongs to.', to='geounits.Region'),
             preserve_default=True,
         ),
+        migrations.RunPython(dummy_iczsj_forward, dummy_iczsj_backward),
     ]
