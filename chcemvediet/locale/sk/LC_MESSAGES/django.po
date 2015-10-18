@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-17 03:36+0200\n"
+"POT-Creation-Date: 2015-10-18 22:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgstr "Spravovať e-maily"
 msgid "accounts:profile:manage_connections"
 msgstr "Spravovať pripojenia"
 
-msgid "inforequests:appeal:advancement:Reason:label"
+msgid "inforequests:appeal:advancement:AdvancementAppeal:label"
 msgstr "Postúpenie žiadosti"
 
 msgid "inforequests:appeal:AppealFinalStep:label"
@@ -95,13 +95,13 @@ msgstr "Nesmie byť z minulosti."
 msgid "inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future"
 msgstr "Nesmie byť viac ako 5 dní z budúcnosti."
 
-msgid "inforequests:appeal:disclosure:Reason:label"
+msgid "inforequests:appeal:disclosure:DisclosureAppeal:label"
 msgstr "Nesprístupnenie"
 
-msgid "inforequests:appeal:expiration:Paper:label"
+msgid "inforequests:appeal:expiration:ExpirationAppeal:label"
 msgstr "Uplynutie lehoty"
 
-msgid "inforequests:appeal:fallback:Paper:label"
+msgid "inforequests:appeal:fallback:FallbackAppeal:label"
 msgstr "Vlastné odvolanie"
 
 msgid "inforequests:appeal:refusal:SanitizationProperlySanitized:label"
@@ -227,7 +227,10 @@ msgstr "Nie, nesúvisí"
 msgid "inforequests:appeal:refusal:DoesNotHaveReason:label"
 msgstr "Informáciu nemá"
 
-msgid "inforequests:appeal:refusal_no_reason:Paper:label"
+msgid "inforequests:appeal:refusal:RefusalAppeal:label"
+msgstr "Odmietnutie sprístupnenia"
+
+msgid "inforequests:appeal:refusal_no_reason:RefusalNoReasonAppeal:label"
 msgstr "Bez udania dôvodu"
 
 msgid "inforequests:clarification_response:Main:content:label"

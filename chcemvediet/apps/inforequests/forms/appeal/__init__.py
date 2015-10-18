@@ -1,5 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from django.conf import settings
+
 from poleno.utils.urls import reverse
 from chcemvediet.apps.wizards.wizard import Wizard
 from chcemvediet.apps.inforequests.models import Action
@@ -19,7 +21,13 @@ class Dispatcher(AppealStep):
         res = super(Dispatcher, self).pre_transition()
         last_action = self.wizard.last_action
 
-        if (last_action.type == Action.TYPES.REFUSAL
+        if (settings.DEBUG and last_action.type == Action.TYPES.REFUSAL
+                and last_action.refusal_reason
+                and len(last_action.refusal_reason) == 5):
+            # Hack to show fallback appeal wizard while testing
+            res.next = FallbackAppeal
+
+        elif (last_action.type == Action.TYPES.REFUSAL
                 and last_action.refusal_reason
                 and set(last_action.refusal_reason) <= RefusalAppeal.covered_reasons()):
             res.next = RefusalAppeal

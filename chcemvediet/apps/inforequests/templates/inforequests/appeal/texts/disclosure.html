@@ -4,21 +4,29 @@
  %
  % Context:
  %  -- wizard: chcemvediet.apps.inforequests.forms.appeal.AppealWizard
- %  -- step: chcemvediet.apps.inforequests.forms.appeal.disclosure.Reason
+ %  -- step: chcemvediet.apps.inforequests.forms.appeal.disclosure.DisclosureAppeal
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- last_action: chcemvediet.apps.inforequests.models.Action
+ %  -- rozklad: boolean
+ %  -- fiktivne: boolean
  %  -- not_at_all: boolean
  %
 {% endcomment %}
 
 
-<h4>{% if not_at_all %}Ani len čiastočné{% else %}Neúplné{% endif %} sprístupnenie</h4>
-<p>
-  {% if not_at_all %}
+{% if not_at_all %}
+  <h4>Ani len čiastočné sprístupnenie</h4>
+  <p>
     Inštitúcia síce niečo poslala, ale nebola to informácia, ktorú ste žiadali. Rozhodnutie
     o nesprístupnení informácie chýbalo, čo je porušenie zákona. Doplňte do odvolania, čo ste
     dostali a prečo to nie je to, čo ste žiadali.
-  {% else %}
+  </p>
+{% else %}
+  <h4>Neúplné sprístupnenie</h4>
+  <p>
     Inštitúcia síce niečo poslala, ale nebolo to všetko, čo ste žiadali. Rozhodnutie o čiastočnom
     sprístupnení informácie chýbalo, čo je porušenie zákona. Doplňte do odvolania, čo ste dostali
     a čo chýba.
-  {% endif %}
-</p>
+  </p>
+{% endif %}

@@ -223,7 +223,7 @@ class Wizard(object):
                     step.is_bound = True
                 else:
                     step.data = self._step_data(step, prefixed=True)
-                    step.is_bound = bool(step.data)
+                    step.is_bound = True #bool(step.data)
                 if not step.is_valid():
                     accessible = False
             self.steps.append(step)

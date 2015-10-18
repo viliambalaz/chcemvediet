@@ -1,0 +1,55 @@
+{# vim: set filetype=htmldjango :#}
+{% load paper_field paragraph from chcemvediet.wizards %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.appeal.AppealWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.appeal.common.AppealPaperStep
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- last_action: chcemvediet.apps.inforequests.models.Action
+ %  -- rozklad: boolean
+ %  -- fiktivne: boolean
+ %  -- not_at_all: boolean
+ %  -- finalize: boolean
+ %
+{% endcomment %}
+
+
+<div>
+  <div style="border-bottom: solid 1px black; text-align: center;">
+    {{ inforequest.applicant_name }}, {{ inforequest.applicant_street }},
+    {{ inforequest.applicant_zip }} {{ inforequest.applicant_city }}
+  </div>
+  <div style="margin-top: 10ex; margin-left: 50%;">
+    {{ branch.obligee.name }}<br>
+    {{ branch.obligee.street }}<br>
+    {{ branch.obligee.zip }} {{ branch.obligee.city }}
+  </div>
+  <div style="margin-top: 10ex; text-align: right;">
+    {{ inforequest.applicant_city }}, {% paper_field step.legal_date %}
+  </div>
+
+  {# Initialize paragraphs #}
+  {% paragraph before=0 after=0 %}{% endparagraph %}
+
+  {% for substep in wizard.steps %}
+    {% if substep.section_template %}
+      {% with reason_number_on_paper=substep.reason_number_on_paper %}
+        {% include substep.section_template %}
+      {% endwith %}
+    {% endif %}
+  {% endfor %}
+  {% paragraph before=2 %}
+    Z uvedených dôvodov žiadam o zrušenie {% if fiktivne %}fiktívneho{% endif %} rozhodnutia
+    o neposkytnutí informácie a sprístupnenie informácií v plnom rozsahu.
+  {% endparagraph %}
+
+  {# Close any opened paragraphs #}
+  {% paragraph before=0 after=2 %}{% endparagraph %}
+
+  <div style="margin: 10ex; text-align: right;">
+    {{ inforequest.applicant_name }}
+  </div>
+</div>

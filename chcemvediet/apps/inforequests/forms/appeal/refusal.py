@@ -7,8 +7,7 @@ from poleno.utils.forms import EditableSpan
 from chcemvediet.apps.wizards.forms import PaperCharField, OptionalSectionCheckboxField
 from chcemvediet.apps.inforequests.models import Action
 
-from .common import AppealStep
-from .common import AppealSectionStep, AppealDeadendStep, AppealPaperStep, AppealFinalStep
+from .common import AppealStep, AppealSectionStep, AppealDeadendStep, AppealPaperStep
 
 
 class RefusalStep(AppealStep):
@@ -59,11 +58,6 @@ class ReasonDispatcher(ReasonStep):
         return res
 
 
-class Paper(AppealPaperStep, RefusalStep):
-    content_template = u'inforequests/appeal/papers/refusal.html'
-    post_step_class = AppealFinalStep
-
-
 class SanitizationStep(RefusalStep):
     all_sanitizable_reasons = set([
             Action.REFUSAL_REASONS.BUSINESS_SECRET,
@@ -100,7 +94,7 @@ class SanitizationStep(RefusalStep):
         return res
 
 class SanitizationEnd(SanitizationStep):
-    pre_step_class = Paper
+    pre_step_class = AppealPaperStep
 
 class SanitizationProperlySanitized(AppealDeadendStep, SanitizationStep):
     label = _(u'inforequests:appeal:refusal:SanitizationProperlySanitized:label')
@@ -721,18 +715,21 @@ class DoesNotHave(ReasonDispatcher):
     without_reason_step_class = DoesNotHaveEnd
 
 
-class RefusalAppeal(RefusalStep):
+class RefusalAppeal(AppealSectionStep, RefusalStep):
     u"""
     Appeal wizard for branches that end with a refusal action with a reason. The wizard supports
     only reasons covered by its reason steps. If the last action contains any other reason, the
     wizard does not apply.
     """
-    pre_step_class = DoesNotHave
+    label = _(u'inforequests:appeal:refusal:RefusalAppeal:label')
+    text_template = u'inforequests/appeal/texts/refusal.html'
+    section_template = u'inforequests/appeal/papers/refusal.html'
+    post_step_class = DoesNotHave
 
     @classmethod
     def covered_reasons(cls):
         res = set()
-        step_class = cls.pre_step_class
+        step_class = cls.post_step_class
         while issubclass(step_class, ReasonDispatcher):
             res.add(step_class.covered_reason)
             step_class = step_class.without_reason_step_class.pre_step_class

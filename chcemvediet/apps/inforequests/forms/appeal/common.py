@@ -60,7 +60,7 @@ class AppealPaperStep(AppealStep, PaperStep):
     label = _(u'inforequests:appeal:AppealPaperStep:label')
     text_template = u'inforequests/appeal/texts/paper.html'
     subject_template = u'inforequests/appeal/papers/subject.txt'
-    content_template = u'inforequests/appeal/papers/base.html'
+    content_template = u'inforequests/appeal/papers/content.html'
     global_fields = [u'legal_date']
     post_step_class = AppealFinalStep
 
