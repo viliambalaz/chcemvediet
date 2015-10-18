@@ -29,14 +29,23 @@ def paper_field(context, field):
 
     return format_html(u'<span{0}>{1}</span>', flatatt(attrs), content)
 
+@register.simple_tag(takes_context=True)
+def paragraphs(context):
+    context.push()
+    context[u'_paragraph_status'] = Bunch(opened=False, after=0)
+    return u''
+
+@register.simple_tag(takes_context=True)
+def endparagraphs(context):
+    status = context.pop()[u'_paragraph_status']
+    if status.opened:
+        return format_html(u'</div>')
+    return u''
+
 @register.simple_pair_tag(takes_context=True)
 def paragraph(content, context, before=1, after=1, editable=False, style=None):
     before, after = int(before), int(after)
-    try:
-        status = context[u'_paragraph_status']
-    except KeyError:
-        status = Bunch(opened=False, after=0)
-        context[u'_paragraph_status'] = status
+    status = context[u'_paragraph_status']
     html = []
     if status.opened and before > 0:
         html.append(format_html(u'</div>'))

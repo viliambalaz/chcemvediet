@@ -1,5 +1,5 @@
 {# vim: set filetype=htmldjango :#}
-{% load paper_field paragraph from chcemvediet.wizards %}
+{% load paper_field paragraphs endparagraphs paragraph from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -31,23 +31,19 @@
     {{ inforequest.applicant_city }}, {% paper_field step.legal_date %}
   </div>
 
-  {# Initialize paragraphs #}
-  {% paragraph before=0 after=0 %}{% endparagraph %}
-
-  {% for substep in wizard.steps %}
-    {% if substep.section_template %}
-      {% with reason_number_on_paper=substep.reason_number_on_paper %}
-        {% include substep.section_template %}
-      {% endwith %}
-    {% endif %}
-  {% endfor %}
-  {% paragraph before=2 %}
-    Z uvedených dôvodov žiadam o zrušenie {% if fiktivne %}fiktívneho{% endif %} rozhodnutia
-    o neposkytnutí informácie a sprístupnenie informácií v plnom rozsahu.
-  {% endparagraph %}
-
-  {# Close any opened paragraphs #}
-  {% paragraph before=0 after=2 %}{% endparagraph %}
+  {% paragraphs %}
+    {% for substep in wizard.steps %}
+      {% if substep.section_template %}
+        {% with reason_number_on_paper=substep.reason_number_on_paper %}
+          {% include substep.section_template %}
+        {% endwith %}
+      {% endif %}
+    {% endfor %}
+    {% paragraph before=2 %}
+      Z uvedených dôvodov žiadam o zrušenie {% if fiktivne %}fiktívneho{% endif %} rozhodnutia
+      o neposkytnutí informácie a sprístupnenie informácií v plnom rozsahu.
+    {% endparagraph %}
+  {% endparagraphs %}
 
   <div style="margin: 10ex; text-align: right;">
     {{ inforequest.applicant_name }}

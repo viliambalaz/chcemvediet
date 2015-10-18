@@ -1,6 +1,6 @@
 {# vim: set filetype=htmldjango :#}
 {% extends "wizards/wizard.html" %}
-{% load paragraph from chcemvediet.wizards %}
+{% load paragraphs endparagraphs from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -15,10 +15,9 @@
   {{ block.super }}
   {% if step.section_template %}
     <div class="well paper-section">
-      {# To make sure all open paragraphs are closed after the section #}
-      {% paragraph before=0 after=0 %}{% endparagraph %}
-      {% include step.section_template %}
-      {% paragraph before=0 after=2 %}{% endparagraph %}
+      {% paragraphs %}
+        {% include step.section_template %}
+      {% endparagraphs %}
     </div>
   {% endif %}
 {% endblock %}
