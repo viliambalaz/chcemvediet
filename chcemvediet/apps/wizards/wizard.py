@@ -47,10 +47,13 @@ class Step(forms.Form):
 
     def commit(self):
         global_fields = self.get_global_fields()
+        step_values = self.wizard.draft.data.setdefault(self.key, {})
+        global_values = self.wizard.draft.data.setdefault(u'global', {})
         for field_name in self.fields:
-            group = u'global' if field_name in global_fields else self.key
-            dest = self.wizard.draft.data.setdefault(group, {})
-            dest[field_name] = self._raw_value(field_name)
+            if field_name in global_fields:
+                global_values[field_name] = self._raw_value(field_name)
+            else:
+                step_values[field_name] = self._raw_value(field_name)
 
     def add_prefix(self, field_name):
         return self.wizard.add_prefix(field_name)
@@ -223,7 +226,7 @@ class Wizard(object):
                     step.is_bound = True
                 else:
                     step.data = self._step_data(step, prefixed=True)
-                    step.is_bound = True #bool(step.data)
+                    step.is_bound = step.key in self.draft.data
                 if not step.is_valid():
                     accessible = False
             self.steps.append(step)
