@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 from poleno.utils.date import local_today
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards.wizard import Step, SectionStep, DeadendStep, PaperStep, PrintStep
-from chcemvediet.apps.wizards.forms import PaperDateField
 
 
 class AppealStep(Step):
@@ -61,37 +60,43 @@ class AppealPaperStep(AppealStep, PaperStep):
     text_template = u'inforequests/appeal/texts/paper.html'
     subject_template = u'inforequests/appeal/papers/subject.txt'
     content_template = u'inforequests/appeal/papers/content.html'
-    global_fields = [u'legal_date']
     post_step_class = AppealFinalStep
 
-    def add_fields(self):
-        super(AppealPaperStep, self).add_fields()
+class AppealLegalDateStep(AppealStep):
+    label = _(u'inforequests:appeal:AppealLegalDateStep:label')
+    text_template = u'inforequests/appeal/texts/legal_date.html'
+    form_template = u'main/snippets/form_horizontal.html'
+    global_fields = [u'legal_date']
+    post_step_class = AppealPaperStep
 
-        self.fields[u'legal_date'] = PaperDateField(
-            localize=True,
-            initial=local_today,
-            final_format=u'd.m.Y',
-            widget=forms.DateInput(attrs={
-                u'placeholder': _('inforequests:appeal:AppealPaperStep:legal_date:placeholder'),
-                u'class': u'datepicker',
-                }),
-            )
+    def add_fields(self):
+        super(AppealLegalDateStep, self).add_fields()
+
+        self.fields[u'legal_date'] = forms.DateField(
+                label=_(u'inforequests:appeal:AppealLegalDateStep:legal_date:label'),
+                localize=True,
+                initial=local_today,
+                widget=forms.DateInput(attrs={
+                    u'placeholder': _('inforequests:appeal:AppealLegalDateStep:legal_date:placeholder'),
+                    u'class': u'datepicker',
+                    }),
+                )
 
     def clean(self):
-        cleaned_data = super(AppealPaperStep, self).clean()
+        cleaned_data = super(AppealLegalDateStep, self).clean()
 
         branch = self.wizard.branch
         legal_date = cleaned_data.get(u'legal_date', None)
         if legal_date is not None:
             try:
                 if legal_date < branch.last_action.legal_date:
-                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:older_than_last_action')
+                    msg = _(u'inforequests:appeal:AppealLegalDateStep:legal_date:error:older_than_last_action')
                     raise ValidationError(msg)
                 if legal_date < local_today():
-                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:from_past')
+                    msg = _(u'inforequests:appeal:AppealLegalDateStep:legal_date:error:from_past')
                     raise ValidationError(msg)
                 if legal_date > local_today() + relativedelta(days=5):
-                    msg = _(u'inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future')
+                    msg = _(u'inforequests:appeal:AppealLegalDateStep:legal_date:error:too_far_from_future')
                     raise ValidationError(msg)
             except ValidationError as e:
                 self.add_error(u'legal_date', e)

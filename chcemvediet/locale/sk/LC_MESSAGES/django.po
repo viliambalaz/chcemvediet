@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-18 22:27+0200\n"
+"POT-Creation-Date: 2015-10-19 01:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,16 +83,22 @@ msgstr "Dokončenie odvolania"
 msgid "inforequests:appeal:AppealPaperStep:label"
 msgstr "Kontrola odvolania"
 
-msgid "inforequests:appeal:AppealPaperStep:legal_date:placeholder"
+msgid "inforequests:appeal:AppealLegalDateStep:label"
+msgstr "Dátum podania odvolania"
+
+msgid "inforequests:appeal:AppealLegalDateStep:legal_date:label"
+msgstr "Dátum odoslania"
+
+msgid "inforequests:appeal:AppealLegalDateStep:legal_date:placeholder"
 msgstr "dd.mm.yyyy"
 
-msgid "inforequests:appeal:AppealPaperStep:legal_date:error:older_than_last_action"
+msgid "inforequests:appeal:AppealLegalDateStep:legal_date:error:older_than_last_action"
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
 
-msgid "inforequests:appeal:AppealPaperStep:legal_date:error:from_past"
+msgid "inforequests:appeal:AppealLegalDateStep:legal_date:error:from_past"
 msgstr "Nesmie byť z minulosti."
 
-msgid "inforequests:appeal:AppealPaperStep:legal_date:error:too_far_from_future"
+msgid "inforequests:appeal:AppealLegalDateStep:legal_date:error:too_far_from_future"
 msgstr "Nesmie byť viac ako 5 dní z budúcnosti."
 
 msgid "inforequests:appeal:disclosure:DisclosureAppeal:label"

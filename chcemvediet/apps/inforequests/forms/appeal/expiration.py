@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 
-from .common import AppealSectionStep, AppealPaperStep
+from .common import AppealSectionStep, AppealLegalDateStep
 
 
 class ExpirationAppeal(AppealSectionStep):
@@ -13,4 +13,4 @@ class ExpirationAppeal(AppealSectionStep):
     label = _(u'inforequests:appeal:expiration:ExpirationAppeal:label')
     text_template = u'inforequests/appeal/texts/expiration.html'
     section_template = u'inforequests/appeal/papers/expiration.html'
-    post_step_class = AppealPaperStep
+    post_step_class = AppealLegalDateStep

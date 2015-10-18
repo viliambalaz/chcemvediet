@@ -4,7 +4,7 @@ from poleno.utils.forms import EditableSpan
 from django.utils.translation import ugettext_lazy as _
 from chcemvediet.apps.wizards.forms import PaperCharField
 
-from .common import AppealSectionStep, AppealPaperStep
+from .common import AppealSectionStep, AppealLegalDateStep
 
 
 class AdvancementAppeal(AppealSectionStep):
@@ -15,7 +15,7 @@ class AdvancementAppeal(AppealSectionStep):
     text_template = u'inforequests/appeal/texts/advancement.html'
     section_template = u'inforequests/appeal/papers/advancement.html'
     global_fields = [u'reason']
-    post_step_class = AppealPaperStep
+    post_step_class = AppealLegalDateStep
 
     def add_fields(self):
         super(AdvancementAppeal, self).add_fields()

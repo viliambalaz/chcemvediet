@@ -28,7 +28,7 @@
     {{ branch.obligee.zip }} {{ branch.obligee.city }}
   </div>
   <div style="margin-top: 10ex; text-align: right;">
-    {{ inforequest.applicant_city }}, {% paper_field step.legal_date %}
+    {{ inforequest.applicant_city }}, {{ wizard.values.legal_date|date:"d.m.Y" }}
   </div>
 
   {% paragraphs %}

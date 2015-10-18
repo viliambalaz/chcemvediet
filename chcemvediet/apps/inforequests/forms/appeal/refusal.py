@@ -7,7 +7,7 @@ from poleno.utils.forms import EditableSpan
 from chcemvediet.apps.wizards.forms import PaperCharField, OptionalSectionCheckboxField
 from chcemvediet.apps.inforequests.models import Action
 
-from .common import AppealStep, AppealSectionStep, AppealDeadendStep, AppealPaperStep
+from .common import AppealStep, AppealSectionStep, AppealDeadendStep, AppealLegalDateStep
 
 
 class RefusalStep(AppealStep):
@@ -94,7 +94,7 @@ class SanitizationStep(RefusalStep):
         return res
 
 class SanitizationEnd(SanitizationStep):
-    pre_step_class = AppealPaperStep
+    pre_step_class = AppealLegalDateStep
 
 class SanitizationProperlySanitized(AppealDeadendStep, SanitizationStep):
     label = _(u'inforequests:appeal:refusal:SanitizationProperlySanitized:label')
