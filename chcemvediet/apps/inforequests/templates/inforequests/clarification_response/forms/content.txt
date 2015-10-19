@@ -18,7 +18,7 @@
 {% if finalize %}
 {% filter squeeze %}
 Povinná osoba:
-  {{ branch.obligee.name }},
+  {{ branch.obligee.official_name }},
   {{ branch.obligee.street }},
   {{ branch.obligee.city }} {{ branch.obligee.zip }},
   {{ branch.obligee.emails }}

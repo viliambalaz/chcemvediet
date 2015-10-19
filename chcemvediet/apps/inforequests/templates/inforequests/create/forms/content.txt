@@ -18,7 +18,7 @@
 {% if finalize %}
 {% filter squeeze %}
 Povinná osoba:
-  {{ obligee.name }},
+  {{ obligee.official_name }},
   {{ obligee.street }},
   {{ obligee.city }} {{ obligee.zip }},
   {{ obligee.emails }}

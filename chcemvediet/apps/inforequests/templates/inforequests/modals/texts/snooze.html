@@ -12,8 +12,8 @@
 
 <p>
   Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
-  {{ branch.historicalobligee.name }}
-  {% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name }}{% endif %}
+  {{ branch.historicalobligee.name_accusative }}
+  {% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name_dative }}{% endif %}
   bola {{ action.deadline.value }}
   {% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
   dni od {{ action.deadline.base_date }}.
