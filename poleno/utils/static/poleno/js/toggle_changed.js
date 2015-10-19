@@ -6,11 +6,13 @@
  *  -- JQuery
  *
  * Examples:
- *     <input type="checkbox" class="toggle-changed" data-container="form" data-action="hide"
- *            data-target-true=".visible-if-true" data-target-false=".visible-if-false" />
+ *     <input type="checkbox" class="toggle-changed" data-container="form"
+ *            data-hide-target-true=".visible-if-true"
+ *            data-hide-target-false=".visible-if-false" />
  *
- *     <select class="toggle-changed" data-container="form" data-action="disable"
- *             data-target-aaa=".visible-if-aaa" data-target-bbb=".visible-if-bbb">
+ *     <select class="toggle-changed" data-container="form"
+ *             data-disable-target-aaa=".visible-if-aaa"
+ *             data-disable-target-bbb=".visible-if-bbb">
  *       <option value="aaa">...</option>
  *       <option value="bbb">...</option>
  *     </select>
@@ -23,19 +25,23 @@
 $(function(){
 	function toggle(){
 		var container = $(this).data('container') || 'html';
-		var action = $(this).data('action') || 'hide';
 		var value = $(this).is(':checkbox') ? $(this).prop('checked') : $(this).val();
-		var active = $(this).attr('data-target-' + value);
+
+		// Toggle Hide
+		var active = $(this).attr('data-hide-target-' + value);
 		var all = $.map(this.attributes, function(attr){
-			if (attr.name.match("^data-target-")) return attr.value;
+			if (attr.name.match("^data-hide-target-")) return attr.value;
 		}).join(', ');
-		if (action == 'hide') {
-			$(this).parents(container).find(all).not(active).hide();
-			$(this).parents(container).find(active).show();
-		} else {
-			$(this).parents(container).find(all).not(active).prop('disabled', true);
-			$(this).parents(container).find(active).prop('disabled', false);
-		}
+		$(this).parents(container).find(all).not(active).hide();
+		$(this).parents(container).find(active).show();
+
+		// Toggle Disable
+		var active = $(this).attr('data-disable-target-' + value);
+		var all = $.map(this.attributes, function(attr){
+			if (attr.name.match("^data-disable-target-")) return attr.value;
+		}).join(', ');
+		$(this).parents(container).find(all).not(active).prop('disabled', true);
+		$(this).parents(container).find(active).prop('disabled', false);
 	}
 	function toggleAll(){
 		// Every radio group shlould be initialized only once. If there is a checked button
@@ -47,7 +53,7 @@ $(function(){
 			if ($(this).prop('checked')) {
 				checked[this.name] = this;
 				delete unchecked[this.name];
-			} if (!checked[this.name]) {
+			} else if (!checked[this.name]) {
 				unchecked[this.name] = this;
 			}
 		});

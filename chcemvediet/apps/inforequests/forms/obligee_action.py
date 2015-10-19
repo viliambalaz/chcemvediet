@@ -44,7 +44,8 @@ class NotCategorized(ObligeeActionStep):
                 widget=forms.RadioSelect(attrs={
                     u'class': u'toggle-changed',
                     u'data-container': u'form',
-                    u'data-target-1': u'.control-group:has(.visible-if-wants-help)',
+                    u'data-hide-target-1': u'.control-group:has(.visible-if-wants-help)',
+                    u'data-disable-target-1': u'.visible-if-wants-help',
                     }),
                 )
 
@@ -416,7 +417,8 @@ class IsItExtension(ObligeeActionStep):
                 widget=forms.RadioSelect(attrs={
                     u'class': u'toggle-changed',
                     u'data-container': u'form',
-                    u'data-target-1': u'.control-group:has(.visible-if-extension)',
+                    u'data-hide-target-1': u'.control-group:has(.visible-if-extension)',
+                    u'data-disable-target-1': u'.visible-if-extension',
                     }),
                 )
 
@@ -492,7 +494,8 @@ class IsItAdvancement(ObligeeActionStep):
                 widget=forms.RadioSelect(attrs={
                     u'class': u'toggle-changed',
                     u'data-container': u'form',
-                    u'data-target-1': u'.control-group:has(.visible-if-advancement)',
+                    u'data-hide-target-1': u'.control-group:has(.visible-if-advancement)',
+                    u'data-disable-target-1': u'.visible-if-advancement',
                     }),
                 )
 
