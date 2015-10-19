@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-19 16:03+0200\n"
+"POT-Creation-Date: 2015-10-19 22:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,6 +79,9 @@ msgstr "Postúpenie žiadosti"
 
 msgid "inforequests:appeal:AppealFinalStep:label"
 msgstr "Dokončenie odvolania"
+
+msgid "inforequests:appeal:AppealFinalStep:error:undecided_emails"
+msgstr "Appeal sa neda podat, kym nezaradite nove maily."
 
 msgid "inforequests:appeal:AppealLegalDateStep:label"
 msgstr "Dátum podania odvolania"
@@ -244,6 +247,9 @@ msgstr "Uveďte, čo inštitúcia chcela doplniť"
 
 msgid "inforequests:clarification_response:Main:attachments:label"
 msgstr "Prílohy"
+
+msgid "inforequests:clarification_response:Main:error:undecided_emails"
+msgstr "Clarification response sa neda poslat, kym nezaradite nove maily"
 
 msgid "inforequests:RefusalReasonField:no_reason"
 msgstr "V texte rozhodnutia sa nespomínajú žiadne dôvody."

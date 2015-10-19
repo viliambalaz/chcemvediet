@@ -58,10 +58,7 @@ class Main(Step):
         cleaned_data = super(Main, self).clean()
 
         if self.wizard.branch.inforequest.has_undecided_emails:
-            msg = squeeze(render_to_string(
-                    u'inforequests/clarification_response/messages/undecided_emails.txt', {
-                        u'inforequest': self.wizard.branch.inforequest,
-                        }))
+            msg = _(u'inforequests:clarification_response:Main:error:undecided_emails')
             self.add_error(None, msg)
 
         return cleaned_data

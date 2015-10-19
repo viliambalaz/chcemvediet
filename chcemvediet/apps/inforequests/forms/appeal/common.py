@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from poleno.utils.date import local_today
-from poleno.utils.template import render_to_string
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards.wizard import Step, SectionStep, DeadendStep, PaperStep, PrintStep
 
@@ -29,9 +28,7 @@ class AppealFinalStep(AppealStep, PrintStep):
         cleaned_data = super(AppealFinalStep, self).clean()
 
         if self.wizard.inforequest.has_undecided_emails:
-            msg = squeeze(render_to_string(u'inforequests/appeal/messages/undecided_emails.txt', {
-                    u'inforequest': self.wizard.inforequest,
-                    }))
+            msg = _(u'inforequests:appeal:AppealFinalStep:error:undecided_emails')
             self.add_error(None, msg)
 
         return cleaned_data
