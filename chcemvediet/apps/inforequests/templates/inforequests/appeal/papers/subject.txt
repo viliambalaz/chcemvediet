@@ -11,6 +11,7 @@
  %  -- rozklad: boolean
  %  -- fiktivne: boolean
  %  -- not_at_all: boolean
+ %  -- finalize: True
  %
 {% endcomment %}
 

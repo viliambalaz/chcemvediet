@@ -12,7 +12,7 @@
  %  -- rozklad: boolean
  %  -- fiktivne: boolean
  %  -- not_at_all: boolean
- %  -- finalize: boolean
+ %  -- finalize: True
  %
 {% endcomment %}
 
@@ -34,9 +34,7 @@
   {% paragraphs %}
     {% for substep in wizard.steps %}
       {% if substep.section_template %}
-        {% with reason_number_on_paper=substep.reason_number_on_paper %}
-          {% include substep.section_template %}
-        {% endwith %}
+        {% include substep.section_template with step=substep %}
       {% endif %}
     {% endfor %}
     {% paragraph before=2 %}

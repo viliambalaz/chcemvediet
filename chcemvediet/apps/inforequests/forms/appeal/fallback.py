@@ -20,7 +20,3 @@ class FallbackAppeal(AppealSectionStep):
     def add_fields(self):
         super(FallbackAppeal, self).add_fields()
         self.fields[u'reason'] = PaperCharField(widget=EditableSpan())
-
-    def paper_fields(self, paper):
-        super(FallbackAppeal, self).paper_fields(paper)
-        paper.fields[u'reason'] = PaperCharField(widget=EditableSpan())

@@ -9,23 +9,24 @@
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
  %  -- branch: chcemvediet.apps.inforequests.models.Branch
  %  -- last_action: chcemvediet.apps.inforequests.models.Action
- %  -- number_of_reasons: int
- %  -- sanitizable: set of chcemvediet.apps.inforequests.models.action.Action.REFUSAL_REASONS
+ %  -- rozklad: boolean
+ %  -- fiktivne: boolean
+ %  -- not_at_all: boolean
  %
 {% endcomment %}
 
 
 <h4>Začiernenie citlivých informácií</h4>
 <p>
-  {% if number_of_reasons == 1 %}
+  {% if step.number_of_reasons == 1 %}
     Ako dôvod
-  {% elif number_of_reasons == sanitizable|length %}
+  {% elif step.number_of_reasons == step.actual_sanitizable_reasons|length %}
     Ako dôvody
   {% else %}
     Medzi dôvodmi
   {% endif %}
   nesprístupnenia informácie bolo uvedené, že žiadaná informácia je
-  {% for reason in sanitizable %}
+  {% for reason in step.actual_sanitizable_reasons %}
     {% filter squeeze %}
       {% if reason == ACTION_REFUSAL_REASONS.BUSINESS_SECRET %}
         obchodné tajomstvo
@@ -42,7 +43,7 @@
 <p>
   Aj keby platilo, že časť žiadanej informácie nemôže inštitúcia sprístupniť, stále máte právo na
   zvyšok informácie. Znamená to, že inštitúcia ma informáciu zverejniť tak, že
-  {% for reason in sanitizable %}
+  {% for reason in step.actual_sanitizable_reasons %}
     {% filter squeeze %}
       {% if reason == ACTION_REFUSAL_REASONS.BUSINESS_SECRET %}
         obchodné tajomstvo

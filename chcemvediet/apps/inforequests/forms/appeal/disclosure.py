@@ -20,7 +20,3 @@ class DisclosureAppeal(AppealSectionStep):
     def add_fields(self):
         super(DisclosureAppeal, self).add_fields()
         self.fields[u'reason'] = PaperCharField(widget=EditableSpan())
-
-    def paper_fields(self, paper):
-        super(DisclosureAppeal, self).paper_fields(paper)
-        paper.fields[u'reason'] = PaperCharField(widget=EditableSpan())

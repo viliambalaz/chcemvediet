@@ -3,19 +3,26 @@
 {% comment %}
  %
  % Context:
- %  -- reason_number_on_paper: int
- %  -- number_of_reasons: int
+ %  -- wizard: chcemvediet.apps.inforequests.forms.appeal.AppealWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.appeal.refusal.BusinessSecretDefinitionReason
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- last_action: chcemvediet.apps.inforequests.models.Action
+ %  -- rozklad: boolean
+ %  -- fiktivne: boolean
+ %  -- not_at_all: boolean
+ %  -- finalize: boolean
  %
 {% endcomment %}
 
 
-{% if number_of_reasons == 1 %}
+{% if step.number_of_reasons == 1 %}
   dôvod
-{% elif reason_number_on_paper == 1 %}
+{% elif step.reason_number_on_paper == 1 %}
   jeden z dôvodov
-{% elif reason_number_on_paper == 2 %}
+{% elif step.reason_number_on_paper == 2 %}
   druhý dôvod
-{% elif reason_number_on_paper == 3 %}
+{% elif step.reason_number_on_paper == 3 %}
   tretí dôvod
 {% else %}
   ďalší dôvod

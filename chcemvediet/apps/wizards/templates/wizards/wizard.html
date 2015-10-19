@@ -17,11 +17,6 @@
     {% block header %}
       <h1>
         {% block header-heading %}{% endblock %}
-        {% block header-step %}
-          {% if wizard.steps|length > 1 %}
-            ({{ step.index|add:1 }}/{{ wizard.steps|length }})
-          {% endif %}
-        {% endblock %}
       </h1>
       {% block header-steps %}
         {% if wizard.steps|length > 1 %}

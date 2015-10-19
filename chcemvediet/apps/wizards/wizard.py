@@ -110,12 +110,6 @@ class SectionStep(Step):
     base_template = u'wizards/section.html'
     section_template = None
 
-    def paper_fields(self, paper):
-        pass
-
-    def paper_context(self, extra=None):
-        return dict(extra or {})
-
     def section_is_empty(self):
         return False
 
@@ -128,37 +122,15 @@ class DeadendStep(Step):
         return cleaned_data
 
 class PaperStep(Step):
-    base_template = u'wizards/paper.html'
     subject_template = None
     content_template = None
     subject_value_name = u'subject'
     content_value_name = u'content'
 
-    def add_fields(self):
-        super(PaperStep, self).add_fields()
-        for step in self.wizard.steps:
-            if isinstance(step, SectionStep):
-                step.paper_fields(self)
+    def pre_transition(self):
+        res = super(PaperStep, self).pre_transition()
 
-    def get_global_fields(self):
-        res = []
-        res.extend(super(PaperStep, self).get_global_fields())
-        for step in self.wizard.steps:
-            if isinstance(step, SectionStep):
-                res.extend(step.get_global_fields())
-        return res
-
-    def context(self, extra=None):
-        res = super(PaperStep, self).context(extra)
-        for step in self.wizard.steps:
-            if isinstance(step, SectionStep):
-                res.update(step.paper_context())
-        return res
-
-    def post_transition(self):
-        res = super(PaperStep, self).post_transition()
-
-        if self.is_valid():
+        if self.accessible:
             context = self.context(dict(finalize=True))
             subject = squeeze(render_to_string(self.subject_template, context))
             content = render_to_string(self.content_template, context)

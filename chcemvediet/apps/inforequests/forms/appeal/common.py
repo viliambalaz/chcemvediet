@@ -56,11 +56,9 @@ class AppealFinalStep(AppealStep, PrintStep):
         return res
 
 class AppealPaperStep(AppealStep, PaperStep):
-    label = _(u'inforequests:appeal:AppealPaperStep:label')
-    text_template = u'inforequests/appeal/texts/paper.html'
     subject_template = u'inforequests/appeal/papers/subject.txt'
     content_template = u'inforequests/appeal/papers/content.html'
-    post_step_class = AppealFinalStep
+    pre_step_class = AppealFinalStep
 
 class AppealLegalDateStep(AppealStep):
     label = _(u'inforequests:appeal:AppealLegalDateStep:label')
