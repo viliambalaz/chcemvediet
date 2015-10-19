@@ -66,6 +66,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    u'poleno.utils.http.RequestProviderMiddleware',
     u'django.middleware.common.CommonMiddleware',
     u'django.contrib.sessions.middleware.SessionMiddleware',
     u'django.middleware.csrf.CsrfViewMiddleware',

@@ -4,9 +4,9 @@ import collections
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
+from poleno.utils.template import render_to_string
 from poleno.utils.misc import cached_method
 
 from .models import Attachment

@@ -2,10 +2,27 @@
 # -*- coding: utf-8 -*-
 import os
 import stat
+from threading import local
 
 from django.http import HttpResponseNotModified, FileResponse, JsonResponse
 from django.views.static import was_modified_since
 from django.utils.http import http_date, urlquote
+
+# Thread local data
+_local = local()
+
+def get_request():
+    return getattr(_local, u'request', None)
+
+class RequestProviderMiddleware(object):
+
+    def process_request(self, request):
+        _local.request = request
+        return None
+
+    def process_response(self, request, response):
+        _local.request = None
+        return response
 
 
 def send_file_response(request, path, name, content_type, attachment=True):

@@ -6,15 +6,24 @@ from functools import partial
 
 from django import template
 from django.apps import apps
-from django.template import TemplateSyntaxError, TemplateDoesNotExist
+from django.template import TemplateSyntaxError, TemplateDoesNotExist, RequestContext
 from django.template.base import parse_bits
-from django.template.loader import BaseLoader, find_template_loader, render_to_string
+from django.template.loader import BaseLoader, find_template_loader
+from django.template.loader import render_to_string as django_render_to_string
 from django.template.loaders.filesystem import Loader as FilesystemLoader
 from django.utils.translation import get_language
 
+from .http import get_request
 from .lazy import lazy_decorator
 from .misc import squeeze
 
+
+def render_to_string(template_name, dictionary=None, context_instance=None, dirs=None):
+    if context_instance is None:
+        request = get_request()
+        if request is not None:
+            context_instance = RequestContext(request)
+    return django_render_to_string(template_name, dictionary, context_instance, dirs)
 
 @lazy_decorator(unicode)
 def lazy_render_to_string(*args, **kwargs):

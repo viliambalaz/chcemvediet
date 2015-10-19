@@ -1,7 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django import forms
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
@@ -10,6 +9,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
+from poleno.utils.template import render_to_string
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards.wizard import Step, Wizard
 from chcemvediet.apps.inforequests.models import Action

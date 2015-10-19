@@ -7,12 +7,12 @@ from django import forms
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.forms.util import flatatt
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
 from django.utils.html import format_html
 
+from poleno.utils.template import render_to_string
 from poleno.utils.html import merge_html_attrs
 
 

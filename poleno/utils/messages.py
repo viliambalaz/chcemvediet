@@ -1,7 +1,8 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.template.loader import render_to_string
 from django.contrib import messages
+
+from poleno.utils.template import render_to_string
 
 
 def render_message(request, level, template, context=None, **kwargs):

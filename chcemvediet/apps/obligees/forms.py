@@ -3,12 +3,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
 from django.utils.datastructures import MultiValueDict, MergeDict
 
 from poleno.utils.html import merge_html_attrs
+from poleno.utils.template import render_to_string
 from poleno.utils.misc import cached_method
 
 from .models import Obligee

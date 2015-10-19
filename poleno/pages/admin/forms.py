@@ -6,14 +6,14 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.core.files.uploadedfile import UploadedFile
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
 from django.utils.formats import date_format
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 from poleno.utils.urls import reverse
-from poleno.utils.misc import Bunch, norm_new_lines, squeeze
+from poleno.utils.template import render_to_string
 from poleno.utils.translation import translation
+from poleno.utils.misc import Bunch, norm_new_lines, squeeze
 
 from .. import pages
 

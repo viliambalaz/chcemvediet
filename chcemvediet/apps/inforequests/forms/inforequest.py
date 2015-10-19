@@ -1,7 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django import forms
-from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
@@ -11,6 +10,7 @@ from poleno.workdays import workdays
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.forms import CompositeTextField, PrefixedForm
+from poleno.utils.template import render_to_string
 from chcemvediet.apps.obligees.forms import ObligeeWidget, ObligeeField
 from chcemvediet.apps.inforequests.models import Inforequest
 

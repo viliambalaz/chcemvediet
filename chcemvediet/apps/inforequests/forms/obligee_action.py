@@ -4,7 +4,6 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
@@ -12,6 +11,7 @@ from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.date import local_date, local_today
+from poleno.utils.template import render_to_string
 from chcemvediet.apps.wizards.wizard import Bottom, Step, Wizard
 from chcemvediet.apps.obligees.models import Obligee
 from chcemvediet.apps.obligees.forms import MultipleObligeeWidget, MultipleObligeeField

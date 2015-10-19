@@ -4,10 +4,10 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from poleno.utils.date import local_today
+from poleno.utils.template import render_to_string
 from poleno.utils.misc import squeeze
 from chcemvediet.apps.wizards.wizard import Step, SectionStep, DeadendStep, PaperStep, PrintStep
 

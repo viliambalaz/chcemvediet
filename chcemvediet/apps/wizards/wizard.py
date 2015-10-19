@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.shortcuts import render
 
+from poleno.utils.template import render_to_string
 from poleno.utils.misc import squeeze
 
 from .models import WizardDraft
@@ -86,8 +86,7 @@ class Step(forms.Form):
         return render(self.wizard.request, self.template or self.base_template, self.context())
 
     def render_to_string(self):
-        return render_to_string(self.template or self.base_template,
-                context_instance=RequestContext(self.wizard.request), dictionary=self.context())
+        return render_to_string(self.template or self.base_template, self.context())
 
     def pre_transition(self):
         res = Transition()
