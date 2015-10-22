@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 
 {% comment %}
  %
@@ -17,7 +17,7 @@
 </p>
 
 {% if last_action.deadline and last_action.deadline.is_deadline_missed %}
-  <div class="alert alert-block">
+  <div class="alert alert-warning">
     <h4>Zmeškaný termin</h4>
     <p>
       Termin na doplnenie žiadosti vypršal pred {{ last_action.deadline.calendar_days_behind }}

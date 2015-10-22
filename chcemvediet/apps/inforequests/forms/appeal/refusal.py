@@ -104,7 +104,7 @@ class SanitizationOverlySanitized(AppealSectionStep, SanitizationStep):
 class SanitizationLevel(SanitizationStep):
     label = _(u'inforequests:appeal:refusal:SanitizationLevel:label')
     text_template = u'inforequests/appeal/texts/refusal/sanitization_level.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
     def add_fields(self):
         super(SanitizationLevel, self).add_fields()
@@ -182,7 +182,7 @@ class OtherReasonValid(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.OTHER_REASON
     label = _(u'inforequests:appeal:refusal:OtherReasonValid:label')
     text_template = u'inforequests/appeal/texts/refusal/other_reason_valid.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
     def add_fields(self):
         super(OtherReasonValid, self).add_fields()
@@ -228,9 +228,14 @@ class ConfidentialFallbackReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(ConfidentialFallbackReason, self).add_fields()
-        self.fields[u'confidential_fallback'] = OptionalSectionCheckboxField(required=False)
+        self.fields[u'confidential_fallback'] = OptionalSectionCheckboxField(
+                label=_(u'inforequests:appeal:refusal:ConfidentialFallbackReason:confidential_fallback:label'),
+                required=False,
+                )
         self.fields[u'confidential_fallback_reason'] = PaperCharField(
-                required=False, widget=EditableSpan())
+                required=False,
+                widget=EditableSpan(),
+                )
 
     def section_is_empty(self):
         return not self.wizard.values.get(u'confidential_fallback', True)
@@ -263,7 +268,7 @@ class ConfidentialNotConfidential(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.CONFIDENTIAL
     label = _(u'inforequests:appeal:refusal:ConfidentialNotConfidential:label')
     text_template = u'inforequests/appeal/texts/refusal/confidential_not_confidential.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
     def add_fields(self):
         super(ConfidentialNotConfidential, self).add_fields()
@@ -309,9 +314,14 @@ class PersonalFallbackReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(PersonalFallbackReason, self).add_fields()
-        self.fields[u'personal_fallback'] = OptionalSectionCheckboxField(required=False)
+        self.fields[u'personal_fallback'] = OptionalSectionCheckboxField(
+                label=_(u'inforequests:appeal:refusal:PersonalFallbackReason:personal_fallback:label'),
+                required=False,
+                )
         self.fields[u'personal_fallback_reason'] = PaperCharField(
-                required=False, widget=EditableSpan())
+                required=False,
+                widget=EditableSpan(),
+                )
 
     def section_is_empty(self):
         return not self.wizard.values.get(u'personal_fallback', True)
@@ -344,7 +354,7 @@ class PersonalOfficer(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.PERSONAL
     label = _(u'inforequests:appeal:refusal:PersonalOfficer:label')
     text_template = u'inforequests/appeal/texts/refusal/personal_officer.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
     def add_fields(self):
         super(PersonalOfficer, self).add_fields()
@@ -390,9 +400,14 @@ class BusinessSecretFallbackReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(BusinessSecretFallbackReason, self).add_fields()
-        self.fields[u'business_secret_fallback'] = OptionalSectionCheckboxField(required=False)
+        self.fields[u'business_secret_fallback'] = OptionalSectionCheckboxField(
+                label=_(u'inforequests:appeal:refusal:BusinessSecretFallbackReason:business_secret_fallback:label'),
+                required=False,
+                )
         self.fields[u'business_secret_fallback_reason'] = PaperCharField(
-                required=False, widget=EditableSpan())
+                required=False,
+                widget=EditableSpan(),
+                )
 
     def section_is_empty(self):
         return not self.wizard.values.get(u'business_secret_fallback', False)
@@ -432,7 +447,7 @@ class BusinessSecretDefinition(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
     label = _(u'inforequests:appeal:refusal:BusinessSecretDefinition:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_definition.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
     global_fields = [u'business_secret_definition']
 
     def add_fields(self):
@@ -473,7 +488,7 @@ class BusinessSecretPublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.BUSINESS_SECRET
     label = _(u'inforequests:appeal:refusal:BusinessSecretPublicFunds:label')
     text_template = u'inforequests/appeal/texts/refusal/business_secret_public_funds.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
     global_fields = [u'business_secret_public_funds']
     post_step_class = BusinessSecretDefinition
 
@@ -553,8 +568,12 @@ class DoesNotProvideFallbackReason(AppealSectionStep, ReasonStep):
 
     def add_fields(self):
         super(DoesNotProvideFallbackReason, self).add_fields()
-        self.fields[u'does_not_provide_fallback'] = OptionalSectionCheckboxField()
-        self.fields[u'does_not_provide_fallback_reason'] = PaperCharField(widget=EditableSpan())
+        self.fields[u'does_not_provide_fallback'] = OptionalSectionCheckboxField(
+                label=_(u'inforequests:appeal:refusal:DoesNotProvideFallbackReason:does_not_provide_fallback:label'),
+                )
+        self.fields[u'does_not_provide_fallback_reason'] = PaperCharField(
+                widget=EditableSpan(),
+                )
 
 class DoesNotProvidePublicFundsReason(AppealSectionStep, ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
@@ -572,7 +591,7 @@ class DoesNotProvidePublicFunds(ReasonStep):
     covered_reason = Action.REFUSAL_REASONS.DOES_NOT_PROVIDE
     label = _(u'inforequests:appeal:refusal:DoesNotProvidePublicFunds:label')
     text_template = u'inforequests/appeal/texts/refusal/does_not_provide_public_funds.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
     def add_fields(self):
         super(DoesNotProvidePublicFunds, self).add_fields()

@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
 {% load url squeeze from poleno.utils %}
 
@@ -13,60 +13,64 @@
 {% endcomment %}
 
 
-<div id="#accordion-email" class="accordion">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-email"
-         href="#accordion-email-{{ email.pk }}">
-        {% trans 'inforequests:obligee_action:email:email:heading' %}
-      </a>
+<div id="#accordion-email" class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading chv-pointer" data-toggle="collapse"
+         data-parent="#accordion-email" data-target="#accordion-email-{{ email.pk }}">
+      <h4 class="panel-title">
+        <a href="#accordion-email-{{ email.pk }}" data-toggle="collapse"
+           data-parent="#accordion-email">
+          {% trans 'inforequests:obligee_action:email:email:heading' %}
+        </a>
+      </h4>
     </div>
     <div id="accordion-email-{{ email.pk }}"
-         class="accordion-body collapse {% if step.is_first %}in{% endif %}">
-      <div class="accordion-inner">
-        <div class="row-fluid">
-          <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
-          <p class="span10">{{ email.subject }}</p>
+         class="panel-collapse collapse {{ step.is_first|yesno:"in," }}">
+      <div class="panel-body">
+        <div class="row">
+          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
+          <p class="col-sm-9">{{ email.subject }}</p>
         </div>
-        <div class="row-fluid">
-          <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:from' %}:</p>
-          <p class="span10">{{ email.from_formatted }}</p>
+        <div class="row">
+          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:from' %}:</p>
+          <p class="col-sm-9">{{ email.from_formatted }}</p>
         </div>
-        <div class="row-fluid">
-          <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:to' %}:</p>
-          <p class="span10">
+        <div class="row">
+          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:to' %}:</p>
+          <p class="col-sm-9">
             {% for recipient in email.recipients %}
-              {% filter squeeze %}
-                {% if recipient.mail == email.received_for %}
-                  <b>{{ recipient.formatted }}</b>
-                {% else %}
-                  <span>{{ recipient.formatted }}</span>
-                {% endif %}
-              {% endfilter %}{% if not forloop.last %},{% endif %}
+              {% if recipient.mail == email.received_for %}
+                <b>{{ recipient.formatted }}</b>
+              {% else %}
+                <span>{{ recipient.formatted }}</span>
+              {% endif %}
+              <br>
             {% endfor %}
           </p>
         </div>
-        <div class="row-fluid">
-          <p class="span2 text-right">{% trans 'inforequests:obligee_action:email:processed' %}:</p>
-          <p class="span10">{{ email.processed }}</p>
+        <div class="row">
+          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:processed' %}:</p>
+          <p class="col-sm-9">{{ email.processed }}</p>
         </div>
         {% if email.attachments %}
-          <div class="row-fluid">
-            <p class="span2 text-right">
+          <div class="row">
+            <div class="col-sm-3 text-right form-control-static">
               {% trans 'inforequests:obligee_action:email:attachments' %}:
-            </p>
-            <p class="span10">
-              {% for attachment in email.attachments %}
-                <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
-                  <span class="label label-info">{{ attachment.name }}</span>
-                </a>
-              {% endfor %}
-            </p>
+            </div>
+            <div class="col-sm-9">
+              <div class="pln-attachments clearfix">
+                {% for attachment in email.attachments %}
+                  <div class="pln-attachment">
+                    <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+                      {{ attachment.name }}
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         {% endif %}
-        <div class="row-fluid">
-          <p class="span12" style="white-space: pre-line;">{{ email.text }}</p>
-        </div>
+        <p class="chv-preline">{{ email.text }}</p>
       </div>
     </div>
   </div>

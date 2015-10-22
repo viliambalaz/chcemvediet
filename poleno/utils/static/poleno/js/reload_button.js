@@ -1,13 +1,13 @@
-/* Clicking on element with class ``reload`` reloads the page.
+/* Clicking on element with class ``pln-reload`` reloads the page.
  *
  * Requires:
  *  -- JQuery
  *
  * Example:
- *     <button type="button" class="reload">Reload</button>
+ *     <button type="button" class="pln-reload">Reload</button>
  */
 $(function(){
-	$(document).on('click', '.reload', function(event){
+	$(document).on('click', '.pln-reload', function(event){
 		event.preventDefault();
 		location.reload();
 	});

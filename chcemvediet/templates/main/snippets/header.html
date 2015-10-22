@@ -1,6 +1,6 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
-{% load page from poleno.pages %}
+{% load page page_active from poleno.pages %}
 
 {% comment %}
  %
@@ -10,35 +10,37 @@
 {% endcomment %}
 
 
-<div class="fixed">
+<div class="chv-fixed-header">
   {% if DEVBAR_MESSAGE %}
-    <div class="devbar">
+    <div class="chv-devbar">
       <div class="container">
         <p>{{ DEVBAR_MESSAGE|safe }}</p>
       </div>
     </div>
   {% endif %}
-  <div class="navbar navbar-inverse navbar-static-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse"
-                data-target=".nav-collapse">
+  <nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target=".navbar-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="brand" href="{% page '/' %}">{% trans 'main:menu:brand' %}</a>
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-            {% include "main/snippets/header_menu.html" %}
-          </ul>
-          <ul class="nav pull-right">
-            {% include "main/snippets/header_devtools.html" %}
-            {% include "main/snippets/header_account.html" %}
-            {% include "main/snippets/header_language.html" %}
-          </ul>
-        </div>
+        <a class="navbar-brand {{ request|page_active:'=/'|yesno:"active," }}" href="{% page '/' %}">
+          {% trans 'main:menu:brand' %}
+        </a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          {% include "main/snippets/header_menu.html" %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% include "main/snippets/header_devtools.html" %}
+          {% include "main/snippets/header_account.html" %}
+          {% include "main/snippets/header_language.html" %}
+        </ul>
       </div>
     </div>
-  </div>
+  </nav>
 </div>

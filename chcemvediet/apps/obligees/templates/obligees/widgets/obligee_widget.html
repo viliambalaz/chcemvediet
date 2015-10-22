@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 
 {% comment %}
  %
@@ -11,7 +11,7 @@
 
 
 <div {% for k, v in widget_attrs.items %}{{ k }}="{{ v }}" {% endfor %}>
-  <div class="obligee_widget_inputs">
+  <div class="chv-obligee-widget-inputs">
     {% include "obligees/widgets/obligee_widget_input.html" %}
   </div>
 </div>

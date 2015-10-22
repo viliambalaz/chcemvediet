@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "pages/admin/base.html" %}
 
 {% comment %}
@@ -41,7 +41,7 @@
                   <a href="{% url "admin:pages_edit" lang page.lpath %}">{{ page.path }}</a>
                 {% endif %}
               </strong>
-              {% if page.is_redirect %} → {{ page.redirect_path }}{% endif %}
+              {% if page.is_redirect %} &#8594; {{ page.redirect_path }}{% endif %}
             {% if page.is_disabled %}</del>{% endif %}
           </td>
           <td>

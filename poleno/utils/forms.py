@@ -95,7 +95,7 @@ class CompositeTextWidget(forms.MultiWidget):
     def format_output(self, rendered_widgets):
         context = dict(self.context, inputs=rendered_widgets, finalize=False)
         content = mark_safe(render_to_string(self.template, context).strip())
-        attrs = merge_html_attrs(self.composite_attrs, class_=u'composite-text')
+        attrs = merge_html_attrs(self.composite_attrs, class_=u'pln-composite-text')
         return format_html(u'<div{0}>{1}</div>', flatatt(attrs), content)
 
     def decompress(self, value):
@@ -121,11 +121,10 @@ class CompositeTextField(forms.MultiValueField):
                             })),
                         forms.CharField(widget=forms.Textarea(attrs={
                             'placeholder': 'Description how to get there',
-                            'class': u'autosize',
+                            'class': u'pln-autosize',
                             })),
                         ],
                     composite_attrs={
-                        'class': u'input-block-level',
                         },
                     )
     """
@@ -175,7 +174,7 @@ class EditableSpan(forms.Widget):
         if value is None:
             value = u''
         span_attrs = merge_html_attrs(self.attrs, attrs,
-                contenteditable=u'true', class_=u'editable-span')
+                contenteditable=u'true', class_=u'pln-editable-span')
         input_attrs = dict(type=u'hidden', name=name, value=force_text(value))
         return format_html(u'<span{0}>{1}</span><input{2} />',
                 flatatt(span_attrs), force_text(value), flatatt(input_attrs))

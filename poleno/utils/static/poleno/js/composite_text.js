@@ -1,10 +1,10 @@
 /* Required for ``poleno.utils.forms.CompositeText`` form widget.
  */
 $(function(){
-	$(document).on('focusin', '.composite-text', function(){
-		$(this).addClass('focus');
+	$(document).on('focusin', '.pln-composite-text', function(){
+		$(this).addClass('pln-composite-text-focus');
 	})
-	$(document).on('focusout', '.composite-text', function(){
-		$(this).removeClass('focus');
+	$(document).on('focusout', '.pln-composite-text', function(){
+		$(this).removeClass('pln-composite-text-focus');
 	})
 });

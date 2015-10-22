@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
@@ -17,9 +17,9 @@
 
 
 <h4>Informáciu neposkytuje</h4>
-<div class="alert">
-  Ak inštitúcia dôveryhodne odôvodnila, že informáciu naozaj neposkytuje, odvolanie nemá zmysel
-  podávať.
+<div class="alert alert-warning">
+  <strong>Pozor:</strong> Ak inštitúcia dôveryhodne odôvodnila, že informáciu naozaj neposkytuje,
+  odvolanie nemá zmysel podávať.
 </div>
 <p>
   Označili ste, že žiadaná informácia nosúvisí s použitím verejných prostriedkov. Je teda
@@ -28,5 +28,5 @@
   považujete postup inštitúcie za nesprávny.
 </p>
 <p>
-  <label>{% paper_field step.does_not_provide_fallback %} Chcem doplniť vlastné zdôvodnenie</label>
+  {% include "main/forms/field.html" with field=step.does_not_provide_fallback %}
 </p>

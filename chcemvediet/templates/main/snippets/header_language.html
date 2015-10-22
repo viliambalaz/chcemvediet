@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load static from staticfiles %}
 {% load change_lang from poleno.utils %}
 
@@ -15,12 +15,12 @@
     <img src="{% static 'main/images/languages/'|add:request.LANGUAGE_CODE|add:'.png' %}"
          alt="{{ request.LANGUAGE_CODE }}"
          style="margin: 0px 5px 3px 0px;">
-    {{ request.LANGUAGE_CODE|upper }} <b class="caret"></b>
+    {{ request.LANGUAGE_CODE|upper }} <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
     {% for lang in LANGUAGES %}
       <li>
-        <a href="{% url 'set_language' %}" class="post"
+        <a href="{% url 'set_language' %}" class="pln-post"
            data-post-csrfmiddlewaretoken="{{ csrf_token }}"
            data-post-language="{{ lang.0 }}"
            data-post-next="{% change_lang lang.0 %}">

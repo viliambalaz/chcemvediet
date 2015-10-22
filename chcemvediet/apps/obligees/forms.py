@@ -22,14 +22,14 @@ class ObligeeWidget(forms.Widget):
 
     def _widget_attrs(self, attrs=None):
         return merge_html_attrs(self.attrs, attrs, {
-                u'class': u'obligee_widget',
+                u'class': u'chv-obligee-widget',
                 })
 
     def _input_attrs(self, name, value, skel=False):
         obligee = value if isinstance(value, Obligee) else None
         value = force_text(obligee.name if obligee else u'' if value is None else value)
         return merge_html_attrs(self.input_attrs, {
-                u'class': u'autocomplete',
+                u'class': u'pln-autocomplete form-control',
                 u'type': u'text',
                 u'name': name if not skel else u'',
                 u'value': value,

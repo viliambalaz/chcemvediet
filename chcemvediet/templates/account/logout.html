@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 
@@ -16,13 +16,13 @@
 {% block content %}
   <h1>{% trans 'account:logout:heading' %}</h1>
   {% include "account/texts/logout_text.html" %}
-  <form method="post" action="{% url 'account_logout' %}">
+  <form class="form-horizontal" method="post" action="{% url 'account_logout' %}">
     {% csrf_token %}
     {% if redirect_field_value %}
       <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
     {% endif %}
-    <div class="form-actions">
+    <p>
       <button type="submit" class="btn btn-primary">{% trans 'account:logout:submit' %}</button>
-    </div>
+    </p>
   </form>
 {% endblock %}

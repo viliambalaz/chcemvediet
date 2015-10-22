@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load squeeze from poleno.utils %}
 
 {% comment %}
@@ -10,10 +10,11 @@
 
 
 {% filter squeeze %}
-<span class="with-tooltip" data-toggle="tooltip" data-placement="right"
+{{ unique_email }}
+<span class="pln-with-tooltip" data-toggle="tooltip" data-placement="right"
       title="{% spaceless %}
         {% include "inforequests/create/tooltips/content_unique_email.txt" %}
         {% endspaceless %}">
-  {{ unique_email }} <i class="icon-question-sign"></i>
+  <span class="glyphicon glyphicon-question-sign"></span>
 </span>
 {% endfilter %}

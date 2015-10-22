@@ -30,6 +30,6 @@ $(function(){
 			}));
 		}
 	}
-	$(document).on('dom-changed', function(event){ live_path(event.target); });
+	$(document).on('pln-dom-changed', function(event){ live_path(event.target); });
 	live_path(document);
 });

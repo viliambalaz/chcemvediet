@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends step.base_template %}
 {% load trans from i18n %}
 
@@ -24,7 +24,7 @@
 
 {% block body %}
   {% if inforequest.has_undecided_emails %}
-    <div class="alert alert-block alert-error">
+    <div class="alert alert-danger">
       {% include "inforequests/clarification_response/texts/undecided_alert.html" %}
     </div>
   {% endif %}
@@ -33,10 +33,10 @@
 
 {% block body-plus-footer %}
   <div class="row">
-    <div class="span8">
+    <div class="col-sm-8">
       {{ block.super }}
     </div>
-    <div class="span4">
+    <div class="col-sm-4">
       {% include "inforequests/accordion/accordion.html" %}
     </div>
   </div>

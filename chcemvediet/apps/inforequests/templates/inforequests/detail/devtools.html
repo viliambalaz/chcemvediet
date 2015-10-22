@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load url from poleno.utils %}
 
 {% comment %}
@@ -16,10 +16,12 @@
 <form action="{% url 'inforequests:devtools_mock_response' inforequest=inforequest %}"
       method="post">
   {% csrf_token %}
-  <textarea name="content" class="input-block-level" placeholder="Response content"></textarea>
-  <div class="text-right">
+  <p>
+    <textarea name="content" class="form-control" placeholder="Response content"></textarea>
+  </p>
+  <p class="text-right">
     <button type="submit" class="btn btn-primary">Send</button>
-  </div>
+  </p>
 </form>
 
 {% if inforequest.main_branch.last_action.type != ACTION_TYPES.REQUEST %}
@@ -32,26 +34,28 @@
   <form action="{% url 'inforequests:devtools_undo_last_action' inforequest=inforequest %}"
         method="post">
     {% csrf_token %}
-    <select name="branch" class="input-block-level">
-      {% for branch in inforequest.branches %}
-        {% if branch.last_action.type == ACTION_TYPES.REQUEST %}
-          <option value="{{ branch.pk }}" disabled="disabled">
-            {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-          </option>
-        {% elif branch.last_action.type == ACTION_TYPES.ADVANCED_REQUEST %}
-          <option value="{{ branch.pk }}" disabled="disabled">
-            {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-          </option>
-        {% else %}
-          <option value="{{ branch.pk }}">
-            {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-          </option>
-        {% endif %}
-      {% endfor %}
-    </select>
-    <div class="text-right">
+    <p>
+      <select name="branch" class="form-control">
+        {% for branch in inforequest.branches %}
+          {% if branch.last_action.type == ACTION_TYPES.REQUEST %}
+            <option value="{{ branch.pk }}" disabled="disabled">
+              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
+            </option>
+          {% elif branch.last_action.type == ACTION_TYPES.ADVANCED_REQUEST %}
+            <option value="{{ branch.pk }}" disabled="disabled">
+              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
+            </option>
+          {% else %}
+            <option value="{{ branch.pk }}">
+              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
+            </option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </p>
+    <p class="text-right">
       <button type="submit" class="btn btn-primary">Undo</button>
-    </div>
+    </p>
   </form>
 {% endif %}
 
@@ -62,9 +66,10 @@
 </p>
 <form action="{% url 'inforequests:devtools_push_history' inforequest=inforequest %}" method="post">
   {% csrf_token %}
-  <input type="number" name="days" class="input-block-level" placeholder="Days"
-         min="-200" max="200">
-  <div class="text-right">
+  <p>
+    <input type="number" name="days" class="form-control" placeholder="Days" min="-200" max="200">
+  </p>
+  <p class="text-right">
     <button type="submit" class="btn btn-primary">Push</button>
-  </div>
+  </p>
 </form>

@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 
 {% comment %}
  %
@@ -19,11 +19,8 @@
 {% endcomment %}
 
 
-<h4>Dokončenie odvolania</h4>
-<p>Vykonajte test tlače a dokončite odvolanie.</p>
-
 {% if is_deadline_missed_at_today %}
-  <div class="alert alert-block">
+  <div class="alert alert-warning">
     <h4>Zmeškaný termin</h4>
     <p>
       Termin na podanie odvolania vypršal pred {{ calendar_days_behind_at_today }} kalendárnymi
@@ -31,7 +28,7 @@
     </p>
   </div>
 {% elif is_deadline_missed_at_legal_date %}
-  <div class="alert alert-block">
+  <div class="alert alert-warning">
     <h4>Dátum po termíne</h4>
     <p>
       Zadaný dátum odvolania {{ wizard.values.legal_date }} je
@@ -39,3 +36,6 @@
     </p>
   </div>
 {% endif %}
+
+<h4>Dokončenie odvolania</h4>
+<p>Vykonajte test tlače a dokončite odvolanie.</p>

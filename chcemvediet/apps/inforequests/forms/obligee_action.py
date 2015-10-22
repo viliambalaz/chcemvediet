@@ -21,7 +21,7 @@ from chcemvediet.apps.inforequests.forms import BranchField, RefusalReasonField
 
 class ObligeeActionStep(Step):
     template = u'inforequests/obligee_action/wizard.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
 
 # Epilogue
 
@@ -42,10 +42,10 @@ class NotCategorized(ObligeeActionStep):
                     (0, _(u'inforequests:obligee_action:NotCategorized:unrelated')),
                     ),
                 widget=forms.RadioSelect(attrs={
-                    u'class': u'toggle-changed',
+                    u'class': u'pln-toggle-changed',
                     u'data-container': u'form',
-                    u'data-hide-target-1': u'.control-group:has(.visible-if-wants-help)',
-                    u'data-disable-target-1': u'.visible-if-wants-help',
+                    u'data-hide-target-1': u'.form-group:has(.chv-visible-if-wants-help)',
+                    u'data-disable-target-1': u'.chv-visible-if-wants-help',
                     }),
                 )
 
@@ -55,7 +55,7 @@ class NotCategorized(ObligeeActionStep):
                 widget=forms.Textarea(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:NotCategorized:help_request:placeholder'),
-                    u'class': u'input-block-level visible-if-wants-help',
+                    u'class': u'chv-visible-if-wants-help',
                     }),
                 )
 
@@ -98,7 +98,7 @@ class Categorized(ObligeeActionStep):
                 widget=forms.DateInput(attrs={
                     u'placeholder':
                         _('inforequests:obligee_action:Categorized:legal_date:placeholder'),
-                    u'class': u'datepicker',
+                    u'class': u'pln-datepicker',
                     }),
                 )
 
@@ -109,7 +109,6 @@ class Categorized(ObligeeActionStep):
                 widget=forms.TextInput(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:Categorized:file_number:placeholder'),
-                    u'class': u'span5',
                     }),
                 )
 
@@ -132,7 +131,7 @@ class Categorized(ObligeeActionStep):
                     widget=forms.DateInput(attrs={
                         u'placeholder':
                             _('inforequests:obligee_action:Categorized:last_action_dd:placeholder'),
-                        u'class': u'datepicker',
+                        u'class': u'pln-datepicker',
                         }),
                     )
 
@@ -194,7 +193,6 @@ class InvalidReversion(ObligeeActionStep):
                 widget=forms.Textarea(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:InvalidReversion:help_request:placeholder'),
-                    u'class': u'input-block-level',
                     }),
                 )
 
@@ -415,10 +413,10 @@ class IsItExtension(ObligeeActionStep):
                     (0, _(u'inforequests:obligee_action:IsItExtension:no')),
                     ),
                 widget=forms.RadioSelect(attrs={
-                    u'class': u'toggle-changed',
+                    u'class': u'pln-toggle-changed',
                     u'data-container': u'form',
-                    u'data-hide-target-1': u'.control-group:has(.visible-if-extension)',
-                    u'data-disable-target-1': u'.visible-if-extension',
+                    u'data-hide-target-1': u'.form-group:has(.chv-visible-if-extension)',
+                    u'data-disable-target-1': u'.chv-visible-if-extension',
                     }),
                 )
 
@@ -432,7 +430,7 @@ class IsItExtension(ObligeeActionStep):
                 widget=forms.NumberInput(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:IsItExtension:extension:placeholder'),
-                    u'class': u'visible-if-extension',
+                    u'class': u'chv-visible-if-extension',
                     }),
                 )
 
@@ -492,10 +490,10 @@ class IsItAdvancement(ObligeeActionStep):
                     (0, _(u'inforequests:obligee_action:IsItAdvancement:no')),
                     ),
                 widget=forms.RadioSelect(attrs={
-                    u'class': u'toggle-changed',
+                    u'class': u'pln-toggle-changed',
                     u'data-container': u'form',
-                    u'data-hide-target-1': u'.control-group:has(.visible-if-advancement)',
-                    u'data-disable-target-1': u'.visible-if-advancement',
+                    u'data-hide-target-1': u'.form-group:has(.chv-visible-if-advancement)',
+                    u'data-disable-target-1': u'.chv-visible-if-advancement',
                     }),
                 )
 
@@ -504,7 +502,7 @@ class IsItAdvancement(ObligeeActionStep):
                 help_text=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:help_text'),
                 required=False,
                 widget=MultipleObligeeWidget(input_attrs={
-                    u'class': u'span5 visible-if-advancement',
+                    u'class': u'chv-visible-if-advancement',
                     u'placeholder':
                         _(u'inforequests:obligee_action:IsItAdvancement:advanced_to:placeholder'),
                     }),
@@ -800,7 +798,7 @@ class InputBasics(ObligeeActionStep):
                 widget=forms.DateInput(attrs={
                     u'placeholder':
                         _('inforequests:obligee_action:InputBasics:delivered_date:placeholder'),
-                    u'class': u'datepicker',
+                    u'class': u'pln-datepicker',
                     }),
                 )
 

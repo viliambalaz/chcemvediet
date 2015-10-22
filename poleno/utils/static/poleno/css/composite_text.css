@@ -1,7 +1,7 @@
 /* Required for ``poleno.utils.forms.CompositeText`` form widget.
  */
 
-.composite-text {
+.pln-composite-text {
 	display: inline-block;
 	vertical-align: middle;
 	height: auto;
@@ -18,28 +18,28 @@
 	white-space: pre-wrap;
 }
 
-.composite-text.focus {
+.pln-composite-text-focus {
 	border-color: rgba(82, 168, 236, 0.8);
 	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(82, 168, 236, 0.6);
 	outline: 0px none;
 }
 
-.control-group.error .composite-text {
+.form-group.has-error .pln-composite-text {
 	border-color: #B94A48;
 	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 
-.control-group.error .composite-text.focus {
+.form-group.has-error .pln-composite-text-focus {
 	border-color: #953B39;
 	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 6px #D59392;
 }
 
-.composite-text textarea {
+.pln-composite-text textarea {
 	width: 100%;
 }
 
-.composite-text textarea,
-.composite-text input[type="text"] {
+.pln-composite-text textarea,
+.pln-composite-text input[type="text"] {
 	margin: 0;
 	padding: 0;
 	border: none;

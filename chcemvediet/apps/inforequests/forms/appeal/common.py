@@ -60,7 +60,7 @@ class AppealPaperStep(AppealStep, PaperStep):
 class AppealLegalDateStep(AppealStep):
     label = _(u'inforequests:appeal:AppealLegalDateStep:label')
     text_template = u'inforequests/appeal/texts/legal_date.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
     global_fields = [u'legal_date']
     post_step_class = AppealPaperStep
 
@@ -73,7 +73,7 @@ class AppealLegalDateStep(AppealStep):
                 initial=local_today,
                 widget=forms.DateInput(attrs={
                     u'placeholder': _('inforequests:appeal:AppealLegalDateStep:legal_date:placeholder'),
-                    u'class': u'datepicker',
+                    u'class': u'pln-datepicker',
                     }),
                 )
 

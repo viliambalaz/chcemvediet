@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 
@@ -20,20 +20,20 @@
       </h1>
       {% block header-steps %}
         {% if wizard.steps|length > 1 %}
-          <div>
+          <p>
             {% for other_step in wizard.steps %}
-              <a class="with-tooltip" href="{{ other_step.get_url }}" data-toggle="tooltip"
+              <a class="pln-with-tooltip" href="{{ other_step.get_url }}" data-toggle="tooltip"
                  title="{{ other_step.label }}">
                 {% if other_step == step %}
-                  <span class="badge badge-info">{{ other_step.index|add:1 }}</span>
+                  <span class="label label-info">{{ other_step.index|add:1 }}</span>
                 {% elif other_step.accessible  %}
-                  <span class="badge badge-success">{{ other_step.index|add:1 }}</span>
+                  <span class="label label-success">{{ other_step.index|add:1 }}</span>
                 {% else %}
-                  <span class="badge">{{ other_step.index|add:1 }}</span>
+                  <span class="label label-default">{{ other_step.index|add:1 }}</span>
                 {% endif %}
               </a>
             {% endfor %}
-          </div>
+          </p>
         {% endif %}
       {% endblock %}
     {% endblock %}
@@ -46,51 +46,56 @@
           {% if step.form_template %}
             <div>{% include step.form_template with form=step %}</div>
           {% elif step.non_field_errors %}
-            <div class="control-group error">
-              <span class="help-block">{{ step.non_field_errors|join:" " }}</span>
-            </div>
+            <p class="text-danger">{{ form.non_field_errors|join:" " }}</p>
           {% endif %}
         {% endblock %}
       {% endblock %}
-      <div class="form-actions">
-        {% block footer %}
-          {% block footer-save %}
-            <button type="submit" class="btn" name="button" value="save">
-              {% block footer-save-label %}
-                <i class="icon-file"></i> {% trans 'wizards:wizard:save' %}
-              {% endblock %}
-            </button>
-          {% endblock %}
-          {% block footer-prev %}
-            {% if not step.is_first %}
-              <a class="btn" href="{{ step.prev.get_url }}">
-                {% block footer-prev-label %}
-                  <i class="icon-chevron-left"></i> {% trans 'wizards:wizard:prev' %}
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+          {% block footer %}
+            {% block footer-save %}
+              <button type="submit" class="btn btn-default" name="button" value="save">
+                {% block footer-save-label %}
+                  <span class="glyphicon glyphicon-file"></span>
+                  {% trans 'wizards:wizard:save' %}
+                {% endblock %}
+              </button>
+            {% endblock %}
+            {% block footer-prev %}
+              {% if not step.is_first %}
+                <a class="btn btn-default" href="{{ step.prev.get_url }}">
+                  {% block footer-prev-label %}
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    {% trans 'wizards:wizard:prev' %}
+                  {% endblock %}
+                </a>
+              {% endif %}
+            {% endblock %}
+            {% block footer-next %}
+              <button type="submit" class="btn btn-primary" name="button" value="next">
+                {% if step.is_last %}
+                  {% block footer-finish-label %}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    {% trans 'wizards:wizard:finish' %}
+                  {% endblock %}
+                {% else %}
+                  {% block footer-next-label %}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    {% trans 'wizards:wizard:next' %}
+                  {% endblock %}
+                {% endif %}
+              </button>
+            {% endblock %}
+            {% block footer-cancel %}
+              <a class="btn btn-link pull-right" href="{% block footer-cancel-href %}{% endblock %}">
+                {% block footer-cancel-label %}
+                  <span class="glyphicon glyphicon-remove"></span>
+                  {% trans 'wizards:wizard:cancel' %}
                 {% endblock %}
               </a>
-            {% endif %}
+            {% endblock %}
           {% endblock %}
-          {% block footer-next %}
-            <button type="submit" class="btn btn-primary" name="button" value="next">
-              {% if step.is_last %}
-                {% block footer-finish-label %}
-                  <i class="icon-chevron-right icon-white"></i> {% trans 'wizards:wizard:finish' %}
-                {% endblock %}
-              {% else %}
-                {% block footer-next-label %}
-                  <i class="icon-chevron-right icon-white"></i> {% trans 'wizards:wizard:next' %}
-                {% endblock %}
-              {% endif %}
-            </button>
-          {% endblock %}
-          {% block footer-cancel %}
-            <a class="btn pull-right" href="{% block footer-cancel-href %}{% endblock %}">
-              {% block footer-cancel-label %}
-                <i class="icon-remove"></i> {% trans 'wizards:wizard:cancel' %}
-              {% endblock %}
-            </a>
-          {% endblock %}
-        {% endblock %}
+        </div>
       </div>
     {% endblock %}
   </form>

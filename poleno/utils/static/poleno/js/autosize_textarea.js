@@ -4,7 +4,7 @@
  *  -- JQuery
  *
  * Example:
- *     <textarea class="autosize"></textarea>
+ *     <textarea class="pln-autosize"></textarea>
  */
 $(function(){
 	function autosize(){
@@ -14,10 +14,10 @@ $(function(){
 		}).height(this.scrollHeight);
 	};
 	function autosizeAll(){
-		$('textarea.autosize').each(autosize);
+		$('textarea.pln-autosize').each(autosize);
 	};
-	$(document).on('input', 'textarea.autosize', autosize);
-	$(document).on('dom-changed', autosizeAll); // Triggered by: poleno/js/ajax.js
+	$(document).on('input', 'textarea.pln-autosize', autosize);
+	$(document).on('pln-dom-changed', autosizeAll); // Triggered by: poleno/js/ajax.js
 	$(window).on('resize', autosizeAll);
 	autosizeAll();
 });

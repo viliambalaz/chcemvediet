@@ -8,17 +8,17 @@ $(function(){
 	function handler(event, ui){
 		if (ui.item) {
 			var obligee = ui.item.obligee;
-			$('.obligee_widget_street', this).text(obligee.street);
-			$('.obligee_widget_zip', this).text(obligee.zip);
-			$('.obligee_widget_city', this).text(obligee.city);
-			$('.obligee_widget_email', this).text(obligee.emails);
-			$('.obligee_widget_details', this).show();
+			$('.chv-obligee-widget-street', this).text(obligee.street);
+			$('.chv-obligee-widget-zip', this).text(obligee.zip);
+			$('.chv-obligee-widget-city', this).text(obligee.city);
+			$('.chv-obligee-widget-email', this).text(obligee.emails);
+			$('.chv-obligee-widget-details', this).show();
 		} else {
-			$('.obligee_widget_details', this).hide();
+			$('.chv-obligee-widget-details', this).hide();
 		}
 	}
-	$(document).on('autocompleteselect', '.obligee_widget_input', handler);
-	$(document).on('autocompletechange', '.obligee_widget_input', handler);
+	$(document).on('autocompleteselect', '.chv-obligee-widget-input', handler);
+	$(document).on('autocompletechange', '.chv-obligee-widget-input', handler);
 });
 
 /* Adds and removes widgets to/from MultipleObligeeWidget.
@@ -28,30 +28,30 @@ $(function(){
  */
 $(function(){
 	function add(container){
-		var inputs = container.find('.obligee_widget_inputs');
-		var skel = container.find('.obligee_widget_skel');
+		var inputs = container.find('.chv-obligee-widget-inputs');
+		var skel = container.find('.chv-obligee-widget-skel');
 		var clone = skel.children().clone();
 		var input = clone.find('input');
 		input.attr('name', input.data('name'));
 		clone.appendTo(inputs);
 	}
 	function del(input){
-		var container = input.closest('.obligee_widget');
-		var inputs = input.closest('.obligee_widget_inputs');
+		var container = input.closest('.chv-obligee-widget');
+		var inputs = input.closest('.chv-obligee-widget-inputs');
 		input.remove();
-		if (inputs.find('.obligee_widget_input').length == 0) {
+		if (inputs.find('.chv-obligee-widget-input').length == 0) {
 			add(container);
 		}
 	}
 	function handle_add(event){
 		event.preventDefault();
-		add($(this).closest('.obligee_widget'));
+		add($(this).closest('.chv-obligee-widget'));
 	}
 	function handle_del(event){
 		event.preventDefault();
-		del($(this).closest('.obligee_widget_input'));
+		del($(this).closest('.chv-obligee-widget-input'));
 	}
 
-	$(document).on('click', '.obligee_widget_add', handle_add);
-	$(document).on('click', '.obligee_widget_del', handle_del);
+	$(document).on('click', '.chv-obligee-widget-add', handle_add);
+	$(document).on('click', '.chv-obligee-widget-del', handle_del);
 });

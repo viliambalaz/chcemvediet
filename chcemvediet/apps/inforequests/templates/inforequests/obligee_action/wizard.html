@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends step.base_template %}
 {% load trans from i18n %}
 
@@ -41,10 +41,10 @@
 
 {% block body-plus-footer %}
   <div class="row">
-    <div class="span8">
+    <div class="col-sm-8">
       {{ block.super }}
     </div>
-    <div class="span4">
+    <div class="col-sm-4">
       {% if wizard.values.branch %}
         {% with last_action=wizard.values.branch.last_action %}
           {% include "inforequests/accordion/accordion.html" %}

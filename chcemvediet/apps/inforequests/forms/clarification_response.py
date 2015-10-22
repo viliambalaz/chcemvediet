@@ -18,7 +18,7 @@ from chcemvediet.apps.inforequests.models import Action
 class Main(Step):
     template = u'inforequests/clarification_response/main.html'
     text_template = u'inforequests/clarification_response/texts/main.html'
-    form_template = u'main/snippets/form_horizontal.html'
+    form_template = u'main/forms/form_horizontal.html'
     global_fields = [u'attachments']
 
     def add_fields(self):
@@ -32,12 +32,11 @@ class Main(Step):
                     forms.CharField(widget=forms.Textarea(attrs={
                         u'placeholder':
                             _(u'inforequests:clarification_response:Main:content:placeholder'),
-                        u'class': u'autosize',
+                        u'class': u'pln-autosize',
                         u'cols': u'', u'rows': u'',
                         })),
                     ],
                 composite_attrs={
-                    u'class': u'input-block-level',
                     },
                 )
 

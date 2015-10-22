@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 
@@ -20,25 +20,27 @@
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
     <div class="row">
-      <div class="span6">
-        {% include "socialaccount/texts/signup_text.html" with account=account%}
+      <div class="col-sm-6">
+        {% include "socialaccount/texts/signup_text.html" %}
       </div>
     </div>
     <div class="row">
-      <div class="span6">
-        {% include "main/snippets/form_horizontal.html" with form=form %}
+      <div class="col-sm-6 col-sm-push-6">
+        {% include "account/texts/why_register.html" %}
+      </div>
+      <div class="col-sm-6 col-sm-pull-6">
+        {% include "main/forms/form_horizontal.html" %}
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
         {% endif %}
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-primary">
+              {% trans 'socialaccount:signup:submit' %}
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="span6">
-        {% include "account/texts/why_register.html" %}
-      </div>
-    </div>
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">
-        {% trans 'socialaccount:signup:submit' %} &raquo;
-      </button>
     </div>
   </form>
 {% endblock %}

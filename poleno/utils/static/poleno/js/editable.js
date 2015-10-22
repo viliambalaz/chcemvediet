@@ -28,21 +28,21 @@ $(function(){
 		element.html(content);
 	}
 	function updateAll() {
-		$('.editable-span').each(function(){
+		$('.pln-editable-span').each(function(){
 			update($(this));
 		});
 	}
 
-	$(document).on('blur', '.editable-span', function(){
+	$(document).on('blur', '.pln-editable-span', function(){
 		update($(this));
 	});
-	$(document).on('focusin', '.editable-container', function(){
+	$(document).on('focusin', '.pln-editable-container', function(){
 		$(this).addClass('focus');
 	});
-	$(document).on('focusout', '.editable-container', function(){
+	$(document).on('focusout', '.pln-editable-container', function(){
 		$(this).removeClass('focus');
 	});
-	$(document).on('dom-changed', function(){ // Triggered by: poleno/js/ajax.js
+	$(document).on('pln-dom-changed', function(){ // Triggered by: poleno/js/ajax.js
 		updateAll();
 	});
 	updateAll();

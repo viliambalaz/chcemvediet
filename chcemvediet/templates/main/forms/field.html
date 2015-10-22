@@ -1,0 +1,27 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load widget_type from widget_tweaks %}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- field: django.forms.Field
+ %
+{% endcomment %}
+
+
+{% with type=field|widget_type %}
+  {% if field.is_hidden %}
+    {% include "main/forms/fields/hidden.html" %}
+  {% elif type in "textinput passwordinput emailinput dateinput numberinput textarea select"|split %}
+    {% include "main/forms/fields/input.html" %}
+  {% elif type == "checkboxinput" %}
+    {% include "main/forms/fields/checkboxinput.html" %}
+  {% elif type == "radioselect" %}
+    {% include "main/forms/fields/radioselect.html" %}
+  {% elif type == "checkboxselectmultiple" %}
+    {% include "main/forms/fields/checkboxselectmultiple.html" %}
+  {% else %}
+    {% include "main/forms/fields/base.html" %}
+  {% endif %}
+{% endwith %}

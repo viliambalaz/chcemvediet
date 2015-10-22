@@ -96,20 +96,21 @@ def local_date(dt, tz=None):
     return local_date_func(dt, tz=tz)
 
 @register.filter
-def active(request, view_prefix):
+def active(request, view_prefixes):
     u"""
-    Tests if the active view name has prefix ``view_prefix``. View name is colon separated list of
-    view namespaces and the actual url name. Thus if the active view is 'namespace:name', then the
-    function returns ``True`` for 'namespace' and 'namespace:name', but not for 'name' or
-    'namespace:other'.
+    Tests if the active view name has any of comma separated prefix ``view_prefixes``. View name is
+    colon separated list of view namespaces and the actual url name. Thus if the active view is
+    'namespace:name', then the function returns ``True`` for 'namespace' and 'namespace:name', but
+    not for 'name' or 'namespace:other'.
     """
     try:
         resolved = resolve(request.path)
     except Exception: # pragma: no cover
         return False
-    if not (resolved.view_name + u':').startswith(view_prefix + u':'):
-        return False
-    return True
+    for view_prefix in view_prefixes.split(u','):
+        if (resolved.view_name + u':').startswith(view_prefix + u':'):
+            return True
+    return False
 
 @register.filter(is_safe=True)
 @stringfilter
@@ -129,6 +130,10 @@ def squeeze(text):
         {% endfilter %}
     """
     return squeeze_func(text)
+
+@register.filter
+def split(value, separator=None):
+    return value.split(separator)
 
 @register.filter
 def generic_type(value):

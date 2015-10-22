@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
@@ -17,9 +17,9 @@
 
 
 <h4>Utajovaná skutočnosť</h4>
-<div class="alert">
-  Ak inštitúcia uviedla relevantné dôvody, prečo vami požadovanú informáciu považuje za utajovanú
-  skutočnosť, tak odvolanie nemá zmysel podávať.
+<div class="alert alert-warning">
+  <strong>Pozor:</strong> Ak inštitúcia uviedla relevantné dôvody, prečo vami požadovanú informáciu
+  považuje za utajovanú skutočnosť, tak odvolanie nemá zmysel podávať.
 </div>
 <p>
   Zvolili ste možnosť, že vami žiadanú informáciu nie je možné priradiť k uvedeným kategóriám.
@@ -32,5 +32,5 @@
   uviesť vlastné odôvodnenie, prečo považujete postup inštitúcie za nesprávny.
 </p>
 <p>
-  <label>{% paper_field step.confidential_fallback %} Chcem doplniť vlastné zdôvodnenie</label>
+  {% include "main/forms/field.html" with field=step.confidential_fallback %}
 </p>

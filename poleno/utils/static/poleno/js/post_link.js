@@ -1,14 +1,14 @@
-/* Makes every link with class ``post`` send POST request to its href URL when clicked.
+/* Makes every link with class ``pln-post`` send POST request to its href URL when clicked.
  * Data for the request may be supplied by ``data-post-*`` element attributes.
  *
  * Requires:
  *  -- JQuery
  *
  * Example:
- *     <a href="/path/to/location" class="post" data-post-name="value">...</a>
+ *     <a href="/path/to/location" class="pln-post" data-post-name="value">...</a>
  */
 $(function(){
-	$(document).on('click', 'a.post', function(event){
+	$(document).on('click', 'a.pln-post', function(event){
 		event.preventDefault();
 		var form = $('<form action="" method="post" style="display: none;"></form>');
 		form.attr('action', $(this).attr('href'));

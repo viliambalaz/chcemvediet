@@ -1,64 +1,35 @@
 /** Various fixes and tweaks for Bootstrap **/
 
-/* Responsive tall modals */
-.modal-body { max-height: calc(100vh - 200px); overflow-y: auto;}
-@media (min-width: 768px) { .modal-body { max-height: calc(90vh - 230px); } }
+/* Fixed top bars and respective body padding */
+@media (min-width: 768px) { .chv-fixed-header { position: fixed; width: 100%; top: 0; z-index: 1; } }
+@media (min-width: 768px) { body.chv-fixed-header-push-1 { padding-top: 60px; } }
+@media (min-width: 768px) { body.chv-fixed-header-push-2 { padding-top: 100px; } }
 
-/* Bootstrap labels with links and close buttons */
-.label { vertical-align: middle; }
-.label a { color: inherit; vertical-align: middle; text-decoration: none; }
-.label a:hover { text-decoration: none; }
-.label-close { color: #000; opacity: 0.4; padding: 0px; margin-left: 5px; background: none;
-    border: 1px red; font-size: 20px; font-weight: bold; line-height: 20px;
-    text-shadow: 0px 1px 0px #FFF; }
-
-/* Form file upload button */
-.btn-file { position: relative; overflow: hidden; }
-.btn-file input[type=file] { position: absolute; top: 0; left: 0; min-width: 100%;
-    min-height: 100%; filter: alpha(opacity=0); opacity: 0; cursor: inherit; display: block; }
-
-/* Box for action content  */
-.action-content { margin: 5%; padding: 5%; border: solid 1px black; background: white; }
+/* Anchor position for fixded top bars */
+@media (min-width: 768px) { .chv-anchor:before { content: ''; display: block; position: relative; width: 0; } }
+@media (min-width: 768px) { body.chv-fixed-header-push-1 .chv-anchor:before { height: 60px; margin-top: -60px; } }
+@media (min-width: 768px) { body.chv-fixed-header-push-2 .chv-anchor:before { height: 100px; margin-top: -100px; } }
 
 /* Highlight active navbar brand */
-.brand.active { color: white; }
-
-/* Well with white background  */
-.well-inverse { background-color: white; }
-
-/* Fix text position if used instead a control in a form */
-.suppressed-control { padding: 5px; height: 20px; line-height: 20px; display: inline-block;
-    vertical-align: center; }
-
-/* Fix .text-right for table cells */
-.table th.text-right, .table td.text-right { text-align: right; }
+.navbar-brand.active { color: white; }
 
 /* Development bar above navbar */
-.devbar { padding-top: 10px; background-color: yellow; color: black; width 100%;
-    padding: 10px 20px 0 20px; }
-@media (max-width: 979px) { .devbar .container { width: auto; padding: 0 5px 0 5px; } }
-@media (max-width: 767px) { .devbar { margin: 0 -20px; } }
+.chv-devbar { padding-top: 10px; background-color: yellow; }
 
-/* Fixed top bars */
-.fixed { position: fixed; width: 100%; top: 0; z-index: 1; }
+/* Dropdown menu panel with arbitrary content */
+.chv-dropdown-panel { padding: 20px; min-width: 500px; max-height: 300px; overflow-y: scroll; }
 
-/* Fix body padding for fixded top bars */
-body.push1 { padding-top: 60px; }
-body.push2 { padding-top: 100px; }
-@media (max-width: 979px) { .fixed { position: static;} body { padding-top: 0 !important; } }
-
-/* Fix anchor position for fixded top bars */
-.anchor:before { content: ''; display: block; position: relative; width: 0; }
-body.push1 .anchor:before { height: 60px; margin-top: -60px; }
-body.push2 .anchor:before { height: 100px; margin-top: -100px; }
-@media (max-width: 979px) { .anchor:before { height: 0 !important; margin-top: 0 !important; } }
-
-/* Fix dropdown panel */
-.dropdown-panel { padding: 20px 30px 0 0; }
+/* Box for action content  */
+.chv-action-content { margin: 20px; padding: 5%; border: solid 1px black; background: white; }
 
 /* Colors for tooltips */
-.tooltip-error + .tooltip > .tooltip-inner { background-color: #BD362F; }
-.tooltip-error + .tooltip.top > .tooltip-arrow { border-top-color: #BD362F; }
-.tooltip-error + .tooltip.bottom > .tooltip-arrow { border-bottom-color: #BD362F; }
-.tooltip-error + .tooltip.left > .tooltip-arrow { border-left-color: #BD362F; }
-.tooltip-error + .tooltip.right > .tooltip-arrow { border-right-color: #BD362F; }
+.chv-tooltip-error + .tooltip > .tooltip-inner { background-color: #BD362F; }
+.chv-tooltip-error + .tooltip.top > .tooltip-arrow { border-top-color: #BD362F; }
+.chv-tooltip-error + .tooltip.bottom > .tooltip-arrow { border-bottom-color: #BD362F; }
+.chv-tooltip-error + .tooltip.left > .tooltip-arrow { border-left-color: #BD362F; }
+.chv-tooltip-error + .tooltip.right > .tooltip-arrow { border-right-color: #BD362F; }
+
+/* Common shortcuts */
+.chv-prewrap { white-space: pre-wrap; }
+.chv-preline { white-space: pre-line; }
+.chv-pointer { cursor: pointer; }

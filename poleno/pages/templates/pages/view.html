@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 
 {% comment %}
@@ -13,26 +13,25 @@
 
 {% block content %}
   {% if page.ancestors %}
-    <ul class="breadcrumb">
+    <ol class="breadcrumb">
       {% for ancestor in page.ancestors %}
-        <li>
-          <a href="{{ ancestor.url }}">{{ ancestor.label }}</a> <span class="divider">/</span>
-        </li>
+        <li><a href="{{ ancestor.url }}">{{ ancestor.label }}</a></li>
       {% endfor %}
       <li class="active">{{ page.label }}</li>
-    </ul>
+    </ol>
   {% endif %}
   <div class="row">
-    <div class="span9">
+    <div class="col-sm-9">
       {{ page.render }}
     </div>
-    <div class="span3">
-      <ul class="nav nav-tabs nav-stacked" style="margin-top: 4em;">
+    <div class="col-sm-3">
+      <br>
+      <ul class="nav nav-tabs nav-stacked">
         {% for subpage in page.subpages %}
           {% if not subpage.is_redirect and not subpage.is_disabled %}
             <li>
               <a href="{{ subpage.url }}">
-                <i class="icon-chevron-right pull-right"></i>{{ subpage.label }}
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>{{ subpage.label }}
               </a>
             </li>
           {% endif %}

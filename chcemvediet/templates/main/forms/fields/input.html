@@ -1,0 +1,15 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/forms/fields/base.html" %}
+{% load add_class from widget_tweaks %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- field: django.forms.Field
+ %
+{% endcomment %}
+
+
+{% block field %}
+  {{ field|add_class:"form-control" }}
+{% endblock %}

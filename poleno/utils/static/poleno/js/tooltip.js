@@ -1,15 +1,15 @@
-/* Enabled Bootstrap tooltips for elements with ``with-tooltip`` class.
+/* Enabled Bootstrap tooltips for elements with ``pln-with-tooltip`` class.
  *
  * Requires:
  *  -- JQuery
  *  -- Bootstrap 2
  *
  * Example:
- *     <a class="with-tooltip" href="..." data-toggle="tooltip" title="Tooltip content.">Go</a>
+ *     <a class="pln-with-tooltip" href="..." data-toggle="tooltip" title="Tooltip content.">Go</a>
  */
 $(function(){
 	function tooltip(base){
-		$(base).find('.with-tooltip').not('.hasTooltip').addClass('hasTooltip').each(function(){
+		$(base).find('.pln-with-tooltip').not('.hasTooltip').addClass('hasTooltip').each(function(){
 			if ($(this).hasClass('tooltip-permanent')) {
 				$(this).tooltip({trigger: 'manual'}).tooltip('show');
 			} else {
@@ -17,7 +17,7 @@ $(function(){
 			}
 		});
 	};
-	$(document).on('dom-changed', function(event){ // Triggered by: poleno/js/ajax.js
+	$(document).on('pln-dom-changed', function(event){ // Triggered by: poleno/js/ajax.js
 		tooltip(event.target);
 	});
 	tooltip(document);

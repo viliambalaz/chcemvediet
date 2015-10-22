@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     u'django_cron',
     u'simple_history',
     u'pipeline',
+    u'widget_tweaks',
     # Reused apps
     u'poleno.utils',
     u'poleno.dummymail',
@@ -164,9 +165,9 @@ ASSETS = (
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css',
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
     u'main/3part/jqueryui/1.10.3/datepicker-sk.js',
-    # Bootstrap; Version 2.3.2 has broken navbar on mobiles
-    u'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css',
-    u'//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js',
+    # Bootstrap
+    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css',
+    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js',
     # JQuery File Upload (Requires: jquery.ui.widget.js)
     u'main/3part/jqueryplugins/jquery.iframe-transport.js',
     u'main/3part/jqueryplugins/jquery.fileupload.js',

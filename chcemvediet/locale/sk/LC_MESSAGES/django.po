@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-19 22:58+0200\n"
+"POT-Creation-Date: 2015-10-22 23:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,6 +149,9 @@ msgstr "Nie, jedná sa o nesúvisiace vyjadrenie."
 msgid "inforequests:appeal:refusal:ConfidentialFallbackReason:label"
 msgstr "Utajovaná skutočnosť"
 
+msgid "inforequests:appeal:refusal:ConfidentialFallbackReason:confidential_fallback:label"
+msgstr "Chcem doplniť vlastné zdôvodnenie"
+
 msgid "inforequests:appeal:refusal:ConfidentialNotConfidentialReason:label"
 msgstr "Utajovaná skutočnosť"
 
@@ -164,6 +167,9 @@ msgstr "Nie, nedá sa zaradiť "
 msgid "inforequests:appeal:refusal:PersonalFallbackReason:label"
 msgstr "Osobné údaje"
 
+msgid "inforequests:appeal:refusal:PersonalFallbackReason:personal_fallback:label"
+msgstr "Chcem doplniť vlastné zdôvodnenie"
+
 msgid "inforequests:appeal:refusal:PersonalOfficerReason:label"
 msgstr "Osobné údaje"
 
@@ -178,6 +184,9 @@ msgstr "Nie, týkajú sa iných osôb"
 
 msgid "inforequests:appeal:refusal:BusinessSecretFallbackReason:label"
 msgstr "Obchodné tajomstvo"
+
+msgid "inforequests:appeal:refusal:BusinessSecretFallbackReason:business_secret_fallback:label"
+msgstr "Chcem doplniť vlastné zdôvodnenie"
 
 msgid "inforequests:appeal:refusal:BusinessSecretDefinitionReason:label"
 msgstr "Obchodné tajomstvo"
@@ -217,6 +226,9 @@ msgstr "Informáciu nevytvára"
 
 msgid "inforequests:appeal:refusal:DoesNotProvideFallbackReason:label"
 msgstr "Informáciu neposkytuje"
+
+msgid "inforequests:appeal:refusal:DoesNotProvideFallbackReason:does_not_provide_fallback:label"
+msgstr "Chcem doplniť vlastné zdôvodnenie"
 
 msgid "inforequests:appeal:refusal:DoesNotProvidePublicFundsReason:label"
 msgstr "Informáciu neposkytuje"
@@ -674,6 +686,18 @@ msgstr "Uložiť ako rozpracované"
 msgid "inforequests:create:cancel"
 msgstr "Zrušiť"
 
+msgid "inforequests:detail:action:snooze"
+msgstr "Počkať ešte 3 dni"
+
+msgid "inforequests:detail:action:clarification_response"
+msgstr "Odpoveď na výzvu na doplnenie žiadosti"
+
+msgid "inforequests:detail:action:appeal"
+msgstr "Odvolanie"
+
+msgid "inforequests:detail:action:print"
+msgstr "Vytlačiť"
+
 msgid "inforequests:detail:action:legal_date"
 msgstr "Dátum úkonu"
 
@@ -709,18 +733,6 @@ msgstr "Dôvod odmietnutia"
 
 msgid "inforequests:detail:action:attachments"
 msgstr "Prílohy"
-
-msgid "inforequests:detail:action:print"
-msgstr "Vytlačiť"
-
-msgid "inforequests:detail:action:snooze"
-msgstr "Počkať ešte 3 dni"
-
-msgid "inforequests:detail:action:clarification_response"
-msgstr "Odpoveď na výzvu na doplnenie žiadosti"
-
-msgid "inforequests:detail:action:appeal"
-msgstr "Odvolanie"
 
 msgid "inforequests:detail:action:advanced_to"
 msgstr "Nová povinná osoba"
@@ -1004,14 +1016,14 @@ msgstr "Prihlásiť sa"
 msgid "account:login:heading"
 msgstr "Prihlásiť sa"
 
-msgid "account:login:social_buttons"
-msgstr "Prihlásiť sa s"
-
 msgid "account:login:submit"
 msgstr "Prihlásiť sa"
 
 msgid "account:login:reset_password"
 msgstr "Zabudnuté heslo?"
+
+msgid "account:login:social_buttons"
+msgstr "Prihlásiť sa s"
 
 msgid "account:logout:title"
 msgstr "Odhlásiť sa"
@@ -1079,11 +1091,11 @@ msgstr "Zaregistrovať"
 msgid "account:signup:heading"
 msgstr "Registrácia"
 
-msgid "account:signup:social_buttons"
-msgstr "Zaregistrovať sa s"
-
 msgid "account:signup:submit"
 msgstr "Zaregistrovať"
+
+msgid "account:signup:social_buttons"
+msgstr "Použiť"
 
 msgid "account:signup_closed:title"
 msgstr "Registrácia pozastavená"
@@ -1165,6 +1177,21 @@ msgstr "Žiadosti"
 
 msgid "main:menu:obligees"
 msgstr "Inštitúcie"
+
+msgid "main:messages:debug"
+msgstr "Debug:"
+
+msgid "main:messages:info"
+msgstr "Poznámka:"
+
+msgid "main:messages:success"
+msgstr "Hotovo:"
+
+msgid "main:messages:warning"
+msgstr "Pozor:"
+
+msgid "main:messages:error"
+msgstr "Chyba:"
 
 msgid "socialaccount:authentication_error:title"
 msgstr "Zlyhalo prihlásenie cez sociálnu sieť"

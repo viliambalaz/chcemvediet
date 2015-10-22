@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 
@@ -19,36 +19,42 @@
       {% include "account/texts/email_list.html" %}
       <form class="form-horizontal" method="post" action="{% url 'account_email' %}">
         {% csrf_token %}
-        <div class="control-group">
-          <div class="controls">
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
             {% for emailaddress in emailaddresses %}
-              <label class="{% if not emailaddress.verified %}muted{%endif%} radio">
-                <input type="radio" name="email" value="{{ emailaddress.email }}"
-                       {% if emailaddress.primary %}checked="checked"{% endif %}>
-                {{ emailaddress.email }}
-                {% if emailaddress.verified %}
-                  <span class="text-success">{% trans 'account:email:verified' %}</span>
-                {% else %}
-                  <span class="text-error">{% trans 'account:email:unverified' %}</span>
-                {% endif %}
-                {% if emailaddress.primary %}
-                  <span class="text-info">{% trans 'account:email:primary' %}</span>
-                {% endif %}
-              </label>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="email" value="{{ emailaddress.email }}"
+                         {% if emailaddress.primary %}checked="checked"{% endif %}>
+                  <span class="{{ emailaddress.verified|yesno:",text-muted" }}">
+                    {{ emailaddress.email }}
+                  </span>
+                  {% if emailaddress.verified %}
+                    <span class="text-success">{% trans 'account:email:verified' %}</span>
+                  {% else %}
+                    <span class="text-danger">{% trans 'account:email:unverified' %}</span>
+                  {% endif %}
+                  {% if emailaddress.primary %}
+                    <span class="text-info">{% trans 'account:email:primary' %}</span>
+                  {% endif %}
+                </label>
+              </div>
             {% endfor %}
           </div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary" name="action_primary">
-            {% trans 'account:email:action_primary' %}
-          </button>
-          <button type="submit" class="btn" name="action_send">
-            {% trans 'account:email:action_send' %}
-          </button>
-          <button type="submit" class="btn confirm" name="action_remove"
-                  data-confirm="{% trans 'account:email:action_remove:confirm' %}">
-            {% trans 'account:email:action_remove' %}
-          </button>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-primary" name="action_primary">
+              {% trans 'account:email:action_primary' %}
+            </button>
+            <button type="submit" class="btn btn-default" name="action_send">
+              {% trans 'account:email:action_send' %}
+            </button>
+            <button type="submit" class="btn btn-default pln-confirm" name="action_remove"
+                    data-confirm="{% trans 'account:email:action_remove:confirm' %}">
+              {% trans 'account:email:action_remove' %}
+            </button>
+          </div>
         </div>
       </form>
     {% else %}
@@ -60,11 +66,13 @@
   {% include "account/texts/email_add.html" %}
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
-    {% include "main/snippets/form_horizontal.html" with form=form %}
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary" name="action_add">
-        {% trans 'account:email:add:action_add' %}
-      </button>
+    {% include "main/forms/form_horizontal.html" %}
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary" name="action_add">
+          {% trans 'account:email:add:action_add' %}
+        </button>
+      </div>
     </div>
   </form>
 {% endblock %}

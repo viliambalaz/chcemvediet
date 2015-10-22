@@ -24,6 +24,6 @@ $(function(){
 			form.submit();
 		});
 	}
-	$(document).on('dom-changed', function(event){ template_widget(event.target); });
+	$(document).on('pln-dom-changed', function(event){ template_widget(event.target); });
 	template_widget(document);
 });

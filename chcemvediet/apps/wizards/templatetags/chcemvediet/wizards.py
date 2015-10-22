@@ -18,7 +18,7 @@ register = Library()
 def paper_field(context, field):
     attrs = {}
     if field.errors:
-        attrs[u'class'] = u'with-tooltip tooltip-permanent tooltip-error'
+        attrs[u'class'] = u'pln-with-tooltip tooltip-permanent chv-tooltip-error'
         attrs[u'title'] = u' '.join(field.errors)
 
     if context.get(u'finalize'):
@@ -54,7 +54,7 @@ def paragraph(content, context, before=1, after=1, editable=False, style=None):
         spacing = max(before, status.after)
         attrs = defaultdict(list)
         if editable:
-            attrs[u'class'].append(u'editable-container')
+            attrs[u'class'].append(u'pln-editable-container')
         if spacing > 1:
             attrs[u'style'].append(u'margin-top: {0}ex;'.format(spacing))
         if style:

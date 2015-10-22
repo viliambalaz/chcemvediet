@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "pages/admin/base.html" %}
 
 {% comment %}
@@ -16,7 +16,7 @@
 
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
-  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}
+  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with inclusive=True %}
   &rsaquo; {% if create %}Add Attachment{% else %}{{ file.name }}{% endif %}
 {% endblock %}
 
@@ -28,7 +28,7 @@
   {% endif %}
   <form id="site_form" method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
-    {% include "pages/admin/snippets/form.html" with form=form %}
+    {% include "pages/admin/snippets/form.html" %}
     <div class="submit-row">
       <button type="submit" class="button default" name="button" value="save"
               style="margin-left: 5px;">

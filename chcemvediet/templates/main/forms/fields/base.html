@@ -1,0 +1,41 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- field: django.forms.Field
+ %
+{% endcomment %}
+
+
+<div class="form-group {{ field.errors|yesno:"has-error," }}">
+  {% block label %}
+    {% if field.label.strip %}
+      <label class="control-label col-sm-3" for="{{ field.auto_id }}">
+        {% if field.field.required %}*{% endif %}
+        {{ field.label.strip }}
+      </label>
+    {% else %}
+      <div class="col-sm-3"></div>
+    {% endif %}
+  {% endblock %}
+  <div class="col-sm-9">
+    {% block field %}
+      {{ field }}
+    {% endblock %}
+    {% block help %}
+      {% if field.field.help_text.strip %}
+        <span class="help-block">
+          {{ field.field.help_text.strip }}
+        </span>
+      {% endif %}
+    {% endblock %}
+    {% block errors %}
+      {% if field.errors %}
+        <span class="help-block">
+          {{ field.errors|join:" " }}
+        </span>
+      {% endif %}
+    {% endblock %}
+  </div>
+</div>

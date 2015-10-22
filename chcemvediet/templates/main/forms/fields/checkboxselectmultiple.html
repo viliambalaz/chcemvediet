@@ -1,0 +1,18 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/forms/fields/base.html" %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- field: django.forms.Field
+ %
+{% endcomment %}
+
+
+{% block field %}
+  {% for choice in field %}
+    <div class="checkbox">
+      {{ choice }}
+    </div>
+  {% endfor %}
+{% endblock %}

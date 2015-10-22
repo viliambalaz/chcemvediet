@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
 
 {% comment %}
@@ -11,23 +11,21 @@
 {% endcomment %}
 
 
-<div class="obligee_widget_input">
-  {% if allow_delete %}
-    <button class="obligee_widget_del">&times;</button>
-  {% endif %}
-  <label>
-    <div class="input-append">
-      <input {% for k, v in input_attrs.items %}{{ k }}="{{ v }}" {% endfor %}/>
-      <span class="add-on"><i class="icon-search"></i></span>
-    </div>
-  </label>
-  <div class="obligee_widget_details {% if not obligee %}obligee_widget_hide{% endif %}">
-    <span class="obligee_widget_street">{{ obligee.street }}</span>
-    <br>
-    <span class="obligee_widget_zip">{{ obligee.zip }}</span>
-    <span class="obligee_widget_city">{{ obligee.city }}</span>
-    <br>
+<div class="chv-obligee-widget-input">
+  <div class="input-group">
+    <input {% for k, v in input_attrs.items %}{{ k }}="{{ v }}" {% endfor %}/>
+    <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+    {% if allow_delete %}
+      <span class="input-group-addon">
+        <button class="close chv-obligee-widget-del">&times;</button>
+      </span>
+    {% endif %}
+  </div>
+  <div class="chv-obligee-widget-details {{ obligee|yesno:",chv-obligee-widget-hide"}}">
+    <span class="chv-obligee-widget-street">{{ obligee.street }}</span><br>
+    <span class="chv-obligee-widget-zip">{{ obligee.zip }}</span>
+    <span class="chv-obligee-widget-city">{{ obligee.city }}</span><br>
     {% trans 'obligees:obligee_widget:email' %}:
-    <span class="obligee_widget_email">{{ obligee.emails }}</span>
+    <span class="chv-obligee-widget-email">{{ obligee.emails }}</span>
   </div>
 </div>

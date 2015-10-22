@@ -3,7 +3,7 @@
  *
  * Requires:
  *  -- JQuery
- *  -- Bootstrap 2
+ *  -- Bootstrap 2 or 3
  *
  * Example:
  *     $('#some-modal').modal('show');

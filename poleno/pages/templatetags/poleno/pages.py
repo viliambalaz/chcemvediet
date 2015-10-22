@@ -70,16 +70,26 @@ def page(context, *args):
         return reverse(u'pages:view', args=[path.lstrip(u'/')])
 
 @register.filter
-def page_active(request, path):
+def page_active(request, paths):
     try:
         resolved = resolve(request.path)
     except Exception as e:
         return False
     if resolved.view_name != u'pages:view':
         return False
-    if not resolved.kwargs.get(u'path', u'').startswith(path.lstrip(u'/')):
-        return False
-    return True
+    lang = get_language()
+    for path in paths.split(u','):
+        if u':' in path:
+            prefix, path = path.split(u':', 1)
+            if prefix != lang:
+                continue
+        if path.startswith(u'='):
+            if resolved.kwargs.get(u'path', u'') == path[1:].lstrip(u'/'):
+                return True
+        else:
+            if resolved.kwargs.get(u'path', u'').startswith(path.lstrip(u'/')):
+                return True
+    return False
 
 @register.assignment_tag(takes_context=True)
 def get_page(context, *args):

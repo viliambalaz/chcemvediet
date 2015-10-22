@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 
@@ -15,14 +15,14 @@
 {% block content %}
   <h1>{% trans 'account:email_confirm:heading' %}</h1>
   {% if confirmation %}
-    {% include "account/texts/email_confirm_text.html" with confirmation=confirmation %}
-    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+    {% include "account/texts/email_confirm_text.html" %}
+    <form class="form-horizontal" method="post" action="{% url 'account_confirm_email' confirmation.key %}">
       {% csrf_token %}
-      <div class="form-actions">
+      <p>
         <button type="submit" class="btn btn-primary">
           {% trans 'account:email_confirm:submit' %}
         </button>
-      </div>
+      </p>
     </form>
   {% else %}
     {% include "account/texts/email_confirm_invalid.html" %}

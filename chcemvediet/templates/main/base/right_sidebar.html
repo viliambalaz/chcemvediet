@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/base.html" %}
 
 {% comment %}
@@ -11,10 +11,10 @@
 
 {% block container %}
   <div class="row">
-    <div id="content" class="span9">
+    <div id="content" class="col-sm-9">
       {% block content %}{% endblock %}
     </div>
-    <div id="sidebar" class="span3">
+    <div id="sidebar" class="col-sm-3">
       {% block sidebar %}{% endblock %}
     </div>
   </div>

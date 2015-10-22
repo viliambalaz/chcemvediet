@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "pages/admin/base.html" %}
 
 {% comment %}
@@ -13,7 +13,7 @@
 
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
-  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}
+  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with inclusive=True %}
   &rsaquo; Delete Page
 {% endblock %}
 
@@ -28,7 +28,7 @@
         {% spaceless %}
           <a href="{% url "admin:pages_edit" lang subpage.lpath %}">{{ subpage.path }}</a>
           {% if subpage.is_redirect %}
-            <span> → {{ subpage.redirect_path }}</span>
+            <span> &#8594; {{ subpage.redirect_path }}</span>
           {% else %}
             <span>: {{ subpage.title }}</span>
           {% endif %}

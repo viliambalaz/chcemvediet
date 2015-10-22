@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "pages/admin/base.html" %}
 
 {% comment %}
@@ -15,7 +15,7 @@
 
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
-  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=create %}
+  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with inclusive=create %}
   {% if create %}&rsaquo; Add Subpage{% endif %}
 {% endblock %}
 
@@ -32,7 +32,7 @@
   {% endif %}
   <form id="site_form" method="post" action="">
     {% csrf_token %}
-    {% include "pages/admin/snippets/form.html" with form=form %}
+    {% include "pages/admin/snippets/form.html" %}
     {% if not create and not page.is_redirect %}
       <fieldset class="module">
         <h2>Subpages</h2>
@@ -55,7 +55,7 @@
                       </a>
                     </strong>
                   {% if subpage.is_disabled %}</del>{% endif %}
-                  {% if subpage.is_redirect %} → {{ subpage.redirect_path }}{% endif %}
+                  {% if subpage.is_redirect %} &#8594; {{ subpage.redirect_path }}{% endif %}
                 </td>
                 <td>
                   {% if not subpage.is_redirect %}

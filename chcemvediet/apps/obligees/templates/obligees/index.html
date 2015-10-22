@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
 {% load range from poleno.utils %}
@@ -15,8 +15,8 @@
 
 {% block content %}
   <h1>{% trans 'obligees:index:heading' %}</h1>
-  {% include "obligees/texts/index.html" with obligee_page=obligee_page %}
-  <table class="table table-striped">
+  {% include "obligees/texts/index.html" %}
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th>{% trans 'obligees:index:table:name' %}</th>
@@ -34,16 +34,16 @@
       {% endfor %}
     </tbody>
   </table>
-  <div class="pagination pagination-centered">
-    <ul>
+  <nav class="text-center">
+    <ul class="pagination">
       {% if obligee_page.number > 1 %}
-        <li><a href="?page=1">«</a></li>
+        <li><a href="?page=1">&laquo;</a></li>
       {% else %}
-        <li class="disabled"><span>«</span></li>
+        <li class="disabled"><span>&laquo;</span></li>
       {% endif %}
       {% for i in "-3"|range:"4" %}
         {% if i == 0 %}
-          <li class="disabled"><span>{{ obligee_page.number }}</span></li>
+          <li class="active"><span>{{ obligee_page.number }}</span></li>
         {% else %}
           {% if obligee_page.number|add:i > 0 %}
             {% if obligee_page.number|add:i <= obligee_page.paginator.num_pages %}
@@ -55,10 +55,10 @@
         {% endif %}
       {% endfor %}
       {% if obligee_page.number < obligee_page.paginator.num_pages %}
-        <li><a href="?page={{ obligee_page.paginator.num_pages }}">»</a></li>
+        <li><a href="?page={{ obligee_page.paginator.num_pages }}">&raquo;</a></li>
       {% else %}
-        <li class="disabled"><span>»</span></li>
+        <li class="disabled"><span>&raquo;</span></li>
       {% endif %}
     </ul>
-  </div>
+  </nav>
 {% endblock %}

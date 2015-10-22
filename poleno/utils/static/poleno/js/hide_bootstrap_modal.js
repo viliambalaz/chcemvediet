@@ -3,7 +3,7 @@
  *
  * Requires:
  *  -- JQuery
- *  -- Bootstrap 2
+ *  -- Bootstrap 3
  *
  * Example:
  *     $.hideBootstrapModal(function(){ console.log('Modals closed.'); });
@@ -11,8 +11,8 @@
 $(function(){
 	$.hideBootstrapModal = function(then){
 		if ($('.modal.in').length) {
-			$('body').on('hidden.hideBootstrapModal', '.modal', function(){
-				$('body').off('.hideBootstrapModal');
+			$('body').on('hidden.bs.modal', '.modal', function(){
+				$('body').off('.bs.modal');
 				then();
 			});
 			$('.modal.in').modal('hide');

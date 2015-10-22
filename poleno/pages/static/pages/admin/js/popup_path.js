@@ -11,7 +11,7 @@ $(function(){
 			}).insertAfter($(field)).before(' ');
 		});
 	}
-	$(document).on('dom-changed', function(event){ popup_path(event.target); });
+	$(document).on('pln-dom-changed', function(event){ popup_path(event.target); });
 	popup_path(document);
 
 	// Popup

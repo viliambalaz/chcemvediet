@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
 {% load url from poleno.utils %}
 
@@ -11,17 +11,20 @@
 
 
 <h4>{% trans 'inforequests:accordion:heading' %}</h4>
-<div id="accordion-actions" class="accordion">
+<div id="accordion-actions" class="panel-group">
   {% for action in last_action.action_path %}
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-actions"
-           href="#accordion-action-{{ action.pk }}">
-          {{ action.get_type_display }}
-        </a>
+    <div class="panel panel-default">
+      <div class="panel-heading chv-pointer" data-toggle="collapse"
+           data-parent="#accordion-actions" data-target="#accordion-action-{{ action.pk }}">
+        <h4 class="panel-title">
+          <a href="#accordion-action-{{ action.pk }}" data-toggle="collapse"
+             data-parent="#accordion-actions">
+            {{ action.get_type_display }}
+          </a>
+        </h4>
       </div>
-      <div id="accordion-action-{{ action.pk }}" class="accordion-body collapse">
-        <div class="accordion-inner">
+      <div id="accordion-action-{{ action.pk }}" class="panel-collapse collapse">
+        <div class="panel-body">
           {% if action.legal_date %}
             <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
             {{ action.legal_date }}<br>
@@ -47,17 +50,23 @@
             {{ action.get_refusal_reason_display }}<br>
           {% endif %}
           {% if action.attachments %}
-            <strong>{% trans 'inforequests:accordion:action:attachments' %}:</strong>
-            {% for attachment in action.attachments %}
-              <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
-                <span class="label label-info">{{ attachment.name }}</span>
-              </a>
-            {% endfor %}<br>
+            <div class="pull-left form-control-static">
+              <strong>{% trans 'inforequests:accordion:action:attachments' %}:</strong>&nbsp;
+            </div>
+            <div class="pln-attachments clearfix">
+              {% for attachment in action.attachments %}
+                <div class="pln-attachment">
+                  <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+                    {{ attachment.name }}
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
           {% endif %}
           {% if action.content %}
             <br>
             {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
-              <p style="white-space: pre-line;">{{ action.content }}</p>
+              <p class="chv-preline">{{ action.content }}</p>
             {% elif action.content_type == action.CONTENT_TYPES.HTML %}
               {{ action.content|safe }}
             {% endif %}

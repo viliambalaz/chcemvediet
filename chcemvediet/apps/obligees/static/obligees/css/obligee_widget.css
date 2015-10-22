@@ -1,14 +1,8 @@
 /* For chcemvediet.apps.obligees.forms.ObligeeWidget and MultipleObligeeWidget */
 
-.obligee_widget { display: inline-block; vertical-align: top; }
-.obligee_widget ~ .help-inline { padding-top: 5px; }
-.obligee_widget_details { padding: 5px 6px; border: 1px solid #CCC; border-radius: 4px; }
-.obligee_widget_hide { display: none; }
-.obligee_widget_input { position: relative; margin-top: 20px; }
-.obligee_widget_input:first-child { margin-top: 0; }
-.obligee_widget_skel { display: none; }
-.obligee_widget_add { float: right; margin-top: 10px; }
-.obligee_widget_del { position: absolute; top: 2px; right: -25px; }
-.obligee_widget_del { font-size: 20px; line-height: 20px; font-weight: bold; opacity: 0.4;
-    text-shadow: 0 1px 0 #fff; background: none; border: none; }
-.obligee_widget_del:hover { opacity: 0.6; }
+.chv-obligee-widget-input { margin-top: 20px; }
+.chv-obligee-widget-input:first-child { margin-top: 0; }
+.chv-obligee-widget-details { padding: 5px 12px; border: solid #CCC; border-width: 0 1px 1px 1px; border-radius: 0 0 4px 4px; }
+.chv-obligee-widget-buttons { margin-top: 10px; text-align: right; }
+.chv-obligee-widget-hide { display: none; }
+.chv-obligee-widget-skel { display: none; }

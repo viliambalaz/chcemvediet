@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "pages/admin/base.html" %}
 
 {% comment %}
@@ -14,7 +14,7 @@
 
 {% block addbreadcrumbs %}
   &rsaquo; <a href="{% url "admin:pages_index" lang %}">{{ lang }}</a>
-  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with page=page inclusive=True %}
+  &rsaquo; {% include "pages/admin/snippets/ancestors.html" with inclusive=True %}
   &rsaquo; <a href="{% url "admin:pages_file_edit" lang page.lpath file.name %}">{{ file.name }}</a>
   &rsaquo; Delete Attachment
 {% endblock %}

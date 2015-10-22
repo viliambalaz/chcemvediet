@@ -36,9 +36,9 @@ class OptionalSectionCheckboxField(forms.BooleanField):
 
     def __init__(self, *args, **kwargs):
         kwargs[u'widget'] = forms.CheckboxInput(attrs={
-                u'class': u'toggle-changed',
+                u'class': u'pln-toggle-changed',
                 u'data-container': u'form',
-                u'data-hide-target-true': u'button[value="next"], .paper-section'
-                    if kwargs.get(u'required', True) else u'.paper-section',
+                u'data-hide-target-true': u'button[value="next"], .chv-paper-section'
+                    if kwargs.get(u'required', True) else u'.chv-paper-section',
                 })
         super(OptionalSectionCheckboxField, self).__init__(*args, **kwargs)

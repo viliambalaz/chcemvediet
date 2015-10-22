@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
@@ -17,9 +17,9 @@
 
 
 <h4>Osobné údaje</h4>
-<div class="alert">
-  Ak inštitúcia dôveryhodne odôvodnila, že informácia naozaj podlieha ochrane osobných údajov,
-  odvolanie nemá zmysel podávať.
+<div class="alert alert-warning">
+  <strong>Pozor:</strong> Ak inštitúcia dôveryhodne odôvodnila, že informácia naozaj podlieha
+  ochrane osobných údajov, odvolanie nemá zmysel podávať.
 </div>
 <p>
   Označili ste, že žiadané osobné údaje sa týkaju iných osôb než verejných zamestnancov. Inštitúcia
@@ -33,5 +33,5 @@
   s právnikom alebo nahliadnutie do príručky a zákona môže pomôcť.
 </p>
 <p>
-  <label>{% paper_field step.personal_fallback %} Chcem doplniť vlastné zdôvodnenie</label>
+  {% include "main/forms/field.html" with field=step.personal_fallback %}
 </p>

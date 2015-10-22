@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- form: django.forms.Form
+ %
+{% endcomment %}
+
+
+{% block non-field-errors %}
+  {% if form.non_field_errors %}
+    <p class="text-danger">{{ form.non_field_errors|join:" " }}</p>
+  {% endif %}
+{% endblock %}
+{% block fields %}
+  {% for field in form %}
+    {% block field %}
+      {% include "main/forms/field.html" %}
+    {% endblock %}
+  {% endfor %}
+{% endblock %}

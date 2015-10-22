@@ -1,4 +1,4 @@
-{# vim: set filetype=htmldjango :#}
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends request.is_ajax|yesno:"main/base/ajax.html,main/base/single_column.html" %}
 {% load trans from i18n %}
 {% load url from poleno.utils %}
@@ -14,30 +14,34 @@
 {% block title %}{% trans 'inforequests:detail:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1 id="request" class="anchor">{% trans 'inforequests:detail:heading' %}</h1>
+  <h1 id="request" class="chv-anchor">{% trans 'inforequests:detail:heading' %}</h1>
   {% if not inforequest.closed %}
     {% if inforequest.has_undecided_emails %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_email.html" %}
-        <a class="btn btn-primary"
-            href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
-          {% trans 'inforequests:detail:add_email_button' %}
-        </a>
+        <p>
+          <a class="btn btn-primary"
+              href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
+            {% trans 'inforequests:detail:add_email_button' %}
+          </a>
+        </p>
       </div>
     {% else %}
       <div class="alert alert-info">
         {% include "inforequests/detail/texts/add_smail.html" %}
-        <a class="btn btn-primary"
-            href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
-          {% trans 'inforequests:detail:add_smail_button' %}
-        </a>
+        <p>
+          <a class="btn btn-primary"
+              href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
+            {% trans 'inforequests:detail:add_smail_button' %}
+          </a>
+        </p>
       </div>
     {% endif %}
   {% endif %}
   <div>
     {% include "inforequests/detail/request.html" %}
   </div>
-  <div id="actions" class="anchor">
+  <div id="actions" class="chv-anchor">
     {% include "inforequests/detail/branch.html" with branch=inforequest.main_branch %}
   </div>
 {% endblock %}
