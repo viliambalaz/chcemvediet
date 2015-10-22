@@ -54,6 +54,20 @@ def negate(value):
     """
     return -value
 
+@register.filter
+def yes(value, arg):
+    if value:
+        return arg
+    else:
+        return u''
+
+@register.filter
+def no(value, arg):
+    if value:
+        return u''
+    else:
+        return arg
+
 @register.filter(name=u'range')
 def range_(a, b):
     u"""

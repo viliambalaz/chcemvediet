@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
+{% load no from poleno.utils %}
 
 {% comment %}
  %
@@ -21,7 +22,7 @@
       </span>
     {% endif %}
   </div>
-  <div class="chv-obligee-widget-details {{ obligee|yesno:",chv-obligee-widget-hide"}}">
+  <div class="chv-obligee-widget-details {{ obligee|no:"chv-obligee-widget-hide"}}">
     <span class="chv-obligee-widget-street">{{ obligee.street }}</span><br>
     <span class="chv-obligee-widget-zip">{{ obligee.zip }}</span>
     <span class="chv-obligee-widget-city">{{ obligee.city }}</span><br>

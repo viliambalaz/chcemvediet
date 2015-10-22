@@ -1,6 +1,7 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
 {% load page page_active from poleno.pages %}
+{% load yes from poleno.utils %}
 
 {% comment %}
  %
@@ -27,7 +28,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand {{ request|page_active:'=/'|yesno:"active," }}" href="{% page '/' %}">
+        <a class="navbar-brand {{ request|page_active:'=/'|yes:"active" }}" href="{% page '/' %}">
           {% trans 'main:menu:brand' %}
         </a>
       </div>

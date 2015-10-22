@@ -1,6 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
-{% load url squeeze from poleno.utils %}
+{% load url squeeze yes from poleno.utils %}
 
 {% comment %}
  %
@@ -25,7 +25,7 @@
       </h4>
     </div>
     <div id="accordion-email-{{ email.pk }}"
-         class="panel-collapse collapse {{ step.is_first|yesno:"in," }}">
+         class="panel-collapse collapse {{ step.is_first|yes:"in" }}">
       <div class="panel-body">
         <div class="row">
           <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
