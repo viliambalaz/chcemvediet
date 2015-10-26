@@ -1,21 +1,17 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-import os
 import re
 import random
-import fnmatch
 from functools import partial
 
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.core.urlresolvers import resolve
-from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib.webdesign.lorem_ipsum import paragraphs
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.html import format_html
-from django.utils.lru_cache import lru_cache
 
 from poleno.utils.urls import reverse
 from poleno.utils.misc import squeeze as squeeze_func
@@ -288,36 +284,6 @@ def url(viewname, *args, **kwargs):
     return reverse(viewname, args=args, kwargs=kwargs)
 
 
-@lru_cache(maxsize=None)
-def _assets_glob(path):
-    patterns = []
-    magic = re.compile(r'[*?[]')
-    while magic.search(path):
-        path, pattern = os.path.split(path)
-        patterns.append(pattern)
-    found = [path]
-    for pattern in reversed(patterns):
-        sub = []
-        for dirname in found:
-            try:
-                directories, files = staticfiles_storage.listdir(dirname)
-            except Exception:
-                continue
-            names = sorted(directories + files)
-            if not pattern.startswith(u'.'):
-                names = [n for n in names if not n.startswith(u'.')]
-            for name in fnmatch.filter(names, pattern):
-                sub.append(os.path.join(dirname, name))
-        found = sub
-    urls = []
-    for filename in found:
-        try:
-            url = staticfiles_storage.url(filename)
-        except Exception:
-            continue
-        urls.append(url)
-    return urls
-
 ASSETS_TYPES = { # {{{
         u'js': (
             re.compile(r'[.]js([?#]|$)'),
@@ -349,16 +315,15 @@ def assets(types, external=False, local=False):
         if asset.startswith(u'//'):
             if not external:
                 continue
-            urls = [asset]
+            url = asset
         else:
             if not local:
                 continue
-            urls = _assets_glob(asset)
+            url = staticfiles_storage.url(asset)
         # Only given types
-        for url in urls:
-            for type in types:
-                type_re, type_tpl = ASSETS_TYPES[type]
-                if type_re.search(url):
-                    res.append(format_html(type_tpl, url=url))
-                    break
+        for type in types:
+            type_re, type_tpl = ASSETS_TYPES[type]
+            if type_re.search(url):
+                res.append(format_html(type_tpl, url=url))
+                break
     return u'\n'.join(res)
