@@ -43,12 +43,11 @@ INSTALLED_APPS = (
     u'allauth.socialaccount.providers.linkedin',
     u'allauth.socialaccount.providers.twitter',
     # Other 3part apps
-    u'sekizai',
     u'adminplus',
     u'django_cron',
     u'simple_history',
-    u'pipeline',
     u'widget_tweaks',
+    u'compressor',
     # Reused apps
     u'poleno.utils',
     u'poleno.dummymail',
@@ -76,7 +75,6 @@ MIDDLEWARE_CLASSES = (
     u'django.middleware.locale.LocaleMiddleware',
     u'django.middleware.clickjacking.XFrameOptionsMiddleware',
     u'simple_history.middleware.HistoryRequestMiddleware',
-    #u'pipeline.middleware.MinifyHTMLMiddleware',
     )
 
 AUTHENTICATION_BACKENDS = (
@@ -99,7 +97,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     u'django.core.context_processors.request',
     u'django.core.context_processors.tz',
     u'django.contrib.messages.context_processors.messages',
-    u'sekizai.context_processors.sekizai',
     u'allauth.account.context_processors.account',
     u'allauth.socialaccount.context_processors.socialaccount',
     u'poleno.mail.context_processors.constants',
@@ -142,9 +139,6 @@ MEDIA_URL = u'/media/'
 STATIC_ROOT = os.path.join(PROJECT_PATH, u'static')
 STATIC_URL = u'/static/'
 
-STATICFILES_STORAGE = u'pipeline.storage.PipelineStorage'
-#STATICFILES_STORAGE = u'pipeline.storage.PipelineCachedStorage'
-
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, u'chcemvediet/static'),
     )
@@ -152,12 +146,10 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     u'django.contrib.staticfiles.finders.FileSystemFinder',
     u'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    u'pipeline.finders.PipelineFinder',
-    #u'pipeline.finders.CachedFileFinder',
+    u'compressor.finders.CompressorFinder',
     )
 
 # JS and CSS assets settings
-# FIXME: enable pipeline and compressor in production?
 ASSETS = (
     # JQuery
     u'//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
@@ -187,24 +179,6 @@ ASSETS = (
     u'main/css/*.css',
     u'main/js/*.js',
     )
-
-#PIPELINE_ENABLED = True
-PIPELINE_JS_COMPRESSOR = None
-PIPELINE_CSS_COMPRESSOR = None
-PIPELINE_JS = {
-    u'main': {
-        u'source_filenames': [a for a in ASSETS if not a.startswith(u'//') and a.endswith(u'.js')],
-        u'output_filename': u'js/main.js',
-    },
-}
-PIPELINE_CSS = {
-    u'main': {
-        u'source_filenames': [a for a in ASSETS if not a.startswith(u'//') and a.endswith(u'.css')],
-        u'output_filename': u'css/main.css',
-    },
-}
-EXTERNAL_JS = [a for a in ASSETS if a.startswith(u'//') and a.endswith(u'.js')]
-EXTERNAL_CSS = [a for a in ASSETS if a.startswith(u'//') and a.endswith(u'.css')]
 
 # Django-allauth settings
 ACCOUNT_ADAPTER = u'poleno.invitations.adapters.InvitationsAdapter'

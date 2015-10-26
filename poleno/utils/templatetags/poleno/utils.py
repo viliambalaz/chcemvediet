@@ -1,15 +1,21 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+import os
+import re
 import random
+import fnmatch
 from functools import partial
 
 from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.core.urlresolvers import resolve
+from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib.webdesign.lorem_ipsum import paragraphs
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.html import format_html
+from django.utils.lru_cache import lru_cache
 
 from poleno.utils.urls import reverse
 from poleno.utils.misc import squeeze as squeeze_func
@@ -281,20 +287,73 @@ def change_lang(context, lang=None):
 def url(viewname, *args, **kwargs):
     return reverse(viewname, args=args, kwargs=kwargs)
 
-@register.simple_tag
-def external_css():
-    u"""
-    Render links to external css styles. Uses settins.EXTERNAL_CSS to get their list.
-    """
-    return u'\n'.join(
-            format_html(u'<link href="{0}" rel="stylesheet">', url)
-            for url in settings.EXTERNAL_CSS)
+@lru_cache(maxsize=None)
+def _assets_glob(path):
+    patterns = []
+    magic = re.compile(r'[*?[]')
+    while magic.search(path):
+        path, pattern = os.path.split(path)
+        patterns.append(pattern)
+    found = [path]
+    for pattern in reversed(patterns):
+        sub = []
+        for dirname in found:
+            try:
+                directories, files = staticfiles_storage.listdir(dirname)
+            except Exception:
+                continue
+            names = sorted(directories + files)
+            if not pattern.startswith(u'.'):
+                names = [n for n in names if not n.startswith(u'.')]
+            for name in fnmatch.filter(names, pattern):
+                sub.append(os.path.join(dirname, name))
+        found = sub
+    urls = []
+    for filename in found:
+        try:
+            url = staticfiles_storage.url(filename)
+        except Exception:
+            continue
+        urls.append(url)
+    return urls
 
 @register.simple_tag
-def external_js():
+def assets(types, external=False, local=False):
     u"""
-    Render links to external javascript. Uses settins.EXTERNAL_JS to get their list.
+    Render links to local and external assets defined in settins.ASSETS.
+
+    Example:
+        {% assets "js" external=True %}
+        {% assets "css,sass" local=True %}
     """
-    return u'\n'.join(
-            format_html(u'<script src="{0}"></script>', url)
-            for url in settings.EXTERNAL_JS)
+    res = []
+    type_re = re.compile(r'[.](\w+)(?:[?#]|$)')
+    types = types.split(u',')
+    for asset in settings.ASSETS:
+        # Only local/external assets
+        if asset.startswith(u'//'):
+            if not external:
+                continue
+            urls = [asset]
+        else:
+            if not local:
+                continue
+            urls = _assets_glob(asset)
+        # Only given types
+        for url in urls:
+            match = type_re.search(url)
+            if not match:
+                raise ImproperlyConfigured(u'Invalid asset: {}'.format(url))
+            type = match.group(1)
+            if type not in types:
+                continue
+            # Format html tags with assets
+            if type == u'js':
+                res.append(format_html(
+                    u'<script src="{}" type="text/javascript" charset="utf-8"></script>', url))
+            elif type == u'css':
+                res.append(format_html(
+                    u'<link href="{}" rel="stylesheet" type="text/css" charset="utf-8">', url))
+            else:
+                raise ImproperlyConfigured(u'Invalid asset: {}'.format(url))
+    return u'\n'.join(res)

@@ -2,5 +2,5 @@
 localmail==0.3
 
 # Dependencies for requirements for local testing with local mail
-Twisted==15.0.0
-zope.interface==4.1.2
+Twisted==15.0.0        # localmail
+zope.interface==4.1.2  # localmail
