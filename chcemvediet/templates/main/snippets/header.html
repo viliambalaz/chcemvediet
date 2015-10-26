@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
+{% load static from staticfiles %}
 {% load page page_active from poleno.pages %}
 {% load yes from poleno.utils %}
 
@@ -11,37 +12,84 @@
 {% endcomment %}
 
 
-<div class="chv-fixed-header">
-  {% if DEVBAR_MESSAGE %}
-    <div class="chv-devbar">
-      <div class="container">
-        <p>{{ DEVBAR_MESSAGE|safe }}</p>
-      </div>
-    </div>
-  {% endif %}
-  <nav class="navbar navbar-inverse navbar-static-top">
+{% if DEVBAR_MESSAGE %}
+  <div class="chv-devbar">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                data-target=".navbar-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand {{ request|page_active:'=/'|yes:"active" }}" href="{% page '/' %}">
-          {% trans 'main:menu:brand' %}
+      <p>{{ DEVBAR_MESSAGE|safe }}</p>
+    </div>
+  </div>
+{% endif %}
+
+<nav class="navbar navbar-static-top chv-navbar-primary">
+  <div class="container">
+    <a class="chv-brand {{ request|page_active:'=/'|yes:"active" }}" href="{% page '/' %}">
+      <img class="chv-logo" src="{% static "main/images/logo.svg" %}">
+      chem<b>vediet</b>.<small>SK</small>
+      <span class="badge">beta</span>
+    </a>
+    <ul class="chv-navbar-nav pull-right">
+      <li class="visible-xs">
+        <a class="collapsed chv-navbar-collapse" href="#" data-toggle="collapse"
+           data-target=".chv-navbar-search">
+          <span class="glyphicon glyphicon-search"></span>
         </a>
+      </li>
+      {% include "main/snippets/header_language.html" %}
+    </ul>
+    <form class="navbar-form pull-right hidden-xs" action=".">
+      <div class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control"
+                 placeholder="{% trans 'main:menu:search:placeholder' %}">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+        </div>
       </div>
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          {% include "main/snippets/header_menu.html" %}
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          {% include "main/snippets/header_devtools.html" %}
-          {% include "main/snippets/header_account.html" %}
-          {% include "main/snippets/header_language.html" %}
-        </ul>
+    </form>
+  </div>
+</nav>
+
+<div class="visible-xs">
+  <div class="chv-navbar-search collapse">
+    <div class="navbar navbar-static-top">
+      <div class="container">
+        <form class="navbar-form" action=".">
+          <div class="input-group">
+            <input type="text" class="form-control"
+                   placeholder="{% trans 'main:menu:search:placeholder' %}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                {% trans 'main:menu:search:button' %}
+              </button>
+            </span>
+          </div>
+        </form>
       </div>
     </div>
-  </nav>
+  </div>
 </div>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        {% include "main/snippets/header_menu.html" %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% include "main/snippets/header_devtools.html" %}
+        {% include "main/snippets/header_account.html" %}
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -286,11 +286,11 @@ def url(viewname, *args, **kwargs):
 
 ASSETS_TYPES = { # {{{
         u'js': (
-            re.compile(r'[.]js([?#]|$)'),
+            re.compile(r'[./]js([?#]|$)'),
             u'<script src="{url}" type="text/javascript" charset="utf-8"></script>',
             ),
         u'css': (
-            re.compile(r'[.]css([?#]|$)'),
+            re.compile(r'[./]css([?#]|$)'),
             u'<link href="{url}" rel="stylesheet" type="text/css" charset="utf-8">',
             ),
         u'scss': (

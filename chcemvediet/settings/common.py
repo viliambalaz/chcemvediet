@@ -168,6 +168,8 @@ ASSETS = (
     # Other JQuery plugins
     u'main/3part/jqueryplugins/jquery.cookie.js',
     u'main/3part/jqueryplugins/jquery.PrintArea.js',
+    # Fonts
+    u'//fonts.googleapis.com/css?family=Ubuntu:400,500,700',
     # Custom Bootstrap
     u'main/css/main.sass',
     u'javascripts/affix.js',
