@@ -287,6 +287,7 @@ def change_lang(context, lang=None):
 def url(viewname, *args, **kwargs):
     return reverse(viewname, args=args, kwargs=kwargs)
 
+
 @lru_cache(maxsize=None)
 def _assets_glob(path):
     patterns = []
@@ -317,6 +318,21 @@ def _assets_glob(path):
         urls.append(url)
     return urls
 
+ASSETS_TYPES = { # {{{
+        u'js': (
+            re.compile(r'[.]js([?#]|$)'),
+            u'<script src="{url}" type="text/javascript" charset="utf-8"></script>',
+            ),
+        u'css': (
+            re.compile(r'[.]css([?#]|$)'),
+            u'<link href="{url}" rel="stylesheet" type="text/css" charset="utf-8">',
+            ),
+        u'scss': (
+            re.compile(r'[.]s[ac]ss$'),
+            u'<link href="{url}" rel="stylesheet" type="text/x-scss">',
+            ),
+        } # }}}
+
 @register.simple_tag
 def assets(types, external=False, local=False):
     u"""
@@ -324,10 +340,9 @@ def assets(types, external=False, local=False):
 
     Example:
         {% assets "js" external=True %}
-        {% assets "css,sass" local=True %}
+        {% assets "css,scss" local=True %}
     """
     res = []
-    type_re = re.compile(r'[.](\w+)(?:[?#]|$)')
     types = types.split(u',')
     for asset in settings.ASSETS:
         # Only local/external assets
@@ -341,19 +356,9 @@ def assets(types, external=False, local=False):
             urls = _assets_glob(asset)
         # Only given types
         for url in urls:
-            match = type_re.search(url)
-            if not match:
-                raise ImproperlyConfigured(u'Invalid asset: {}'.format(url))
-            type = match.group(1)
-            if type not in types:
-                continue
-            # Format html tags with assets
-            if type == u'js':
-                res.append(format_html(
-                    u'<script src="{}" type="text/javascript" charset="utf-8"></script>', url))
-            elif type == u'css':
-                res.append(format_html(
-                    u'<link href="{}" rel="stylesheet" type="text/css" charset="utf-8">', url))
-            else:
-                raise ImproperlyConfigured(u'Invalid asset: {}'.format(url))
+            for type in types:
+                type_re, type_tpl = ASSETS_TYPES[type]
+                if type_re.search(url):
+                    res.append(format_html(type_tpl, url=url))
+                    break
     return u'\n'.join(res)

@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     u'simple_history',
     u'widget_tweaks',
     u'compressor',
+    u'bootstrap_sass',
     # Reused apps
     u'poleno.utils',
     u'poleno.dummymail',
@@ -149,6 +150,10 @@ STATICFILES_FINDERS = (
     u'compressor.finders.CompressorFinder',
     )
 
+COMPRESS_PRECOMPILERS = (
+    (u'text/x-scss', u'django_libsass.SassCompiler'),
+    )
+
 # JS and CSS assets settings
 ASSETS = (
     # JQuery
@@ -157,15 +162,15 @@ ASSETS = (
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css',
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
     u'main/3part/jqueryui/1.10.3/datepicker-sk.js',
-    # Bootstrap
-    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css',
-    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js',
     # JQuery File Upload (Requires: jquery.ui.widget.js)
     u'main/3part/jqueryplugins/jquery.iframe-transport.js',
     u'main/3part/jqueryplugins/jquery.fileupload.js',
     # Other JQuery plugins
     u'main/3part/jqueryplugins/jquery.cookie.js',
     u'main/3part/jqueryplugins/jquery.PrintArea.js',
+    # Custom Bootstrap
+    u'main/css/main.sass',
+    u'javascripts/*.js',
     # Reused apps
     u'poleno/css/*.css',
     u'poleno/js/*.js',

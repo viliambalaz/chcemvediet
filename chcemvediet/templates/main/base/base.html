@@ -20,7 +20,7 @@
     <title>{% block title %}{% trans 'main:base:title' %}{% endblock %}</title>
     {% assets "css" external=True %}
     {% compress css %}
-      {% assets "css" local=True %}
+      {% assets "css,scss" local=True %}
     {% endcompress %}
   </head>
   <body class="{{ DEVBAR_MESSAGE|yesno:"chv-fixed-header-push-2,chv-fixed-header-push-1" }}">
