@@ -17,7 +17,8 @@
 .chv-devbar { padding-top: 10px; background-color: yellow; }
 
 /* Dropdown menu panel with arbitrary content */
-.chv-dropdown-panel { padding: 20px; min-width: 500px; max-height: 300px; overflow-y: scroll; }
+.chv-dropdown-panel { padding: 20px !important; min-width: 500px; max-height: 300px;  overflow-y: scroll; }
+.chv-dropdown-panel { background: #fff !important; box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176) !important; }
 
 /* Box for action content  */
 .chv-action-content { margin: 20px; padding: 5%; border: solid 1px black; background: white; }

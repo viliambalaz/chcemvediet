@@ -1,0 +1,38 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/navbar-base.html" %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- id_specimen: string
+ %
+{% endcomment %}
+
+
+{% block title %}Navbar anonymous user{% endblock %}
+
+{% block primary-right-items %}
+  <li class="visible-xs">
+    <a class="collapsed" href="#" data-toggle="collapse"
+       data-target="#{{ id_specimen }} .chv-navbar-search">
+      <span class="glyphicon glyphicon-search"></span>
+    </a>
+  </li>
+  <li class="hidden-xs">
+    <a href="#"><span class="chv-hover-bold" data-content="English">English</span></a>
+  </li>
+  <li class="visible-xs">
+    <a href="#"><span class="chv-hover-bold" data-content="EN">EN</span></a>
+  </li>
+{% endblock %}
+
+{% block secondary-left-items %}
+  <li><a href="#"><span class="chv-hover-bold" data-content="O projekte">O projekte</span></a></li>
+  <li><a href="#"><span class="chv-hover-bold" data-content="Žiadosti">Žiadosti</span></a></li>
+  <li><a href="#"><span class="chv-hover-bold" data-content="Inštitúcie">Inštitúcie</span></a></li>
+{% endblock %}
+
+{% block secondary-right-items %}
+  <li><a href="#"><span class="chv-hover-bold" data-content="Login">Login</span></a></li>
+  <li class="chv-nav-feature"><a href="#">+ Podať žiadosť</a></li>
+{% endblock %}

@@ -1,0 +1,51 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/navbar-base.html" %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- id_specimen: string
+ %
+{% endcomment %}
+
+
+{% block title %}Navbar authentificated user{% endblock %}
+
+{% block primary-right-items %}
+  <li class="visible-xs">
+    <a class="collapsed" href="#" data-toggle="collapse"
+       data-target="#{{ id_specimen }} .chv-navbar-search">
+      <span class="glyphicon glyphicon-search"></span>
+    </a>
+  </li>
+  <li class="hidden-xs">
+    <a href="#"><span class="chv-hover-bold" data-content="Slovenčina">Slovenčina</span></a>
+  </li>
+  <li class="visible-xs">
+     <a href="#"><span class="chv-hover-bold" data-content="SK">SK</span></a>
+   </li>
+{% endblock %}
+
+{% block secondary-left-items %}
+  <li><a href="#"><span class="chv-hover-bold" data-content="About">About</span></a></li>
+  <li><a href="#"><span class="chv-hover-bold" data-content="Inforequests">Inforequests</span></a></li>
+  <li><a href="#"><span class="chv-hover-bold" data-content="Obligees">Obligees</span></a></li>
+{% endblock %}
+
+{% block secondary-right-items %}
+  <li class="dropdown chv-nav-user">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      name@example.com <span class="caret"></span>
+      <span class="chv-circle">
+        <span class="glyphicon glyphicon-user"></span>
+      </span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">Invitations</a></li>
+      <li class="divider"></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </li>
+{% endblock %}

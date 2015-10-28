@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import TemplateView
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,6 +25,7 @@ urlpatterns += i18n_patterns(u'',
     url(r'^accounts/', include(u'allauth.urls')),
     url(r'^accounts/', include(u'chcemvediet.apps.accounts.urls', namespace=u'accounts')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^sg/$', TemplateView.as_view(template_name=u'styleguide/main.html'), name=u'styleguide'),
     url(r'', include(u'poleno.pages.urls', namespace=u'pages')),
 )
 

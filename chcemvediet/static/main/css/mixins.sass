@@ -1,0 +1,31 @@
+
+@mixin chv-links-reset()
+  a
+    color: inherit
+    &:hover,
+    &:focus
+      color: inherit
+      text-decoration: none
+
+@mixin chv-hover-bold()
+  .chv-hover-bold
+    display: inline-block
+    text-align: center
+    vertical-align: -22.5%
+    &:after
+      content: attr(data-content)
+      display: block
+      height: 0
+      font-weight: 700
+      overflow: hidden
+      visibility: hidden
+  &:hover,
+  &:focus
+    .chv-hover-bold
+      font-weight: 700
+
+// Set text color and caret color
+@mixin chv-color($color)
+  color: $color
+  .caret
+    border-top-color: $color

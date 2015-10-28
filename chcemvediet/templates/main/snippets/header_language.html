@@ -13,19 +13,19 @@
 {% for lang in LANGUAGES %}
   {% if lang.0 != request.LANGUAGE_CODE %}
     <li class="hidden-xs">
-      <a href="{% url 'set_language' %}" class="pln-post" data-content="{{ lang.1 }}"
+      <a href="{% url 'set_language' %}" class="pln-post"
          data-post-csrfmiddlewaretoken="{{ csrf_token }}"
          data-post-language="{{ lang.0 }}"
          data-post-next="{% change_lang lang.0 %}">
-        {{ lang.1 }}
+        <span class="chv-hover-bold" data-content="{{ lang.1 }}">{{ lang.1 }}</span>
       </a>
     </li>
     <li class="visible-xs">
-      <a href="{% url 'set_language' %}" class="pln-post" data-content="{{ lang.0|upper }}"
+      <a href="{% url 'set_language' %}" class="pln-post"
          data-post-csrfmiddlewaretoken="{{ csrf_token }}"
          data-post-language="{{ lang.0 }}"
          data-post-next="{% change_lang lang.0 %}">
-        {{ lang.0|upper }}
+        <span class="chv-hover-bold" data-content="{{ lang.0|upper }}">{{ lang.0|upper }}</span>
       </a>
     </li>
   {% endif %}

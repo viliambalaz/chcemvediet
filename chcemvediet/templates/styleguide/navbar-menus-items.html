@@ -1,0 +1,43 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load yes from poleno.utils%}
+
+{% comment %}
+ %
+ % Context:
+ %  -- right: boolean
+ %
+{% endcomment %}
+
+
+<li class="active">
+  <a href="#"><span class="chv-hover-bold" data-content="Active">Active</span></a>
+</li>
+<li>
+  <a href="#"><span class="chv-hover-bold" data-content="Inactive">Inactive</span></a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <span class="chv-hover-bold" data-content="Menu">Menu</span>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu {{ right|yes:"pull-right" }}">
+    <li><a href="#">Lorem ipsum</a></li>
+    <li><a href="#">Dolor sit</a></li>
+    <li><a href="#">Sed do eiusmod</a></li>
+    <li class="divider"></li>
+    <li><a href="#">Tempor incididunt</a></li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-wrench"></span>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu {{ right|yes:"pull-right" }}">
+    <li><a href="#">Lorem ipsum</a></li>
+    <li><a href="#">Dolor sit</a></li>
+    <li><a href="#">Sed do eiusmod</a></li>
+    <li class="divider"></li>
+    <li><a href="#">Tempor incididunt</a></li>
+  </ul>
+</li>
