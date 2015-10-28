@@ -264,7 +264,7 @@ def configure_email_addresses(configure, settings):
             '{token}' as a placeholder to distinguish individual inforequests. For instance
             '{token}@mail.example.com' may be expanded to 'lama@mail.example.com'.""") + RESET)
     inforequest_unique_email = configure.input(u'inforequest_unique_email',
-            u'Inforequest unique e-mail', default=u'{token}@mail.{}'.format(mail_domain),
+            u'Inforequest unique e-mail', default=u'{{token}}@mail.{}'.format(mail_domain),
             required=True)
     settings.setting(u'INFOREQUEST_UNIQUE_EMAIL', inforequest_unique_email)
 
