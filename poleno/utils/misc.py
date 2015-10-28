@@ -31,6 +31,18 @@ class Bunch(object):
     def __init__(self, **kwargs):
         vars(self).update(kwargs)
 
+class FormatMixin(object):
+
+    def __format__(self, format):
+        try:
+            u = unicode(self)
+        except UnicodeError:
+            u = u'[Bad Unicode data]'
+        return u'<{}: {}>'.format(self.__class__.__name__, u)
+
+    def __repr__(self):
+        return format(self).encode(u'utf-8')
+
 def random_string(length, chars=(string.ascii_letters + string.digits)):
     u"""
     Returns a random string ``length`` characters long consisting of ``chars``.
@@ -161,11 +173,11 @@ def filesize(size):
         49573834547 -> "46.2 GB"
         -3847 -> "-3.8 kB"
     """
-    for fmt in ['%.0f bytes', u'%.1f kB', u'%.1f MB', u'%.1f GB', u'%.1f TB']:
+    for fmt in ['{:.0f} bytes', u'{:.1f} kB', u'{:.1f} MB', u'{:.1f} GB', u'{:.1f} TB']:
         if abs(size) < 1024.0:
-            return fmt % size
+            return fmt.format(size)
         size /= 1024.0
-    return u'%.1f PB' % size
+    return u'{:.1f} PB'.format(size)
 
 @contextlib.contextmanager
 def collect_stdout():
@@ -175,7 +187,7 @@ def collect_stdout():
     Example:
         with collect_stdout() as collect:
             print('Hello')
-        return 'printed: "%s"' % collect.stdout
+        return 'printed: "{}"'.format(collect.stdout)
     """
     orig_stdout = sys.stdout
     new_stdout = sys.stdout = StringIO()
@@ -228,7 +240,7 @@ def cached_method(method=None, cached_exceptions=None):
         class Moo(object):
             @cached_method(cached_exceptions=ValidationError)
             def foo(self, value):
-                print('Moo.foo(%s)' % value)
+                print('Moo.foo({})'.format(value))
                 if value == 1:
                     return 4
                 if value == 2:
@@ -263,7 +275,7 @@ def cached_method(method=None, cached_exceptions=None):
     def actual_decorator(method):
         @wraps(method, assigned=available_attrs(method))
         def wrapped_method(self, *args):
-            cache = self.__dict__.setdefault(u'_%s__cache' % method.__name__, {})
+            cache = self.__dict__.setdefault(u'_{}__cache'.format(method.__name__), {})
             try:
                 res, exc = cache[args]
             except KeyError:
@@ -288,11 +300,13 @@ def print_invocations(func=None):
         print_invocations.level = 0
     @wraps(func, assigned=available_attrs(func))
     def wrapped_func(*args, **kwargs):
-        print(u'%s>%s: args=%r kwargs=%r' % (
-                u'  '*print_invocations.level, func.__name__, args, kwargs))
+        print(u'{}>{}: args={} kwargs={}'.format(
+                u'  '*print_invocations.level, func.__name__,
+                unicode(repr(args), u'utf-8'), unicode(repr(kwargs), u'utf-8')))
         print_invocations.level += 1
         res = func(*args, **kwargs)
         print_invocations.level -= 1
-        print(u'%s<%s: res=%r' % (u'  '*print_invocations.level, func.__name__, res))
+        print(u'{}<{}: res={}'.format(u'  '*print_invocations.level, func.__name__,
+                unicode(repr(res), u'utf-8')))
         return res
     return wrapped_func

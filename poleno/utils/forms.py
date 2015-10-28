@@ -148,7 +148,7 @@ class CompositeTextField(forms.MultiValueField):
 class PrefixedForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(PrefixedForm, self).__init__(*args, **kwargs)
-        self.prefix = u'%s%s%s' % (self.prefix or u'', u'-' if self.prefix else u'',
+        self.prefix = u'{}{}{}'.format(self.prefix or u'', u'-' if self.prefix else u'',
                 self.__class__.__name__.lower())
 
 class ValidatorChain(object):

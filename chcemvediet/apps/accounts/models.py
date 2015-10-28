@@ -3,8 +3,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from poleno.utils.misc import FormatMixin
 
-class Profile(models.Model):
+
+class Profile(FormatMixin, models.Model):
     user = models.OneToOneField(User)
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -19,4 +21,4 @@ class Profile(models.Model):
     #  -- user: OneToOneField
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)

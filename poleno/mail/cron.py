@@ -27,12 +27,12 @@ def mail():
                     with transaction.atomic():
                         message = next(messages)
                         nop() # To let tests raise testing exception here.
-                    cron_logger.info(u'Received email: %s' % repr(message))
+                    cron_logger.info(u'Received email: {}'.format(message))
                 except StopIteration:
                     break
                 except Exception:
                     trace = unicode(traceback.format_exc(), u'utf-8')
-                    cron_logger.error(u'Receiving emails failed:\n%s' % trace)
+                    cron_logger.error(u'Receiving emails failed:\n{}'.format(trace))
                     break
 
     # Process inbound mail; At most 10 messages in one batch
@@ -49,10 +49,10 @@ def mail():
                 message.save(update_fields=[u'processed'])
                 message_received.send(sender=None, message=message)
                 nop() # To let tests raise testing exception here.
-            cron_logger.info(u'Processed received email: %s' % repr(message))
+            cron_logger.info(u'Processed received email: {}'.format(message))
         except Exception:
             trace = unicode(traceback.format_exc(), u'utf-8')
-            cron_logger.error(u'Processing received email failed: %r\n%s' % (message, trace))
+            cron_logger.error(u'Processing received email failed: {}\n{}'.format(message, trace))
 
     # Send outbound mail; At most 10 messages in one batch
     path = getattr(settings, u'EMAIL_OUTBOUND_TRANSPORT', None)
@@ -75,7 +75,7 @@ def mail():
                             message.save(update_fields=[u'processed'])
                             message_sent.send(sender=None, message=message)
                             nop() # To let tests raise testing exception here.
-                        cron_logger.info(u'Sent email: %s' % repr(message))
+                        cron_logger.info(u'Sent email: {}'.format(message))
                     except Exception:
                         trace = unicode(traceback.format_exc(), u'utf-8')
-                        cron_logger.error(u'Seding email failed: %r\n%s' % (message, trace))
+                        cron_logger.error(u'Seding email failed: {}\n{}'.format(message, trace))

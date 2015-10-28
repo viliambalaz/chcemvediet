@@ -5,7 +5,7 @@ from django.db.models import Q, F
 
 from poleno import datacheck
 from poleno.utils.models import QuerySet
-from poleno.utils.misc import squeeze, decorate, slugify
+from poleno.utils.misc import FormatMixin, squeeze, decorate, slugify
 
 
 class RegionQuerySet(QuerySet):
@@ -14,7 +14,7 @@ class RegionQuerySet(QuerySet):
     def order_by_name(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class Region(models.Model): # "Kraj"
+class Region(FormatMixin, models.Model): # "Kraj"
     # Primary key
     id = models.CharField(max_length=32, primary_key=True,
             help_text=squeeze(u"""
@@ -65,10 +65,7 @@ class Region(models.Model): # "Kraj"
         super(Region, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 class DistrictQuerySet(QuerySet):
@@ -77,7 +74,7 @@ class DistrictQuerySet(QuerySet):
     def order_by_name(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class District(models.Model): # "Okres"
+class District(FormatMixin, models.Model): # "Okres"
     # Primary key
     id = models.CharField(max_length=32, primary_key=True,
             help_text=squeeze(u"""
@@ -134,10 +131,7 @@ class District(models.Model): # "Okres"
         super(District, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 class MunicipalityQuerySet(QuerySet):
@@ -146,7 +140,7 @@ class MunicipalityQuerySet(QuerySet):
     def order_by_name(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class Municipality(models.Model): # "Obec"
+class Municipality(FormatMixin, models.Model): # "Obec"
     # Primary key
     id = models.CharField(max_length=32, primary_key=True,
             help_text=squeeze(u"""
@@ -206,17 +200,14 @@ class Municipality(models.Model): # "Obec"
         super(Municipality, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 class NeighbourhoodQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')
 
-class Neighbourhood(models.Model): # "Základná sídelná jednotka"
+class Neighbourhood(FormatMixin, models.Model): # "Základná sídelná jednotka"
     # Primary key
     id = models.CharField(max_length=32, primary_key=True,
             help_text=squeeze(u"""
@@ -264,10 +255,7 @@ class Neighbourhood(models.Model): # "Základná sídelná jednotka"
     objects = NeighbourhoodQuerySet.as_manager()
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 @datacheck.register

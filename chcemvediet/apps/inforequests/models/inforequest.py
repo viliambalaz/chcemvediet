@@ -14,7 +14,7 @@ from poleno.utils.models import QuerySet, join_lookup, after_saved
 from poleno.utils.urls import reverse, complete_url
 from poleno.utils.mail import render_mail
 from poleno.utils.date import utc_now
-from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify
+from poleno.utils.misc import random_readable_string, squeeze, decorate, slugify, FormatMixin
 
 
 class InforequestQuerySet(QuerySet):
@@ -55,7 +55,7 @@ class InforequestQuerySet(QuerySet):
             .prefetch_related(Message.prefetch_attachments(u'undecided_emails'))
             )
 
-class Inforequest(models.Model):
+class Inforequest(FormatMixin, models.Model):
     # May NOT be NULL
     applicant = models.ForeignKey(User,
             help_text=squeeze(u"""
@@ -514,7 +514,7 @@ class Inforequest(models.Model):
 
     def send_obligee_deadline_reminder(self, action):
         self._send_notification(
-                u'inforequests/mails/obligee_deadline_reminder', u'#a%s' % action.pk, {
+                u'inforequests/mails/obligee_deadline_reminder', u'#a{}'.format(action.pk), {
                     u'action': action,
                     })
 
@@ -523,7 +523,7 @@ class Inforequest(models.Model):
 
     def send_applicant_deadline_reminder(self, action):
         self._send_notification(u'inforequests/mails/applicant_deadline_reminder',
-                u'#a%s' % action.pk, {
+                u'#a{}'.format(action.pk), {
                     u'action': action,
                     })
 
@@ -531,7 +531,7 @@ class Inforequest(models.Model):
         action.save(update_fields=[u'last_deadline_reminder'])
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.subject[:30])
+        return u'[{}] {}'.format(self.pk, self.subject[:30])
 
 @datacheck.register
 def datachecks(superficial, autofix):
@@ -545,7 +545,7 @@ def datachecks(superficial, autofix):
 
     if superficial:
         inforequests = inforequests[:5+1]
-    issues = [u'%r has %d main branches' % (r, r.branch__count) for r in inforequests]
+    issues = [u'{} has {} main branches'.format(r, r.branch__count) for r in inforequests]
     if superficial and issues:
         if len(issues) > 5:
             issues[-1] = u'More inforequests have invalid number of main branches'

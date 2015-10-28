@@ -31,7 +31,7 @@ def index(request, lang):
     return render(request, u'pages/admin/index.html', {
             u'is_popup': request.GET.get(u'popup', False),
             u'popup_target': request.GET.get(u'target', None),
-            u'title': u'Select page to change (%s)' % lang.upper(),
+            u'title': u'Select page to change ({})'.format(lang.upper()),
             u'lang': lang,
             u'pages': pages,
             })

@@ -3,15 +3,17 @@
 import functools
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
+from poleno.utils.misc import FormatMixin
 
-class Issue(object):
+
+class Issue(FormatMixin, object):
 
     def __init__(self, level, msg, *args, **kwargs):
         self.level = level
-        self.msg = msg % args
         self.issuer = None
         self.autofixable = kwargs.pop(u'autofixable', False)
         self.autofixed = None
+        self.msg = msg.format(*args, **kwargs) if args or kwargs else msg
 
     def __eq__(self, other):
         return self.level == other.level and self.msg == other.msg and self.issuer == other.issuer
@@ -20,13 +22,13 @@ class Issue(object):
         return not self.__eq__(other)
 
     def __unicode__(self):
-        return u'%s: %s%s' % (self.issuer, self.msg,
+        return u'{}: {}{}'.format(self.issuer, self.msg,
                 u' (Was autofixed)' if self.autofixed else
                 u' (Can be autofixed, use --autofix)' if self.autofixable else u'',
                 )
 
-    def __repr__(self):
-        return u'<%s: level=%r issuer=%s msg=%r%s>' % (
+    def __format__(self, format):
+        return u'<{}: level={} issuer={} msg={}{}>'.format(
                 self.__class__.__name__, self.level, self.issuer, self.msg,
                 u' autofixed' if self.autofixed else u' autofixable' if self.autofixable else u'',
                 )
@@ -53,11 +55,11 @@ class Critical(Issue):
 
 
 @functools.total_ordering
-class Check(object):
+class Check(FormatMixin, object):
 
     def __init__(self, func):
         self.func = func
-        self.name = u'%s.%s' % (func.__module__, func.__name__)
+        self.name = u'{}.{}'.format(func.__module__, func.__name__)
 
     def __call__(self, *args, **kwargs):
         return self.func(*args, **kwargs)
@@ -73,9 +75,6 @@ class Check(object):
 
     def __unicode__(self):
         return self.name
-
-    def __repr__(self):
-        return u'<%s: %s>' % (self.__class__.__name__, self.name)
 
 class Registry(object):
 

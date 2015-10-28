@@ -36,9 +36,9 @@ def undecided_email_reminder():
                     continue
                 filtered.append(inforequest)
             except Exception:
-                msg = u'Checking if undecided email reminder should be sent failed: %r\n%s'
+                msg = u'Checking if undecided email reminder should be sent failed: {}\n{}'
                 trace = unicode(traceback.format_exc(), u'utf-8')
-                cron_logger.error(msg % (inforequest, trace))
+                cron_logger.error(msg.format(inforequest, trace))
 
         if not filtered:
             return
@@ -55,11 +55,11 @@ def undecided_email_reminder():
             try:
                 with transaction.atomic():
                     inforequest.send_undecided_email_reminder()
-                    cron_logger.info(u'Sent undecided email reminder: %r' % inforequest)
+                    cron_logger.info(u'Sent undecided email reminder: {}'.format(inforequest))
             except Exception:
-                msg = u'Sending undecided email reminder failed: %r\n%s'
+                msg = u'Sending undecided email reminder failed: {}\n{}'
                 trace = unicode(traceback.format_exc(), u'utf-8')
-                cron_logger.error(msg % (inforequest, trace))
+                cron_logger.error(msg.format(inforequest, trace))
 
 @cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
@@ -88,9 +88,9 @@ def obligee_deadline_reminder():
                         continue
                     filtered.append(branch)
                 except Exception:
-                    msg = u'Checking if obligee deadline reminder should be sent failed: %r\n%s'
+                    msg = u'Checking if obligee deadline reminder should be sent failed: {}\n{}'
                     trace = unicode(traceback.format_exc(), u'utf-8')
-                    cron_logger.error(msg % (action, trace))
+                    cron_logger.error(msg.format(action, trace))
 
         if not filtered:
             return
@@ -105,11 +105,12 @@ def obligee_deadline_reminder():
             try:
                 with transaction.atomic():
                     branch.inforequest.send_obligee_deadline_reminder(branch.last_action)
-                    cron_logger.info(u'Sent obligee deadline reminder: %r' % branch.last_action)
+                    msg = u'Sent obligee deadline reminder: {}'
+                    cron_logger.info(msg.format(branch.last_action))
             except Exception:
-                msg = u'Sending obligee deadline reminder failed: %r\n%s'
+                msg = u'Sending obligee deadline reminder failed: {}\n{}'
                 trace = unicode(traceback.format_exc(), u'utf-8')
-                cron_logger.error(msg % (branch.last_action, trace))
+                cron_logger.error(msg.format(branch.last_action, trace))
 
 @cron_job(run_at_times=settings.CRON_USER_INTERACTION_TIMES)
 @transaction.atomic
@@ -138,9 +139,9 @@ def applicant_deadline_reminder():
                         continue
                     filtered.append(branch)
                 except Exception:
-                    msg = u'Checking if applicant deadline reminder should be sent failed: %r\n%s'
+                    msg = u'Checking if applicant deadline reminder should be sent failed: {}\n{}'
                     trace = unicode(traceback.format_exc(), u'utf-8')
-                    cron_logger.error(msg % (action, trace))
+                    cron_logger.error(msg.format(action, trace))
 
         if not filtered:
             return
@@ -154,11 +155,12 @@ def applicant_deadline_reminder():
             try:
                 with transaction.atomic():
                     branch.inforequest.send_applicant_deadline_reminder(branch.last_action)
-                    cron_logger.info(u'Sent applicant deadline reminder: %r' % branch.last_action)
+                    msg = u'Sent applicant deadline reminder: {}'
+                    cron_logger.info(msg.format(branch.last_action))
             except Exception:
-                msg = u'Sending applicant deadline reminder failed: %r\n%s'
+                msg = u'Sending applicant deadline reminder failed: {}\n{}'
                 trace = unicode(traceback.format_exc(), u'utf-8')
-                cron_logger.error(msg % (branch.last_action, trace))
+                cron_logger.error(msg.format(branch.last_action, trace))
 
 @cron_job(run_at_times=settings.CRON_IMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
@@ -180,9 +182,9 @@ def close_inforequests():
                 # Every branch that has a deadline have been missed for at least 100 WD.
                 filtered.append(inforequest)
         except Exception:
-            msg = u'Checking if inforequest should be closed failed: %r\n%s'
+            msg = u'Checking if inforequest should be closed failed: {}\n{}'
             trace = unicode(traceback.format_exc(), u'utf-8')
-            cron_logger.error(msg % (inforequest, trace))
+            cron_logger.error(msg.format(inforequest, trace))
 
     for inforequest in filtered:
         try:
@@ -191,11 +193,11 @@ def close_inforequests():
                     branch.add_expiration_if_expired()
                 inforequest.closed = True
                 inforequest.save(update_fields=[u'closed'])
-                cron_logger.info(u'Closed inforequest: %r' % inforequest)
+                cron_logger.info(u'Closed inforequest: {}'.format(inforequest))
         except Exception:
-            msg = u'Closing inforequest failed: %r\n%s'
+            msg = u'Closing inforequest failed: {}\n{}'
             trace = unicode(traceback.format_exc(), u'utf-8')
-            cron_logger.error(msg % (inforequest, trace))
+            cron_logger.error(msg.format(inforequest, trace))
 
 @cron_job(run_at_times=settings.CRON_IMPORTANT_MAINTENANCE_TIMES)
 @transaction.atomic
@@ -222,16 +224,16 @@ def add_expirations():
                 # still left.
                 filtered.append(branch)
             except Exception:
-                msg = u'Checking if expiration action should be added failed: %r\n%s'
+                msg = u'Checking if expiration action should be added failed: {}\n{}'
                 trace = unicode(traceback.format_exc(), u'utf-8')
-                cron_logger.error(msg % (branch, trace))
+                cron_logger.error(msg.format(branch, trace))
 
     for branch in filtered:
         try:
             with transaction.atomic():
                 branch.add_expiration_if_expired()
-                cron_logger.info(u'Added expiration action: %r' % branch)
+                cron_logger.info(u'Added expiration action: {}'.format(branch))
         except Exception:
-            msg = u'Adding expiration action failed: %r\n%s'
+            msg = u'Adding expiration action failed: {}\n{}'
             trace = unicode(traceback.format_exc(), u'utf-8')
-            cron_logger.error(msg % (branch, trace))
+            cron_logger.error(msg.format(branch, trace))

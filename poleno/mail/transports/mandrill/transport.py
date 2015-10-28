@@ -8,6 +8,8 @@ from collections import defaultdict
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
+from poleno.utils.misc import squeeze
+
 from ..base import BaseTransport
 
 
@@ -71,9 +73,9 @@ class MandrillTransport(BaseTransport):
         response = requests.post(self.api_send, data=json.dumps(data))
 
         if response.status_code != 200:
-            raise RuntimeError(
-                    u'Sending Message(pk=%s) failed with status code %s. Mandrill response: %s'
-                        % (message.pk, response.status_code, response.text))
+            raise RuntimeError(squeeze(u"""
+                    Sending Message(pk={}) failed with status code {}. Mandrill response: {}
+                    """).format(message.pk, response.status_code, response.text))
 
         for rcp in response.json():
             for recipient in recipients[rcp[u'email']]:

@@ -190,9 +190,9 @@ class PageEditForm(forms.Form):
         if create or edit_regular:
             for lang, _ in settings.LANGUAGES:
                 if lang != page.lang:
-                    key = u'lang_%s' % lang
+                    key = u'lang_{}'.format(lang)
                     self.fields[key] = forms.CharField(
-                        label=u'Translation %s' % lang.upper(),
+                        label=u'Translation {}'.format(lang.upper()),
                         required=False,
                         validators=[
                             RegexValidator(pages.path_regex, squeeze(u"""
@@ -275,7 +275,7 @@ class PageEditForm(forms.Form):
         config = {}
 
         # String config options
-        keys = [u'title', u'label', u'order'] + [u'lang_%s' % l for l, _ in settings.LANGUAGES]
+        keys = [u'title', u'label', u'order'] + [u'lang_{}'.format(l) for l, _ in settings.LANGUAGES]
         for key in keys:
             if key in self.fields:
                 old_value = page._config.get(key) if not create else None
@@ -341,7 +341,7 @@ class PageEditForm(forms.Form):
         raise FormSaveError
 
     def _add_save_error(self, field, e):
-        self.add_error(field if field in self.fields else None, u'%s' % e)
+        self.add_error(field if field in self.fields else None, format(e))
 
 class FileEditForm(forms.Form):
     u"""
@@ -406,4 +406,4 @@ class FileEditForm(forms.Form):
         raise FormSaveError
 
     def _add_save_error(self, field, e):
-        self.add_error(field if field in self.fields else None, u'%s' % e)
+        self.add_error(field if field in self.fields else None, format(e))

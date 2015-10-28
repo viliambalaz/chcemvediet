@@ -25,9 +25,9 @@ class Command(NoArgsCommand):
 
         This command runs two pairs of dummy SMTP and IMAP servers on localhost. One
         pair is for outgoing mails and one for incoming mails. By default, outgoing
-        SMPT server runs on port number `%(o_smtp)d`, incoming SMTP server on port number
-        `%(i_smtp)d`, outgoing IMAP server on port number `%(o_imap)d` and incoming IMAP server on
-        port number `%(o_imap)d`. You may change these port numbers with options.
+        SMPT server runs on port number `{o_smtp}`, incoming SMTP server on port number
+        `{i_smtp}`, outgoing IMAP server on port number `{o_imap}` and incoming IMAP server on
+        port number `{o_imap}`. You may change these port numbers with options.
 
         During the development, you may use this infrastructure to simulate the site
         communication with the outside world with no risk of sending any real e-mails
@@ -60,7 +60,7 @@ class Command(NoArgsCommand):
         it's safe to send any message, from any e-mail address to any e-mail address
         whatsoever. Nothing will be delivered. Also note, that all e-mails are stored
         in the memory only, so they will disappear when the infrastructure is
-        restarted.""" % dict(
+        restarted.""".format(
             o_smtp=default_outgoing_smtp_port,
             o_imap=default_outgoing_imap_port,
             i_smtp=default_incoming_smtp_port,
@@ -70,20 +70,20 @@ class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option(u'--out-smtp-port', action=u'store', type=u'int', dest=u'outgoing_smtp_port',
             default=default_outgoing_smtp_port,
-            help=u'Port to use for the outgoing SMTP server. Defaults to %d.'
-                % default_outgoing_smtp_port),
+            help=u'Port to use for the outgoing SMTP server. Defaults to {}.'.format(
+                default_outgoing_smtp_port)),
         make_option(u'--out-imap-port', action=u'store', type=u'int', dest=u'outgoing_imap_port',
             default=default_outgoing_imap_port,
-            help=u'Port to use for the outgoing IMAP server. Defaults to %d.'
-                % default_outgoing_imap_port),
+            help=u'Port to use for the outgoing IMAP server. Defaults to {}.'.format(
+                default_outgoing_imap_port)),
         make_option(u'--in-smtp-port', action=u'store', type=u'int', dest=u'incoming_smtp_port',
             default=default_incoming_smtp_port,
-            help=u'Port to use for the incoming SMTP server. Defaults to %d.'
-                % default_incoming_smtp_port),
+            help=u'Port to use for the incoming SMTP server. Defaults to {}.'.format(
+                default_incoming_smtp_port)),
         make_option(u'--in-imap-port', action=u'store', type=u'int', dest=u'incoming_imap_port',
             default=default_incoming_imap_port,
-            help=u'Port to use for the incoming IMAP server. Defaults to %d.'
-                % default_incoming_imap_port),
+            help=u'Port to use for the incoming IMAP server. Defaults to {}.'.format(
+                default_incoming_imap_port)),
         )
 
     def handle_noargs(self, **options):

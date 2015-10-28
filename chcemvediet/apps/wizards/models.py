@@ -6,13 +6,14 @@ from django.contrib.contenttypes import generic
 from jsonfield import JSONField
 
 from poleno.utils.models import QuerySet
+from poleno.utils.misc import FormatMixin
 
 
 class WizardDraftQuerySet(QuerySet):
     def owned_by(self, user):
         return self.filter(owner=user)
 
-class WizardDraft(models.Model):
+class WizardDraft(FormatMixin, models.Model):
     # Primary key (Wizard.instance_id)
     id = models.CharField(max_length=255, primary_key=True)
 
@@ -44,4 +45,4 @@ class WizardDraft(models.Model):
     objects = WizardDraftQuerySet.as_manager()
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)

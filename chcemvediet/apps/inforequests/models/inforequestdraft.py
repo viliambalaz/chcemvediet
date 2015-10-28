@@ -9,7 +9,7 @@ from jsonfield import JSONField
 
 from poleno.attachments.models import Attachment
 from poleno.utils.models import QuerySet, join_lookup
-from poleno.utils.misc import squeeze
+from poleno.utils.misc import FormatMixin, squeeze
 
 
 class InforequestDraftQuerySet(QuerySet):
@@ -18,7 +18,7 @@ class InforequestDraftQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')
 
-class InforequestDraft(models.Model):
+class InforequestDraft(FormatMixin, models.Model):
     # May NOT be NULL
     applicant = models.ForeignKey(User,
             help_text=squeeze(u"""
@@ -72,4 +72,4 @@ class InforequestDraft(models.Model):
         return list(self.attachment_set.order_by_pk())
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)

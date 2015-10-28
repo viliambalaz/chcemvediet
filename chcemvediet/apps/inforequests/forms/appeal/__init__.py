@@ -62,7 +62,7 @@ class AppealWizard(Wizard):
         super(AppealWizard, self).__init__(request, index)
 
     def get_instance_id(self):
-        return u'%s-%s' % (self.__class__.__name__, self.last_action.pk)
+        return u'{}-{}'.format(self.__class__.__name__, self.last_action.pk)
 
     def get_step_url(self, step, anchor=u''):
         return reverse(u'inforequests:appeal',

@@ -13,7 +13,7 @@ from poleno.utils.models import QuerySet, after_saved
 from poleno.utils.urls import complete_reverse
 from poleno.utils.date import utc_now
 from poleno.utils.mail import render_mail
-from poleno.utils.misc import squeeze, decorate, random_string
+from poleno.utils.misc import FormatMixin, squeeze, decorate, random_string
 
 from . import app_settings, UserMayNotInvite
 
@@ -26,7 +26,7 @@ class InvitationQuerySet(QuerySet):
     def pending(self):
         return self.filter(accepted__isnull=True).filter(valid_to__gte=utc_now())
 
-class Invitation(models.Model):
+class Invitation(FormatMixin, models.Model):
     # May NOT be empty
     email = models.EmailField(max_length=255,
             help_text=squeeze(u"""
@@ -155,13 +155,13 @@ class Invitation(models.Model):
         self.save(update_fields=[u'message'])
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)
 
 
 class InvitationSupplyQuerySet(QuerySet):
     pass
 
-class InvitationSupply(models.Model):
+class InvitationSupply(FormatMixin, models.Model):
     # May NOT be NULL
     user = models.OneToOneField(User,
             help_text=squeeze(u"""
@@ -235,4 +235,4 @@ class InvitationSupply(models.Model):
         self.save()
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)

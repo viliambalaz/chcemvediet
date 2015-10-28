@@ -61,7 +61,7 @@ class Column(object):
             try:
                 validator(value)
             except ValidationError as e:
-                raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
+                raise CellError((u'validator', validator.__name__), u'; '.join(e.messages))
 
     def do_pre_coerce_validation(self, sheet, row_idx, value):
         self.validate_type(value)
@@ -109,7 +109,7 @@ class Column(object):
             try:
                 validator(value)
             except ValidationError as e:
-                raise CellError((u'validator', validator.__name__), u'{}', u'; '.join(e.messages))
+                raise CellError((u'validator', validator.__name__), u'; '.join(e.messages))
 
     def do_post_ceorce_validation(self, sheet, row_idx, value):
         self.validate_blank(value)

@@ -37,7 +37,7 @@ def send_file_response(request, path, name, content_type, attachment=True):
     # and fix it for them and/or sanitize and normalize file names.
     statobj = os.stat(path)
     if not stat.S_ISREG(statobj.st_mode):
-        raise OSError(u'Not a regular file: %s' % path)
+        raise OSError(u'Not a regular file: {}'.format(path))
     http_header = request.META.get(u'HTTP_IF_MODIFIED_SINCE')
     if not was_modified_since(http_header, statobj.st_mtime, statobj.st_size):
         return HttpResponseNotModified()
@@ -45,7 +45,7 @@ def send_file_response(request, path, name, content_type, attachment=True):
     response[u'Last-Modified'] = http_date(statobj.st_mtime)
     response[u'Content-Length'] = statobj.st_size
     if attachment:
-        response[u'Content-Disposition'] = "attachment; filename*=UTF-8''%s" % urlquote(name)
+        response[u'Content-Disposition'] = "attachment; filename*=UTF-8''{}".format(urlquote(name))
     return response
 
 

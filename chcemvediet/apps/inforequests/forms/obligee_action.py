@@ -897,7 +897,7 @@ class ObligeeActionWizard(Wizard):
         super(ObligeeActionWizard, self).__init__(request, index)
 
     def get_instance_id(self):
-        return u'%s-%s' % (self.__class__.__name__, self.inforequest.pk)
+        return u'{}-{}'.format(self.__class__.__name__, self.inforequest.pk)
 
     def get_step_url(self, step, anchor=u''):
         return reverse(u'inforequests:obligee_action',

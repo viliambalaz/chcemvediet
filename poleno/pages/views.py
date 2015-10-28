@@ -34,8 +34,8 @@ def view(request, path):
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
-        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
-                page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
+        logger.warning(u'Redirected request: /{}/{} -> /{}{}; Referer: {}'.format(
+                page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--')))
 
     if page.is_disabled:
         return HttpResponseNotFound()
@@ -55,8 +55,8 @@ def alternatives(request, lang, path):
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
-        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
-                lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
+        logger.warning(u'Redirected request: /{}/{} -> /{}{}; Referer: {}'.format(
+                lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--')))
 
     if page.is_disabled:
         return HttpResponseNotFound()
@@ -87,8 +87,8 @@ def file(request, path, name):
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
-        logger.warning(u'Redirected request: /%s/%s -> /%s%s; Referer: %s',
-                page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--'))
+        logger.warning(u'Redirected request: /{}/{} -> /{}{}; Referer: {}'.format(
+                page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--')))
 
     try:
         file = File(page, name)

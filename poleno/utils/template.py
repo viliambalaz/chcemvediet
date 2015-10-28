@@ -73,7 +73,8 @@ class TranslationLoader(BaseLoader):
         language = get_language()
         template_base, template_ext = splitext(template_name)
         try:
-            return self.loader(u'%s.%s%s' % (template_base, language, template_ext), template_dirs)
+            return self.loader(u'{}.{}{}'.format(
+                template_base, language, template_ext), template_dirs)
         except TemplateDoesNotExist:
             return self.loader(template_name, template_dirs)
 
@@ -126,7 +127,8 @@ class Library(template.Library):
             if params[0] == 'content':
                 params = params[1:]
             else:
-                raise TemplateSyntaxError(u'The first argument of "%s" must be "content"' % name)
+                raise TemplateSyntaxError(
+                        u'The first argument of "{}" must be "content"'.format(name))
 
             bits = token.split_contents()[1:]
             args, kwargs = parse_bits(parser, bits, params, varargs, varkw, defaults,

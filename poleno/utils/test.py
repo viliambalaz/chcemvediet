@@ -91,9 +91,9 @@ class ViewTestCaseMixin(TestCase):
         for method in methods:
             response = getattr(self.client, method.lower())(url)
             if method in allowed:
-                self.assertNotEqual(response.status_code, 405, u'%s is not allowed' % method)
+                self.assertNotEqual(response.status_code, 405, u'{} is not allowed'.format(method))
             else:
-                self.assertEqual(response.status_code, 405, u'%s is allowed' % method)
+                self.assertEqual(response.status_code, 405, u'{} is allowed'.format(method))
                 allow_headers.append(response[u'Allow'])
         for header in allow_headers:
             self.assertItemsEqual(header.split(u', '), allowed)

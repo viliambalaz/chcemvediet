@@ -25,7 +25,7 @@ class MessageAdmin(admin.ModelAdmin):
                 admin_order_field=u'from_mail',
                 ),
             decorate(
-                lambda o: u'; '.join(u'%s: %s' % (k, v) for k, v in [
+                lambda o: u'; '.join(u'{}: {}'.format(k, v) for k, v in [
                     (u'To', o.to_formatted),
                     (u'Cc', o.cc_formatted),
                     (u'Bcc', o.bcc_formatted),

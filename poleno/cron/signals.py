@@ -13,6 +13,6 @@ def log_to_logger_on_cronjoblog_post_save(sender, instance, **kwargs):
     Track saved cron logs using standard logging framework.
     """
     if instance.is_success:
-        cron_logger.debug(u"Cron job '%s' succeeded.", instance.code)
+        cron_logger.debug(u'Cron job "{}" succeeded.'.format(instance.code))
     else:
-        cron_logger.error(u"Cron job '%s' failed:\n%s", instance.code, instance.message)
+        cron_logger.error(u'Cron job "{}" failed:\n{}'.format(instance.code, instance.message))

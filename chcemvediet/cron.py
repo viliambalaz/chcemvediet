@@ -36,7 +36,7 @@ def send_admin_error_logs():
 
     # FIXME: We should skip Mandrill and use some low level mail delivery for admin logs.
     site = Site.objects.get_current()
-    subject = u'[%s] Admin Error Logs' % site.name
+    subject = u'[{}] Admin Error Logs'.format(site.name)
     admins = (formataddr(r) for r in settings.ADMINS)
     msg = EmailMessage(subject, logs, settings.SERVER_EMAIL, admins)
     msg.send()

@@ -27,12 +27,12 @@ def render_mail(template_prefix, dictionary=None, **kwargs):
                     to=['Your Name <you@example.com>'])
     """
     site = Site.objects.get_current()
-    subject = render_to_string(u'%s_subject.txt' % template_prefix, dictionary)
-    subject = squeeze(u'[%s] %s' % (site.name, subject))
+    subject = render_to_string(u'{}_subject.txt'.format(template_prefix), dictionary)
+    subject = squeeze(u'[{}] {}'.format(site.name, subject))
 
     bodies = {}
     for ext in [u'html', u'txt']:
-        template_name = u'%s_message.%s' % (template_prefix, ext)
+        template_name = u'{}_message.{}'.format(template_prefix, ext)
         try:
             bodies[ext] = render_to_string(template_name, dictionary).strip()
         except TemplateDoesNotExist:

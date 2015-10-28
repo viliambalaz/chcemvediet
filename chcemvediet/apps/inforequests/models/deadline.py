@@ -6,10 +6,10 @@ from django.utils.functional import cached_property
 
 from poleno.workdays import workdays
 from poleno.utils.date import local_today
-from poleno.utils.misc import Bunch
+from poleno.utils.misc import Bunch, FormatMixin
 
 
-class Deadline(object):
+class Deadline(FormatMixin, object):
 
     TYPES = Bunch(
             OBLIGEE_DEADLINE = 1,
@@ -165,6 +165,3 @@ class Deadline(object):
                 u' +{0} CD'.format(self.snooze_in_calendar_days)
                     if self.snooze_date != self.deadline_date else u'',
                 )
-
-    def __repr__(self):
-        return u'<Deadline: %s>' % unicode(self)

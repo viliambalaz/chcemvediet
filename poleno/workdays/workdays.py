@@ -6,6 +6,7 @@ from dateutil.easter import easter
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.utils.importlib import import_module
+from poleno.utils.misc import FormatMixin
 
 
 WEEKEND = [5, 6]
@@ -39,7 +40,7 @@ class Holiday(object):
     def for_year(self, year):
         raise NotImplementedError
 
-class FixedHoliday(Holiday):
+class FixedHoliday(FormatMixin, Holiday):
     def __init__(self, **kwargs):
         self.day = kwargs.pop(u'day')
         self.month = kwargs.pop(u'month')
@@ -48,10 +49,10 @@ class FixedHoliday(Holiday):
     def for_year(self, year):
         return [datetime.date(year, self.month, self.day)]
 
-    def __repr__(self):
-        return u'%s(day=%s, month=%s)' % (self.__class__.__name__, repr(self.day), repr(self.month))
+    def __unicode__(self):
+        return u'day={}, month={}'.format(self.day, self.month)
 
-class EasterHoliday(Holiday):
+class EasterHoliday(FormatMixin, Holiday):
     def __init__(self, **kwargs):
         u"""
         ``days`` after/before Easter Sunday if positive/negative.
@@ -62,10 +63,10 @@ class EasterHoliday(Holiday):
     def for_year(self, year):
         return [easter(year) + datetime.timedelta(days=self.days)]
 
-    def __repr__(self):
-        return u'%s(days=%s)' % (self.__class__.__name__, repr(self.days))
+    def __unicode__(self):
+        return u'days={}'.format(self.days)
 
-class HolidaySet(object):
+class HolidaySet(FormatMixin, object):
     def __init__(self, *args):
         u"""
         Accepts Holiday objects
@@ -79,8 +80,8 @@ class HolidaySet(object):
         return set(d for h in self.holidays
                      for d in h.between(after, before))
 
-    def __repr__(self):
-        return u'%s%s' % (self.__class__.__name__, repr(self.holidays))
+    def __unicode__(self):
+        return u', '.join(format(h) for h in self.holidays)
 
 
 def between(after, before, holiday_set=None):

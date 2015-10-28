@@ -81,10 +81,10 @@ class Config(object):
                 try:
                     key, val = line.split(u'=', 1)
                 except ValueError:
-                    raise ParseConfigError(u'Parse error on line %d: "%s"' % (idx, line))
+                    raise ParseConfigError(u'Parse error on line {}: "{}"'.format(idx, line))
                 key = key.strip()
                 if not key:
-                    raise ParseConfigError(u'Parse error on line %d: "%s"' % (idx, line))
+                    raise ParseConfigError(u'Parse error on line {}: "{}"'.format(idx, line))
                 res[key] = val.strip()
         self._config = res
 
@@ -92,9 +92,9 @@ class Config(object):
         res = []
         for key, val in self._config.items():
             if not isinstance(key, basestring):
-                res.append(u'%s\n' % val)
+                res.append(u'{}\n'.format(val))
             elif val is not None:
-                res.append(u'%s = %s\n' % (key, val))
+                res.append(u'{} = {}\n'.format(key, val))
         return u''.join(res)
 
     def get(self, key, default=None):
@@ -144,14 +144,15 @@ class File(object):
 
     def __init__(self, page, name):
         if not file_regex.match(name):
-            raise InvalidFileError(u'Invalid file name: %s' % name)
+            raise InvalidFileError(u'Invalid file name: {}'.format(name))
 
         filesdir = os.path.join(page._pagedir, u'_files')
         filepath = os.path.join(filesdir, name)
         if not os.path.exists(filepath):
-            raise InvalidFileError(u'Page %s has no file: %s' % (page.path, name))
+            raise InvalidFileError(u'Page {} has no file: {}'.format(page.path, name))
         if not os.path.isfile(filepath):
-            raise InvalidFileError(u'Page %s file "%s" is not a regular file' % (page.path, name))
+            raise InvalidFileError(
+                    u'Page {} file "{}" is not a regular file'.format(page.path, name))
 
         # Private properties
         self._page = page
@@ -231,11 +232,11 @@ class File(object):
 
     def rename(self, name):
         if not file_regex.match(name):
-            raise FileNameError(u'Invalid target file name: %s' % name)
+            raise FileNameError(u'Invalid target file name: {}'.format(name))
 
         filepath = os.path.join(self._filesdir, name)
         if os.path.lexists(filepath):
-            raise FileNameError(u'Target file already exists: %s' % name)
+            raise FileNameError(u'Target file already exists: {}'.format(name))
 
         os.rename(self._filepath, filepath)
         return File(self._page, name)
@@ -309,14 +310,14 @@ class Page(object):
         if not pagedir.startswith(rootdir + os.sep) and pagedir != rootdir:
             raise InvalidPageError(u'Redirected outside root dir.')
         if not os.path.exists(pagedir):
-            raise InvalidPageError(u'Page does not exist: /%s' % os.path.relpath(pagedir, rootdir))
+            raise InvalidPageError(u'Page does not exist: /{}'.format(os.path.relpath(pagedir, rootdir)))
         if not os.path.isdir(pagedir):
-            raise InvalidPageError(u'Not a directory: /%s' % os.path.relpath(pagedir, rootdir))
+            raise InvalidPageError(u'Not a directory: /{}'.format(os.path.relpath(pagedir, rootdir)))
 
         realpath = pagedir[len(rootdir):] + u'/'
 
         if not path_regex.match(realpath):
-            raise InvalidPageError(u'Redirected to an invalid path: %s' % realpath)
+            raise InvalidPageError(u'Redirected to an invalid path: {}'.format(realpath))
 
         return realpath, pagedir
 
@@ -333,11 +334,11 @@ class Page(object):
     def _read_symlink(self, pagedir):
         link = os.readlink(pagedir)
         if u'/@/' not in link:
-            raise InvalidPageError(u'Invalid redirect: %s' % link)
+            raise InvalidPageError(u'Invalid redirect: {}'.format(link))
 
         redirect = u'/' + link.split(u'/@/', 1)[1]
         if not path_regex.match(redirect):
-            raise InvalidPageError(u'Invalid redirect: %s' % link)
+            raise InvalidPageError(u'Invalid redirect: {}'.format(link))
 
         return redirect
 
@@ -374,7 +375,7 @@ class Page(object):
         lang = lang or get_language()
         path = _path = fix_slashes(path)
         if not path_regex.match(path):
-            raise InvalidPageError(u'Invalid path: %s' % path)
+            raise InvalidPageError(u'Invalid path: {}'.format(path))
 
         rootdir = os.path.realpath(default_storage.path(u'pages/' + lang))
         if not os.path.lexists(rootdir):
@@ -462,8 +463,8 @@ class Page(object):
                         res.append(self.subpage(file))
                     except InvalidPageError as e:
                         logger = logging.getLogger(u'poleno.pages')
-                        logger.error(u'Page /%s%s%s/ is broken: %s',
-                                self._lang, self._path, file, e)
+                        logger.error(u'Page /{}{}{}/ is broken: {}'.format(
+                                self._lang, self._path, file, e))
         res.sort()
         return res
 
@@ -584,7 +585,7 @@ class Page(object):
             return u'/'
         if self._config is None:
             return None
-        return self._config.get(u'lang_%s' % lang)
+        return self._config.get(u'lang_{}'.format(lang))
 
     def translation(self, lang):
         if lang == self._lang:
@@ -596,13 +597,13 @@ class Page(object):
             page = Page(path, lang)
         except PageError as e:
             logger = logging.getLogger(u'poleno.pages')
-            logger.error(u'Page /%s%s has broken translation: /%s%s: %s',
-                    self._lang, self._path, lang, fix_slashes(path), e.message)
+            logger.error(u'Page /{}{} has broken translation: /{}{}: {}'.format(
+                    self._lang, self._path, lang, fix_slashes(path), e.message))
             return None
         if page.path != path:
             logger = logging.getLogger(u'poleno.pages')
-            logging.warning(u'Page /%s%s has redirected translation: /%s%s -> /%s%s',
-                    self._lang, self._path, lang, fix_slashes(path), page.lang, page.path)
+            logging.warning(u'Page /{}{} has redirected translation: /{}{} -> /{}{}'.format(
+                    self._lang, self._path, lang, fix_slashes(path), page.lang, page.path))
         return page
 
     def render(self):
@@ -631,7 +632,7 @@ class Page(object):
         if self._redirect is not None:
             raise PageError(u'Redirects may not have subpages.')
         if not slug_regex.match(name):
-            raise PageNameError(u'Invalid page name: "%s"' % name)
+            raise PageNameError(u'Invalid page name: "{}"'.format(name))
         if raw_config is not None and entries:
             raise ParseConfigError(
                     u'Cannot set raw config and individual options at the same time.')
@@ -640,7 +641,7 @@ class Page(object):
         pagedir = os.path.join(self._pagedir, name)
 
         if os.path.lexists(pagedir):
-            raise PageNameError(u'Target page already exists: %s' % path)
+            raise PageNameError(u'Target page already exists: {}'.format(path))
 
         os.mkdir(pagedir)
 
@@ -669,13 +670,13 @@ class Page(object):
         if parent._path.startswith(self._path):
             raise PageParentError(u'Cannot move the page to a subpage of itself.')
         if not slug_regex.match(name):
-            raise PageNameError(u'Invalid target name: "%s"' % name)
+            raise PageNameError(u'Invalid target name: "{}"'.format(name))
 
         path = parent._path + name + u'/'
         pagedir = os.path.join(parent._pagedir, name)
 
         if os.path.lexists(pagedir):
-            raise PageNameError(u'Target page already exists: %s' % path)
+            raise PageNameError(u'Target page already exists: {}'.format(path))
 
         os.rename(self._pagedir, pagedir)
         os.symlink(os.path.relpath(self._rootdir, os.path.dirname(self._pagedir))
@@ -749,8 +750,8 @@ class Page(object):
                     res.append(self.file(file))
                 except InvalidFileError as e:
                     logger = logging.getLogger(u'poleno.pages')
-                    logger.error(u'Page /%s%s file "%s" is broken: %s',
-                            self._lang, self._path, file, e)
+                    logger.error(u'Page /{}{} file "{}" is broken: {}'.format(
+                            self._lang, self._path, file, e))
         res.sort()
         return res
 
@@ -759,7 +760,7 @@ class Page(object):
 
     def create_file(self, name, content):
         if not file_regex.match(name):
-            raise FileNameError(u'Invalid file name: %s' % name)
+            raise FileNameError(u'Invalid file name: {}'.format(name))
 
         filesdir = os.path.join(self._pagedir, u'_files')
         if not os.path.lexists(filesdir):
@@ -767,7 +768,7 @@ class Page(object):
 
         filepath = os.path.join(filesdir, name)
         if os.path.lexists(filepath):
-            raise FileNameError(u'Target file already exists: %s' % name)
+            raise FileNameError(u'Target file already exists: {}'.format(name))
 
         with open(filepath, u'wb') as f:
             for chunk in content.chunks():
