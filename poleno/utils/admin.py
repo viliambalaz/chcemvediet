@@ -27,12 +27,12 @@ def admin_obj_format(obj, format=u'{tag}', *args, **kwargs):
     link = kwargs.pop(u'link', u'change')
     if obj is None:
         return u'--'
-    tag = u'<%s: %s>' % (obj.__class__.__name__, obj.pk)
+    tag = u'<{}: {}>'.format(obj.__class__.__name__, obj.pk)
     res = format.format(obj=obj, tag=tag, *args, **kwargs)
     if link:
         try:
             info = obj._meta.app_label, obj._meta.model_name, link
-            url = reverse(u'admin:%s_%s_%s' % info, args=[obj.pk])
+            url = reverse(u'admin:{}_{}_{}'.format(*info), args=[obj.pk])
             res = format_html(u'<a href="{0}">{1}</a>', url, res)
         except NoReverseMatch:
             pass

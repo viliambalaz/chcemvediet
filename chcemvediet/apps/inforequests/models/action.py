@@ -16,7 +16,7 @@ from poleno.attachments.models import Attachment
 from poleno.workdays import workdays
 from poleno.utils.models import FieldChoices, QuerySet, join_lookup, after_saved
 from poleno.utils.date import utc_now, local_today
-from poleno.utils.misc import Bunch, squeeze, decorate
+from poleno.utils.misc import Bunch, squeeze, decorate, FormatMixin
 
 
 class ActionQuerySet(QuerySet):
@@ -76,7 +76,7 @@ class ActionQuerySet(QuerySet):
     def after(self, other):
         return self.filter(Q(created__gt=other.created) | Q(created=other.created, pk__gt=other.pk))
 
-class Action(models.Model):
+class Action(FormatMixin, models.Model):
     # NOT NULL
     branch = models.ForeignKey(u'Branch')
 
@@ -428,7 +428,7 @@ class Action(models.Model):
         elif self.type == self.TYPES.APPEAL_EXPIRATION:
             return None
 
-        raise ValueError(u'Invalid action type: %d' % self.type)
+        raise ValueError(u'Invalid action type: {}'.format(self.type))
 
     @classmethod
     def create(cls, *args, **kwargs):
@@ -459,11 +459,11 @@ class Action(models.Model):
         return action
 
     def get_absolute_url(self):
-        return self.branch.inforequest.get_absolute_url(u'#a%d' % self.pk)
+        return self.branch.inforequest.get_absolute_url(u'#a{}'.format(self.pk))
 
     def send_by_email(self):
         if not self.is_applicant_action:
-            raise TypeError(u'%s is not applicant action' % self.get_type_display())
+            raise TypeError(u'{} is not applicant action'.format(self.get_type_display()))
 
         sender_name = self.branch.inforequest.applicant_name
         sender_address = self.branch.inforequest.unique_email
@@ -490,7 +490,7 @@ class Action(models.Model):
         self.save(update_fields=[u'email'])
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.get_type_display())
+        return u'[{}] {}'.format(self.pk, self.get_type_display())
 
 @datacheck.register
 def datachecks(superficial, autofix):
@@ -506,7 +506,7 @@ def datachecks(superficial, autofix):
 
     if superficial:
         actions = actions[:5+1]
-    issues = [u'%r email is assigned to another inforequest' % a for a in actions]
+    issues = [u'{} email is assigned to another inforequest'.format(a) for a in actions]
     if superficial and issues:
         if len(issues) > 5:
             issues[-1] = u'More action emails are assigned to other inforequests'

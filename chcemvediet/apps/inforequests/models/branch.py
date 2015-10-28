@@ -7,7 +7,7 @@ from django.utils.functional import cached_property
 from poleno import datacheck
 from poleno.utils.models import QuerySet, join_lookup, after_saved
 from poleno.utils.date import local_today
-from poleno.utils.misc import squeeze, decorate
+from poleno.utils.misc import squeeze, decorate, FormatMixin
 
 
 class BranchQuerySet(QuerySet):
@@ -18,7 +18,7 @@ class BranchQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')
 
-class Branch(models.Model):
+class Branch(FormatMixin, models.Model):
     # May NOT be NULL; Index is prefix of [inforequest, advanced_by] index
     inforequest = models.ForeignKey(u'Inforequest', db_index=False)
 
@@ -294,7 +294,7 @@ class Branch(models.Model):
     def can_add_action(self, *action_types):
         for action_type in action_types:
             type_name = Action.TYPES._inverse[action_type]
-            if getattr(self, u'can_add_%s' % type_name.lower()):
+            if getattr(self, u'can_add_{}'.format(type_name.lower())):
                 return True
         return False
 
@@ -352,7 +352,7 @@ class Branch(models.Model):
         return ((name, mail) for mail, name in res.items())
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)
 
 @datacheck.register
 def datachecks(superficial, autofix):
@@ -368,8 +368,8 @@ def datachecks(superficial, autofix):
 
     if superficial:
         branches = branches[:5+1]
-    issues = [u'%r has inforequest_id = %s but advanced_by.branch.inforequest_id = %s' %
-                (b, b.inforequest_id, b.advanced_by.branch.inforequest_id) for b in branches]
+    issues = [u'{} has inforequest_id = {} but advanced_by.branch.inforequest_id = {}'.format(
+            b, b.inforequest_id, b.advanced_by.branch.inforequest_id) for b in branches]
     if superficial and issues:
         if len(issues) > 5:
             issues[-1] = u'More branches have invalid advanced by references'

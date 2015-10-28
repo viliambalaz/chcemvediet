@@ -194,7 +194,7 @@ def method(value, arg):
         return getattr(value, str(arg))
     except AttributeError:
         pass
-    return u'[no method %s]' % arg
+    return u'[no method {}]'.format(arg)
 
 @register.filter
 def call_with(value, arg):
@@ -246,7 +246,7 @@ def lorem(randseed=None, count=1, method=None):
     random.setstate(state)
 
     if method == u'p':
-        res = [u'<p>%s</p>' % p for p in res]
+        res = [u'<p>{}</p>'.format(p) for p in res]
     return u'\n'.join(res)
 
 @register.simple_tag(takes_context=True)
@@ -277,7 +277,7 @@ def change_lang(context, lang=None):
     with translation(lang):
         url = reverse(view_name, kwargs=kwargs)
 
-    return u'%s' % url
+    return format(url)
 
 @register.simple_tag
 def url(viewname, *args, **kwargs):

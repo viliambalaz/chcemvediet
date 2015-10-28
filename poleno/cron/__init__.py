@@ -32,7 +32,7 @@ def cron_job(**kwargs):
     def decorator(function):
         class CronJob(CronJobBase):
             schedule = Schedule(**kwargs)
-            code = u'%s.%s' % (function.__module__.split('.')[-2], function.__name__)
+            code = u'{}.{}'.format(function.__module__.split('.')[-2], function.__name__)
             def do(self):
                 return function()
         CronJob.__name__ = function.__name__

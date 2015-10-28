@@ -11,5 +11,5 @@ from .datacheck import registry
 def datacheck():
     issues = registry.run_checks(superficial=True)
     for issue in issues:
-        cron_logger.log(issue.level, u'%s', issue)
-    cron_logger.info(u'Data check identified %s issues.', len(issues))
+        cron_logger.log(issue.level, issue)
+    cron_logger.info(u'Data check identified {} issues.'.format(len(issues)))

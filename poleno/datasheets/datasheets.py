@@ -28,7 +28,8 @@ class RollingError(Exception):
 class CellError(Exception):
     def __init__(self, code, msg, *args, **kwargs):
         self.code = code
-        super(CellError, self).__init__(msg.format(*args, **kwargs))
+        msg = msg.format(*args, **kwargs) if args or kwargs else msg
+        super(CellError, self).__init__(msg)
 
 class RollbackDryRun(Exception):
     pass
@@ -53,8 +54,9 @@ class Sheet(object):
         self.importer.error(code, msg, *args, **kwargs)
 
     def cell_error(self, code, row_idx, column, msg, *args, **kwargs):
+        msg = msg.format(*args, **kwargs) if args or kwargs else msg
         self.error((column.label, code), u'Invalid value in row {} of "{}.{}": {}',
-                row_idx, self.label, column.label, msg.format(*args, **kwargs))
+                row_idx, self.label, column.label, msg)
 
     def reset_model(self, model):
         count = model.objects.count()
@@ -111,7 +113,7 @@ class Sheet(object):
         try:
             return column.do_import(self, row_idx, value)
         except CellError as e:
-            self.cell_error(e.code, row_idx, column, u'{}', e)
+            self.cell_error(e.code, row_idx, column, e)
             raise RollingError
 
     def process_row(self, row_idx, row):

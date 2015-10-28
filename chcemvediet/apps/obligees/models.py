@@ -10,7 +10,7 @@ from poleno import datacheck
 from poleno.utils.models import FieldChoices, QuerySet
 from poleno.utils.forms import validate_comma_separated_emails
 from poleno.utils.history import register_history
-from poleno.utils.misc import squeeze, decorate, slugify
+from poleno.utils.misc import FormatMixin, squeeze, decorate, slugify
 from chcemvediet.apps.geounits.models import Neighbourhood
 
 
@@ -22,7 +22,7 @@ class ObligeeTagQuerySet(QuerySet):
     def order_by_name(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class ObligeeTag(models.Model):
+class ObligeeTag(FormatMixin, models.Model):
     # May NOT be empty
     key = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
@@ -68,10 +68,7 @@ class ObligeeTag(models.Model):
         super(ObligeeTag, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.key)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.key)
 
 
 class ObligeeGroupQuerySet(QuerySet):
@@ -82,7 +79,7 @@ class ObligeeGroupQuerySet(QuerySet):
     def order_by_name(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class ObligeeGroup(models.Model):
+class ObligeeGroup(FormatMixin, models.Model):
     # May NOT be empty
     key = models.CharField(max_length=255, unique=True,
             help_text=squeeze(u"""
@@ -135,10 +132,7 @@ class ObligeeGroup(models.Model):
         super(ObligeeGroup, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.key)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.key)
 
 
 class ObligeeQuerySet(QuerySet):
@@ -150,7 +144,7 @@ class ObligeeQuerySet(QuerySet):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
 @register_history
-class Obligee(models.Model):
+class Obligee(FormatMixin, models.Model):
     # FIXME: Ordinary indexes do not work for LIKE '%word%'. So we can't use the slug index for
     # searching. Eventually, we need to define a fulltext index for "slug" or "name" and use
     # ``__search`` instead of ``__contains`` in autocomplete view. However, SQLite does not support
@@ -314,10 +308,7 @@ class Obligee(models.Model):
         super(Obligee, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 class ObligeeAliasQuerySet(QuerySet):
@@ -326,7 +317,7 @@ class ObligeeAliasQuerySet(QuerySet):
     def order_by_alias(self):
         return self.order_by(u'name') # no tiebreaker, name is unique
 
-class ObligeeAlias(models.Model):
+class ObligeeAlias(FormatMixin, models.Model):
     # May NOT be NULL
     obligee = models.ForeignKey(Obligee, help_text=u'Obligee of which this is alias.')
 
@@ -378,10 +369,7 @@ class ObligeeAlias(models.Model):
         super(ObligeeAlias, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.name)
-
-    def __format__(self, format):
-        return unicode(repr(self), u'utf-8')
+        return u'[{}] {}'.format(self.pk, self.name)
 
 
 @datacheck.register
@@ -396,5 +384,5 @@ def datachecks(superficial, autofix):
             continue
         parent_key = group.key.rsplit(u'/', 1)[0]
         if parent_key not in keys:
-            yield datacheck.Error(u'{} has key="{}" but thare is no group with key="{}"'.format(
-                    group, group.key, parent_key))
+            yield datacheck.Error(u'{} has key="{}" but thare is no group with key="{}"',
+                    group, group.key, parent_key)

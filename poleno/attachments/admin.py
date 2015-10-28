@@ -73,6 +73,6 @@ class AttachmentAdmin(admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
         download_view = self.admin_site.admin_view(self.download_view)
         urls = patterns('',
-                url(r'^(.+)/download/$', download_view, name=u'%s_%s_download' % info),
+                url(r'^(.+)/download/$', download_view, name=u'{}_{}_download'.format(*info)),
                 )
         return urls + super(AttachmentAdmin, self).get_urls()

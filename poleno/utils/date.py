@@ -277,8 +277,8 @@ def _datetime_factory(*args, **kwargs):
         if not error:
             error = name
         if args:
-            error = u'%s, got %s' % (error, repr(args[0]))
-        raise TypeError(u'Expecting argument: %s' % error)
+            error = u'{}, got {}'.format(error, unicode(repr(args[0]), u'utf-8'))
+        raise TypeError(u'Expecting argument: {}'.format(error))
 
     dt = pop_arg(u'datetime', datetime.datetime, parse_dt, default=None)
     if dt is None:
@@ -298,7 +298,7 @@ def _datetime_factory(*args, **kwargs):
         dt = datetime.datetime.combine(date, time)
 
     if args or kwargs:
-        error = [u'%r' % a for a in args]
-        error += [u'%s=%r' % (k, v) for k, v in kwargs.items()]
-        raise TypeError(u'Unexpected arguments: %s' % u', '.join(error))
+        error = [unicode(repr(a), u'utf-8') for a in args]
+        error += [u'{}={}'.format(k, unicode(repr(v), u'utf-8')) for k, v in kwargs.items()]
+        raise TypeError(u'Unexpected arguments: {}'.format(u', '.join(error)))
     return dt

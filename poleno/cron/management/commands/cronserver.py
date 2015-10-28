@@ -22,9 +22,9 @@ class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option(u'--interval', action=u'store', type=u'int', dest=u'interval',
             default=default_interval, help=squeeze(u"""
-                Interval in seconds how often to check if there are jobs to run. Defaults to %d
+                Interval in seconds how often to check if there are jobs to run. Defaults to {}
                 secons.
-                """) % default_interval),
+                """).format(default_interval)),
         make_option(u'--clearlogs', action=u'store_true', dest=u'clearlogs', default=False,
             help=squeeze(u"""
                 Clear cron logs before running the server like no cron jobs have ever been run yet.

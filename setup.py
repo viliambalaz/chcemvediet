@@ -17,12 +17,15 @@ ERROR = u'\033[91m'
 PROMPT = u'\033[96m'
 RESET = u'\033[0m'
 
+def squeeze(s):
+    return u' '.join(s.split())
+
 def call(msg, args, cwd=None):
     if cwd:
-        msg += u' (in %s)' % cwd
+        msg += u' (in {})'.format(cwd)
         cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), cwd))
-    print(u'%s\n%s\n%s' % (INFO, msg, RESET))
-    print(u'%s$ %s\n%s' % (SHELL, u' '.join(args), RESET))
+    print(u'{}\n{}\n{}'.format(INFO, msg, RESET))
+    print(u'{}$ {}\n{}'.format(SHELL, u' '.join(args), RESET))
     return subprocess.check_call(args, cwd=cwd)
 
 class JsonFile(object):
@@ -68,8 +71,9 @@ class Configure(object):
 
     def input(self, key, prompt, default=u'', required=False):
         configured = self.data.get(key, default)
+        prompt = u'\n{} [{}]: '.format(prompt, configured)
         while True:
-            inputed = raw_input(PROMPT + u'\n%s [%s]: ' % (prompt, configured) + RESET) or configured
+            inputed = raw_input(PROMPT + prompt + RESET) or configured
             if required and not inputed:
                 print(ERROR + u'\nError: The value is required.' + RESET)
                 continue
@@ -80,8 +84,9 @@ class Configure(object):
 
     def input_password(self, key, prompt, hasher=None, required=False):
         configured = self.data.get(key, u'')
+        prompt = u'\n{} [{}]: '.format(prompt, u'*****' if configured else u'')
         while True:
-            inputed = getpass.getpass(PROMPT + u'\n%s [%s]: ' % (prompt, u'*****' if configured else u'') + RESET)
+            inputed = getpass.getpass(PROMPT + prompt + RESET)
             if required and not inputed and not configured:
                 print(ERROR + u'\nError: The value is required.' + RESET)
                 continue
@@ -95,8 +100,9 @@ class Configure(object):
 
     def input_yes_no(self, key, prompt, default=u''):
         configured = self.data.get(key, default)
+        prompt = u'\n{} Y/N [{}]: '.format(prompt, configured)
         while True:
-            inputed = raw_input(PROMPT + u'\n%s Y/N [%s]: ' % (prompt, configured) + RESET) or configured
+            inputed = raw_input(PROMPT + prompt + RESET) or configured
             if not inputed:
                 print(ERROR + u'\nError: The value is required.' + RESET)
                 continue
@@ -112,13 +118,14 @@ class Configure(object):
     def input_choice(self, key, prompt, choices, default=u''):
         configured = self.data.get(key, default)
         configured_choice = u''
-        print(INFO + u'\n%s:' % prompt + RESET)
+        print(INFO + u'\n{}:'.format(prompt) + RESET)
         for idx, (value, label) in enumerate(choices):
-            print(INFO + u' %d) %s' % (idx+1, label) + RESET)
+            print(INFO + u' {}) {}'.format(idx+1, label) + RESET)
             if value == configured:
-                configured_choice = u'%d' % (idx+1)
+                configured_choice = format(idx+1)
+        prompt = u'\n{} [{}]: '.format(prompt, configured_choice)
         while True:
-            inputed = raw_input(PROMPT + u'\n%s [%s]: ' % (prompt, configured_choice) + RESET) or configured_choice
+            inputed = raw_input(PROMPT + prompt + RESET) or configured_choice
             if not inputed:
                 print(ERROR + u'\nError: The value is required.' + RESET)
                 continue
@@ -148,13 +155,14 @@ class Settings(object):
 
     def comment(self, text):
         for line in text.split(u'\n'):
-            self.lines.append(u'# %s' % line)
+            self.lines.append(u'# {}'.format(line))
 
     def include(self, filaname):
-        self.lines.append(u'execfile(os.path.join(SETTINGS_PATH, %s))' % repr(filaname))
+        self.lines.append(u'execfile(os.path.join(SETTINGS_PATH, {}))'.format(
+                unicode(repr(filaname), u'utf-8')))
 
     def setting(self, name, value):
-        self.lines.append(u'%s = %s' % (name, repr(value)))
+        self.lines.append(u'{} = {}'.format(name, unicode(repr(value), u'utf-8')))
 
 def generate_secret_key(length, chars):
     sysrandom = random.SystemRandom()
@@ -175,11 +183,17 @@ def configure_server_mode(configure, settings):
             addresses are replaced with dummies, so you won't send any unsolicited emails to
             them.""") + RESET)
     server_mode = configure.input_choice(u'server_mode', u'Server mode', choices=(
-            (u'local_with_no_mail',          u'Local development mode with no email infrastructure.'),
-            (u'local_with_local_mail',       u'Local development mode with dummy email infrastructure.'),
-            (u'dev_with_no_mail',            u'Online development mode with no email infrastructure.'),
-            (u'dev_with_dummy_obligee_mail', u'Online development mode with working email infrastructure and dummy obligee email addresses.'),
-            (u'production',                  u'Production mode.'),
+            (u'local_with_no_mail',
+                u'Local development mode with no email infrastructure.'),
+            (u'local_with_local_mail',
+                u'Local development mode with dummy email infrastructure.'),
+            (u'dev_with_no_mail',
+                u'Online development mode with no email infrastructure.'),
+            (u'dev_with_dummy_obligee_mail', squeeze(u"""
+                Online development mode with working email infrastructure and dummy obligee email
+                addresses.""")),
+            (u'production',
+                u'Production mode.'),
             ))
     includes = {
             u'local_with_no_mail':          [u'server_local.py', u'mail_nomail.py'],
@@ -193,32 +207,54 @@ def configure_server_mode(configure, settings):
 
 def install_requirements(configure):
     server_mode = configure.get(u'server_mode')
-    enable_unittests = configure.input_yes_no(u'enable_unittests', u'Install requirements for unittesting?', default=u'N')
+    enable_unittests = configure.input_yes_no(u'enable_unittests',
+            u'Install requirements for unittesting?', default=u'N')
     requirements = {
-            u'local_with_no_mail':          [u'-r', u'requirements/base.txt', u'-r', u'requirements/local.txt'],
-            u'local_with_local_mail':       [u'-r', u'requirements/base.txt', u'-r', u'requirements/local.txt', u'-r', u'requirements/local_mail.txt'],
-            u'dev_with_no_mail':            [u'-r', u'requirements/base.txt', u'-r', u'requirements/online.txt'],
-            u'dev_with_dummy_obligee_mail': [u'-r', u'requirements/base.txt', u'-r', u'requirements/online.txt'],
-            u'production':                  [u'-r', u'requirements/base.txt', u'-r', u'requirements/online.txt'],
+            u'local_with_no_mail': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/local.txt',
+                ],
+            u'local_with_local_mail': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/local.txt',
+                u'-r', u'requirements/local_mail.txt',
+                ],
+            u'dev_with_no_mail': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/online.txt',
+                ],
+            u'dev_with_dummy_obligee_mail': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/online.txt',
+                ],
+            u'production': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/online.txt',
+                ],
             }[server_mode]
     requirements += {
             u'Y': [u'-r', u'requirements/tests.txt'],
             u'N': [],
             }[enable_unittests]
-    call(u'Installing requirements for the selected server mode:', [u'env/bin/pip', u'install'] + requirements);
+    call(u'Installing requirements for the selected server mode:',
+            [u'env/bin/pip', u'install'] + requirements);
 
 def configure_secret_key(configure, settings):
-    secret_key = configure.auto(u'secret_key', generate_secret_key(100, string.digits + string.letters + string.punctuation))
+    secret_key = configure.auto(u'secret_key',
+            generate_secret_key(100, string.digits + string.letters + string.punctuation))
     settings.setting(u'SECRET_KEY', secret_key)
 
 def configure_email_addresses(configure, settings):
-    server_domain = configure.input(u'server_domain', u'Server domain (with www and/or port number if used, eg. localhost:8000)', default=u'www.chcemvediet.sk', required=True)
+    server_domain = configure.input(u'server_domain',
+            u'Server domain (with www and/or port number if used, eg. localhost:8000)',
+            default=u'www.chcemvediet.sk', required=True)
     mail_domain = re.sub(r'^(?:www[.])?([^:]*)(?:[:]\d+)?$', r'\1', server_domain)
 
     print(INFO + textwrap.dedent(u"""
             Set admin e-mail. It will be used for lowlevel error reporting and
             administration e-mails.""") + RESET)
-    admin_email = configure.input(u'admin_email', u'Admin e-mail', default=u'admin@%s' % mail_domain, required=True)
+    admin_email = configure.input(u'admin_email', u'Admin e-mail',
+            default=u'admin@{}'.format(mail_domain), required=True)
     settings.setting(u'SERVER_EMAIL', admin_email)
     settings.setting(u'ADMINS[len(ADMINS):]', [(u'Admin', admin_email)])
 
@@ -227,13 +263,16 @@ def configure_email_addresses(configure, settings):
             e-mail addresses used by inforequests. The unique e-mail template must contain
             '{token}' as a placeholder to distinguish individual inforequests. For instance
             '{token}@mail.example.com' may be expanded to 'lama@mail.example.com'.""") + RESET)
-    inforequest_unique_email = configure.input(u'inforequest_unique_email', u'Inforequest unique e-mail', default=u'{token}@mail.%s' % mail_domain, required=True)
+    inforequest_unique_email = configure.input(u'inforequest_unique_email',
+            u'Inforequest unique e-mail', default=u'{token}@mail.{}'.format(mail_domain),
+            required=True)
     settings.setting(u'INFOREQUEST_UNIQUE_EMAIL', inforequest_unique_email)
 
     print(INFO + textwrap.dedent(u"""
             Set default from address. It will be used as the from e-mail addresses for all
             other e-mails.""") + RESET)
-    default_from_email = configure.input(u'default_from_email', u'Default from e-mail', default=u'info@%s' % mail_domain, required=True)
+    default_from_email = configure.input(u'default_from_email', u'Default from e-mail',
+            default=u'info@{}'.format(mail_domain), required=True)
     settings.setting(u'DEFAULT_FROM_EMAIL', default_from_email)
 
     # Production mode uses real obligee emails.
@@ -244,18 +283,26 @@ def configure_email_addresses(configure, settings):
                 addresses with dummies. Use '{name}' as a placeholder to distinguish individual
                 obligees. For instance 'mail@{name}.example.com' may be expanded to
                 'mail@martika-hnusta.example.com'."""))
-        obligee_dummy_mail = configure.input(u'obligee_dummy_mail', u'Obligee dummy e-mail', required=True)
+        obligee_dummy_mail = configure.input(u'obligee_dummy_mail', u'Obligee dummy e-mail',
+                required=True)
         settings.setting(u'OBLIGEE_DUMMY_MAIL', obligee_dummy_mail)
 
 def configure_devbar(configure, settings):
     server_mode = configure.get(u'server_mode')
     obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
     devbar_message = {
-            u'local_with_no_mail':          u'',
-            u'local_with_local_mail':       u'',
-            u'dev_with_no_mail':            u'<strong>Warning:</strong> This is a development server. No emails are sent anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin interface</a>.',
-            u'dev_with_dummy_obligee_mail': u'<strong>Warning:</strong> This is a development server. All obligee email addresses are replaced with dummies: %s.' % obligee_dummy_mail,
-            u'production':                  u'',
+            u'local_with_no_mail': u'',
+            u'local_with_local_mail': u'',
+            u'dev_with_no_mail': squeeze(u"""
+                <strong>Warning:</strong> This is a development server. No emails are sent
+                anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin
+                interface</a>.
+                """),
+            u'dev_with_dummy_obligee_mail': squeeze(u"""
+                <strong>Warning:</strong> This is a development server. All obligee email addresses
+                are replaced with dummies: {}.
+                """).format(obligee_dummy_mail),
+            u'production': u'',
             }[server_mode]
     settings.setting(u'DEVBAR_MESSAGE', devbar_message)
 
@@ -266,7 +313,8 @@ def configure_database(configure, settings):
                 Set MySQL database name, user and password.""") + RESET)
         db_name = configure.input(u'db_name', u'Database name', required=True)
         db_user = configure.input(u'db_user', u'Database user name', required=True)
-        db_password = configure.input_password(u'db_password', u'Database user password', required=True)
+        db_password = configure.input_password(u'db_password', u'Database user password',
+                required=True)
         settings.setting(u'DATABASES[u"default"][u"NAME"]', db_name)
         settings.setting(u'DATABASES[u"default"][u"USER"]', db_user)
         settings.setting(u'DATABASES[u"default"][u"PASSWORD"]', db_password)
@@ -283,23 +331,29 @@ def configure_mandrill(configure, settings):
                 URL prefix. If using ngrok, your prefix should look like
                 "https://<yoursubdomain>.ngrok.com/". If using a public server, the prefix
                 should be "https://<yourdomain>/".""") + RESET)
-        mandrill_webhook_https = configure.input_yes_no(u'mandrill_webhook_https', u'Use "https" for Mandrill Webhooks?', default=u'Y')
-        mandrill_webhook_prefix = configure.input(u'mandrill_webhook_prefix', u'Mandrill Webhook Prefix', default=u'%s://%s/' % (u'https' if mandrill_webhook_https == u'Y' else u'http', server_domain), required=True)
-        mandrill_webhook_secret = configure.auto(u'mandrill_webhook_secret', generate_secret_key(32, string.digits + string.letters))
-        mandrill_webhook_url = u'%s/mandrill/webhook/?secret=%s' % (mandrill_webhook_prefix.rstrip(u'/'), mandrill_webhook_secret)
+        mandrill_webhook_https = configure.input_yes_no(u'mandrill_webhook_https',
+                u'Use "https" for Mandrill Webhooks?', default=u'Y')
+        mandrill_webhook_prefix = configure.input(u'mandrill_webhook_prefix',
+                u'Mandrill Webhook Prefix', default=u'{}://{}/'.format(
+                    u'https' if mandrill_webhook_https == u'Y' else u'http', server_domain),
+                required=True)
+        mandrill_webhook_secret = configure.auto(u'mandrill_webhook_secret',
+                generate_secret_key(32, string.digits + string.letters))
+        mandrill_webhook_url = u'{}/mandrill/webhook/?secret={}'.format(
+                mandrill_webhook_prefix.rstrip(u'/'), mandrill_webhook_secret)
         mandrill_api_key = configure.input(u'mandrill_api_key', u'Mandrill API key', required=True)
         print(INFO + textwrap.dedent(u"""
                 After you finish this configuration and run your server, you can open Mandrill
                 webhook settings and create a webhook with the following URL:
 
-                    %s
+                    {}
 
                 It is not possible to create the webhook before you run your server, because
                 Mandrill checks if the given URL works. After you create your webhooks, run this
                 configuration once again and enter all their keys as given by Mandrill. If you
                 are entering multiple webhook keys, separate them with space. Leave the key
                 empty if you have not created the webhook yet."""
-                % mandrill_webhook_url) + RESET)
+                .format(mandrill_webhook_url)) + RESET)
         mandrill_webhook_keys = configure.input(u'mandrill_webhook_keys', u'Mandrill webhook keys')
         settings.setting(u'MANDRILL_WEBHOOK_SECRET', mandrill_webhook_secret)
         settings.setting(u'MANDRILL_WEBHOOK_URL', mandrill_webhook_url)
@@ -322,8 +376,10 @@ def create_or_sync_database(configure):
         User.objects.count()
     except DatabaseError:
         call(u'Create DB:', [u'env/bin/python', u'manage.py', u'migrate'])
-        call(u'Load DB fixtures:', [u'env/bin/python', u'manage.py', u'loaddata'] + load_fixtures(configure))
-        call(u'Load datasheets:', [u'env/bin/python', u'manage.py', u'loadsheets', u'fixtures/datasheets.xlsx'])
+        call(u'Load DB fixtures:',
+                [u'env/bin/python', u'manage.py', u'loaddata'] + load_fixtures(configure))
+        call(u'Load datasheets:',
+                [u'env/bin/python', u'manage.py', u'loadsheets', u'fixtures/datasheets.xlsx'])
     else:
         call(u'Migrate DB:', [u'env/bin/python', u'manage.py', u'migrate'])
 
@@ -342,7 +398,8 @@ def configure_admin_password(configure):
 
     print(INFO + textwrap.dedent(u"""
             Enter site admin password.""") + RESET)
-    admin_password = configure.input_password(u'admin_password', u'Admin password', make_password, required=True)
+    admin_password = configure.input_password(u'admin_password', u'Admin password',
+            make_password, required=True)
     admin_email = configure.get(u'admin_email')
     admin = User.objects.get(username=u'admin')
     if admin_password != admin.password or admin_email != admin.email:
@@ -358,8 +415,10 @@ def configure_social_accounts(configure):
             don't want to use some providers, just skip them by entering empty strings.
             Don't share the keys with anybody and never push them to git."""))
     for social_app in SocialApp.objects.all():
-        client_id = configure.input(u'%s_client_id' % social_app.provider, u'%s Client ID' % social_app.name)
-        secret = configure.input(u'%s_secret' % social_app.provider, u'%s Secret' % social_app.name)
+        client_id = configure.input(u'{}_client_id'.format(social_app.provider),
+                u'{} Client ID'.format(social_app.name))
+        secret = configure.input(u'{}_secret'.format(social_app.provider),
+                u'{} Secret'.format(social_app.name))
         if client_id != social_app.client_id or secret != social_app.secret:
             social_app.client_id = client_id
             social_app.secret = secret
@@ -382,9 +441,11 @@ def configure_dummy_obligee_emails(configure):
                 obligee.save()
 
 def compile_locales(configure):
-    for cwd in [u'poleno/attachments/', u'poleno/invitations/', u'poleno/mail/', u'poleno/pages/', u'poleno/utils/', u'chcemvediet/']:
+    for cwd in [u'poleno/attachments/', u'poleno/invitations/', u'poleno/mail/',
+            u'poleno/pages/', u'poleno/utils/', u'chcemvediet/']:
         rel = os.path.relpath(u'.', cwd)
-        call(u'Compiling locales:', [os.path.join(rel, u'env/bin/python'), os.path.join(rel, u'manage.py'), u'compilemessages'], cwd=cwd)
+        call(u'Compiling locales:', [os.path.join(rel, u'env/bin/python'),
+                os.path.join(rel, u'manage.py'), u'compilemessages'], cwd=cwd)
 
 def run_datachecks(configure):
     call(u'Running data checks:', [u'env/bin/python', u'manage.py', u'datacheck', u'--autofix'])

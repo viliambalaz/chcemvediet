@@ -20,7 +20,7 @@ class AttachmentsWidget(forms.TextInput):
         self.download_url_func = None
 
     def render(self, name, value, attrs=None):
-        textinput_value = u',%s,' % u','.join(u'%s' % a.pk for a in value or [])
+        textinput_value = u',{},'.format(u','.join(format(a.pk) for a in value or []))
         textinput_attrs = dict(attrs, type=u'hidden')
         textinput = super(AttachmentsWidget, self).render(name, textinput_value, textinput_attrs)
         return render_to_string(u'attachments/attachments_widget.html', {

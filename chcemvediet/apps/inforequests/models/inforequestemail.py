@@ -7,7 +7,7 @@ from aggregate_if import Count
 from poleno import datacheck
 from poleno.mail.models import Message
 from poleno.utils.models import FieldChoices, QuerySet
-from poleno.utils.misc import squeeze
+from poleno.utils.misc import FormatMixin, squeeze
 
 
 class InforequestEmailQuerySet(QuerySet):
@@ -22,7 +22,7 @@ class InforequestEmailQuerySet(QuerySet):
     def newest(self):
         return self.order_by_email().reverse()[:1]
 
-class InforequestEmail(models.Model):
+class InforequestEmail(FormatMixin, models.Model):
     # May NOT be NULL; m2m ends; Indexes are prefixes of [inforequest, email] and
     # [email, inforequest] indexes, respectively
     inforequest = models.ForeignKey(u'Inforequest', db_index=False)
@@ -73,7 +73,7 @@ class InforequestEmail(models.Model):
                 ]
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)
 
 @datacheck.register
 def datachecks(superficial, autofix):
@@ -88,7 +88,7 @@ def datachecks(superficial, autofix):
 
     if superficial:
         emails = emails[:5+1]
-    issues = [u'%r is assigned to %d inforequests' % (m, m.inforequest__count) for m in emails]
+    issues = [u'{} is assigned to {} inforequests'.format(m, m.inforequest__count) for m in emails]
     if superficial and issues:
         if len(issues) > 5:
             issues[-1] = u'More messages are assigned to multiple inforequests'

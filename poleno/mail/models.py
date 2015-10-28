@@ -13,7 +13,7 @@ from jsonfield import JSONField
 
 from poleno.attachments.models import Attachment
 from poleno.utils.models import FieldChoices, QuerySet, join_lookup
-from poleno.utils.misc import squeeze
+from poleno.utils.misc import FormatMixin, squeeze
 
 
 class MessageQuerySet(QuerySet):
@@ -32,7 +32,7 @@ class MessageQuerySet(QuerySet):
     def order_by_processed(self):
         return self.order_by(u'processed', u'pk')
 
-class Message(models.Model):
+class Message(FormatMixin, models.Model):
     # May NOT be NULL
     TYPES = FieldChoices(
             (u'INBOUND',  1, _(u'mail:Message:type:INBOUND')),
@@ -207,7 +207,7 @@ class Message(models.Model):
         return u', '.join(r.formatted for r in self.recipients_bcc)
 
     def __unicode__(self):
-        return u'%s' % self.pk
+        return format(self.pk)
 
 
 class RecipientQuerySet(QuerySet):
@@ -220,7 +220,7 @@ class RecipientQuerySet(QuerySet):
     def order_by_pk(self):
         return self.order_by(u'pk')
 
-class Recipient(models.Model):
+class Recipient(FormatMixin, models.Model):
     # May NOT be NULL
     message = models.ForeignKey(u'Message')
 
@@ -308,4 +308,4 @@ class Recipient(models.Model):
         self.name, self.mail = parseaddr(value)
 
     def __unicode__(self):
-        return u'[%s] %s' % (self.pk, self.mail)
+        return u'[{}] {}'.format(self.pk, self.mail)

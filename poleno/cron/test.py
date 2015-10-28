@@ -21,7 +21,7 @@ def mock_cron_jobs():
     patchers = {}
     mocks = {}
     for job in settings.CRON_CLASSES:
-        patchers[job] = mock.patch(u'%s.do' % job)
+        patchers[job] = mock.patch(u'{}.do'.format(job))
         mocks[job] = patchers[job].start()
     try:
         yield mocks

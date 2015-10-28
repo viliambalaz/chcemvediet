@@ -36,14 +36,14 @@ class Command(BaseCommand):
         output = []
         if options[u'list']:
             output.append(u'Available data checks:')
-            output.extend(u' -- %s' % c for c in datacheck.registry)
+            output.extend(u' -- {}'.format(c) for c in datacheck.registry)
             self.stdout.write(u'\n'.join(output))
             return
 
         if prefixes:
             registry = datacheck.registry.filtered(prefixes)
-            output.append(u'Running %s data checks:' % len(registry))
-            output.extend(u' -- %s' % c for c in registry)
+            output.append(u'Running {} data checks:'.format(len(registry)))
+            output.extend(u' -- {}'.format(c) for c in registry)
             output.append(u'')
         else:
             registry = datacheck.registry
@@ -56,20 +56,20 @@ class Command(BaseCommand):
         if autofixable:
             if options[u'autofix']:
                 output.append(squeeze(u"""
-                    Data checks identified %s issues, %s of them were autofixed.
-                    """) % (len(issues), autofixable))
+                    Data checks identified {} issues, {} of them were autofixed.
+                    """).format(len(issues), autofixable))
             else:
                 output.append(squeeze(u"""
-                    Data checks identified %s issues, %s of them can be autofixed (use --autofix).
-                    """) % (len(issues), autofixable))
+                    Data checks identified {} issues, {} of them can be autofixed (use --autofix).
+                    """).format(len(issues), autofixable))
         else:
-            output.append(u'Data checks identified %s issues.' % len(issues))
+            output.append(u'Data checks identified {} issues.'.format(len(issues)))
 
         for group, level_min, level_max, style in groups:
             filtered = [a for a in issues if level_min <= a.level < level_max]
             if filtered:
                 output.append(u'')
-                output.append(u'%s:' % group)
-                output.extend(style(u'%s' % a) for a in filtered)
+                output.append(u'{}:'.format(group))
+                output.extend(style(format(a)) for a in filtered)
 
         self.stdout.write(u'\n'.join(output))

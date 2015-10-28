@@ -97,7 +97,7 @@ class Command(BaseCommand):
                         continue
                     break
                 else:
-                    raise CommandError(u'Invalid date: "%s".' % joined)
+                    raise CommandError(u'Invalid date: "{}".'.format(joined))
             else:
                 # Remember this datetime may already be warped.
                 date = datetime.datetime.now()
@@ -106,7 +106,7 @@ class Command(BaseCommand):
             timewarp.jump(date=date+delta, speed=options[u'speedup'])
 
         if options[u'verbosity'] != u'0':
-            print(u'Real time: %s' % datetime.datetime.fromtimestamp(timewarp.real_time))
-            print(u'Warped time: %s' % (datetime.datetime.fromtimestamp(timewarp.warped_time)
+            print(u'Real time: {}'.format(datetime.datetime.fromtimestamp(timewarp.real_time)))
+            print(u'Warped time: {}'.format(datetime.datetime.fromtimestamp(timewarp.warped_time)
                     if timewarp.is_warped else u'--'))
-            print(u'Speedup: %s' % (timewarp.speedup if timewarp.is_warped else u'--'))
+            print(u'Speedup: {}'.format(timewarp.speedup if timewarp.is_warped else u'--'))

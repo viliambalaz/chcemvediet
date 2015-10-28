@@ -211,12 +211,12 @@ class Wizard(object):
         current_index = max(0, min(current_index, len(self.steps)-1))
         while current_index > 0 and not self.steps[current_index].accessible:
             current_index -= 1
-        if u'%d' % current_index != index:
+        if format(current_index) != index:
             raise WizzardRollback(self.steps[current_index])
         self.current_step = self.steps[current_index]
 
     def add_prefix(self, field_name):
-        return u'%s-%s' % (self.instance_id, field_name)
+        return u'{}-{}'.format(self.instance_id, field_name)
 
     def commit(self):
         self.current_step.commit()

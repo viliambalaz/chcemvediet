@@ -34,7 +34,7 @@ def merge_html_attrs(*args, **kwargs):
                 else:
                     attrs.setdefault(u'style', []).append(val)
             elif key in attrs:
-                raise ValueError(u'Duplicate attribute "%s".' % key)
+                raise ValueError(u'Duplicate attribute "{}".'.format(key))
             else:
                 attrs[key] = val
     if u'class' in attrs:

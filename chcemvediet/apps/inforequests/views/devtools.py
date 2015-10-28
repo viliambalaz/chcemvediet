@@ -98,7 +98,8 @@ def devtools_push_history(request, inforequest_pk):
                 legal_date=F(u'legal_date') - delta,
                 last_deadline_reminder=F(u'last_deadline_reminder') - delta,
                 )
-        messages.success(request, u'The inforequest was pushed in history by %s days.' % days)
+        messages.success(request,
+                u'The inforequest was pushed in history by {} days.'.format(days))
     else:
         messages.error(request, u'Invalid number of days.')
 

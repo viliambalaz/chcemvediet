@@ -41,7 +41,7 @@ class EmailBackend(BaseEmailBackend):
                 html = content
             else:
                 ext = guess_extension(content_type, u'.bin')
-                remnant_alternatives.append((u'message%s' % ext, content, content_type))
+                remnant_alternatives.append((u'message{}'.format(ext), content, content_type))
 
         recipients = []
         for addresses, type in ((message.to, Recipient.TYPES.TO),
@@ -68,7 +68,7 @@ class EmailBackend(BaseEmailBackend):
             if not content_type:
                 content_type = DEFAULT_ATTACHMENT_MIME_TYPE
             if not name:
-                name = u'attachment%s' % guess_extension(content_type, u'.bin')
+                name = u'attachment{}'.format(guess_extension(content_type, u'.bin'))
             attachments.append(Attachment(
                     file=ContentFile(content),
                     name=name,

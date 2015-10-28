@@ -96,15 +96,15 @@ class FieldChoices(object):
         inverse = {}
         for choice_name, choice_key, choice_value in args:
             if choice_key in inverse:
-                raise ValueError(u'Duplicate choice key: %r' % choice_key)
+                raise ValueError(u'Duplicate choice key: "{}"'.format(choice_key))
             inverse[choice_key] = choice_name
             if isinstance(choice_value, (list, tuple)): # It's a choice group
                 group = []
                 bunch = Bunch()
                 for group_name, group_key, group_value in choice_value:
                     if group_key in inverse:
-                        raise ValueError(u'Duplicate choice key: %r' % choice_key)
-                    inverse[group_key] = u'%s.%s' % (choice_name, group_name)
+                        raise ValueError(u'Duplicate choice key: "{}"'.format(choice_key))
+                    inverse[group_key] = u'{}.{}'.format(choice_name, group_name)
                     group.append((group_key, group_value))
                     setattr(bunch, group_name, group_key)
                 choices.append((choice_key, group))
@@ -134,7 +134,7 @@ class QuerySet(models.query.QuerySet):
 
         """
         if getattr(self.model.save, u'prevent_bulk_create', False):
-            raise ValueError(u"Can't bulk create %s" % self.model.__name__)
+            raise ValueError(u"Can't bulk create {}".format(self.model.__name__))
         super(QuerySet, self).bulk_create(*args, **kwargs)
 
     def get_or_404(self, *args, **kwargs):
