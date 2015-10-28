@@ -31,7 +31,8 @@ def mail():
                 except StopIteration:
                     break
                 except Exception:
-                    cron_logger.error(u'Receiving emails failed:\n%s' % traceback.format_exc())
+                    trace = unicode(traceback.format_exc(), u'utf-8')
+                    cron_logger.error(u'Receiving emails failed:\n%s' % trace)
                     break
 
     # Process inbound mail; At most 10 messages in one batch
@@ -50,8 +51,8 @@ def mail():
                 nop() # To let tests raise testing exception here.
             cron_logger.info(u'Processed received email: %s' % repr(message))
         except Exception:
-            cron_logger.error(u'Processing received email failed: %s\n%s'
-                    % (repr(message), traceback.format_exc()))
+            trace = unicode(traceback.format_exc(), u'utf-8')
+            cron_logger.error(u'Processing received email failed: %r\n%s' % (message, trace))
 
     # Send outbound mail; At most 10 messages in one batch
     path = getattr(settings, u'EMAIL_OUTBOUND_TRANSPORT', None)
@@ -76,5 +77,5 @@ def mail():
                             nop() # To let tests raise testing exception here.
                         cron_logger.info(u'Sent email: %s' % repr(message))
                     except Exception:
-                        cron_logger.error(u'Seding email failed: %s\n%s'
-                                % (repr(message), traceback.format_exc()))
+                        trace = unicode(traceback.format_exc(), u'utf-8')
+                        cron_logger.error(u'Seding email failed: %r\n%s' % (message, trace))
