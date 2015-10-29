@@ -1,0 +1,61 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- sg: dict with defined colors
+ %
+{% endcomment %}
+
+
+<table class="table sg-table">
+  <thead>
+    <tr>
+      <td></td>
+      <td>More darker</td>
+      <td>Darker</td>
+      <th>Featured color</th>
+      <td>Lighter</td>
+      <td>More lighter</td>
+      <td>Whitish</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Blue</th>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue_dd %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue_d %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue_l %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue_ll %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_blue_w %}</td>
+    </tr>
+    <tr>
+      <th>Green</th>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_green %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_green_l %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_green_ll %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_green_w %}</td>
+    </tr>
+    <tr>
+      <th>Red</th>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_red %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_red_l %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_red_ll %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_red_w %}</td>
+    </tr>
+    <tr>
+      <th>Gray</th>
+      <td>&mdash;</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_gray_d %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_gray %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_gray_l %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_gray_ll %}</td>
+      <td>{% include "styleguide/colors-color.html" with color=sg.chv_color_gray_w %}</td>
+    </tr>
+  </tbody>
+</table>

@@ -22,9 +22,10 @@
       {% assets "css,scss" local=True %}
     {% endcompress %}
   </head>
-  <body>
+  <body id="styleguide">
     <div>
       <h1>StyleGuide chcemvediet.sk</h1>
+      {% include "styleguide/colors.html" %}
       {% include "styleguide/navbar.html" %}
     </div>
     {% assets "js" external=True %}

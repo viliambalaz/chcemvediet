@@ -1,0 +1,17 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- bg: color
+ %  -- text: color
+ %  -- icon: color
+ %
+{% endcomment %}
+
+<div class="sg-color-combo" style="background: {{ bg }}; color: {{ text }};">
+  <span class="glyphicon glyphicon-tint" style="color: {{ icon}};"></span>
+  text: {{ text }}<br>
+  icon: {{ icon }}<br>
+  on: {{ bg }}
+</div>

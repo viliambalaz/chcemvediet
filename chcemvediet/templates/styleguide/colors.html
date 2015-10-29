@@ -1,0 +1,16 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load sass_variables from chcemvediet.styleguide %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<h2>Colors</h2>
+{% with sg="main/css/colors.sass"|sass_variables %}
+  {% include "styleguide/colors-colors.html" %}
+  {% include "styleguide/colors-combos.html" %}
+{% endwith %}
