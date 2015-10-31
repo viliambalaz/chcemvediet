@@ -9,8 +9,14 @@
 {% endcomment %}
 
 
-<h2 id="colors">Colors</h2>
-{% with sg="main/css/colors.sass"|sass_variables %}
-  {% include "styleguide/colors-colors.html" %}
-  {% include "styleguide/colors-combos.html" %}
-{% endwith %}
+<div class="sg-container">
+  <h2 id="colors">
+    <a href="#colors-collapse" class="collapsed" data-toggle="collapse">Colors</a>
+  </h2>
+  <div id="colors-collapse" class="collapse">
+    {% with sg="main/css/colors.sass"|sass_variables %}
+      {% include "styleguide/colors-colors.html" %}
+      {% include "styleguide/colors-combos.html" %}
+    {% endwith %}
+  </div>
+</div>

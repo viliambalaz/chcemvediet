@@ -1,0 +1,46 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="sg-container">
+  <h2 id="typography">
+    <a href="#typography-collapse" class="collapsed" data-toggle="collapse">Typography</a>
+  </h2>
+  <div id="typography-collapse" class="collapse">
+    <input id="sg-typo-grid-checkbox" type="checkbox" checked="checked">
+    <label for="sg-typo-grid-checkbox">Show baseline</label>
+    <div class="sg-typo-grid">
+      <div class="row">
+        <div class="col-md-4">
+          <h1>Heading 1</h1>
+          <p>{% lorem 3 %}</p>
+          <p>{% lorem 7 %}</p>
+          <h2>Heading 2 - Dolor sit amet, consectetur adipisicing elit</h2>
+          <p>{% lorem 8 %}</p>
+          <h3>Heading 3 - Dolor sit amet</h3>
+          <p>{% lorem 10 %}</p>
+        </div>
+        <div class="col-md-4">
+          <div class="chv-vskip-4"></div>
+          <p>{% lorem 3 %}</p>
+          <p>{% lorem 7 %}</p>
+          <h2>Heading 2 - Dolor sit amet</h2>
+          <p>{% lorem 10 %}</p>
+          <h3>Heading 3 - Dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt</h3>
+          <p>{% lorem 8 %}</p>
+        </div>
+        <div class="col-md-4">
+          <h1>Heading 1 - Lorem ipsum dolor sit amet consectetur adipisicing elit</h1>
+          {% lorem 7 5 'p' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,10 +8,18 @@
 {% endcomment %}
 
 
-<h2 id="icons">Icons</h2>
-<div class="clearfix">
-  {% include "styleguide/icons-icon.html" with icon="icon-search" %}
-  <br>
-  {% include "styleguide/icons-stacked.html" with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
-  {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
+<div class="sg-container">
+  <h2 id="icons">
+    <a href="#icons-collapse" class="collapsed" data-toggle="collapse">Icons</a>
+  </h2>
+  <div id="icons-collapse" class="collapse">
+    <div class="clearfix">
+      {% include "styleguide/icons-icon.html" with icon="icon-search" %}
+      <br>
+      {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
+        {% include "styleguide/icons-stacked.html" %}
+        {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" %}
+      {% endwith %}
+    </div>
+  </div>
 </div>

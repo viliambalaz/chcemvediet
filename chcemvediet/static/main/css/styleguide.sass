@@ -1,5 +1,10 @@
 
 body#styleguide
+  padding-bottom: 100px
+
+  .sg-container
+    margin-left: 50px
+    margin-right: 50px
 
   .sg-table
     table-layout: fixed
@@ -32,3 +37,14 @@ body#styleguide
     vertical-align: middle
     .chv-icon
       color: #666
+
+  #sg-typo-grid-checkbox:checked ~ .sg-typo-grid
+    $a: #ef9f9f 0px
+    $b: #ef9f9f 1px
+    $c: transparent 1px
+    $d: transparent ($chv-baseline / 2)
+    $e: #c9e4ef ($chv-baseline / 2)
+    $f: #c9e4ef ($chv-baseline / 2 + 1px)
+    $g: transparent ($chv-baseline / 2 + 1px)
+    $h: transparent $chv-baseline
+    background-image: repeating-linear-gradient(180deg, $a, $b, $c, $d, $e, $f, $g, $h)
