@@ -5,6 +5,6 @@ instrumental==0.5.3
 testfixtures==4.1.2
 
 # Dependencies for requirements for unittests
-Mako==1.0.1
-MarkupSafe==0.23
-astkit==0.5.4
+astkit==0.5.4     # instrumental
+Mako==1.0.1       # instrumental
+MarkupSafe==0.23  # instrumental

@@ -43,12 +43,12 @@ INSTALLED_APPS = (
     u'allauth.socialaccount.providers.linkedin',
     u'allauth.socialaccount.providers.twitter',
     # Other 3part apps
-    u'sekizai',
     u'adminplus',
     u'django_cron',
     u'simple_history',
-    u'pipeline',
     u'widget_tweaks',
+    u'compressor',
+    u'bootstrap_sass',
     # Reused apps
     u'poleno.utils',
     u'poleno.dummymail',
@@ -76,7 +76,6 @@ MIDDLEWARE_CLASSES = (
     u'django.middleware.locale.LocaleMiddleware',
     u'django.middleware.clickjacking.XFrameOptionsMiddleware',
     u'simple_history.middleware.HistoryRequestMiddleware',
-    #u'pipeline.middleware.MinifyHTMLMiddleware',
     )
 
 AUTHENTICATION_BACKENDS = (
@@ -99,7 +98,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     u'django.core.context_processors.request',
     u'django.core.context_processors.tz',
     u'django.contrib.messages.context_processors.messages',
-    u'sekizai.context_processors.sekizai',
     u'allauth.account.context_processors.account',
     u'allauth.socialaccount.context_processors.socialaccount',
     u'poleno.mail.context_processors.constants',
@@ -142,22 +140,21 @@ MEDIA_URL = u'/media/'
 STATIC_ROOT = os.path.join(PROJECT_PATH, u'static')
 STATIC_URL = u'/static/'
 
-STATICFILES_STORAGE = u'pipeline.storage.PipelineStorage'
-#STATICFILES_STORAGE = u'pipeline.storage.PipelineCachedStorage'
-
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, u'chcemvediet/static'),
+    os.path.join(PROJECT_PATH, u'fontello/output/static'),
     )
 
 STATICFILES_FINDERS = (
     u'django.contrib.staticfiles.finders.FileSystemFinder',
     u'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    u'pipeline.finders.PipelineFinder',
-    #u'pipeline.finders.CachedFileFinder',
+    u'compressor.finders.CompressorFinder',
+    )
+
+COMPRESS_PRECOMPILERS = (
+    (u'text/x-scss', u'django_libsass.SassCompiler'),
     )
 
 # JS and CSS assets settings
-# FIXME: enable pipeline and compressor in production?
 ASSETS = (
     # JQuery
     u'//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js',
@@ -165,46 +162,56 @@ ASSETS = (
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css',
     u'//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js',
     u'main/3part/jqueryui/1.10.3/datepicker-sk.js',
-    # Bootstrap
-    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css',
-    u'//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js',
     # JQuery File Upload (Requires: jquery.ui.widget.js)
     u'main/3part/jqueryplugins/jquery.iframe-transport.js',
     u'main/3part/jqueryplugins/jquery.fileupload.js',
     # Other JQuery plugins
     u'main/3part/jqueryplugins/jquery.cookie.js',
     u'main/3part/jqueryplugins/jquery.PrintArea.js',
+    # Fonts
+    u'//fonts.googleapis.com/css?family=Ubuntu:400,500,700',
+    u'fontello/css/fontello.css',
+    # Custom Bootstrap
+    u'main/css/main.sass',
+    u'javascripts/affix.js',
+    u'javascripts/alert.js',
+    u'javascripts/button.js',
+    u'javascripts/carousel.js',
+    u'javascripts/collapse.js',
+    u'javascripts/dropdown.js',
+    u'javascripts/modal.js',
+    u'javascripts/popover.js',
+    u'javascripts/scrollspy.js',
+    u'javascripts/tab.js',
+    u'javascripts/tooltip.js',
+    u'javascripts/transition.js',
     # Reused apps
-    u'poleno/css/*.css',
-    u'poleno/js/*.js',
-    u'attachments/css/*.css',
-    u'attachments/js/*.js',
+    u'poleno/js/00.confirm_button.js',
+    u'poleno/js/ajax.js',
+    u'poleno/js/autocomplete.js',
+    u'poleno/js/autosize_textarea.js',
+    u'poleno/css/composite_text.css',
+    u'poleno/js/composite_text.js',
+    u'poleno/js/datepicker.js',
+    u'poleno/css/editable.css',
+    u'poleno/js/editable.js',
+    u'poleno/js/hide_bootstrap_modal.js',
+    u'poleno/js/post_link.js',
+    u'poleno/js/print_button.js',
+    u'poleno/js/recursive_bootstrap_modal.js',
+    u'poleno/js/reload_button.js',
+    u'poleno/js/scrollto.js',
+    u'poleno/js/toggle_changed.js',
+    u'poleno/js/tooltip.js',
+    u'attachments/css/fileupload.css',
+    u'attachments/js/fileupload.js',
     # Local to the project
-    u'obligees/css/*.css',
-    u'obligees/js/*.js',
-    u'inforequests/css/*.css',
-    u'inforequests/js/*.js',
-    u'main/css/*.css',
-    u'main/js/*.js',
+    u'obligees/css/obligee_widget.css',
+    u'obligees/js/obligee_widget.js',
+    u'main/css/01.bootstrapfix.css',
+    u'main/js/01.bootstrapfix.js',
+    u'main/css/02.jqueryfix.css',
     )
-
-#PIPELINE_ENABLED = True
-PIPELINE_JS_COMPRESSOR = None
-PIPELINE_CSS_COMPRESSOR = None
-PIPELINE_JS = {
-    u'main': {
-        u'source_filenames': [a for a in ASSETS if not a.startswith(u'//') and a.endswith(u'.js')],
-        u'output_filename': u'js/main.js',
-    },
-}
-PIPELINE_CSS = {
-    u'main': {
-        u'source_filenames': [a for a in ASSETS if not a.startswith(u'//') and a.endswith(u'.css')],
-        u'output_filename': u'css/main.css',
-    },
-}
-EXTERNAL_JS = [a for a in ASSETS if a.startswith(u'//') and a.endswith(u'.js')]
-EXTERNAL_CSS = [a for a in ASSETS if a.startswith(u'//') and a.endswith(u'.css')]
 
 # Django-allauth settings
 ACCOUNT_ADAPTER = u'poleno.invitations.adapters.InvitationsAdapter'

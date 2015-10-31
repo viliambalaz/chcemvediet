@@ -1,5 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+import re
 import random
 from functools import partial
 
@@ -9,6 +10,7 @@ from django.core.urlresolvers import resolve
 from django.conf import settings
 from django.contrib.webdesign.lorem_ipsum import paragraphs
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.html import format_html
 
 from poleno.utils.urls import reverse
@@ -281,20 +283,47 @@ def change_lang(context, lang=None):
 def url(viewname, *args, **kwargs):
     return reverse(viewname, args=args, kwargs=kwargs)
 
-@register.simple_tag
-def external_css():
-    u"""
-    Render links to external css styles. Uses settins.EXTERNAL_CSS to get their list.
-    """
-    return u'\n'.join(
-            format_html(u'<link href="{0}" rel="stylesheet">', url)
-            for url in settings.EXTERNAL_CSS)
+
+ASSETS_TYPES = { # {{{
+        u'js': (
+            re.compile(r'[./]js([?#]|$)'),
+            u'<script src="{url}" type="text/javascript" charset="utf-8"></script>',
+            ),
+        u'css': (
+            re.compile(r'[./]css([?#]|$)'),
+            u'<link href="{url}" rel="stylesheet" type="text/css" charset="utf-8">',
+            ),
+        u'scss': (
+            re.compile(r'[.]s[ac]ss$'),
+            u'<link href="{url}" rel="stylesheet" type="text/x-scss">',
+            ),
+        } # }}}
 
 @register.simple_tag
-def external_js():
+def assets(types, external=False, local=False):
     u"""
-    Render links to external javascript. Uses settins.EXTERNAL_JS to get their list.
+    Render links to local and external assets defined in settins.ASSETS.
+
+    Example:
+        {% assets "js" external=True %}
+        {% assets "css,scss" local=True %}
     """
-    return u'\n'.join(
-            format_html(u'<script src="{0}"></script>', url)
-            for url in settings.EXTERNAL_JS)
+    res = []
+    types = types.split(u',')
+    for asset in settings.ASSETS:
+        # Only local/external assets
+        if asset.startswith(u'//'):
+            if not external:
+                continue
+            url = asset
+        else:
+            if not local:
+                continue
+            url = staticfiles_storage.url(asset)
+        # Only given types
+        for type in types:
+            type_re, type_tpl = ASSETS_TYPES[type]
+            if type_re.search(url):
+                res.append(format_html(type_tpl, url=url))
+                break
+    return u'\n'.join(res)

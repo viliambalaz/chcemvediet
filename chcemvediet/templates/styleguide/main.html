@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load trans from i18n %}
 {% load compress from compress %}
 {% load assets from poleno.utils %}
 
@@ -12,31 +11,23 @@
 
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en" }}">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% trans 'main:base:title' %}{% endblock %}</title>
+    <title>StyleGuide chcemvediet.sk</title>
     {% assets "css" external=True %}
     {% compress css %}
       {% assets "css,scss" local=True %}
     {% endcompress %}
   </head>
-  <body>
-    <header>
-      {% include "main/snippets/header.html" %}
-    </header>
-    <div class="container">
-      {% include "main/snippets/messages.html" %}
-      {% block container %}{% endblock %}
-    </div>
-    <footer class="container">
-      <hr>
-      {% include "main/snippets/footer.html" %}
-    </footer>
-    <div id="ajax-fail-modal" class="modal fade">
-      {% include "main/snippets/ajax_fail.html" %}
+  <body id="styleguide">
+    <div>
+      <h1>StyleGuide chcemvediet.sk</h1>
+      {% include "styleguide/colors.html" %}
+      {% include "styleguide/icons.html" %}
+      {% include "styleguide/navbar.html" %}
     </div>
     {% assets "js" external=True %}
     {% compress js %}

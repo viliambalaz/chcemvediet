@@ -1,0 +1,58 @@
+{
+  "name": "",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "f900b42ce284db3e619b0001e4878aed",
+      "css": "chv-horiz-40",
+      "code": 59393,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M0 0L0 357.8 575.8 497.8 81.6 497.8 0 642.2 0 1000 829.6 497.8 0 0Z",
+        "width": 830
+      },
+      "search": [
+        "chv-horiz-40"
+      ]
+    },
+    {
+      "uid": "bda436e99598248f24bbd55dbcd76d6a",
+      "css": "chv-horiz-70",
+      "code": 59394,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M0 0L0 357.8 81.6 497.8 575.8 497.8 0 642.2 0 1000 829.6 497.8 0 0Z",
+        "width": 830
+      },
+      "search": [
+        "chv-horiz-70"
+      ]
+    },
+    {
+      "uid": "70ef6853128f524b3c78c6e220468c5e",
+      "css": "chv-horiz-100",
+      "code": 59395,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M0 0L0 357.8 575.8 497.8 0 642.2 0 1000 829.6 497.8 0 0Z",
+        "width": 830
+      },
+      "search": [
+        "chv-horiz-100"
+      ]
+    },
+    {
+      "uid": "9dd9e835aebe1060ba7190ad2b2ed951",
+      "css": "search",
+      "code": 59392,
+      "src": "fontawesome"
+    }
+  ]
+}

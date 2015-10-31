@@ -1,0 +1,217 @@
+
+$chv-navbar-primary-color: #fff
+$chv-navbar-primary-bg: #0032b4
+$chv-navbar-primary-collapse-bg: #00328c
+$chv-navbar-secondary-color: #0032b4
+$chv-navbar-secondary-bg: #f8f8f8
+$chv-navbar-secondary-collapsed-color: #fff
+$chv-navbar-secondary-collapsed-bg: #b3b3b3
+$chv-navbar-secondary-collapsed-hover-bg: #999
+$chv-navbar-secondary-right-color: #666
+$chv-navbar-secondary-right-collapsed-color: #fff
+$chv-navbar-secondary-right-collapsed-bg: #6994e8
+$chv-navbar-link-padding-x: 10px
+$chv-navbar-link-padding-y: (($navbar-height - $line-height-computed) / 2)
+$chv-navbar-search-color: #fff
+$chv-navbar-search-bg: #00328c
+$chv-navbar-search-placeholder: #fff
+$chv-navbar-search-button-color: #fff
+$chv-navbar-search-button-bg: #02216c
+$chv-navbar-search-width: 160px
+$chv-nav-feature-color: #fff
+$chv-nav-feature-bg: #6fdc91
+$chv-nav-feature-hover-bg: #39b56e
+$chv-nav-user-color: #0032b4
+$chv-nav-user-bg: #6994e8
+$chv-nav-user-hover-color: #6994e8
+$chv-nav-user-hover-bg: #b5caf2
+
+.chv-navbar-primary
+  margin: 0
+  border: none
+  border-radius: 0
+  @include chv-color($chv-navbar-primary-color)
+  background-color: $chv-navbar-primary-bg
+  @include chv-links-reset()
+  a[data-toggle="collapse"]:not(.collapsed)
+    background-color: $chv-navbar-primary-collapse-bg
+
+.chv-navbar-secondary
+  margin: 0
+  border: none
+  border-radius: 0
+  @include chv-color($chv-navbar-secondary-color)
+  background-color: $chv-navbar-secondary-bg
+  @include chv-links-reset()
+
+.chv-navbar-primary-right,
+.chv-navbar-secondary-left,
+.chv-navbar-secondary-right
+  margin: 0
+  padding: 0
+  list-style: none
+  @include clearfix()
+  > li
+    display: block
+    float: left
+    &.active
+      font-weight: 700
+    > a
+      display: block
+      min-width: $navbar-height
+      padding: $chv-navbar-link-padding-y $chv-navbar-link-padding-x
+      outline: none
+      text-align: center
+      @include chv-hover-bold()
+
+.chv-navbar-primary-right,
+.chv-navbar-secondary-right
+  float: right
+  margin-right: (-$chv-navbar-link-padding-x)
+
+.chv-navbar-secondary-left
+  float: left
+  margin-left: (-$chv-navbar-link-padding-x)
+  @media(max-width:$screen-xs-max)
+    position: absolute
+    top: $navbar-height
+    left: 0
+    right: 0
+    margin: 0
+    @include chv-color($chv-navbar-secondary-collapsed-color)
+    background-color: $chv-navbar-secondary-collapsed-bg
+    z-index: 1
+    > li
+      float: none
+      > a
+        padding: 1.5ex $chv-container-padding
+        text-align: left
+        &:hover,
+        &:focus
+          background-color: $chv-navbar-secondary-collapsed-hover-bg
+        .chv-hover-bold
+          text-align: left
+    .open .dropdown-menu
+      position: static
+      float: none
+      margin: 0
+      padding: 0
+      border-radius: 0
+      border: none
+      box-shadow: none
+      background-color: rgba(#fff, 0.5)
+      > li > a
+        padding: 1.5ex $chv-container-padding
+  @media(min-width:$screen-sm-min)
+    display: block
+
+.chv-navbar-secondary-right
+  @include chv-color($chv-navbar-secondary-right-color)
+  @media(max-width:$screen-xs-max)
+    > li
+      position: static
+    .open .dropdown-menu
+      position: absolute
+      left: 0
+      right: 0
+      margin: 0
+      padding: 0
+      border-radius: 0
+      border: none
+      box-shadow: none
+      background-color: $chv-navbar-secondary-right-collapsed-bg
+      > li > a
+        padding: 1.5ex $chv-container-padding
+        color: $chv-navbar-secondary-right-collapsed-color
+        &:hover,
+        &:focus
+          background-color: rgba(#fff, 0.5)
+
+.chv-navbar-secondary-toggle
+  display: block
+  float: left
+  width: $navbar-height
+  height: $navbar-height
+  padding: 0
+  border: none
+  outline: none
+  background-color: $chv-navbar-secondary-collapsed-bg
+  .icon-bar
+    display: block
+    margin: ($navbar-height * 0.06) auto
+    width: ($navbar-height * 0.36)
+    height: ($navbar-height * 0.06)
+    background-color: $chv-navbar-secondary-collapsed-color
+  &.collapsed
+    background-color: $chv-navbar-secondary-bg
+    .icon-bar
+      background-color: $chv-navbar-secondary-color
+  @media(min-width:$screen-sm-min)
+    display: none
+
+.chv-navbar-search
+  border: none
+  outline: none
+  box-shadow: none
+  input
+    color: $chv-navbar-search-color
+    background-color: $chv-navbar-search-bg
+    border: none
+    outline: none
+    box-shadow: none !important
+    &:focus
+      @include placeholder(transparent)
+  button
+    color: $chv-navbar-search-button-color
+    background-color: $chv-navbar-search-bg
+    border-color: $chv-navbar-search-bg
+    font-weight: 700
+    &:hover,
+    &:focus
+      color: $chv-navbar-search-button-color
+      background-color: $chv-navbar-search-button-bg
+      border-color: $chv-navbar-search-bg
+  @media(max-width:$screen-xs-max)
+    float: none !important
+    margin: 0 (-$chv-container-padding)
+    padding: 0 $chv-container-padding
+    background-color: $chv-navbar-search-bg
+    .form-group
+      margin: 0
+    input
+      height: $navbar-height
+      border-radius: 0
+      margin: 0
+      padding: 0 $chv-navbar-link-padding-x 0 0
+    button
+      border-radius: 4px !important
+      background-color: $chv-navbar-search-button-bg
+  @media(min-width:$screen-sm-min)
+    display: block !important
+    padding: 0 $chv-navbar-link-padding-x
+    input
+      max-width: $chv-navbar-search-width
+
+.chv-nav-feature
+  margin: 0 $chv-navbar-link-padding-x
+  @include chv-color($chv-nav-feature-color)
+  background-color: $chv-nav-feature-bg
+  font-weight: 700
+  &:hover,
+  &:focus
+    background-color: $chv-nav-feature-hover-bg
+  a:hover,
+  a:focus
+    @include chv-color($chv-nav-feature-color)
+
+.chv-nav-user
+  .chv-circle
+    margin-left: $chv-navbar-link-padding-x
+    color: $chv-nav-user-color
+    background-color: $chv-nav-user-bg
+  a:hover,
+  a:focus
+    @include chv-color($chv-navbar-secondary-color)
+    .chv-circle
+      color: $chv-nav-user-hover-color
+      background-color: $chv-nav-user-hover-bg

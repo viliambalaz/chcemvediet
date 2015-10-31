@@ -1,0 +1,138 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load sass_variables from chcemvediet.styleguide %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<h3>Color combinations</h3>
+<table class="table sg-table">
+  <thead>
+    <tr>
+      <td></td>
+      <td>Default ink</td>
+      <td>Blue ink</td>
+      <td>Green ink</td>
+      <td>Red ink</td>
+      <td>Inverse ink</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>On blue</th>
+      <td>
+        {% with bg=sg.chv_color_blue_w text=sg.chv_text_default_on_blue_w icon=sg.chv_default_icon_on_blue_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_blue_w text=sg.chv_text_blue_on_blue_w icon=sg.chv_blue_icon_on_blue_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>
+        {% with bg=sg.chv_color_blue text=sg.chv_text_default_on_blue icon=sg.chv_default_icon_on_blue %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+    </tr>
+    <tr>
+      <th>On green</th>
+      <td>
+        {% with bg=sg.chv_color_green_w text=sg.chv_text_default_on_green_w icon=sg.chv_default_icon_on_green_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>&mdash;</td>
+      <td>
+        {% with bg=sg.chv_color_green_w text=sg.chv_text_green_on_green_w icon=sg.chv_green_icon_on_green_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>&mdash;</td>
+      <td>
+        {% with bg=sg.chv_color_green text=sg.chv_text_default_on_green icon=sg.chv_default_icon_on_green %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+    </tr>
+    <tr>
+      <th>On red</th>
+      <td>
+        {% with bg=sg.chv_color_red_w text=sg.chv_text_default_on_red_w icon=sg.chv_default_icon_on_red_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>
+        {% with bg=sg.chv_color_red_w text=sg.chv_text_red_on_red_w icon=sg.chv_red_icon_on_red_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_red text=sg.chv_text_default_on_red icon=sg.chv_default_icon_on_red %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+    </tr>
+    <tr>
+      <th>On gray</th>
+      <td>
+        {% with bg=sg.chv_color_gray_w text=sg.chv_text_default_on_gray_w icon=sg.chv_default_icon_on_gray_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_gray_w text=sg.chv_text_blue_on_gray_w icon=sg.chv_blue_icon_on_gray_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_gray_w text=sg.chv_text_green_on_gray_w icon=sg.chv_green_icon_on_gray_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_gray_w text=sg.chv_text_red_on_gray_w icon=sg.chv_red_icon_on_gray_w %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_gray text=sg.chv_text_default_on_gray icon=sg.chv_default_icon_on_gray %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+    </tr>
+    <tr>
+      <th>On white</th>
+      <td>
+        {% with bg=sg.chv_color_white text=sg.chv_text_default_on_white icon=sg.chv_default_icon_on_white %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_white text=sg.chv_text_blue_on_white icon=sg.chv_blue_icon_on_white %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_white text=sg.chv_text_green_on_white icon=sg.chv_green_icon_on_white %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>
+        {% with bg=sg.chv_color_white text=sg.chv_text_red_on_white icon=sg.chv_red_icon_on_white %}
+          {% include "styleguide/colors-combo.html" %}
+        {% endwith %}
+      </td>
+      <td>&mdash;</td>
+    </tr>
+  </tbody>
+</table>

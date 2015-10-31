@@ -17,9 +17,8 @@ from poleno.utils.misc import Bunch
 class TemplatetagsStringTest(TestCase):
     u"""
     Tests ``subtract``, ``negate``, ``range``, ``utc_date``, ``local_date``, ``squeeze``,
-    ``method``, ``call_with``, ``call`` and ``with`` template filters and ``lorem``,
-    ``external_css`` and ``external_js`` template tags. Tests are performed on simple templates in
-    strings.
+    ``method``, ``call_with``, ``call`` and ``with`` template filters and ``lorem`` template tags.
+    Tests are performed on simple templates in strings.
     """
 
     def _render(self, template, **context):
@@ -173,26 +172,6 @@ class TemplatetagsStringTest(TestCase):
                 u'({% lorem 14 2 "p" %})' # random text as paragraphs
                 u'')
         self.assertRegexpMatches(rendered, r'^\(Lorem ipsum .*\)\(<p>.{30,}</p>\s*<p>.{30,}</p>\)$')
-
-    def test_external_css_and_js_tags(self):
-        u"""
-        Test that ``external_css`` and ``external_js`` template tags render exactly all external
-        css and js assets confifured in ``settings.EXTERNAL_CSS`` and ``settings.EXTERNAL_JS`` in
-        the same order as configured.
-        """
-        css = [u'//test/aaa.css', u'//test/bbb.css']
-        js = [u'//test/ccc.js']
-        with self.settings(EXTERNAL_CSS=css, EXTERNAL_JS=js):
-            rendered = self._render(
-                    u'{% load external_css external_js from poleno.utils %}'
-                    u'{% external_css %}{% external_js %}'
-                    u'')
-
-            found_css = re.findall(r'<link .*?href="(.*?)".*?>', rendered)
-            self.assertEqual(found_css, css)
-
-            found_js = re.findall(r'<script .*?src="(.*?)".*?>', rendered)
-            self.assertEqual(found_js, js)
 
 class TemplatetagsViewTest(TestCase):
     u"""

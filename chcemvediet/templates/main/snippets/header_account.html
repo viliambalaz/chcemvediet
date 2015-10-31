@@ -11,9 +11,12 @@
 
 
 {% if user.is_authenticated %}
-  <li class="dropdown {{ request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations'|yes:"active" }}">
+  <li class="dropdown chv-nav-user {{ request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations'|yes:"active" }}">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
       {{ user.email }} <span class="caret"></span>
+      <span class="chv-circle">
+        <span class="glyphicon glyphicon-user"></span>
+      </span>
     </a>
     <ul class="dropdown-menu">
       <li>
@@ -56,12 +59,15 @@
 {% else %}
   <li class="{{ request|active:'account_login'|yes:"active" }}">
     <a href="{% url 'account_login' %}">
-      {% trans 'main:menu:account:login' %}
+      <span class="chv-hover-bold" data-content="{% trans 'main:menu:account:login' %}">
+        {% trans 'main:menu:account:login' %}
+      </span>
     </a>
   </li>
-  <li class="{{ request|active:'account_signup'|yes:"active" }}">
+  <li class="chv-nav-feature {{ request|active:'account_signup'|yes:"active" }}">
     <a href="{% url 'account_signup' %}">
-      {% trans 'main:menu:account:signup' %}
+      <span class="glyphicon glyphicon-plus"></span>
+      {% trans 'main:menu:create' %}
     </a>
   </li>
 {% endif %}

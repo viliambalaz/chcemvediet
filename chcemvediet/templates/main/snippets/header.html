@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
+{% load static from staticfiles %}
 {% load page page_active from poleno.pages %}
 {% load yes from poleno.utils %}
 
@@ -11,37 +12,58 @@
 {% endcomment %}
 
 
-<div class="chv-fixed-header">
-  {% if DEVBAR_MESSAGE %}
-    <div class="chv-devbar">
-      <div class="container">
-        <p>{{ DEVBAR_MESSAGE|safe }}</p>
-      </div>
-    </div>
-  {% endif %}
-  <nav class="navbar navbar-inverse navbar-static-top">
+{% if DEVBAR_MESSAGE %}
+  <div class="chv-devbar">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                data-target=".navbar-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand {{ request|page_active:'=/'|yes:"active" }}" href="{% page '/' %}">
-          {% trans 'main:menu:brand' %}
-        </a>
-      </div>
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          {% include "main/snippets/header_menu.html" %}
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          {% include "main/snippets/header_devtools.html" %}
-          {% include "main/snippets/header_account.html" %}
-          {% include "main/snippets/header_language.html" %}
-        </ul>
-      </div>
+      <p>{{ DEVBAR_MESSAGE|safe }}</p>
     </div>
-  </nav>
-</div>
+  </div>
+{% endif %}
+
+<nav class="navbar chv-navbar-primary">
+  <div class="container">
+    <div class="chv-brand">
+      <a href="{% page '/' %}">chem<b>vediet</b>.<tt>sk</tt></a>
+      <span class="badge">beta</span>
+    </div>
+    <ul class="chv-navbar-primary-right">
+      <li class="visible-xs">
+        <a class="collapsed" href="#" data-toggle="collapse" data-target=".chv-navbar-search">
+          <span class="glyphicon glyphicon-search"></span>
+        </a>
+      </li>
+      {% include "main/snippets/header_language.html" %}
+    </ul>
+    <form class="navbar-form chv-navbar-search collapse pull-right" action=".">
+      <div class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control"
+                 placeholder="{% trans 'main:menu:search:placeholder' %}">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <span class="hidden-xs"><span class="glyphicon glyphicon-search"></span></span>
+              <span class="visible-xs">{% trans 'main:menu:search:button' %}</span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</nav>
+<nav class="navbar chv-navbar-secondary">
+  <div class="container">
+    <button type="button" class="chv-navbar-secondary-toggle collapsed" data-toggle="collapse"
+            data-target=".chv-navbar-secondary-left">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <ul class="chv-navbar-secondary-left collapse">
+      {% include "main/snippets/header_menu.html" %}
+    </ul>
+    <ul class="chv-navbar-secondary-right">
+      {% include "main/snippets/header_devtools.html" %}
+      {% include "main/snippets/header_account.html" %}
+    </ul>
+  </div>
+</nav>

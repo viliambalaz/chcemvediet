@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import TemplateView
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -14,6 +15,7 @@ from . import ready
 
 urlpatterns = patterns(u'',
     url(r'^mandrill/', include(u'poleno.mail.transports.mandrill.urls', namespace=u'mandrill')),
+    url(r'^sg/$', TemplateView.as_view(template_name=u'styleguide/main.html'), name=u'styleguide'),
     url(r'^i18n/', include(u'django.conf.urls.i18n')),
 )
 
