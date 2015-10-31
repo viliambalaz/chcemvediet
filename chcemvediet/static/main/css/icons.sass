@@ -1,0 +1,161 @@
+
+//
+// Simple icon
+//
+.chv-icon
+  display: inline-block
+  width: 1em
+  height: 1em
+  line-height: 1em
+  // Fontello sets margins on :before pseudo element. We prefer them
+  // on the element itself so they are outside the border.
+  margin-left: 0.2em
+  margin-right: 0.2em
+  &:before
+    margin: 0
+
+//
+// Larger icons
+//
+.chv-icon-lg // 33% larger
+  font-size: (4em / 3)
+.chv-icon-2x
+  font-size: 2em
+.chv-icon-3x
+  font-size: 3em
+
+//
+// Stacked icons
+//
+.chv-icon-stack,
+.chv-icon-stack-2x,
+.chv-icon-stack-3x,
+  position: relative
+  display: inline-block
+  vertical-align: -15%
+  > .chv-icon
+    position: absolute
+    left: 0
+    right: 0
+    margin: 0
+    line-height: inherit
+    text-align: center
+.chv-icon-stack
+  width: 1em
+  height: 1em
+  line-height: 1em
+  margin-left: 0.2em
+  margin-right: 0.2em
+.chv-icon-stack-2x
+  width: 2em
+  height: 2em
+  line-height: 2em
+  margin-left: 0.4em
+  margin-right: 0.4em
+.chv-icon-stack-3x
+  width: 3em
+  height: 3em
+  line-height: 3em
+  margin-left: 0.6em
+  margin-right: 0.6em
+
+//
+// Vertically centered icon
+//
+.chv-icon-vc
+  vertical-align: middle
+
+//
+// Custom fixes for particular icons
+//
+.icon-chv-horiz-40
+  opacity: 0.4
+.icon-chv-horiz-70
+  opacity: 0.7
+
+
+///////////////////////////////////////////////////////////
+// Icon manipulation adapted from Font Awesome
+// See: https://fortawesome.github.io/Font-Awesome/examples/
+//
+
+//
+// Fixed Width Icons
+//
+.chv-icon-fw
+  width: (18em / 14)
+  text-align: center
+
+//
+// List icons
+//
+$chv-icon-li-width: (30em / 14)
+.chv-icon-ul
+  padding-left: 0
+  margin-left: $chv-icon-li-width
+  list-style-type: none
+  > li
+    position: relative
+.chv-icon-li
+  position: absolute
+  left: -$chv-icon-li-width
+  width: $chv-icon-li-width
+  top: (2em / 14)
+  text-align: center
+  &.chv-icon-lg
+    left: -$chv-icon-li-width + (4em / 14)
+
+//
+// Spinning Icons
+//
+.chv-icon-spin
+  -webkit-animation: chv-icon-spin 2s infinite linear
+  animation:         chv-icon-spin 2s infinite linear
+.chv-icon-pulse
+  -webkit-animation: chv-icon-spin 1s infinite steps(8)
+  animation:         chv-icon-spin 1s infinite steps(8)
+@-webkit-keyframes chv-icon-spin
+  0%
+    -webkit-transform: rotate(0deg)
+    transform:         rotate(0deg)
+  100%
+    -webkit-transform: rotate(359deg)
+    transform:         rotate(359deg)
+@keyframes chv-icon-spin
+  0%
+    -webkit-transform: rotate(0deg)
+    transform:         rotate(0deg)
+  100%
+    -webkit-transform: rotate(359deg)
+    transform:         rotate(359deg)
+
+//
+// Rotated & Flipped Icons
+//
+@mixin chv-icon-rotate($degrees, $rotation)
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})
+  -webkit-transform: rotate($degrees)
+  -ms-transform:     rotate($degrees)
+  transform:         rotate($degrees)
+@mixin chv-icon-flip($horiz, $vert, $rotation)
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})
+  -webkit-transform: scale($horiz, $vert)
+  -ms-transform:     scale($horiz, $vert)
+  transform:         scale($horiz, $vert)
+.chv-icon-rotate-90
+  @include chv-icon-rotate(90deg, 1)
+.chv-icon-rotate-180
+  @include chv-icon-rotate(180deg, 2)
+.chv-icon-rotate-270
+  @include chv-icon-rotate(270deg, 3)
+.chv-icon-flip-horizontal
+  @include chv-icon-flip(-1, 1, 0)
+.chv-icon-flip-vertical
+  @include chv-icon-flip(1, -1, 2)
+// Hook for IE8-9
+:root .chv-icon-rotate-90,
+:root .chv-icon-rotate-180,
+:root .chv-icon-rotate-270,
+:root .chv-icon-flip-horizontal,
+:root .chv-icon-flip-vertical,
+  filter: none

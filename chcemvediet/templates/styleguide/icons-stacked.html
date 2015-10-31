@@ -1,0 +1,28 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- stack: string
+ %  -- icons: string
+ %
+{% endcomment %}
+
+<div class="sg-icon">
+  <span class="chv-icon-stack chv-icon-2x chv-icon-vc {{ stack }}">
+    {% for icon in icons|split:"," %}
+      <i class="chv-icon {{ icon }}"></i>
+    {% endfor %}
+  </span>
+  {% if stack %}
+    <span class="chv-middle">
+      {{ stack }} +
+    </span>
+  {% endif %}
+  <span class="chv-middle">
+    {% for icon in icons|split:"," %}
+      {{ icon }}<br>
+    {% endfor %}
+  </span>
+</div>

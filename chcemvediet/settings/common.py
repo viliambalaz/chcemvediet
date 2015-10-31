@@ -141,7 +141,7 @@ STATIC_ROOT = os.path.join(PROJECT_PATH, u'static')
 STATIC_URL = u'/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, u'chcemvediet/static'),
+    os.path.join(PROJECT_PATH, u'fontello/output/static'),
     )
 
 STATICFILES_FINDERS = (
@@ -170,6 +170,7 @@ ASSETS = (
     u'main/3part/jqueryplugins/jquery.PrintArea.js',
     # Fonts
     u'//fonts.googleapis.com/css?family=Ubuntu:400,500,700',
+    u'fontello/css/fontello.css',
     # Custom Bootstrap
     u'main/css/main.sass',
     u'javascripts/affix.js',

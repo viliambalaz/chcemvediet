@@ -239,6 +239,9 @@ def install_requirements(configure):
     call(u'Installing requirements for the selected server mode:',
             [u'env/bin/pip', u'install'] + requirements);
 
+def download_fontello(configure):
+    call(u'Downloading Fontello:', [u'env/bin/python', u'fontello/fontello.py'])
+
 def configure_secret_key(configure, settings):
     secret_key = configure.auto(u'secret_key',
             generate_secret_key(100, string.digits + string.letters + string.punctuation))
@@ -518,6 +521,7 @@ def main():
         with Settings() as settings:
             configure_server_mode(configure, settings)
             install_requirements(configure)
+            download_fontello(configure)
             configure_secret_key(configure, settings)
             configure_email_addresses(configure, settings)
             configure_devbar(configure, settings)
