@@ -1,40 +1,40 @@
 
 $chv-baseline: 20px
-$chv-font-size-p: 14px
-$chv-font-size-h1: ($chv-font-size-p * 2.5)
-$chv-font-size-h2: ($chv-font-size-h1 * 5 / 7)
-$chv-font-size-h3: ($chv-font-size-h2 * 3 / 5)
+$chv-baseline-p:  "p"  "p"  14px 1 0 1
+$chv-baseline-h1: "h1" "h1" 35px 2 1 1
+$chv-baseline-h2: "h2" "h2" 25px 2 0 1
+$chv-baseline-h3: "h3" "h3" 15px 1 0 1
 
 //
-// Text elements keeping vertical rhythm
+// Paragraphs and headings with vertical rhythm.
+//
+// Use <h2 class="chv-adjust-to-h1"> to align the first line of h2 to the first line of h1.
+// Use <div class="chv-vskip-h1"> to skip the same height as would be taken by one-line <h1>.
 //
 
-@mixin chv-baseline-fix($fontsize, $lines, $extra: 0)
-  // This constants probably work only for this particular font
-  $lineheight: $chv-baseline * $lines
-  $baseline-fix: ($lineheight * 37 / 88 - $fontsize / 4)
-  padding-top: ($baseline-fix + $extra * $chv-baseline)
-  padding-bottom: 0
-  margin-top: 0
-  margin-bottom: ($chv-baseline - $baseline-fix)
-  font-size: $fontsize
-  line-height: $lineheight
+$chv-baseline-spec: ()
+$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h1)
+$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h2)
+$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h3)
+$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-p)
 
-p
-  @include chv-baseline-fix($chv-font-size-p, 1)
-  color: $chv-text-default-on-white
-h1
-  @include chv-baseline-fix($chv-font-size-h1, 2, 1)
-h2
-  @include chv-baseline-fix($chv-font-size-h2, 2)
-h3
-  @include chv-baseline-fix($chv-font-size-h3, 1)
-h1, h2, h3
-  font-weight: 400
-  color: $chv-text-blue-on-white
+@each $name, $selector, $fontsize, $lead, $above, $below in $chv-baseline-spec
+  $fix: ($lead * $chv-baseline * 37 / 88 - $fontsize / 4)
+  #{$selector}
+    padding-top: ($fix + $above * $chv-baseline)
+    padding-bottom: 0
+    margin-top: 0
+    margin-bottom: ($below * $chv-baseline - $fix)
+    font-size: $fontsize
+    line-height: $lead * $chv-baseline
+    @each $name2, $selector2, $fontsize2, $lead2, $above2, $below2 in $chv-baseline-spec
+      &.chv-adjust-to-#{$name2}
+        padding-top: (($lead2 + $above2 - $lead) * $chv-baseline + $fix)
+  .chv-vskip-#{$name}
+    height: (($lead + $above + $below) * $chv-baseline)
 
 //
-// Vertical skip
+// Vertical skips with fixed heights
 //
 
 .chv-vskip-1
