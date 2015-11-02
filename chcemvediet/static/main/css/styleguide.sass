@@ -15,8 +15,12 @@ body#styleguide
   .sg-color
     width: 50px
     height: 50px
+    line-height: 50px
     margin: 1ex auto
     border-radius: 50%
+    font-size: 30px
+    text-align: center
+    color: red
 
   .sg-color-combo
     width: 150px
@@ -26,7 +30,7 @@ body#styleguide
     border-radius: 1em
     text-align: left
     overflow: hidden
-    .glyphicon
+    .chv-icon
       float: left
       margin: 0.7ex 0 0 -3ex
 
@@ -35,16 +39,6 @@ body#styleguide
     min-width: 200px
     margin: 10px
     vertical-align: middle
-    .chv-icon
-      color: #666
 
-  #sg-typo-grid-checkbox:checked ~ .sg-typo-grid
-    $a: #ef9f9f 0px
-    $b: #ef9f9f 1px
-    $c: transparent 1px
-    $d: transparent ($chv-baseline / 2)
-    $e: #c9e4ef ($chv-baseline / 2)
-    $f: #c9e4ef ($chv-baseline / 2 + 1px)
-    $g: transparent ($chv-baseline / 2 + 1px)
-    $h: transparent $chv-baseline
-    background-image: repeating-linear-gradient(180deg, $a, $b, $c, $d, $e, $f, $g, $h)
+  .sg-checkbox:checked ~ .sg-grid
+    @extend .baseline-grid

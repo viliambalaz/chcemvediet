@@ -1,8 +1,11 @@
 
+//
 // Featured colors
 // -l is lighter and -ll is more lighter
 // -d is darker and -dd is more darker
 // -w is whitish
+//
+
 $chv-color-blue: #0032b4
 $chv-color-blue-d: #00328c
 $chv-color-blue-dd: #02216c
@@ -24,46 +27,197 @@ $chv-color-gray-d: #333333
 $chv-color-gray-w: #f8f8f8
 $chv-color-white: #ffffff
 
-// Default (gray) text shades for backgrounds
-$chv-text-default-on-blue: #ffffff
-$chv-text-default-on-blue-w: #4d4d4d
-$chv-text-default-on-green: #ffffff
-$chv-text-default-on-green-w: #4d4d4d
-$chv-text-default-on-red: #ffffff
-$chv-text-default-on-red-w: #4d4d4d
-$chv-text-default-on-gray: #c1c1c1
-$chv-text-default-on-gray-w: #333333
+@mixin chv-color($name, $color)
+  .chv-color-#{$name}
+    color: $color !important
+  a:focus, a:hover
+    .chv-hover-#{$name}
+      color: $color !important
+
+@include chv-color("blue", $chv-color-blue)
+@include chv-color("blue-d", $chv-color-blue-d)
+@include chv-color("blue-dd", $chv-color-blue-dd)
+@include chv-color("blue-l", $chv-color-blue-l)
+@include chv-color("blue-ll", $chv-color-blue-ll)
+@include chv-color("blue-w", $chv-color-blue-w)
+@include chv-color("green", $chv-color-green)
+@include chv-color("green-l", $chv-color-green-l)
+@include chv-color("green-ll", $chv-color-green-ll)
+@include chv-color("green-w", $chv-color-green-w)
+@include chv-color("red", $chv-color-red)
+@include chv-color("red-l", $chv-color-red-l)
+@include chv-color("red-ll", $chv-color-red-ll)
+@include chv-color("red-w", $chv-color-red-w)
+@include chv-color("gray", $chv-color-gray)
+@include chv-color("gray-l", $chv-color-gray-l)
+@include chv-color("gray-ll", $chv-color-gray-ll)
+@include chv-color("gray-d", $chv-color-gray-d)
+@include chv-color("gray-w", $chv-color-gray-w)
+@include chv-color("white", $chv-color-white)
+
+//
+// Special colors
+//
+
+$chv-color-twitter: #6cadde
+$chv-color-facebook: #3a5795
+
+@include chv-color("facebook", $chv-color-facebook)
+@include chv-color("twitter", $chv-color-twitter)
+
+//
+// Default shades for backgrounds
+//
+
+$chv-text-default-on-blue: purple
+$chv-text-default-on-blue-w: purple
+$chv-text-default-on-green: purple
+$chv-text-default-on-green-w: purple
+$chv-text-default-on-red: purple
+$chv-text-default-on-red-w: purple
+$chv-text-default-on-gray: purple
+$chv-text-default-on-gray-w: #4d4d4d
 $chv-text-default-on-white: #4d4d4d
 
-// Admissible text color combinations
-$chv-text-blue-on-blue-w: $chv-color-blue
-$chv-text-blue-on-gray-w: $chv-color-blue
-$chv-text-blue-on-white: $chv-color-blue
-$chv-text-green-on-green-w: $chv-color-green
-$chv-text-green-on-gray-w: $chv-color-green
-$chv-text-green-on-white: $chv-color-green
-$chv-text-red-on-red-w: $chv-color-red
-$chv-text-red-on-gray-w: $chv-color-red
-$chv-text-red-on-white: $chv-color-red
+$chv-title-default-on-blue: purple
+$chv-title-default-on-blue-w: purple
+$chv-title-default-on-green: purple
+$chv-title-default-on-green-w: purple
+$chv-title-default-on-red: purple
+$chv-title-default-on-red-w: purple
+$chv-title-default-on-gray: purple
+$chv-title-default-on-gray-w: purple
+$chv-title-default-on-white: $chv-color-blue
 
-// Default (gray) icon shades for backgrounds
-$chv-default-icon-on-blue: #ffffff
-$chv-default-icon-on-blue-w: #999999
-$chv-default-icon-on-green: #ffffff
-$chv-default-icon-on-green-w: #999999
-$chv-default-icon-on-red: #ffffff
-$chv-default-icon-on-red-w: #999999
-$chv-default-icon-on-gray: #c1c1c1
-$chv-default-icon-on-gray-w: #999999
-$chv-default-icon-on-white: #999999
+$chv-link-default-on-blue: purple
+$chv-link-default-on-blue-w: purple
+$chv-link-default-on-green: purple
+$chv-link-default-on-green-w: purple
+$chv-link-default-on-red: purple
+$chv-link-default-on-red-w: purple
+$chv-link-default-on-gray: purple
+$chv-link-default-on-gray-w: $chv-color-blue
+$chv-link-default-on-white: $chv-color-blue
 
-// Admissible icon color combinations
-$chv-blue-icon-on-blue-w: $chv-color-blue
-$chv-blue-icon-on-gray-w: $chv-color-blue
-$chv-blue-icon-on-white: $chv-color-blue
-$chv-green-icon-on-green-w: $chv-color-green
-$chv-green-icon-on-gray-w: $chv-color-green
-$chv-green-icon-on-white: $chv-color-green
-$chv-red-icon-on-red-w: $chv-color-red
-$chv-red-icon-on-gray-w: $chv-color-red
-$chv-red-icon-on-white: $chv-color-red
+$chv-hover-default-on-blue: purple
+$chv-hover-default-on-blue-w: purple
+$chv-hover-default-on-green: purple
+$chv-hover-default-on-green-w: purple
+$chv-hover-default-on-red: purple
+$chv-hover-default-on-red-w: purple
+$chv-hover-default-on-gray: purple
+$chv-hover-default-on-gray-w: $chv-color-blue-ll
+$chv-hover-default-on-white: $chv-color-blue-ll
+
+$chv-icon-default-on-blue: purple
+$chv-icon-default-on-blue-w: purple
+$chv-icon-default-on-green: purple
+$chv-icon-default-on-green-w: purple
+$chv-icon-default-on-red: purple
+$chv-icon-default-on-red-w: purple
+$chv-icon-default-on-gray: purple
+$chv-icon-default-on-gray-w: #b3b3b3
+$chv-icon-default-on-white: #999999
+
+@mixin chv-bg($bg, $text, $title, $link, $hover, $icon)
+  background-color: $bg
+  color: $text
+  @include chv-link-color($link, $hover)
+  h1, h2, h3
+    color: $title
+  .chv-icon
+    color: $icon
+  .chv-icon-inv
+    color: $bg
+  .chv-text-default
+    color: $text
+
+.chv-bg-gray
+  $bg: $chv-color-gray-w
+  $text: $chv-text-default-on-gray-w
+  $title: $chv-title-default-on-gray-w
+  $link: $chv-link-default-on-gray-w
+  $hover: $chv-hover-default-on-gray-w
+  $icon: $chv-icon-default-on-gray-w
+  @include chv-bg($bg, $text, $title, $link, $hover, $icon)
+
+.chv-bg-white
+  $bg: $chv-color-white
+  $text: $chv-text-default-on-white
+  $title: $chv-title-default-on-white
+  $link: $chv-link-default-on-white
+  $hover: $chv-hover-default-on-white
+  $icon: $chv-icon-default-on-white
+  @include chv-bg($bg, $text, $title, $link, $hover, $icon)
+
+//
+// Admissible color combinations
+//
+// FIXME: In /o-projekte/ was
+//  -- $chv-icon-blue-on-white := $chv-color-blue-ll
+//  -- $chv-icon-red-on-white := $chv-color-red
+// Fix it there after setting it here
+//
+
+$chv-text-blue-on-blue-w: purple
+$chv-text-blue-on-gray-w: purple
+$chv-text-blue-on-white: purple
+$chv-text-green-on-green-w: purple
+$chv-text-green-on-gray-w: purple
+$chv-text-green-on-white: purple
+$chv-text-red-on-red-w: purple
+$chv-text-red-on-gray-w: purple
+$chv-text-red-on-white: purple
+
+$chv-title-blue-on-blue-w: purple
+$chv-title-blue-on-gray-w: purple
+$chv-title-blue-on-white: purple
+$chv-title-green-on-green-w: purple
+$chv-title-green-on-gray-w: purple
+$chv-title-green-on-white: purple
+$chv-title-red-on-red-w: purple
+$chv-title-red-on-gray-w: purple
+$chv-title-red-on-white: purple
+
+$chv-link-blue-on-blue-w: purple
+$chv-link-blue-on-gray-w: purple
+$chv-link-blue-on-white: purple
+$chv-link-green-on-green-w: purple
+$chv-link-green-on-gray-w: purple
+$chv-link-green-on-white: purple
+$chv-link-red-on-red-w: purple
+$chv-link-red-on-gray-w: purple
+$chv-link-red-on-white: purple
+
+$chv-hover-blue-on-blue-w: purple
+$chv-hover-blue-on-gray-w: purple
+$chv-hover-blue-on-white: purple
+$chv-hover-green-on-green-w: purple
+$chv-hover-green-on-gray-w: purple
+$chv-hover-green-on-white: purple
+$chv-hover-red-on-red-w: purple
+$chv-hover-red-on-gray-w: purple
+$chv-hover-red-on-white: purple
+
+$chv-icon-blue-on-blue-w: purple
+$chv-icon-blue-on-gray-w: purple
+$chv-icon-blue-on-white: $chv-color-blue-ll
+$chv-icon-green-on-green-w: purple
+$chv-icon-green-on-gray-w: purple
+$chv-icon-green-on-white: purple
+$chv-icon-red-on-red-w: purple
+$chv-icon-red-on-gray-w: purple
+$chv-icon-red-on-white: $chv-color-red
+
+.chv-bg-white
+  .chv-icon.chv-icon-blue
+    color: $chv-icon-blue-on-white
+  .chv-icon.chv-icon-red
+    color: $chv-icon-red-on-white
+
+//
+// Body background is white
+//
+
+body
+  @extend .chv-bg-white

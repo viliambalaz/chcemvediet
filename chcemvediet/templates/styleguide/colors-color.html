@@ -1,12 +1,25 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load getkey from poleno.utils %}
 
 {% comment %}
  %
  % Context:
- %  -- color: color
+ %  -- sg: dict with defined colors
+ %  -- name: string
  %
 {% endcomment %}
 
 
-{{ color }}
-<div class="sg-color" style="background: {{ color }}"></div>
+{% with sassname="$chv-color-"|add:name class="chv-color-"|add:name %}
+  {% if sassname in sg %}
+    {% with color=sg|getkey:sassname %}
+      {{ class }}<br>
+      {{ color }}<br>
+      <div class="sg-color" style="background: {{ color }}">
+        <i class="chv-icon icon-cancel {{ class }}"></i>
+      </div>
+    {% endwith %}
+  {% else %}
+    &mdash;
+  {% endif %}
+{% endwith %}

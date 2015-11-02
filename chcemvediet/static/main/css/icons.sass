@@ -36,7 +36,7 @@
   > .chv-icon
     position: absolute
     left: 0
-    right: 0
+    width: 100%
     margin: 0
     line-height: inherit
     text-align: center
@@ -60,9 +60,24 @@
   margin-right: 0.6em
 
 //
+// List icons
+//
+.chv-icon-ul
+  position: relative
+  list-style-type: none
+.chv-icon-li
+  position: absolute
+  left: 0
+  width: $chv-list-indent * 0.7
+  margin: 0
+  text-align: center
+  &:before
+    margin: 0
+
+//
 // Vertically centered icon
 //
-.chv-icon-vc
+.chv-icon-middle
   vertical-align: middle
 
 //
@@ -85,25 +100,6 @@
 .chv-icon-fw
   width: (18em / 14)
   text-align: center
-
-//
-// List icons
-//
-$chv-icon-li-width: (30em / 14)
-.chv-icon-ul
-  padding-left: 0
-  margin-left: $chv-icon-li-width
-  list-style-type: none
-  > li
-    position: relative
-.chv-icon-li
-  position: absolute
-  left: -$chv-icon-li-width
-  width: $chv-icon-li-width
-  top: (2em / 14)
-  text-align: center
-  &.chv-icon-lg
-    left: -$chv-icon-li-width + (4em / 14)
 
 //
 // Spinning Icons

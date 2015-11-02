@@ -27,7 +27,7 @@
     <header>
       {% include "main/snippets/header.html" %}
     </header>
-    <div class="container">
+    <div class="container {% if DEBUG and "grid" in request.GET %}baseline-grid{% endif %}">
       {% include "main/snippets/messages.html" %}
       {% block container %}{% endblock %}
     </div>

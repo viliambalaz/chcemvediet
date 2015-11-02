@@ -13,13 +13,45 @@
     <a href="#icons-collapse" class="collapsed" data-toggle="collapse">Icons</a>
   </h2>
   <div id="icons-collapse" class="collapse">
-    <div class="clearfix">
-      {% include "styleguide/icons-icon.html" with icon="icon-search" %}
-      <br>
-      {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
-        {% include "styleguide/icons-stacked.html" %}
-        {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" %}
-      {% endwith %}
-    </div>
+    {% with extra="chv-icon-middle chv-icon-2x" %}
+      <div class="clearfix">
+        {% include "styleguide/icons-icon.html" with icon="icon-ok" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-cancel" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-circle" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-search" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-mail" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-facebook" %}
+        {% include "styleguide/icons-icon.html" with icon="icon-twitter" %}
+      </div>
+    {% endwith %}
+    <h3>Stacked icons</h3>
+    {% with extra="chv-icon-middle chv-icon-2x" %}
+      <div class="clearfix">
+        {% include "styleguide/icons-circled.html" with icon="icon-mail" %}
+        {% include "styleguide/icons-circled.html" with icon="icon-facebook" %}
+        {% include "styleguide/icons-circled.html" with icon="icon-twitter" %}
+        <br>
+        {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
+          {% include "styleguide/icons-stacked.html" %}
+          {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" %}
+        {% endwith %}
+      </div>
+    {% endwith %}
+    <h3>Icon size</h3>
+    {% with extra="chv-icon-middle icon-ok" %}
+      <div class="clearfix">
+        {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
+        {% include "styleguide/icons-icon.html" with icon="chv-icon-lg" %}
+        {% include "styleguide/icons-icon.html" with icon="chv-icon-2x" %}
+        {% include "styleguide/icons-icon.html" with icon="chv-icon-3x" %}
+      </div>
+    {% endwith %}
+    <h3>Vertical alignment</h3>
+    {% with extra="chv-icon-2x icon-ok" %}
+      <div class="clearfix">
+        {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
+        {% include "styleguide/icons-icon.html" with icon="chv-icon-middle" %}
+      </div>
+    {% endwith %}
   </div>
 </div>

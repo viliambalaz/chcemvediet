@@ -24,5 +24,6 @@ def sass_variables(asset):
                 else:
                     res[name] = value
     # Strip leading '$' and replace '-' with '_'
-    res = {n.lstrip(u'$').replace(u'-', u'_'): v for n, v in res.items()}
+    for name, value in res.items():
+        res[name.lstrip(u'$').replace(u'-', u'_')] = value
     return res

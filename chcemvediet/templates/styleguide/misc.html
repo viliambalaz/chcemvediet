@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="sg-container">
+  <h2 id="misc">
+    <a href="#misc-collapse" class="collapsed" data-toggle="collapse">Misc</a>
+  </h2>
+  <div id="misc-collapse" class="collapse">
+    <input id="sg-misc-grid" class="sg-checkbox" type="checkbox" checked="checked">
+    <label for="sg-misc-grid">Show baseline</label>
+    <div class="sg-grid">
+      {% include "styleguide/misc-breadcrumbs.html" %}
+    </div>
+  </div>
+</div>

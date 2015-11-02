@@ -440,6 +440,12 @@ class Page(object):
         return Page(self._ppath, self._lang)
 
     @cached_property
+    def root(self):
+        if self._isroot:
+            return self
+        return self.parent.root
+
+    @cached_property
     def ancestors(self):
         res = []
         ancestor = self.parent
