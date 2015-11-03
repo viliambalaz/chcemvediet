@@ -77,10 +77,18 @@ LOGGING = {
             u'level': u'WARNING',
             u'propagate': False,
             },
+        u'django': {
+            u'handlers': [u'mail_admins', u'file_general'],
+            u'level': u'WARNING',
+            },
         u'poleno.cron': {
             u'handlers': [u'mail_admins', u'file_cron'],
             u'level': u'INFO',
             u'propagate': False,
+            },
+        u'poleno': {
+            u'handlers': [u'mail_admins', u'file_general'],
+            u'level': u'WARNING',
             },
         },
     u'root': {

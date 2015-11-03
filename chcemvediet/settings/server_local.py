@@ -48,6 +48,14 @@ LOGGING = {
         #    u'level': u'DEBUG',
         #    u'propagate': False,
         #    },
+        u'django': {
+            u'handlers': [u'console'],
+            u'level': u'INFO',
+            },
+        u'poleno': {
+            u'handlers': [u'console'],
+            u'level': u'INFO',
+            },
         },
     u'root': {
         u'handlers': [u'console'],
