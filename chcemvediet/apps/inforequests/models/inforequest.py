@@ -298,6 +298,7 @@ class Inforequest(FormatMixin, models.Model):
                 u'FROM {through} p '
                     u'INNER JOIN {message} m ON (m.{message_pk} = p.{through_email}) '
                 u'WHERE p.{through_inforequest} = {through}.{through_inforequest} '
+                    u'AND p.{through_type} = %s '
                 u'ORDER BY m.{message_processed} DESC, m.{message_pk} DESC, p.{through_pk} DESC '
                 u'LIMIT 1'
             u')'.format(
@@ -306,10 +307,13 @@ class Inforequest(FormatMixin, models.Model):
                 through_inforequest = quote_name(
                     InforequestEmail._meta.get_field(u'inforequest').column),
                 through_email = quote_name(InforequestEmail._meta.get_field(u'email').column),
+                through_type = quote_name(InforequestEmail._meta.get_field(u'type').column),
                 message = quote_name(Message._meta.db_table),
                 message_pk = quote_name(Message._meta.pk.column),
                 message_processed = quote_name(Message._meta.get_field(u'processed').column),
                 )
+            ], params=[
+                InforequestEmail.TYPES.UNDECIDED,
             ])
         return Prefetch(join_lookup(path, u'inforequestemail_set'),
                 queryset, to_attr=u'_newest_undecided_email')
