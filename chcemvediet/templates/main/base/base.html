@@ -33,7 +33,7 @@
     <div class="{% if DEBUG and "grid" in request.GET %}baseline-grid{% endif %}">
       {% block container %}{% endblock %}
     </div>
-    <footer class="container">
+    <footer class="{% if DEBUG and "grid" in request.GET %}baseline-grid{% endif %}">
       {% include "main/snippets/footer.html" %}
     </footer>
     <div id="ajax-fail-modal" class="modal fade">

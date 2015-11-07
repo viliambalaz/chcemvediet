@@ -1,7 +1,32 @@
 
-$chv-container-padding: ($navbar-height / 2)
+//
+// Adjust container padding
+//
 
+$chv-container-padding: ($navbar-height / 2)
 .container
   padding-left: $chv-container-padding
   padding-right: $chv-container-padding
   overflow: hidden
+
+//
+// Element with fixed aspect ratio
+//
+
+.chv-aspect
+  position: relative
+  height: 0
+.chv-aspect-inner
+  position: absolute
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+.chv-aspect-parners
+  padding-top: 8%
+
+//
+// Make sure the page is not smaller than the viewport so the footer is always at the bottom
+//
+#content
+  min-height: 100vh

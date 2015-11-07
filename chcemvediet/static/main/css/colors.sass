@@ -104,7 +104,7 @@ $chv-color-linkedin: #0165ae
 .chv-scheme-gray
   $bg: $chv-color-gray-w
   $text: #4d4d4d
-  $title: purple
+  $title: #4d4d4d
   $link: $chv-color-blue
   $hover: $chv-color-blue-ll
   $icon: #b3b3b3
@@ -126,6 +126,15 @@ $chv-color-linkedin: #0165ae
   $link: $chv-color-white
   $hover: $chv-color-white
   $icon: $chv-color-white
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
+
+.chv-scheme-inv-gray
+  $bg: $chv-color-gray
+  $text: #c2c2c2
+  $title: $chv-color-gray-ll
+  $link: #c2c2c2
+  $hover: $chv-color-gray-w
+  $icon: $chv-color-gray-l
   @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
 
 //
