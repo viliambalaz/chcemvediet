@@ -1,31 +1,7 @@
 
 //
-// Featured colors
-// -l is lighter and -ll is more lighter
-// -d is darker and -dd is more darker
-// -w is whitish
+// Plain colors
 //
-
-$chv-color-blue: #0032b4
-$chv-color-blue-d: #00328c
-$chv-color-blue-dd: #02216c
-$chv-color-blue-l: #3766cb
-$chv-color-blue-ll: #6994e8
-$chv-color-blue-w: #f0f4fd
-$chv-color-green: #39b56e
-$chv-color-green-l: #6fdc91
-$chv-color-green-ll: #a3e5b5
-$chv-color-green-w: #f6fcf8
-$chv-color-red: #fc723b
-$chv-color-red-l: #f79f84
-$chv-color-red-ll: #facfc3
-$chv-color-red-w: #fef5f3
-$chv-color-gray: #666666
-$chv-color-gray-l: #b3b3b3
-$chv-color-gray-ll: #dbdbdb
-$chv-color-gray-d: #333333
-$chv-color-gray-w: #f8f8f8
-$chv-color-white: #ffffff
 
 @mixin chv-color($name, $color)
   .chv-color-#{$name}
@@ -61,22 +37,13 @@ $chv-color-white: #ffffff
 @include chv-color("gray-w", $chv-color-gray-w)
 @include chv-color("white", $chv-color-white)
 
-//
-// Special colors
-//
-
-$chv-color-facebook: #3a5795
-$chv-color-gplus: #2f2e2c
-$chv-color-twitter: #6cadde
-$chv-color-linkedin: #0165ae
-
 @include chv-color("facebook", $chv-color-facebook)
 @include chv-color("gplus", $chv-color-gplus)
 @include chv-color("twitter", $chv-color-twitter)
 @include chv-color("linkedin", $chv-color-linkedin)
 
 //
-// Default color schemes
+// Color schemes
 //
 
 @mixin chv-scheme($bg, $text, $title, $link, $hover, $icon)
@@ -136,10 +103,3 @@ $chv-color-linkedin: #0165ae
   $hover: $chv-color-gray-w
   $icon: $chv-color-gray-l
   @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
-
-//
-// Body background is white
-//
-
-body
-  @extend .chv-scheme-white

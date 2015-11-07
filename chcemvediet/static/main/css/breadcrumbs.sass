@@ -1,12 +1,8 @@
 
-$chv-breadcrumb-ancestor: $chv-color-blue-ll
-$chv-breadcrumb-active: $chv-color-gray
-$chv-breadcrumb-separator: $chv-color-gray-ll
-
 .breadcrumb
   @include chv-baseline($chv-fontsize-base)
   padding-left: 0
-  color: $chv-breadcrumb-ancestor
+  color: $chv-color-blue-ll
   background-color: transparent
   @include chv-link-color(inherit)
   > li
@@ -14,6 +10,6 @@ $chv-breadcrumb-separator: $chv-color-gray-ll
     margin: 0 !important
     + li:before
       content: "/ "
-      color: $chv-breadcrumb-separator
+      color: $chv-color-gray-ll
   > .active
-    color: $chv-breadcrumb-active
+    color: $chv-color-gray
