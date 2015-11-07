@@ -1,8 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
-{% load static from staticfiles %}
-{% load page page_active from poleno.pages %}
-{% load yes from poleno.utils %}
 
 {% comment %}
  %
@@ -23,7 +20,7 @@
 <nav class="navbar chv-navbar-primary">
   <div class="container">
     <div class="chv-brand">
-      <a href="{% page '/' %}">chem<b>vediet</b>.<tt>sk</tt></a>
+      <a href="{% url 'homepage' %}">chem<b>vediet</b>.<tt>sk</tt></a>
       <span class="badge">beta</span>
     </div>
     <ul class="chv-navbar-primary-right">

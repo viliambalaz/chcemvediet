@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load split from poleno.utils %}
 
 {% comment %}
  %
@@ -9,11 +8,12 @@
 {% endcomment %}
 
 
-<div class="sg-icon">
-  <span class="chv-icon-stack-2x chv-icon-middle">
-    <i class="chv-icon chv-icon-2x icon-circle"></i>
-    <i class="chv-icon chv-icon-inv {{ icon }}"></i>
+<div class="sg-inline">
+  <span class="chv-icon-stack chv-icon-2x chv-icon-middle">
+    <i class="chv-icon icon-circle"></i>
+    <i class="chv-icon chv-icon-half chv-icon-inv {{ icon }}"></i>
   </span>
+  &nbsp;
   <span class="chv-middle">
     icon-circle<br>
     {{ icon }}<br>

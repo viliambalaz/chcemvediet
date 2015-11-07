@@ -1,0 +1,29 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %
+{% endcomment %}
+
+
+<p class="text-center">{{ class }}</p>
+<div class="sg-scheme {{ class }}">
+  <h3>Heading 3</h3>
+  <p>{% lorem 3 %} <a href="#">Link and its hover.</a></p>
+  <ul class="chv-icon-ul">
+    <li>
+      <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
+      Simple icon
+    </li>
+    <li>
+      <span class="chv-icon-stack chv-icon-li chv-icon-lg">
+        <i class="chv-icon icon-circle"></i>
+        <i class="chv-icon chv-icon-inv icon-ok"></i>
+      </span>
+      Inverse stacked icon
+    </li>
+  </ul>
+</div>

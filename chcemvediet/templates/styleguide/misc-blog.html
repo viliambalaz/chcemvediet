@@ -1,0 +1,24 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load static from staticfiles %}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<h3 class="sg-h">Blog</h3>
+<div class="row">
+  <div class="col-sm-4">
+    <a class="chv-blog" href="#">
+      <img class="chv-blog-img" src="{% static "main/images/blog/a.jpg" %}">
+      <span class="chv-blog-date">9. apríl 2015</span>
+      <span class="chv-blog-text">
+        {% lorem 3 %}
+      </span>
+    </a>
+  </div>
+</div>

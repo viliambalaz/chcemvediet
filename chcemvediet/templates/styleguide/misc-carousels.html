@@ -1,0 +1,53 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem split yes from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<h3 class="sg-h">Carousel</h3>
+<div class="row">
+  <div class="col-sm-4">
+    <div id="sg-carousel-1" class="carousel chv-carousel-blue slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#sg-carousel-1" data-slide-to="0" class="active"></li>
+        <li data-target="#sg-carousel-1" data-slide-to="1"></li>
+        <li data-target="#sg-carousel-1" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        {% for i in "1 2 3"|split %}
+          <div class="item {{ forloop.first|yes:"active" }}">
+            <div class="chv-thinner text-center">
+              <div class="panel chv-panel-blue">
+                <div class="panel-body">
+                  <div class="chv-height-6">
+                    <p>{% lorem i %}</p>
+                  </div>
+                  <div class="chv-above-1 chv-bellow-1">
+                    <a class="btn chv-btn-blue" href="#">
+                      <i class="chv-icon icon-twitter"></i> &nbsp; Tweet
+                    </a>
+                    &nbsp;
+                    <a class="btn chv-btn-blue" href="#">
+                      <i class="chv-icon icon-facebook"></i> &nbsp; Share
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="left carousel-control" href="#sg-carousel-1" data-slide="prev">
+        <span class="chv-icon icon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#sg-carousel-1" data-slide="next">
+        <span class="chv-icon icon-chevron-right"></span>
+      </a>
+    </div>
+  </div>
+</div>

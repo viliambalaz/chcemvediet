@@ -2,6 +2,7 @@
 .panel
   margin-bottom: $chv-baseline
   border-width: 1px
+  box-shadow: none
   overflow: hidden
 
 .panel-body
@@ -10,8 +11,14 @@
   margin-top: -1px
   margin-bottom: -1px
 
-.chv-panel-default
-  border-color: purple
+.chv-panel-blue
+  @extend .chv-scheme-blue
 
 .chv-panel-gray
-  @extend .chv-bg-gray
+  @extend .chv-scheme-gray
+
+.chv-panel-white
+  @extend .chv-scheme-white
+
+.chv-panel-inv-blue
+  @extend .chv-scheme-inv-blue

@@ -1,0 +1,34 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="sg-container">
+  <h2 id="buttons">
+    <a href="#buttons-collapse" class="collapsed" data-toggle="collapse">Buttons</a>
+  </h2>
+  <div id="buttons-collapse" class="collapse">
+    <div>
+      {% include "styleguide/buttons-button.html" with class="chv-btn-blue" %}
+      {% include "styleguide/buttons-button.html" with class="chv-btn-green" %}
+      {% include "styleguide/buttons-button.html" with class="chv-btn-red" %}
+      {% include "styleguide/buttons-button.html" with class="btn-default" %}
+      <br>
+      {% include "styleguide/buttons-button.html" with class="chv-btn-inv-blue" %}
+      {% include "styleguide/buttons-button.html" with class="chv-btn-inv-green" %}
+      {% include "styleguide/buttons-button.html" with class="chv-btn-inv-red" %}
+    </div>
+    <h3 class="sg-h">Button sizes</h3>
+    <div>
+      {% with extra="chv-btn-blue" %}
+        {% include "styleguide/buttons-button.html" with class="btn" %}
+        {% include "styleguide/buttons-button.html" with class="chv-btn-wide" %}
+      {% endwith %}
+    </div>
+  </div>
+</div>

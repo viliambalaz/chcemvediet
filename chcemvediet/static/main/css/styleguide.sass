@@ -1,10 +1,17 @@
 
 body#styleguide
   padding-bottom: 100px
+  h3.sg-h
+    margin-top: $chv-baseline
 
   .sg-container
     margin-left: 50px
     margin-right: 50px
+
+  .sg-inline
+    display: inline-block
+    min-width: 200px
+    margin: 10px
 
   .sg-table
     table-layout: fixed
@@ -19,26 +26,12 @@ body#styleguide
     margin: 1ex auto
     border-radius: 50%
     font-size: 30px
-    text-align: center
-    color: red
+    background-color: gray
 
-  .sg-color-combo
-    width: 150px
-    max-width: 100%
-    margin: 1ex auto
-    padding: 2ex 2ex 2ex 5ex
+  .sg-scheme
+    padding: 2ex
     border-radius: 1em
-    text-align: left
-    overflow: hidden
-    .chv-icon
-      float: left
-      margin: 0.7ex 0 0 -3ex
-
-  .sg-icon
-    display: inline-block
-    min-width: 200px
-    margin: 10px
-    vertical-align: middle
 
   .sg-checkbox:checked ~ .sg-grid
     @extend .baseline-grid
+    padding-bottom: ($chv-baseline * 2)

@@ -1,0 +1,17 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load getkey from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- color: string | undefined
+ %  -- bg: string | undefined
+ %  -- hover: string | undefined
+ %
+{% endcomment %}
+
+
+{{ color }} {{ bg }} {{ hover }}
+<div class="sg-color {{ bg }}">
+  <i class="chv-icon icon-ok {{ color }} {{ hover }}"></i>
+</div>

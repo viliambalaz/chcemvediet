@@ -1,0 +1,27 @@
+
+.chv-circle
+  border-radius: 50%
+
+.chv-middle
+  display: inline-block
+  vertical-align: middle
+
+.chv-thinner
+  padding-left: 5%
+  padding-right: 5%
+
+.chv-inline
+  display: inline-block
+
+.chv-block
+  display: block
+
+.chv-nowrap
+  white-space: nowrap
+
+.chv-justify
+  text-align: justify
+
+@for $k from 1 through 10
+  .chv-maxw-#{$k * 5}
+    max-width: $k * 50px

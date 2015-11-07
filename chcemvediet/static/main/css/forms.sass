@@ -1,0 +1,33 @@
+
+//
+// Adjust form elements margins to baseline
+//
+
+.input-group,
+.form-control,
+.btn,
+  // WARNING: Hardcoded for baseline 20px
+  margin-top: -2px
+  margin-bottom: 8px
+
+.input-group,
+  .btn,
+  .form-control,
+    margin-top: 0
+    margin-bottom: 0
+
+.form-horizontal
+  .checkbox,
+  .radio,
+    @include chv-baseline($chv-fontsize-base, 1, 0, 0.5)
+
+.form-group,
+  // FIXME: maybe we want a looser form sometimes ($chv-baseline/2 margin)
+  margin-bottom: 0
+
+//
+// Hide placeholder on active inputs
+//
+
+input:focus
+  @include placeholder(transparent)

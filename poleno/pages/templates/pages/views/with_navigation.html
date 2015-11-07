@@ -1,0 +1,41 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/base/single_column.html" %}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- page: poleno.pages.pages.Page
+ %
+{% endcomment %}
+
+
+{% block content %}
+  {% if page.ancestors %}
+    <ol class="breadcrumb">
+      <li><a href="{% url 'homepage' %}">{% trans 'pages:breadcrumb:root' %}</a></li>
+      {% for ancestor in page.ancestors|slice:"1:" %}
+        <li><a href="{{ ancestor.url }}">{{ ancestor.label }}</a></li>
+      {% endfor %}
+      <li class="active">{{ page.label }}</li>
+    </ol>
+  {% endif %}
+  <div class="row">
+    <div class="col-sm-9">
+      {% block page %}{% endblock %}
+    </div>
+    <div class="col-sm-3">
+      <ul class="nav nav-tabs nav-stacked">
+        {% for sibling in page.parent.subpages %}
+          {% if not sibling.is_redirect and not sibling.is_disabled %}
+            <li class="{% if sibling == page %}active{% endif %}">
+              <a href="{{ sibling.url }}">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>{{ sibling.label }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

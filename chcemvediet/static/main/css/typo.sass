@@ -1,27 +1,18 @@
 
 $chv-baseline: 20px
-$chv-baseline-h1:     "h1"     "h1"     35px 2 1 1
-$chv-baseline-h2:     "h2"     "h2"     25px 2 0 1
-$chv-baseline-h3:     "h3"     "h3"     15px 1 0 1
-$chv-baseline-p-lead: "p-lead" "p.lead" 16px 1 0 1
-$chv-baseline-p:      "p"      "p"      14px 1 0 1
-$chv-baseline-li:     "li"     "li"     14px 1 0 0.5
 $chv-list-indent: 32px
+
+$chv-fontsize-base: 14px
+$chv-fontsize-p: $chv-fontsize-base
+$chv-fontsize-p-lead: 16px
+$chv-fontsize-li: $chv-fontsize-base
+$chv-fontsize-h3: 15px
+$chv-fontsize-h2: 25px
+$chv-fontsize-h1: 35px
 
 //
 // Paragraphs and headings with vertical rhythm.
 //
-// Use <h2 class="chv-adjust-to-h1"> to align the first line of h2 to the first line of h1.
-// Use <div class="chv-height-h1"> to skip the same height as would be taken by one-line <h1>.
-//
-
-$chv-baseline-spec: ()
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h1)
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h2)
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-h3)
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-p-lead)
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-p)
-$chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-li)
 
 @function chv_baseline_fix($fontsize, $lead)
   @return ($lead * $chv-baseline * 37 / 88 - $fontsize / 4)
@@ -34,29 +25,40 @@ $chv-baseline-spec: append($chv-baseline-spec, $chv-baseline-li)
   margin-bottom: ($below * $chv-baseline - $fix)
   font-size: $fontsize
   line-height: $lead * $chv-baseline
+  @if $below == 0.5
+    &:nth-child(odd):last-child
+      padding-bottom: ($chv-baseline * 0.5)
+    &:nth-child(even):last-child
+      padding-bottom: $chv-baseline
 
-@each $name, $selector, $fontsize, $lead, $above, $below in $chv-baseline-spec
-  $fix: chv_baseline_fix($fontsize, $lead)
-  #{$selector}
-    @include chv-baseline($fontsize, $lead, $above, $below)
-    @each $name2, $selector2, $fontsize2, $lead2, $above2, $below2 in $chv-baseline-spec
-      &.chv-adjust-to-#{$name2}
-        padding-top: (($lead2 + $above2 - $lead) * $chv-baseline + $fix)
-  .chv-height-#{$name}
-    height: (($lead + $above + $below) * $chv-baseline)
+h1
+  @include chv-baseline($chv-fontsize-h1, 2, 1, 1)
+h2
+  @include chv-baseline($chv-fontsize-h2, 2, 0, 1)
+h3
+  @include chv-baseline($chv-fontsize-h3, 1, 0, 1)
+p.lead
+  @include chv-baseline($chv-fontsize-p-lead, 1, 0, 1)
+p
+  @include chv-baseline($chv-fontsize-p, 1, 0, 1)
+li
+  @include chv-baseline($chv-fontsize-li, 1, 0, 0.5)
 
 //
-// Adjust half-baseline margin after odd number of list items
+// Adjust margins of some other elements
 //
 
-li:nth-child(odd):last-child
-  padding-bottom: 0.5 * $chv-baseline
-li:nth-child(even):last-child
-  padding-bottom: $chv-baseline
 ul, ol
   margin-top: 0
   margin-bottom: 0
   padding-left: $chv-list-indent
+
+hr
+  margin-top: 0
+  padding-top: ($chv-baseline - 1px)
+  margin-bottom: $chv-baseline
+  border-top: none
+  border-bottom: 1px solid #eee
 
 //
 // Base paragraph and heading styles
@@ -70,34 +72,26 @@ h3
   font-weight: 500
 a
   text-decoration: none
-  &:focus,
-  &:hover,
+  &:focus, &:hover
     text-decoration: none
 
 //
 // Fixed vertical sizes maintaining rhythm
 //
 
-.chv-height-half
-  height: ($chv-baseline * 0.5)
-.chv-above-half
-  padding-top: ($chv-baseline * 0.5)
-.chv-bellow-half
-  margin-bottom: ($chv-baseline * 0.5)
+@mixin chv-height($name, $lead)
+  .chv-height-#{$name}
+    height: ($chv-baseline * $lead) !important
+  .chv-above-#{$name}
+    padding-top: ($chv-baseline * $lead) !important
+  .chv-bellow-#{$name}
+    padding-bottom: ($chv-baseline * $lead) !important
 
+@include chv-height("0", 0)
+@include chv-height("half", 0.5)
 @for $i from 1 through 8
-  .chv-height-#{$i}
-    height: ($chv-baseline * $i)
-  .chv-height-#{$i}-half
-    height: ($chv-baseline * ($i + 0.5))
-  .chv-above-#{$i}
-    padding-top: ($chv-baseline * $i)
-  .chv-above-#{$i}-half
-    padding-top: ($chv-baseline * ($i + 0.5))
-  .chv-bellow-#{$i}
-    margin-bottom: ($chv-baseline * $i)
-  .chv-bellow-#{$i}-half
-    margin-bottom: ($chv-baseline * ($i + 0.5))
+  @include chv-height($i, $i)
+  @include chv-height("#{$i}-half", $i + 0.5)
 
 //
 // Simple grid overlay for baseline visualization

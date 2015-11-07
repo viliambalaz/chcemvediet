@@ -10,15 +10,11 @@
 {% endcomment %}
 
 
-{% with sassname="$chv-color-"|add:name class="chv-color-"|add:name %}
+{% with sassname="$chv-color-"|add:name %}
   {% if sassname in sg %}
-    {% with color=sg|getkey:sassname %}
-      {{ class }}<br>
-      {{ color }}<br>
-      <div class="sg-color" style="background: {{ color }}">
-        <i class="chv-icon icon-cancel {{ class }}"></i>
-      </div>
-    {% endwith %}
+    chv-color-{{ name }}<br>
+    {{ sg|getkey:sassname }}<br>
+    <div class="sg-color chv-bg-{{ name }}"></div>
   {% else %}
     &mdash;
   {% endif %}

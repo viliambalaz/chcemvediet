@@ -9,12 +9,13 @@
  %
 {% endcomment %}
 
-<div class="sg-icon">
+<div class="sg-inline">
   <span class="chv-icon-stack chv-icon-2x chv-icon-middle {{ stack }}">
     {% for icon in icons|split:"," %}
       <i class="chv-icon {{ icon }}"></i>
     {% endfor %}
   </span>
+  &nbsp;
   {% if stack %}
     <span class="chv-middle">
       {{ stack }} +

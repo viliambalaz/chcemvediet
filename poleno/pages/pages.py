@@ -561,6 +561,12 @@ class Page(object):
             return u'~' + self._name
         return self._config.get(u'order') or self._name
 
+    @cached_property
+    def base_template(self):
+        if self._config is None:
+            return None
+        return self._config.get(u'base_template') or None
+
     @property
     def redirect_path(self):
         return self._redirect

@@ -1,0 +1,24 @@
+
+.chv-carousel-blue
+  > .carousel-indicators
+    bottom: -10px
+    > li
+      margin: 0
+      padding: 0
+      background-color: $chv-color-blue-w
+      &.active
+        background-color: darken($chv-color-blue-w, 10%)
+  > .carousel-control
+    background: none
+    filter: none
+    outline: none
+    > .chv-icon
+      position: absolute
+      top: 50%
+      margin-top: -1em
+      color: darken($chv-color-blue-w, 10%)
+      text-shadow: none
+    &.left > .chv-icon
+      right: 25%
+    &.right > .chv-icon
+      left: 25%

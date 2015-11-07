@@ -1,0 +1,25 @@
+
+@mixin chv-btn($color, $bg)
+  @include button-variant($color, $bg, $color)
+  font-weight: 700
+  .chv-icon
+    color: $color
+
+// The extra .btn is to raise specificity so ".chv-scheme-* a" won't owerride it
+.btn.chv-btn-blue
+  @include chv-btn($chv-color-blue, $chv-color-white)
+.btn.chv-btn-green
+  @include chv-btn($chv-color-green, $chv-color-white)
+.btn.chv-btn-red
+  @include chv-btn($chv-color-red, $chv-color-white)
+
+.btn.chv-btn-inv-blue
+  @include chv-btn($chv-color-white, $chv-color-blue)
+.btn.chv-btn-inv-green
+  @include chv-btn($chv-color-white, $chv-color-green)
+.btn.chv-btn-inv-red
+  @include chv-btn($chv-color-white, $chv-color-red)
+
+.chv-btn-wide
+  padding-left: 3em
+  padding-right: 3em

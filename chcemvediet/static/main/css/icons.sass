@@ -7,16 +7,32 @@
   width: 1em
   height: 1em
   line-height: 1em
-  // Fontello sets margins on :before pseudo element. We prefer them
-  // on the element itself so they are outside the border.
-  margin-left: 0.2em
-  margin-right: 0.2em
+  text-align: center
+  // Drop Fontello margins
   &:before
     margin: 0
 
 //
-// Larger icons
+// Stacked icons
 //
+.chv-icon-stack
+  display: inline-block
+  position: relative
+  width: 1em
+  height: 1em
+  line-height: 1em
+  vertical-align: -15%
+  > .chv-icon
+    position: absolute
+    left: 0
+    width: 100%
+    line-height: inherit
+
+//
+// Smaller and larger icons
+//
+.chv-icon-half
+  font-size: 0.5em
 .chv-icon-lg // 33% larger
   font-size: (4em / 3)
 .chv-icon-2x
@@ -25,60 +41,31 @@
   font-size: 3em
 
 //
-// Stacked icons
-//
-.chv-icon-stack,
-.chv-icon-stack-2x,
-.chv-icon-stack-3x,
-  position: relative
-  display: inline-block
-  vertical-align: -15%
-  > .chv-icon
-    position: absolute
-    left: 0
-    width: 100%
-    margin: 0
-    line-height: inherit
-    text-align: center
-.chv-icon-stack
-  width: 1em
-  height: 1em
-  line-height: 1em
-  margin-left: 0.2em
-  margin-right: 0.2em
-.chv-icon-stack-2x
-  width: 2em
-  height: 2em
-  line-height: 2em
-  margin-left: 0.4em
-  margin-right: 0.4em
-.chv-icon-stack-3x
-  width: 3em
-  height: 3em
-  line-height: 3em
-  margin-left: 0.6em
-  margin-right: 0.6em
-
-//
 // List icons
 //
 .chv-icon-ul
-  position: relative
   list-style-type: none
+  > li
+    position: relative
 .chv-icon-li
   position: absolute
-  left: 0
-  width: $chv-list-indent * 0.7
-  margin: 0
-  text-align: center
-  &:before
-    margin: 0
+  top: ($chv-baseline * 0.75)
+  left: (-$chv-list-indent * 0.25)
+  margin-top: -0.5em
+  margin-left: -1em
 
 //
 // Vertically centered icon
 //
 .chv-icon-middle
   vertical-align: middle
+
+//
+// Zero width icon
+//
+.chv-icon-zero-width
+  margin-left: -0.5em
+  margin-right: -0.5em
 
 //
 // Custom fixes for particular icons
@@ -93,13 +80,6 @@
 // Icon manipulation adapted from Font Awesome
 // See: https://fortawesome.github.io/Font-Awesome/examples/
 //
-
-//
-// Fixed Width Icons
-//
-.chv-icon-fw
-  width: (18em / 14)
-  text-align: center
 
 //
 // Spinning Icons

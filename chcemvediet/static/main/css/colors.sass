@@ -30,9 +30,15 @@ $chv-color-white: #ffffff
 @mixin chv-color($name, $color)
   .chv-color-#{$name}
     color: $color !important
-  a:focus, a:hover
-    .chv-hover-#{$name}
+  .chv-bg-#{$name}
+    background-color: $color !important
+  .chv-hover-#{$name}
+    &:focus, &:hover
       color: $color !important
+  a
+    &:focus, &:hover
+      .chv-hover-#{$name}
+        color: $color !important
 
 @include chv-color("blue", $chv-color-blue)
 @include chv-color("blue-d", $chv-color-blue-d)
@@ -59,67 +65,21 @@ $chv-color-white: #ffffff
 // Special colors
 //
 
-$chv-color-twitter: #6cadde
 $chv-color-facebook: #3a5795
+$chv-color-gplus: #2f2e2c
+$chv-color-twitter: #6cadde
+$chv-color-linkedin: #0165ae
 
 @include chv-color("facebook", $chv-color-facebook)
+@include chv-color("gplus", $chv-color-gplus)
 @include chv-color("twitter", $chv-color-twitter)
+@include chv-color("linkedin", $chv-color-linkedin)
 
 //
-// Default shades for backgrounds
+// Default color schemes
 //
 
-$chv-text-default-on-blue: purple
-$chv-text-default-on-blue-w: purple
-$chv-text-default-on-green: purple
-$chv-text-default-on-green-w: purple
-$chv-text-default-on-red: purple
-$chv-text-default-on-red-w: purple
-$chv-text-default-on-gray: purple
-$chv-text-default-on-gray-w: #4d4d4d
-$chv-text-default-on-white: #4d4d4d
-
-$chv-title-default-on-blue: purple
-$chv-title-default-on-blue-w: purple
-$chv-title-default-on-green: purple
-$chv-title-default-on-green-w: purple
-$chv-title-default-on-red: purple
-$chv-title-default-on-red-w: purple
-$chv-title-default-on-gray: purple
-$chv-title-default-on-gray-w: purple
-$chv-title-default-on-white: $chv-color-blue
-
-$chv-link-default-on-blue: purple
-$chv-link-default-on-blue-w: purple
-$chv-link-default-on-green: purple
-$chv-link-default-on-green-w: purple
-$chv-link-default-on-red: purple
-$chv-link-default-on-red-w: purple
-$chv-link-default-on-gray: purple
-$chv-link-default-on-gray-w: $chv-color-blue
-$chv-link-default-on-white: $chv-color-blue
-
-$chv-hover-default-on-blue: purple
-$chv-hover-default-on-blue-w: purple
-$chv-hover-default-on-green: purple
-$chv-hover-default-on-green-w: purple
-$chv-hover-default-on-red: purple
-$chv-hover-default-on-red-w: purple
-$chv-hover-default-on-gray: purple
-$chv-hover-default-on-gray-w: $chv-color-blue-ll
-$chv-hover-default-on-white: $chv-color-blue-ll
-
-$chv-icon-default-on-blue: purple
-$chv-icon-default-on-blue-w: purple
-$chv-icon-default-on-green: purple
-$chv-icon-default-on-green-w: purple
-$chv-icon-default-on-red: purple
-$chv-icon-default-on-red-w: purple
-$chv-icon-default-on-gray: purple
-$chv-icon-default-on-gray-w: #b3b3b3
-$chv-icon-default-on-white: #999999
-
-@mixin chv-bg($bg, $text, $title, $link, $hover, $icon)
+@mixin chv-scheme($bg, $text, $title, $link, $hover, $icon)
   background-color: $bg
   color: $text
   @include chv-link-color($link, $hover)
@@ -132,92 +92,45 @@ $chv-icon-default-on-white: #999999
   .chv-text-default
     color: $text
 
-.chv-bg-gray
+.chv-scheme-blue
+  $bg: $chv-color-blue-w
+  $text: #4d4d4d
+  $title: $chv-color-blue
+  $link: $chv-color-blue
+  $hover: $chv-color-blue-ll
+  $icon: #b3b3b3
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
+
+.chv-scheme-gray
   $bg: $chv-color-gray-w
-  $text: $chv-text-default-on-gray-w
-  $title: $chv-title-default-on-gray-w
-  $link: $chv-link-default-on-gray-w
-  $hover: $chv-hover-default-on-gray-w
-  $icon: $chv-icon-default-on-gray-w
-  @include chv-bg($bg, $text, $title, $link, $hover, $icon)
+  $text: #4d4d4d
+  $title: purple
+  $link: $chv-color-blue
+  $hover: $chv-color-blue-ll
+  $icon: #b3b3b3
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
 
-.chv-bg-white
+.chv-scheme-white
   $bg: $chv-color-white
-  $text: $chv-text-default-on-white
-  $title: $chv-title-default-on-white
-  $link: $chv-link-default-on-white
-  $hover: $chv-hover-default-on-white
-  $icon: $chv-icon-default-on-white
-  @include chv-bg($bg, $text, $title, $link, $hover, $icon)
+  $text: #4d4d4d
+  $title: $chv-color-blue
+  $link: $chv-color-blue
+  $hover: $chv-color-blue-ll
+  $icon: #999999
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
 
-//
-// Admissible color combinations
-//
-// FIXME: In /o-projekte/ was
-//  -- $chv-icon-blue-on-white := $chv-color-blue-ll
-//  -- $chv-icon-red-on-white := $chv-color-red
-// Fix it there after setting it here
-//
-
-$chv-text-blue-on-blue-w: purple
-$chv-text-blue-on-gray-w: purple
-$chv-text-blue-on-white: purple
-$chv-text-green-on-green-w: purple
-$chv-text-green-on-gray-w: purple
-$chv-text-green-on-white: purple
-$chv-text-red-on-red-w: purple
-$chv-text-red-on-gray-w: purple
-$chv-text-red-on-white: purple
-
-$chv-title-blue-on-blue-w: purple
-$chv-title-blue-on-gray-w: purple
-$chv-title-blue-on-white: purple
-$chv-title-green-on-green-w: purple
-$chv-title-green-on-gray-w: purple
-$chv-title-green-on-white: purple
-$chv-title-red-on-red-w: purple
-$chv-title-red-on-gray-w: purple
-$chv-title-red-on-white: purple
-
-$chv-link-blue-on-blue-w: purple
-$chv-link-blue-on-gray-w: purple
-$chv-link-blue-on-white: purple
-$chv-link-green-on-green-w: purple
-$chv-link-green-on-gray-w: purple
-$chv-link-green-on-white: purple
-$chv-link-red-on-red-w: purple
-$chv-link-red-on-gray-w: purple
-$chv-link-red-on-white: purple
-
-$chv-hover-blue-on-blue-w: purple
-$chv-hover-blue-on-gray-w: purple
-$chv-hover-blue-on-white: purple
-$chv-hover-green-on-green-w: purple
-$chv-hover-green-on-gray-w: purple
-$chv-hover-green-on-white: purple
-$chv-hover-red-on-red-w: purple
-$chv-hover-red-on-gray-w: purple
-$chv-hover-red-on-white: purple
-
-$chv-icon-blue-on-blue-w: purple
-$chv-icon-blue-on-gray-w: purple
-$chv-icon-blue-on-white: $chv-color-blue-ll
-$chv-icon-green-on-green-w: purple
-$chv-icon-green-on-gray-w: purple
-$chv-icon-green-on-white: purple
-$chv-icon-red-on-red-w: purple
-$chv-icon-red-on-gray-w: purple
-$chv-icon-red-on-white: $chv-color-red
-
-.chv-bg-white
-  .chv-icon.chv-icon-blue
-    color: $chv-icon-blue-on-white
-  .chv-icon.chv-icon-red
-    color: $chv-icon-red-on-white
+.chv-scheme-inv-blue
+  $bg: $chv-color-blue
+  $text: $chv-color-white
+  $title: $chv-color-white
+  $link: $chv-color-white
+  $hover: $chv-color-white
+  $icon: $chv-color-white
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
 
 //
 // Body background is white
 //
 
 body
-  @extend .chv-bg-white
+  @extend .chv-scheme-white
