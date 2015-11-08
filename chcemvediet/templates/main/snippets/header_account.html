@@ -14,12 +14,12 @@
   {% with active=request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations' %}
     <div class="chv-navbar-item chv-navbar-item-gray-blue dropdown {{ active|yes:"active" }}">
       <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-        {{ user.email }} <i class="chv-icon icon-down-dir"></i>
-        &nbsp;
+        <span class="chv-hidden-450">{{ user.email }}  </span>
         <span class="chv-icon-stack chv-icon-2x chv-middle">
-          <i class="chv-icon icon-circle chv-color-gray-l chv-hover-blue-ll"></i>
-          <i class="chv-icon chv-icon-half icon-user chv-color-blue-l chv-hover-blue"></i>
+          <i class="chv-icon icon-circle chv-color-blue-ll chv-hover-blue-lll"></i>
+          <i class="chv-icon chv-icon-half icon-user chv-color-blue chv-hover-blue-ll"></i>
         </span>
+        <i class="chv-icon icon-down-dir"></i>
       </a>
       <ul class="dropdown-menu pull-right">
         <li>
@@ -65,10 +65,5 @@
     <span class="chv-hover-bold" data-content="{% trans 'main:menu:account:login' %}">
       {% trans 'main:menu:account:login' %}
     </span>
-  </a>
-  <a class="chv-navbar-item chv-navbar-item-green" href="{% url 'account_signup' %}">
-    <i class="chv-icon icon-plus"></i>
-    &nbsp;
-    <span class="chv-hidden-300">{% trans 'main:menu:create' %}</span>
   </a>
 {% endif %}

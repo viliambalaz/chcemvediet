@@ -8,95 +8,97 @@
 {% endcomment %}
 
 
-<div class="sg-container">
-  <h2 id="icons">
-    <a href="#icons-collapse" class="collapsed" data-toggle="collapse">Icons</a>
-  </h2>
-  <div id="icons-collapse" class="collapse chv-scheme-white">
-    <div>
-      {% with extra="chv-icon-middle chv-icon-2x" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-ok" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-cancel" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-plus" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-chevron-left" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-chevron-right" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-down-dir" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-circle" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-asterisk" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-menu" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-search" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-user" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-users" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-mail" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-docs" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-home" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-building" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-wrench" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-print" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-link-ext" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-hammer" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-euro" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-facebook" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-gplus" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-twitter" %}
-        {% include "styleguide/icons-icon.html" with icon="icon-linkedin" %}
-      {% endwith %}
-    </div>
-    <h3 class="sg-h">Stacked icons</h3>
-    <div>
-      {% with extra="chv-icon-middle chv-icon-2x" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-help" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-mail" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-facebook" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-gplus" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-twitter" %}
-        {% include "styleguide/icons-circled.html" with icon="icon-linkedin" %}
-        <br>
-        {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
-          {% include "styleguide/icons-stacked.html" %}
-          {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" %}
+{% with collapse_id=idgenerator.next %}
+  <div class="sg-container">
+    <h2 id="icons">
+      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Icons</a>
+    </h2>
+    <div id="{{ collapse_id }}" class="collapse chv-scheme-white">
+      <div>
+        {% with extra="chv-icon-middle chv-icon-2x" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-ok" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-cancel" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-plus" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-chevron-left" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-chevron-right" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-down-dir" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-circle" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-asterisk" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-menu" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-search" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-user" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-users" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-mail" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-docs" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-home" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-building" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-wrench" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-print" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-link-ext" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-hammer" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-euro" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-facebook" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-gplus" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-twitter" %}
+          {% include "styleguide/icons-icon.html" with icon="icon-linkedin" %}
         {% endwith %}
+      </div>
+      <h3 class="sg-h">Stacked icons</h3>
+      <div>
+        {% with extra="chv-icon-middle chv-icon-2x" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-help" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-mail" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-facebook" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-gplus" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-twitter" %}
+          {% include "styleguide/icons-circled.html" with icon="icon-linkedin" %}
+          <br>
+          {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
+            {% include "styleguide/icons-stacked.html" %}
+            {% include "styleguide/icons-stacked.html" with stack="chv-icon-rotate-90" %}
+          {% endwith %}
+        {% endwith %}
+      </div>
+      <h3 class="sg-h">Icon size</h3>
+      <div>
+        {% with extra="chv-icon-middle icon-ok" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon-half" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon-lg" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon-2x" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon-3x" %}
+        {% endwith %}
+      </div>
+      <h3 class="sg-h">Vertical alignment</h3>
+      <div>
+        {% with extra="chv-icon-2x icon-ok" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
+          {% include "styleguide/icons-icon.html" with icon="chv-icon-middle" %}
+        {% endwith %}
+      </div>
+      <h3 class="sg-h">List icons</h3>
+      {% with extra="icon-ok" icon_extra="icon-ok chv-icon-half" %}
+        <ul class="chv-icon-ul sg-inline">
+          {% include "styleguide/icons-list.html" with icon="chv-icon-half" %}
+          {% include "styleguide/icons-list-circled.html" with stack="chv-icon-half" %}
+        </ul>
+        <ul class="chv-icon-ul sg-inline">
+          {% include "styleguide/icons-list.html" with icon="chv-icon" %}
+          {% include "styleguide/icons-list-circled.html" with stack="chv-icon" %}
+        </ul>
+        <ul class="chv-icon-ul sg-inline">
+          {% include "styleguide/icons-list.html" with icon="chv-icon-lg" %}
+          {% include "styleguide/icons-list-circled.html" with stack="chv-icon-lg" %}
+        </ul>
+        <ul class="chv-icon-ul sg-inline">
+          {% include "styleguide/icons-list.html" with icon="chv-icon-2x" %}
+          {% include "styleguide/icons-list-circled.html" with stack="chv-icon-2x" %}
+        </ul>
+        <ul class="chv-icon-ul sg-inline">
+          {% include "styleguide/icons-list.html" with icon="chv-icon-3x" %}
+          {% include "styleguide/icons-list-circled.html" with stack="chv-icon-3x" %}
+        </ul>
       {% endwith %}
     </div>
-    <h3 class="sg-h">Icon size</h3>
-    <div>
-      {% with extra="chv-icon-middle icon-ok" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon-half" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon-lg" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon-2x" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon-3x" %}
-      {% endwith %}
-    </div>
-    <h3 class="sg-h">Vertical alignment</h3>
-    <div>
-      {% with extra="chv-icon-2x icon-ok" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon" %}
-        {% include "styleguide/icons-icon.html" with icon="chv-icon-middle" %}
-      {% endwith %}
-    </div>
-    <h3 class="sg-h">List icons</h3>
-    {% with extra="icon-ok" icon_extra="icon-ok chv-icon-half" %}
-      <ul class="chv-icon-ul sg-inline">
-        {% include "styleguide/icons-list.html" with icon="chv-icon-half" %}
-        {% include "styleguide/icons-list-circled.html" with stack="chv-icon-half" %}
-      </ul>
-      <ul class="chv-icon-ul sg-inline">
-        {% include "styleguide/icons-list.html" with icon="chv-icon" %}
-        {% include "styleguide/icons-list-circled.html" with stack="chv-icon" %}
-      </ul>
-      <ul class="chv-icon-ul sg-inline">
-        {% include "styleguide/icons-list.html" with icon="chv-icon-lg" %}
-        {% include "styleguide/icons-list-circled.html" with stack="chv-icon-lg" %}
-      </ul>
-      <ul class="chv-icon-ul sg-inline">
-        {% include "styleguide/icons-list.html" with icon="chv-icon-2x" %}
-        {% include "styleguide/icons-list-circled.html" with stack="chv-icon-2x" %}
-      </ul>
-      <ul class="chv-icon-ul sg-inline">
-        {% include "styleguide/icons-list.html" with icon="chv-icon-3x" %}
-        {% include "styleguide/icons-list-circled.html" with stack="chv-icon-3x" %}
-      </ul>
-    {% endwith %}
   </div>
-</div>
+{% endwith %}

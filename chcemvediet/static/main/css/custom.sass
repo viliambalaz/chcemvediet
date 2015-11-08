@@ -19,9 +19,10 @@ a:hover, a:focus
 
 //
 // Blog link component
+// Note: The class is used twice to raise specificity, so .chv-scheme-* won't override its colors
 //
 
-.chv-blog
+.chv-blog.chv-blog
   display: block
   padding: ($chv-baseline - 1px)
   margin-bottom: $chv-baseline

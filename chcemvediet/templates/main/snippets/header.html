@@ -21,7 +21,7 @@
   <div class="container">
     <div class="chv-navbar-items">
       <div class="chv-navbar-item chv-navbar-brand">
-        <div class="chv-navbar-item chv-navbar-logo chv-hidden-400">
+        <div class="chv-navbar-item chv-navbar-logo chv-hidden-450">
           <span class="chv-icon-stack">
             <i class="chv-icon icon-chv-horiz-40"></i>
             <i class="chv-icon icon-chv-horiz-70"></i>
@@ -29,7 +29,7 @@
           </span>
         </div>
         <a href="{% url 'homepage' %}">chem<b>vediet</b>.<tt>sk</tt></a>
-        <span class="badge chv-hidden-400">beta</span>
+        <span class="badge chv-hidden-450">beta</span>
       </div>
     </div>
     <div class="chv-navbar-items pull-right">
@@ -46,14 +46,17 @@
     <div class="chv-navbar-items pull-right">
       {% include "main/snippets/header_devtools.html" %}
       {% include "main/snippets/header_account.html" %}
+      {% include "main/snippets/header_menu_right.html" %}
     </div>
-    <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#" data-toggle="collapse"
-       data-target="#chv-navbar-menu">
-      <i class="chv-icon chv-icon-lg icon-menu"></i>
-    </a>
-    <div id="chv-navbar-menu" class="chv-navbar-items chv-navbar-collapse collapse">
-      {% include "main/snippets/header_menu.html" %}
-    </div>
+    {% with menu_id=idgenerator.next %}
+      <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#{{ menu_id }}"
+         data-toggle="collapse">
+        <i class="chv-icon chv-icon-lg icon-menu"></i>
+      </a>
+      <div id="{{ menu_id }}" class="chv-navbar-items chv-navbar-collapse collapse">
+        {% include "main/snippets/header_menu_left.html" %}
+      </div>
+    {% endwith %}
   </div>
 </nav>
 

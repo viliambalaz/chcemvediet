@@ -101,6 +101,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     u'allauth.account.context_processors.account',
     u'allauth.socialaccount.context_processors.socialaccount',
     u'poleno.mail.context_processors.constants',
+    u'poleno.utils.context_processors.idgenerator',
     u'chcemvediet.apps.obligees.context_processors.constants',
     u'chcemvediet.apps.inforequests.context_processors.constants',
     u'chcemvediet.context_processors.settings',

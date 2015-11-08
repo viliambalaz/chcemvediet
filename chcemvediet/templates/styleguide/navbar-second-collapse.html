@@ -8,25 +8,27 @@
 {% endcomment %}
 
 
-<div class="sg-container">
-  <h3 class="sg-h">Second navbar &ndash; Collapsible items</h3>
-</div>
-<nav class="chv-navbar chv-navbar-second">
-  <div class="container">
-    <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#sg-navbar-second-collapse"
-       data-toggle="collapse">
-      <i class="chv-icon chv-icon-lg icon-menu"></i>
-    </a>
-    <div id="sg-navbar-second-collapse" class="chv-navbar-items chv-navbar-collapse collapse">
-      <a class="chv-navbar-item" href="#">
-        <span class="chv-hover-bold" data-content="Inactive">Inactive</span>
-      </a>
-      <a class="chv-navbar-item active" href="#">
-        <span class="chv-hover-bold" data-content="Active">Active</span>
-      </a>
-      <a class="chv-navbar-item" href="#">
-        <i class="chv-icon icon-wrench"></i>
-      </a>
-    </div>
+{% with collapse_id=idgenerator.next %}
+  <div class="sg-container">
+    <h3 class="sg-h">Second navbar &ndash; Collapsible items</h3>
   </div>
-</nav>
+  <nav class="chv-navbar chv-navbar-second">
+    <div class="container">
+      <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#{{ collapse_id }}"
+         data-toggle="collapse">
+        <i class="chv-icon chv-icon-lg icon-menu"></i>
+      </a>
+      <div id="{{ collapse_id }}" class="chv-navbar-items chv-navbar-collapse collapse">
+        <a class="chv-navbar-item" href="#">
+          <span class="chv-hover-bold" data-content="Inactive">Inactive</span>
+        </a>
+        <a class="chv-navbar-item active" href="#">
+          <span class="chv-hover-bold" data-content="Active">Active</span>
+        </a>
+        <a class="chv-navbar-item" href="#">
+          <i class="chv-icon icon-wrench"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+{% endwith %}

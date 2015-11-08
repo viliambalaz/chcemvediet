@@ -1,0 +1,16 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<a class="chv-navbar-item chv-navbar-item-green" href="{% url 'account_signup' %}">
+  <i class="chv-icon icon-plus"></i>
+  &nbsp;
+  <span class="chv-hidden-450">{% trans 'main:menu:create' %}</span>
+</a>

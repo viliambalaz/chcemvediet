@@ -8,17 +8,19 @@
 {% endcomment %}
 
 
-<div class="sg-container">
-  <h2 id="navbar">
-    <a href="#navbar-collapse" class="collapsed" data-toggle="collapse">Navbar</a>
-  </h2>
-</div>
-<div id="navbar-collapse" class="collapse">
-  {% include "styleguide/navbar-first-brand.html" %}
-  {% include "styleguide/navbar-first-items.html" %}
-  {% include "styleguide/navbar-second-blue-items.html" %}
-  {% include "styleguide/navbar-second-gray-items.html" %}
-  {% include "styleguide/navbar-second-gray-blue-items.html" %}
-  {% include "styleguide/navbar-second-green-items.html" %}
-  {% include "styleguide/navbar-second-collapse.html" %}
-</div>
+{% with collapse_id=idgenerator.next %}
+  <div class="sg-container">
+    <h2 id="navbar">
+      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Navbar</a>
+    </h2>
+  </div>
+  <div id="{{ collapse_id }}" class="collapse">
+    {% include "styleguide/navbar-first-brand.html" %}
+    {% include "styleguide/navbar-first-items.html" %}
+    {% include "styleguide/navbar-second-blue-items.html" %}
+    {% include "styleguide/navbar-second-gray-items.html" %}
+    {% include "styleguide/navbar-second-gray-blue-items.html" %}
+    {% include "styleguide/navbar-second-green-items.html" %}
+    {% include "styleguide/navbar-second-collapse.html" %}
+  </div>
+{% endwith %}

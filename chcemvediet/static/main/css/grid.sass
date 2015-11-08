@@ -8,13 +8,21 @@
   padding-right: $chv-container-padding
 
 //
-// For tiny viewpoets
+// Content hidden for (visible only to) vieports up to X.
+// Note that bootstrap .hidden-* is broken because it forces display block when visible.
 //
 
-@for $i from 1 through 10
-  .chv-hidden-#{$i * 50}
-    @media(max-width:#{$i * 50px})
+@mixin chv-hidden($name, $upto)
+  .chv-hidden-#{$name}
+    @media(max-width:$upto)
       display: none !important
+  .chv-visible-#{$name}
+    @media(min-width:($upto + 1px))
+      display: none !important
+
+@include chv-hidden('xs', $screen-xs-max)
+@for $i from 1 through 10
+  @include chv-hidden($i * 50, $i * 50px)
 
 //
 // Element with fixed aspect ratio
