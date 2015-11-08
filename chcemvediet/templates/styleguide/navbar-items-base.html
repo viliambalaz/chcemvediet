@@ -1,0 +1,38 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="sg-container">
+  <h3 class="sg-h">{{ title }}</h3>
+</div>
+<nav class="chv-navbar {{ navbarclass }}">
+  <div class="container">
+    <div class="chv-navbar-items">
+      <a class="chv-navbar-item {{ itemclass }}" href="#">
+        <span class="chv-hover-bold" data-content="Inactive">Inactive</span>
+      </a>
+      <a class="chv-navbar-item {{ itemclass }} active" href="#">
+        <span class="chv-hover-bold" data-content="Active">Active</span>
+      </a>
+      <div class="chv-navbar-item {{ itemclass }} dropdown">
+        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+          <span class="chv-hover-bold" data-content="Menu">Menu</span>
+          <i class="chv-icon icon-down-dir"></i>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li><a href="#">Lorem ipsum</a></li>
+          <li><a href="#">Dolor sit</a></li>
+        </ul>
+      </div>
+      <a class="chv-navbar-item {{ itemclass }}" href="#">
+        <i class="chv-icon icon-wrench"></i>
+      </a>
+    </div>
+  </div>
+</nav>

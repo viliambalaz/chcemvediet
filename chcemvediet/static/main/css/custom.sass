@@ -1,4 +1,26 @@
 
+//
+// Reserve space for bold hover
+//
+
+.chv-hover-bold
+  display: inline-block
+  text-align: center
+  &:before
+    content: attr(data-content)
+    display: block
+    height: 0
+    font-weight: 700
+    overflow: hidden
+    visibility: hidden
+a:hover, a:focus
+  .chv-hover-bold
+    font-weight: 700
+
+//
+// Blog link component
+//
+
 .chv-blog
   display: block
   padding: ($chv-baseline - 1px)
@@ -37,6 +59,10 @@
       width: 10em
       padding-top: chv_baseline_fix($chv-fontsize-base, 1)
       overflow: hidden
+
+//
+// Component for statistics with big numbers
+//
 
 .chv-bigstats
   // WARNING: Hardcoded for baseline 20px

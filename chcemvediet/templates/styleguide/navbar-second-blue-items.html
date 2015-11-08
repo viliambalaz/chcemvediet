@@ -1,0 +1,15 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with title="Second navbar &ndash; Blue items" %}
+{% with navbarclass="chv-navbar-second" %}
+  {% include "styleguide/navbar-items-base.html" %}
+{% endwith %}
+{% endwith %}

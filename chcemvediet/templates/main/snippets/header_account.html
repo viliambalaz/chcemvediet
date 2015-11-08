@@ -11,63 +11,64 @@
 
 
 {% if user.is_authenticated %}
-  <li class="dropdown chv-nav-user {{ request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations'|yes:"active" }}">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      {{ user.email }} <span class="caret"></span>
-      <span class="chv-circle">
-        <span class="glyphicon glyphicon-user"></span>
-      </span>
-    </a>
-    <ul class="dropdown-menu">
-      <li>
-        <a href="{% url 'accounts:profile' %}">
-          {% trans 'main:menu:account:profile' %}
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'account_change_password' %}">
-          {% trans 'main:menu:account:password' %}
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'account_email' %}">
-          {% trans 'main:menu:account:email' %}
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'socialaccount_connections' %}">
-          {% trans 'main:menu:account:connections' %}
-        </a>
-      </li>
-      {% if user.invitationsupply.can_use_invitations %}
-        <li class="divider"></li>
+  {% with active=request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations' %}
+    <div class="chv-navbar-item chv-navbar-item-gray-blue dropdown {{ active|yes:"active" }}">
+      <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+        {{ user.email }} <i class="chv-icon icon-down-dir"></i>
+        &nbsp;
+        <span class="chv-icon-stack chv-icon-2x chv-middle">
+          <i class="chv-icon icon-circle chv-color-gray-l chv-hover-blue-ll"></i>
+          <i class="chv-icon chv-icon-half icon-user chv-color-blue-l chv-hover-blue"></i>
+        </span>
+      </a>
+      <ul class="dropdown-menu pull-right">
         <li>
-          <a href="{% url 'invitations:invite' %}">
-            {% trans 'main:menu:account:invite' %}
+          <a href="{% url 'accounts:profile' %}">
+            {% trans 'main:menu:account:profile' %}
           </a>
         </li>
-      {% endif %}
-      <li class="divider"></li>
-      <li>
-        <a href="{% url 'account_logout' %}" class="pln-post"
-           data-post-csrfmiddlewaretoken="{{ csrf_token }}">
-          {% trans 'main:menu:account:logout' %}
-        </a>
-      </li>
-    </ul>
-  </li>
+        <li>
+          <a href="{% url 'account_change_password' %}">
+            {% trans 'main:menu:account:password' %}
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'account_email' %}">
+            {% trans 'main:menu:account:email' %}
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'socialaccount_connections' %}">
+            {% trans 'main:menu:account:connections' %}
+          </a>
+        </li>
+        {% if user.invitationsupply.can_use_invitations %}
+          <li class="divider"></li>
+          <li>
+            <a href="{% url 'invitations:invite' %}">
+              {% trans 'main:menu:account:invite' %}
+            </a>
+          </li>
+        {% endif %}
+        <li class="divider"></li>
+        <li>
+          <a href="{% url 'account_logout' %}" class="pln-post"
+             data-post-csrfmiddlewaretoken="{{ csrf_token }}">
+            {% trans 'main:menu:account:logout' %}
+          </a>
+        </li>
+      </ul>
+    </div>
+  {% endwith %}
 {% else %}
-  <li class="{{ request|active:'account_login'|yes:"active" }}">
-    <a href="{% url 'account_login' %}">
-      <span class="chv-hover-bold" data-content="{% trans 'main:menu:account:login' %}">
-        {% trans 'main:menu:account:login' %}
-      </span>
-    </a>
-  </li>
-  <li class="chv-nav-feature {{ request|active:'account_signup'|yes:"active" }}">
-    <a href="{% url 'account_signup' %}">
-      <span class="glyphicon glyphicon-plus"></span>
-      {% trans 'main:menu:create' %}
-    </a>
-  </li>
+  <a class="chv-navbar-item chv-navbar-item-gray" href="{% url 'account_login' %}">
+    <span class="chv-hover-bold" data-content="{% trans 'main:menu:account:login' %}">
+      {% trans 'main:menu:account:login' %}
+    </span>
+  </a>
+  <a class="chv-navbar-item chv-navbar-item-green" href="{% url 'account_signup' %}">
+    <i class="chv-icon icon-plus"></i>
+    &nbsp;
+    <span class="chv-hidden-300">{% trans 'main:menu:create' %}</span>
+  </a>
 {% endif %}

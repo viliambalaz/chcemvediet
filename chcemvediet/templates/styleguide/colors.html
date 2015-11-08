@@ -14,7 +14,7 @@
     <a href="#colors-collapse" class="collapsed" data-toggle="collapse">Colors</a>
   </h2>
   <div id="colors-collapse" class="collapse">
-    {% with sg="main/css/colors.sass"|sass_variables %}
+    {% with sg="main/css/vars.sass"|sass_variables %}
       {% include "styleguide/colors-colors.html" %}
       {% include "styleguide/colors-schemes.html" %}
     {% endwith %}

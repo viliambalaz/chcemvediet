@@ -6,7 +6,15 @@
 .container
   padding-left: $chv-container-padding
   padding-right: $chv-container-padding
-  overflow: hidden
+
+//
+// For tiny viewpoets
+//
+
+@for $i from 1 through 10
+  .chv-hidden-#{$i * 50}
+    @media(max-width:#{$i * 50px})
+      display: none !important
 
 //
 // Element with fixed aspect ratio

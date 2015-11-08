@@ -12,21 +12,17 @@
 
 {% for lang in LANGUAGES %}
   {% if lang.0 != request.LANGUAGE_CODE %}
-    <li class="hidden-xs">
-      <a href="{% url 'set_language' %}" class="pln-post"
-         data-post-csrfmiddlewaretoken="{{ csrf_token }}"
-         data-post-language="{{ lang.0 }}"
-         data-post-next="{% change_lang lang.0 %}">
-        <span class="chv-hover-bold" data-content="{{ lang.1 }}">{{ lang.1 }}</span>
-      </a>
-    </li>
-    <li class="visible-xs">
-      <a href="{% url 'set_language' %}" class="pln-post"
-         data-post-csrfmiddlewaretoken="{{ csrf_token }}"
-         data-post-language="{{ lang.0 }}"
-         data-post-next="{% change_lang lang.0 %}">
-        <span class="chv-hover-bold" data-content="{{ lang.0|upper }}">{{ lang.0|upper }}</span>
-      </a>
-    </li>
+    <a href="{% url 'set_language' %}" class="chv-navbar-item hidden-xs pln-post"
+       data-post-csrfmiddlewaretoken="{{ csrf_token }}"
+       data-post-language="{{ lang.0 }}"
+       data-post-next="{% change_lang lang.0 %}">
+      <span class="chv-hover-bold" data-content="{{ lang.1 }}">{{ lang.1 }}</span>
+    </a>
+    <a href="{% url 'set_language' %}" class="chv-navbar-item visible-xs pln-post"
+       data-post-csrfmiddlewaretoken="{{ csrf_token }}"
+       data-post-language="{{ lang.0 }}"
+       data-post-next="{% change_lang lang.0 %}">
+      <span class="chv-hover-bold" data-content="{{ lang.0|upper }}">{{ lang.0|upper }}</span>
+    </a>
   {% endif %}
 {% endfor %}
