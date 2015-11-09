@@ -1,5 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load yes from poleno.utils %}
+{% load yes no from poleno.utils %}
 
 {% comment %}
  %
@@ -16,11 +16,9 @@
         {% if field.field.required %}*{% endif %}
         {{ field.label.strip }}
       </label>
-    {% else %}
-      <div class="col-sm-3"></div>
     {% endif %}
   {% endblock %}
-  <div class="col-sm-9">
+  <div class="col-sm-9 {% block offset %}{{ field.label.strip|no:"col-sm-offset-3" }}{% endblock %}">
     {% block field %}
       {{ field }}
     {% endblock %}

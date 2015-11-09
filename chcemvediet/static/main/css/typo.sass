@@ -59,7 +59,7 @@ h1, h2
   font-weight: 400
 h3
   font-weight: 500
-a
+a, .btn-link
   text-decoration: none
   &:focus, &:hover
     text-decoration: none
@@ -73,14 +73,28 @@ a
     height: ($chv-baseline * $lead) !important
   .chv-above-#{$name}
     padding-top: ($chv-baseline * $lead) !important
+  .chv-above-minus-#{$name}
+    margin-top: (-1 * $chv-baseline * $lead) !important
   .chv-bellow-#{$name}
     padding-bottom: ($chv-baseline * $lead) !important
+  .chv-bellow-minus-#{$name}
+    margin-bottom: (-1 * $chv-baseline * $lead) !important
 
-@include chv-height("0", 0)
-@include chv-height("half", 0.5)
-@for $i from 1 through 8
-  @include chv-height($i, $i)
-  @include chv-height("#{$i}-half", $i + 0.5)
+@mixin chv-heights($screen: "")
+  @include chv-height("0#{$screen}", 0)
+  @include chv-height("half#{$screen}", 0.5)
+  @for $i from 1 through 8
+    @include chv-height("#{$i}#{$screen}", $i)
+    @include chv-height("#{$i}-half#{$screen}", $i + 0.5)
+
+@include chv-heights()
+@include chv-heights("-xs")
+@media(min-width:$screen-sm-min)
+  @include chv-heights("-sm")
+@media(min-width:$screen-md-min)
+  @include chv-heights("-md")
+@media(min-width:$screen-lg-min)
+  @include chv-heights("-lg")
 
 //
 // Simple grid overlay for baseline visualization

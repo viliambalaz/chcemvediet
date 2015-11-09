@@ -17,7 +17,11 @@
   .chv-icon
     color: $chv-color-white
 
-// The extra .btn is to raise specificity so ".chv-scheme-* a" won't owerride it
+//
+// Colored buttons
+// Note: The extra .btn is to raise specificity so ".chv-scheme-* a" won't owerride it
+//
+
 .btn.chv-btn-blue
   @include chv-btn($chv-color-blue)
 .btn.chv-btn-green
@@ -33,6 +37,19 @@
   @include chv-btn-inv($chv-color-green)
 .btn.chv-btn-inv-red
   @include chv-btn-inv($chv-color-red)
+
+//
+// Semantic names for buttons
+//
+
+.chv-btn-default
+  @extend .chv-btn-blue
+.chv-btn-primary
+  @extend .chv-btn-inv-blue
+
+//
+// Button variants
+//
 
 .chv-btn-wide
   padding-left: 3em

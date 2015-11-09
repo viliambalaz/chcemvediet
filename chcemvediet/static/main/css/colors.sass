@@ -60,6 +60,16 @@
   .chv-text-default
     color: $text
 
+// White scheme must be first so it can be overriden
+.chv-scheme-white
+  $bg: $chv-color-white
+  $text: #4d4d4d
+  $title: $chv-color-blue
+  $link: $chv-color-blue
+  $hover: $chv-color-blue-ll
+  $icon: #999999
+  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
+
 .chv-scheme-blue
   $bg: $chv-color-blue-w
   $text: #4d4d4d
@@ -76,15 +86,6 @@
   $link: $chv-color-blue
   $hover: $chv-color-blue-ll
   $icon: #b3b3b3
-  @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
-
-.chv-scheme-white
-  $bg: $chv-color-white
-  $text: #4d4d4d
-  $title: $chv-color-blue
-  $link: $chv-color-blue
-  $hover: $chv-color-blue-ll
-  $icon: #999999
   @include chv-scheme($bg, $text, $title, $link, $hover, $icon)
 
 .chv-scheme-inv-blue

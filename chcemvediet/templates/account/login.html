@@ -16,26 +16,26 @@
 {% block title %}{% trans 'account:login:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1>{% trans 'account:login:heading' %}</h1>
   <form class="form-horizontal" method="post" action="{% url 'account_login' %}">
     {% csrf_token %}
     <div class="row">
-      <div class="col-sm-6">
-        {% include "account/texts/login_text.html" %}
+      <div class="col-sm-8">
+        <h1>{% trans 'account:login:heading' %}</h1>
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6 col-sm-push-6">
+      <div class="col-md-4 col-md-push-8 chv-above-minus-3-md">
         {% include "account/texts/why_register.html" %}
       </div>
-      <div class="col-sm-6 col-sm-pull-6">
+      <div class="col-md-8 col-md-pull-4">
+        {% include "account/texts/login_text.html" %}
         {% include "main/forms/form_horizontal.html" %}
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
         {% endif %}
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn chv-btn-primary">
               {% trans 'account:login:submit' %}
             </button>
             <a class="btn btn-link" href="{% url 'account_reset_password' %}">
