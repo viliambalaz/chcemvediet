@@ -1,0 +1,64 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- users: int
+ %  -- obligees: int
+ %  -- inforequests: int
+ %
+{% endcomment %}
+
+
+<div class="row">
+  <div class="col-sm-4">
+    <div class="chv-bigstats">
+      <div class="chv-bigstats-icon">
+        <span class="chv-icon-stack">
+          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
+          <i class="chv-icon chv-icon-half chv-icon-inv icon-users"></i>
+        </span>
+      </div>
+      <div class="chv-bigstats-stats chv-color-blue">{{ users }}</div>
+      <div class="chv-bigstats-text chv-color-blue-ll">
+        {% trans 'main:homepage:bigstats:users' %}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="chv-bigstats">
+      <div class="chv-bigstats-icon">
+        <span class="chv-icon-stack">
+          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
+          <i class="chv-icon chv-icon-half chv-icon-inv icon-docs"></i>
+        </span>
+      </div>
+      <div class="chv-bigstats-stats chv-color-blue">{{ inforequests }}</div>
+      <div class="chv-bigstats-text chv-color-blue-ll">
+        {% trans 'main:homepage:bigstats:inforequests' %}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="chv-bigstats">
+      <div class="chv-bigstats-icon">
+        <span class="chv-icon-stack">
+          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
+          <i class="chv-icon chv-icon-half chv-icon-inv icon-building"></i>
+        </span>
+      </div>
+      <div class="chv-bigstats-stats chv-color-blue">{{ obligees }}</div>
+      <div class="chv-bigstats-text chv-color-blue-ll">
+        {% trans 'main:homepage:bigstats:obligees' %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="chv-above-1">
+  <p class="chv-color-gray">
+    <span class="badge chv-bg-gray-l">beta</span>
+    &nbsp;
+    {% trans 'main:homepage:bigstats:beta' %}
+  </p>
+</div>

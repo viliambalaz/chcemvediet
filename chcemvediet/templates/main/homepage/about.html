@@ -1,0 +1,40 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load page from poleno.pages %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="row">
+  <div class="col-md-4 col-sm-6 chv-justify">
+    {% include "main/homepage/texts/about.html" %}
+    <div class="text-center chv-above-1">
+      <a class="btn chv-btn-blue" href="{% page "/o-projekte/" %}">
+        <i class="chv-icon icon-link-ext"></i>
+        &nbsp;
+        {% trans 'main:homepage:about:more' %}
+      </a>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 hidden-xs">
+    {% include "main/homepage/texts/why_register.html" %}
+    <div class="text-center chv-above-1">
+      <a class="btn chv-btn-wide chv-btn-inv-blue" href="{% url 'account_signup' %}">
+        {% trans 'main:homepage:signup:button' %}
+      </a>
+    </div>
+    <div class="text-center chv-above-1">
+      <ul class="chv-icon-ul chv-inline text-left">
+        {% include "main/homepage/about_links.html" %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 text-center">
+    {% include "main/homepage/login.html" %}
+  </div>
+</div>

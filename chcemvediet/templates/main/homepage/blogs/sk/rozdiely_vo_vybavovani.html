@@ -1,0 +1,15 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/homepage/blogs/base.html" %}
+{% load static from staticfiles %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% block img %}{% static "main/images/blog/a.jpg" %}{% endblock %}
+{% block date %}9. apríl 2015{% endblock %}
+{% block text %}Rozdiely vo vybavovaní infožiadostí sú veľké{% endblock %}

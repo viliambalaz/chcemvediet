@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-02 07:02+0100\n"
+"POT-Creation-Date: 2015-11-09 10:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1133,6 +1133,81 @@ msgstr "Je potrebné overenie e-mailovej adresy"
 msgid "main:base:title"
 msgstr "Chcemvediet.sk"
 
+msgid "main:homepage:about:more"
+msgstr "Chcem vedieť viac"
+
+msgid "main:homepage:signup:button"
+msgstr "Registrácia"
+
+msgid "main:homepage:bigstats:users"
+msgstr "Registrovaných <br>užívateľov"
+
+msgid "main:homepage:bigstats:inforequests"
+msgstr "Podaných <br>žiadostí"
+
+msgid "main:homepage:bigstats:obligees"
+msgstr "Inštitúcií <br>v databáze"
+
+msgid "main:homepage:bigstats:beta"
+msgstr "Portál chcemvediet.sk funguje v testovacej prevádzke"
+
+msgid "main:homepage:blogs:heading"
+msgstr "Blog"
+
+msgid "main:homepage:didyouknow:heading"
+msgstr "Vedeli ste?"
+
+msgid "main:homepage:didyouknow:twitter"
+msgstr "Tweet"
+
+msgid "main:homepage:didyouknow:facebook"
+msgstr "Share"
+
+msgid "main:homepage:funding:heading"
+msgstr "Financovanie"
+
+msgid "main:homepage:funding:donate"
+msgstr "Chcem prispieť"
+
+msgid "main:homepage:login:heading"
+msgstr "Prihlásenie"
+
+msgid "main:homepage:login:email:placeholder"
+msgstr "E-mail"
+
+msgid "main:homepage:login:password:placeholder"
+msgstr "Heslo"
+
+msgid "main:homepage:login:remember"
+msgstr "Zapamätaj si ma"
+
+msgid "main:homepage:login:button"
+msgstr "Prihlásiť sa"
+
+msgid "main:homepage:login:reset_password"
+msgstr "Zabudnuté heslo?"
+
+msgid "main:homepage:login:social_buttons"
+msgstr "Použiť iný login"
+
+msgid "main:homepage:search:heading"
+msgstr "Čo chceš <b>vedieť</b>?"
+
+msgid "main:homepage:search:placeholder"
+msgstr "Hľadaj v už zodpovedaných infožiadostiach..."
+
+msgid "main:homepage:steps:signup"
+msgstr "Zaregistruj sa"
+
+msgid "main:homepage:steps:obligee"
+msgstr "Nájdi inštitúciu"
+
+msgid "main:homepage:steps:inforequest"
+msgstr "Podaj infožiadosť"
+
+msgid "main:homepage:steps:wait"
+msgstr "Čakaj pripomienku"
+
 msgid "main:ajax_fail:heading"
 msgstr "Niečo sa pokazilo"
 
@@ -1142,11 +1217,17 @@ msgstr "Obnoviť stránku"
 msgid "main:ajax_fail:close"
 msgstr "Zavrieť"
 
-msgid "main:menu:search:placeholder"
-msgstr "Hľadaj..."
+msgid "main:footer:partners:heading"
+msgstr "Partneri projektu"
 
-msgid "main:menu:search:button"
-msgstr "Hľadaj"
+msgid "main:footer:donors:heading"
+msgstr "Individuálni darcovia"
+
+msgid "main:footer:donors:show"
+msgstr "Zobraziť zoznam"
+
+msgid "main:footer:donate"
+msgstr "Chcem prispieť"
 
 msgid "main:menu:account:profile"
 msgstr "Profil užívateľa"
@@ -1169,9 +1250,6 @@ msgstr "Odhlásiť"
 msgid "main:menu:account:login"
 msgstr "Prihlásiť"
 
-msgid "main:menu:create"
-msgstr "Podať žiadosť"
-
 msgid "main:menu:about"
 msgstr "O projekte"
 
@@ -1180,6 +1258,15 @@ msgstr "Žiadosti"
 
 msgid "main:menu:obligees"
 msgstr "Inštitúcie"
+
+msgid "main:menu:create"
+msgstr "Podať žiadosť"
+
+msgid "main:header:search:placeholder"
+msgstr "Hľadaj..."
+
+msgid "main:header:search:button"
+msgstr "Hľadaj"
 
 msgid "main:messages:debug"
 msgstr "Debug:"

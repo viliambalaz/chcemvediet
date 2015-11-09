@@ -1,0 +1,26 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="chv-above-1 chv-bellow-1 chv-maxw-45 center-block">
+  <h1>{% trans 'main:homepage:search:heading' %}</h1>
+  <form action=".">
+    <div class="input-group">
+      <input class="form-control" type="text"
+             placeholder="{% trans 'main:homepage:search:placeholder' %}">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <i class="chv-icon icon-search chv-color-blue"></i>
+        </button>
+      </span>
+    </div>
+  </form>
+  {% include "main/homepage/texts/search_text.html" %}
+</div>

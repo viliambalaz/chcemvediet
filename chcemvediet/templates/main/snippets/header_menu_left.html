@@ -23,7 +23,8 @@
     {% trans 'main:menu:inforequests' %}
   </span>
 </a>
-<a class="chv-navbar-item {{ request|active:'obligees'|yes:"active" }}" href="{% url 'obligees:index' %}">
+<a class="chv-navbar-item {{ request|active:'obligees'|yes:"active" }}"
+   href="{% url 'obligees:index' %}">
   <span class="chv-hover-bold" data-content="{% trans 'main:menu:obligees' %}">
     {% trans 'main:menu:obligees' %}
   </span>

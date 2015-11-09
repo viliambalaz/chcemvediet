@@ -1,0 +1,69 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<h2>{% trans 'main:homepage:login:heading' %}</h2>
+<form class="form-horizontal" method="post" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="col-sm-12">
+      <div class="chv-maxw-25 center-block">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="chv-icon icon-mail"></i></span>
+          <input class="form-control" type="email" name="login"
+                 placeholder="{% trans 'main:homepage:login:email:placeholder' %}">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-12">
+      <div class="chv-maxw-25 center-block">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="chv-icon icon-asterisk"></i></span>
+          <input class="form-control" type="password" name="password"
+                 placeholder="{% trans 'main:homepage:login:password:placeholder' %}">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-12">
+      <div class="checkbox chv-inline">
+        <label>
+          <input type="checkbox" name="remember">
+          {% trans 'main:homepage:login:remember' %}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button class="btn chv-btn-wide chv-btn-inv-green" type="submit">
+      {% trans 'main:homepage:login:button' %}
+    </button>
+  </div>
+  <div class="visible-xs">
+    <a class="btn chv-btn-wide chv-btn-inv-blue" href="{% url 'account_signup' %}">
+      {% trans 'main:homepage:signup:button' %}
+    </a>
+  </div>
+</form>
+<p>
+  <a class="chv-color-gray chv-hover-gray-d" href="{% url 'account_reset_password' %}">
+    <span class="chv-icon-stack">
+      <i class="chv-icon icon-circle"></i>
+      <i class="chv-icon chv-icon-half chv-icon-inv icon-help"></i>
+    </span>
+    {% trans 'main:homepage:login:reset_password' %}
+  </a>
+</p>
+<hr>
+<h3>{% trans 'main:homepage:login:social_buttons' %}</h3>
+{% include "account/snippets/social_login_buttons.html" with process="login" %}

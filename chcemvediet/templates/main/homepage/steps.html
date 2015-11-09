@@ -1,0 +1,67 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load static from staticfiles %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="row">
+  <div class="col-sm-3 hidden-xs">
+    <p class="lead">
+      <a class="chv-block" href="{% url 'account_signup' %}">
+        <img class="chv-height-5 img-responsive center-block"
+             src="{% static "main/images/step01.svg" %}">
+        <span class="chv-block chv-above-1 chv-bellow-2">
+          <b>{% trans 'main:homepage:steps:signup' %}</b>
+        </span>
+      </a>
+    </p>
+  </div>
+  <div class="pull-left hidden-xs chv-above-2-half" style="">
+    <i class="chv-icon chv-icon-2x chv-icon-zero-width icon-chevron-right chv-color-blue-d"></i>
+  </div>
+  <div class="col-sm-3 col-xs-6">
+    <p class="lead">
+      <a class="chv-block" href="{% url 'obligees:index' %}">
+        <img class="chv-height-5 img-responsive center-block"
+             src="{% static "main/images/step02.svg" %}">
+        <span class="chv-block chv-above-1 chv-bellow-2">
+          <b>{% trans 'main:homepage:steps:obligee' %}</b>
+        </span>
+      </a>
+    </p>
+  </div>
+  <div class="pull-left chv-above-2-half" style="">
+    <i class="chv-icon chv-icon-2x chv-icon-zero-width icon-chevron-right chv-color-blue-d"></i>
+  </div>
+  <div class="col-sm-3 col-xs-6">
+    <p class="lead">
+      <a class="chv-block" href="{% url 'inforequests:create' %}">
+        <img class="chv-height-5 img-responsive center-block"
+             src="{% static "main/images/step03.svg" %}">
+        <span class="chv-block chv-above-1 chv-bellow-2">
+          <b>{% trans 'main:homepage:steps:inforequest' %}</b>
+        </span>
+      </a>
+    </p>
+  </div>
+  <div class="pull-left hidden-xs chv-above-2-half" style="">
+    <i class="chv-icon chv-icon-2x chv-icon-zero-width icon-chevron-right chv-color-blue-d"></i>
+  </div>
+  <div class="col-sm-3 hidden-xs">
+    <p class="lead">
+      <a class="chv-block" href="{% url 'inforequests:index' %}">
+        <img class="chv-height-5 img-responsive center-block"
+             src="{% static "main/images/step04.svg" %}">
+        <span class="chv-block chv-above-1 chv-bellow-2">
+          <b>{% trans 'main:homepage:steps:wait' %}</b>
+        </span>
+      </a>
+    </p>
+  </div>
+</div>
