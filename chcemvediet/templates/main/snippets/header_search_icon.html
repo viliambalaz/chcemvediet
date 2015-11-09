@@ -1,0 +1,15 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- collapse_id: string
+ %
+{% endcomment %}
+
+
+<a class="chv-navbar-item chv-navbar-search-toggle visible-xs collapsed"
+   href="#{{ collapse_id }}" data-toggle="collapse">
+  <i class="chv-icon icon-search"></i>
+</a>

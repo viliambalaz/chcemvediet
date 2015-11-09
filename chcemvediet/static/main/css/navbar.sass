@@ -127,7 +127,7 @@
     font-weight: 700
   tt
     text-transform: uppercase
-    font-size: 0.8em
+    font-size: 0.7em
     font-weight: 700
     font-family: $font-family-sans-serif
   .badge
@@ -136,221 +136,55 @@
     font-weight: 500
     vertical-align: 30%
 
+//
+// Search component
+//
 
-//////////////////////////////////
-
-//$chv-navbar-primary-color: $chv-color-white
-//$chv-navbar-primary-bg: $chv-color-blue
-//$chv-navbar-primary-collapse-bg: $chv-color-blue-d
-//$chv-navbar-secondary-color: $chv-color-blue
-//$chv-navbar-secondary-bg: $chv-color-gray-w
-//$chv-navbar-secondary-collapsed-color: $chv-color-white
-//$chv-navbar-secondary-collapsed-bg: $chv-color-gray-l
-//$chv-navbar-secondary-collapsed-hover-bg: #999999
-//$chv-navbar-secondary-right-color: $chv-color-gray
-//$chv-navbar-secondary-right-collapsed-color: $chv-color-white
-//$chv-navbar-secondary-right-collapsed-bg: $chv-color-blue-ll
-//$chv-navbar-link-padding-x: 10px
-//$chv-navbar-link-padding-y: (($navbar-height - $line-height-computed) / 2)
-//$chv-navbar-search-color: $chv-color-white
-//$chv-navbar-search-bg: $chv-color-blue-d
-//$chv-navbar-search-placeholder: $chv-color-white
-//$chv-navbar-search-button-color: $chv-color-white
-//$chv-navbar-search-button-bg: $chv-color-blue-dd
-//$chv-navbar-search-width: 160px
-//$chv-nav-feature-color: $chv-color-white
-//$chv-nav-feature-bg: $chv-color-green-l
-//$chv-nav-feature-hover-bg: $chv-color-green
-//$chv-nav-user-color: $chv-color-blue
-//$chv-nav-user-bg: $chv-color-blue-ll
-//$chv-nav-user-hover-color: $chv-color-blue-ll
-//$chv-nav-user-hover-bg: #b5caf2
-//
-//
-//.chv-navbar-primary
-//  margin: 0
-//  border: none
-//  border-radius: 0
-//  @include chv-color($chv-navbar-primary-color)
-//  background-color: $chv-navbar-primary-bg
-//  @include chv-links-reset()
-//  a[data-toggle="collapse"]:not(.collapsed)
-//    background-color: $chv-navbar-primary-collapse-bg
-//
-//.chv-navbar-secondary
-//  margin: 0
-//  border: none
-//  border-radius: 0
-//  @include chv-color($chv-navbar-secondary-color)
-//  background-color: $chv-navbar-secondary-bg
-//  @include chv-links-reset()
-//
-//.chv-navbar-primary-right,
-//.chv-navbar-secondary-left,
-//.chv-navbar-secondary-right
-//  margin: 0
-//  padding: 0
-//  list-style: none
-//  @include clearfix()
-//  > li
-//    display: block
-//    float: left
-//    margin-top: 0 !important
-//    margin-bottom: 0 !important
-//    padding-top: 0 !important
-//    padding-bottom: 0 !important
-//    &.active
-//      font-weight: 700
-//    > a
-//      display: block
-//      min-width: $navbar-height
-//      padding: $chv-navbar-link-padding-y $chv-navbar-link-padding-x
-//      outline: none
-//      text-align: center
-//      @include chv-hover-bold()
-//
-//.chv-navbar-primary-right,
-//.chv-navbar-secondary-right
-//  float: right
-//  margin-right: (-$chv-navbar-link-padding-x)
-//
-//.chv-navbar-secondary-left
-//  float: left
-//  margin-left: (-$chv-navbar-link-padding-x)
-//  @media(max-width:$screen-xs-max)
-//    position: absolute
-//    top: $navbar-height
-//    left: 0
-//    right: 0
-//    margin: 0
-//    @include chv-color($chv-navbar-secondary-collapsed-color)
-//    background-color: $chv-navbar-secondary-collapsed-bg
-//    z-index: 1
-//    > li
-//      float: none
-//      > a
-//        padding: 1.5ex $chv-container-padding
-//        text-align: left
-//        &:hover, &:focus
-//          background-color: $chv-navbar-secondary-collapsed-hover-bg
-//        .chv-hover-bold
-//          text-align: left
-//    .open .dropdown-menu
-//      position: static
-//      float: none
-//      margin: 0
-//      padding: 0
-//      border-radius: 0
-//      border: none
-//      box-shadow: none
-//      background-color: rgba(#fff, 0.5)
-//      > li > a
-//        padding: 1.5ex $chv-container-padding
-//  @media(min-width:$screen-sm-min)
-//    display: block
-//
-//.chv-navbar-secondary-right
-//  @include chv-color($chv-navbar-secondary-right-color)
-//  @media(max-width:$screen-xs-max)
-//    > li
-//      position: static
-//    .open .dropdown-menu
-//      position: absolute
-//      left: 0
-//      right: 0
-//      margin: 0
-//      padding: 0
-//      border-radius: 0
-//      border: none
-//      box-shadow: none
-//      background-color: $chv-navbar-secondary-right-collapsed-bg
-//      > li > a
-//        padding: 1.5ex $chv-container-padding
-//        color: $chv-navbar-secondary-right-collapsed-color
-//        &:hover, &:focus
-//          background-color: rgba(#fff, 0.5)
-//
-//.chv-navbar-secondary-toggle
-//  display: block
-//  float: left
-//  width: $navbar-height
-//  height: $navbar-height
-//  padding: 0
-//  border: none
-//  outline: none
-//  background-color: $chv-navbar-secondary-collapsed-bg
-//  .icon-bar
-//    display: block
-//    margin: ($navbar-height * 0.06) auto
-//    width: ($navbar-height * 0.36)
-//    height: ($navbar-height * 0.06)
-//    background-color: $chv-navbar-secondary-collapsed-color
-//  &.collapsed
-//    background-color: $chv-navbar-secondary-bg
-//    .icon-bar
-//      background-color: $chv-navbar-secondary-color
-//  @media(min-width:$screen-sm-min)
-//    display: none
-//
-//.chv-navbar-search
-//  border: none
-//  outline: none
-//  box-shadow: none
-//  input
-//    color: $chv-navbar-search-color
-//    background-color: $chv-navbar-search-bg
-//    border: none
-//    outline: none
-//    box-shadow: none !important
-//    &:focus
-//      @include placeholder(transparent)
-//  button
-//    color: $chv-navbar-search-button-color
-//    background-color: $chv-navbar-search-bg
-//    border-color: $chv-navbar-search-bg
-//    font-weight: 700
-//    &:hover, &:focus
-//      color: $chv-navbar-search-button-color
-//      background-color: $chv-navbar-search-button-bg
-//      border-color: $chv-navbar-search-bg
-//  @media(max-width:$screen-xs-max)
-//    float: none !important
-//    margin: 0 (-$chv-container-padding)
-//    padding: 0 $chv-container-padding
-//    background-color: $chv-navbar-search-bg
-//    .form-group
-//      margin: 0
-//    input
-//      height: $navbar-height
-//      border-radius: 0
-//      margin: 0
-//      padding: 0 $chv-navbar-link-padding-x 0 0
-//    button
-//      border-radius: 4px !important
-//      background-color: $chv-navbar-search-button-bg
-//  @media(min-width:$screen-sm-min)
-//    display: block !important
-//    padding: 0 $chv-navbar-link-padding-x
-//    input
-//      max-width: $chv-navbar-search-width
-//
-//.chv-nav-feature
-//  margin: 0 $chv-navbar-link-padding-x
-//  @include chv-color($chv-nav-feature-color)
-//  background-color: $chv-nav-feature-bg
-//  font-weight: 700
-//  &:hover, &:focus
-//    background-color: $chv-nav-feature-hover-bg
-//  a:hover, a:focus
-//    @include chv-color($chv-nav-feature-color)
-//
-//.chv-nav-user
-//  .chv-circle
-//    margin-left: $chv-navbar-link-padding-x
-//    color: $chv-nav-user-color
-//    background-color: $chv-nav-user-bg
-//  a:hover, a:focus
-//    @include chv-color($chv-navbar-secondary-color)
-//    .chv-circle
-//      color: $chv-nav-user-hover-color
-//      background-color: $chv-nav-user-hover-bg
+.chv-navbar-search
+  float: right
+  .chv-navbar-search-inner
+    max-height: $chv-navbar-height
+    line-height: $chv-navbar-height
+    overflow: hidden
+  input
+    display: inline !important
+    color: $chv-color-white
+    background-color: $chv-color-blue-d
+    border-color: $chv-color-blue-d !important
+    box-shadow: none !important
+  .btn
+    color: $chv-color-white
+    font-weight: 700
+    &:hover, &:active, &:focus
+      color: $chv-color-white
+      background-color: $chv-color-blue-dd
+@media(max-width:$screen-xs-max)
+  .chv-navbar-search
+    width: 100%
+    .chv-navbar-search-inner
+      margin-left: -$chv-container-padding
+      margin-right: -$chv-container-padding
+      background-color: $chv-color-blue-d
+    input
+      padding-left: $chv-container-padding
+    .btn
+      margin-right: ($chv-container-padding - $chv-navber-padding-x)
+      background-color: $chv-color-blue-dd
+  .chv-navbar-search-toggle:not(.collapsed)
+    background-color: $chv-color-blue-d
+@media(min-width:$screen-sm-min)
+  .chv-navbar-search
+    padding-right: ($chv-navber-padding-x * 2)
+    .chv-navbar-search-inner
+      height: $chv-navbar-height !important
+    .input-group
+      width: 10px
+    input
+      padding-right: 0
+      width: 100px !important
+      &:focus
+        width: 200px !important
+    .btn
+      background-color: $chv-color-blue-d
+    .collapse
+      display: block

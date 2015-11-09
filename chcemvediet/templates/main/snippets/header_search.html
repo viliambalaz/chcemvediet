@@ -1,0 +1,26 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- collapse_id: string
+ %
+{% endcomment %}
+
+
+<div class="chv-navbar-search">
+  <div id="{{ collapse_id }}" class="chv-navbar-search-inner collapse">
+    <form action=".">
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="Hľadaj...">
+        <span class="input-group-btn">
+          <button class="btn" type="submit">
+            <span class="hidden-xs"><i class="chv-icon icon-search"></i></span>
+            <span class="visible-xs">{% trans 'main:menu:search:button' %}</span>
+          </button>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>

@@ -19,26 +19,16 @@
 
 <nav class="chv-navbar chv-navbar-first">
   <div class="container">
-    <div class="chv-navbar-items">
-      <div class="chv-navbar-item chv-navbar-brand">
-        <div class="chv-navbar-item chv-navbar-logo chv-hidden-450">
-          <span class="chv-icon-stack">
-            <i class="chv-icon icon-chv-horiz-40"></i>
-            <i class="chv-icon icon-chv-horiz-70"></i>
-            <i class="chv-icon icon-chv-horiz-100"></i>
-          </span>
-        </div>
-        <a href="{% url 'homepage' %}">chem<b>vediet</b>.<tt>sk</tt></a>
-        <span class="badge chv-hidden-450">beta</span>
+    {% with search_id=idgenerator.next %}
+      <div class="chv-navbar-items">
+        {% include "main/snippets/header_brand.html" %}
       </div>
-    </div>
-    <div class="chv-navbar-items pull-right">
-      <a class="chv-navbar-item collapsed" href="#" data-toggle="collapse"
-         data-target="#chv-navbar-search">
-        <i class="chv-icon icon-search"></i>
-      </a>
-      {% include "main/snippets/header_language.html" %}
-    </div>
+      <div class="chv-navbar-items pull-right chv-hidden-300">
+        {% include "main/snippets/header_search_icon.html" with collapse_id=search_id %}
+        {% include "main/snippets/header_language.html" %}
+      </div>
+      {% include "main/snippets/header_search.html" with collapse_id=search_id %}
+    {% endwith %}
   </div>
 </nav>
 <nav class="chv-navbar chv-navbar-second">
@@ -48,31 +38,14 @@
       {% include "main/snippets/header_account.html" %}
       {% include "main/snippets/header_menu_right.html" %}
     </div>
-    {% with menu_id=idgenerator.next %}
-      <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#{{ menu_id }}"
+    {% with collapse_id=idgenerator.next %}
+      <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#{{ collapse_id }}"
          data-toggle="collapse">
         <i class="chv-icon chv-icon-lg icon-menu"></i>
       </a>
-      <div id="{{ menu_id }}" class="chv-navbar-items chv-navbar-collapse collapse">
+      <div id="{{ collapse_id }}" class="chv-navbar-items chv-navbar-collapse collapse">
         {% include "main/snippets/header_menu_left.html" %}
       </div>
     {% endwith %}
   </div>
 </nav>
-
-    {%comment%}
-    <form class="navbar-form chv-navbar-search collapse pull-right" action=".">
-      <div class="form-group">
-        <div class="input-group">
-          <input type="text" class="form-control"
-                 placeholder="{% trans 'main:menu:search:placeholder' %}">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">
-              <span class="hidden-xs"><span class="glyphicon glyphicon-search"></span></span>
-              <span class="visible-xs">{% trans 'main:menu:search:button' %}</span>
-            </button>
-          </span>
-        </div>
-      </div>
-    </form>
-    {%endcomment%}

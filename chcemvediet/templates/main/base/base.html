@@ -24,24 +24,26 @@
     {% endcompress %}
   </head>
   <body class="{% if DEBUG and "grid" in request.GET %}baseline-grid{% endif %}">
-    <header>
-      {% include "main/snippets/header.html" %}
-    </header>
-    <div class="container">
-      {% include "main/snippets/messages.html" %}
+    <div class="chv-body-clip">
+      <header>
+        {% include "main/snippets/header.html" %}
+      </header>
+      <div class="container">
+        {% include "main/snippets/messages.html" %}
+      </div>
+      <div class="chv-scheme-white">
+        {% block container %}{% endblock %}
+      </div>
+      <footer>
+        {% include "main/snippets/footer.html" %}
+      </footer>
+      <div id="ajax-fail-modal" class="modal fade">
+        {% include "main/snippets/ajax_fail.html" %}
+      </div>
+      {% assets "js" external=True %}
+      {% compress js %}
+        {% assets "js" local=True %}
+      {% endcompress %}
     </div>
-    <div class="chv-scheme-white">
-      {% block container %}{% endblock %}
-    </div>
-    <footer>
-      {% include "main/snippets/footer.html" %}
-    </footer>
-    <div id="ajax-fail-modal" class="modal fade">
-      {% include "main/snippets/ajax_fail.html" %}
-    </div>
-    {% assets "js" external=True %}
-    {% compress js %}
-      {% assets "js" local=True %}
-    {% endcompress %}
   </body>
 </html>
