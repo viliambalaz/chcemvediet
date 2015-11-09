@@ -1,5 +1,13 @@
 
 //
+// Development bar above navbar
+//
+
+.chv-devbar
+  padding-top: ($chv-baseline / 2)
+  background-color: yellow
+
+//
 // Reserve space for bold hover
 //
 
@@ -16,6 +24,18 @@
 a:hover, a:focus
   .chv-hover-bold
     font-weight: 700
+
+//
+// Hack dropdown menu to accomodate arbitrary content
+// Note: The panel is not responsive. So far we use it in debug mode only.
+//
+
+.chv-dropdown-panel
+  min-width: 500px
+  max-height: 300px
+  padding: 20px
+  background: $chv-color-white !important
+  overflow-y: scroll
 
 //
 // Blog link component

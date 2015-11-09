@@ -1,25 +1,5 @@
 /** Various fixes and tweaks for Bootstrap **/
 
-/* Fixed top bars and respective body padding */
-@media (min-width: 768px) { .chv-fixed-header { position: fixed; width: 100%; top: 0; z-index: 1; } }
-@media (min-width: 768px) { body.chv-fixed-header-push-1 { padding-top: 60px; } }
-@media (min-width: 768px) { body.chv-fixed-header-push-2 { padding-top: 100px; } }
-
-/* Anchor position for fixded top bars */
-@media (min-width: 768px) { .chv-anchor:before { content: ''; display: block; position: relative; width: 0; } }
-@media (min-width: 768px) { body.chv-fixed-header-push-1 .chv-anchor:before { height: 60px; margin-top: -60px; } }
-@media (min-width: 768px) { body.chv-fixed-header-push-2 .chv-anchor:before { height: 100px; margin-top: -100px; } }
-
-/* Highlight active navbar brand */
-.navbar-brand.active { color: white; }
-
-/* Development bar above navbar */
-.chv-devbar { padding-top: 10px; background-color: yellow; }
-
-/* Dropdown menu panel with arbitrary content */
-.chv-dropdown-panel { padding: 20px !important; min-width: 500px; max-height: 300px;  overflow-y: scroll; }
-.chv-dropdown-panel { background: #fff !important; box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176) !important; }
-
 /* Box for action content  */
 .chv-action-content { margin: 20px; padding: 5%; border: solid 1px black; background: white; }
 
@@ -29,8 +9,3 @@
 .chv-tooltip-error + .tooltip.bottom > .tooltip-arrow { border-bottom-color: #BD362F; }
 .chv-tooltip-error + .tooltip.left > .tooltip-arrow { border-left-color: #BD362F; }
 .chv-tooltip-error + .tooltip.right > .tooltip-arrow { border-right-color: #BD362F; }
-
-/* Common shortcuts */
-.chv-prewrap { white-space: pre-wrap; }
-.chv-preline { white-space: pre-line; }
-.chv-pointer { cursor: pointer; }

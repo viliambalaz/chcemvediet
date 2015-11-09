@@ -14,7 +14,7 @@
 {% block title %}{% trans 'inforequests:detail:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1 id="request" class="chv-anchor">{% trans 'inforequests:detail:heading' %}</h1>
+  <h1 id="request">{% trans 'inforequests:detail:heading' %}</h1>
   {% if not inforequest.closed %}
     {% if inforequest.has_undecided_emails %}
       <div class="alert alert-info">
@@ -41,7 +41,7 @@
   <div>
     {% include "inforequests/detail/request.html" %}
   </div>
-  <div id="actions" class="chv-anchor">
+  <div id="actions">
     {% include "inforequests/detail/branch.html" with branch=inforequest.main_branch %}
   </div>
 {% endblock %}
