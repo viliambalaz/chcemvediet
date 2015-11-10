@@ -1,11 +1,68 @@
 
 //
+// Make sure the page is not smaller than the viewport so the footer is always at the bottom
+//
+
+#content
+  min-height: 100vh
+
+//
 // Adjust container padding
 //
 
 .container
   padding-left: $chv-container-padding
   padding-right: $chv-container-padding
+
+//
+// Fixed vertical sizes maintaining rhythm
+//
+
+@mixin chv-height($name, $lead)
+  .chv-height-#{$name}
+    height: ($chv-baseline * $lead) !important
+  .chv-above-#{$name}
+    padding-top: ($chv-baseline * $lead) !important
+  .chv-above-minus-#{$name}
+    margin-top: (-1 * $chv-baseline * $lead) !important
+  .chv-bellow-#{$name}
+    padding-bottom: ($chv-baseline * $lead) !important
+  .chv-bellow-minus-#{$name}
+    margin-bottom: (-1 * $chv-baseline * $lead) !important
+
+@mixin chv-heights($screen: "")
+  @include chv-height("0#{$screen}", 0)
+  @include chv-height("half#{$screen}", 0.5)
+  @for $i from 1 through 8
+    @include chv-height("#{$i}#{$screen}", $i)
+    @include chv-height("#{$i}-half#{$screen}", $i + 0.5)
+
+@include chv-heights()
+@include chv-heights("-xs")
+@media(min-width:$screen-sm-min)
+  @include chv-heights("-sm")
+@media(min-width:$screen-md-min)
+  @include chv-heights("-md")
+@media(min-width:$screen-lg-min)
+  @include chv-heights("-lg")
+
+//
+// Pull left/right based on screen size
+//
+
+@mixin chv-pull($screen)
+  .chv-pull-left#{$screen}
+    float: left !important
+  .chv-pull-right#{$screen}
+    float: right !important
+
+@include chv-pull("-xs")
+@media(min-width:$screen-sm-min)
+  @include chv-pull("-sm")
+@media(min-width:$screen-md-min)
+  @include chv-pull("-md")
+@media(min-width:$screen-lg-min)
+  @include chv-pull("-lg")
 
 //
 // Content hidden for (visible only to) vieports up to X.
@@ -39,9 +96,3 @@
   bottom: 0
 .chv-aspect-parners
   padding-top: 8%
-
-//
-// Make sure the page is not smaller than the viewport so the footer is always at the bottom
-//
-#content
-  min-height: 100vh

@@ -14,6 +14,7 @@
       <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Buttons</a>
     </h2>
     <div id="{{ collapse_id }}" class="collapse">
+      <h3>Defined buttons</h3>
       <div>
         {% include "styleguide/buttons-button.html" with class="btn-default" %}
         {% include "styleguide/buttons-button.html" with class="btn-link" %}
@@ -27,12 +28,12 @@
         {% include "styleguide/buttons-button.html" with class="chv-btn-inv-green" %}
         {% include "styleguide/buttons-button.html" with class="chv-btn-inv-red" %}
       </div>
-      <h3 class="sg-h">Semantic names for buttons</h3>
+      <h3>Semantic names for buttons</h3>
       <div>
         {% include "styleguide/buttons-button.html" with class="chv-btn-default" %}
         {% include "styleguide/buttons-button.html" with class="chv-btn-primary" %}
       </div>
-      <h3 class="sg-h">Button sizes</h3>
+      <h3>Button sizes</h3>
       <div>
         {% with extra="chv-btn-blue" %}
           {% include "styleguide/buttons-button.html" with class="btn" %}

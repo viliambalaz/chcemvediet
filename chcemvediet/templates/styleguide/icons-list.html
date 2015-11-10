@@ -4,11 +4,20 @@
  %
  % Context:
  %  -- icon: string
- %  -- extra: string
  %
 {% endcomment %}
 
-<li>
-  <i class="chv-icon chv-icon-li {{ icon }} {{ extra }}"></i>
-  {{ icon }}
-</li>
+
+<ul class="chv-icon-ul sg-specimen-inline chv-scheme-white">
+  <li>
+    <i class="chv-icon chv-icon-li icon-ok {{ icon }}"></i>
+    {{ icon }}
+  </li>
+  <li>
+    <span class="chv-icon-stack chv-icon-li {{ icon }}">
+      <i class="chv-icon icon-circle"></i>
+      <i class="chv-icon chv-icon-inv chv-icon-half icon-ok"></i>
+    </span>
+    {{ icon }}
+  </li>
+</ul>

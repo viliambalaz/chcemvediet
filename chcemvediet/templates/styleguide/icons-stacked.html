@@ -6,11 +6,12 @@
  % Context:
  %  -- stack: string
  %  -- icons: string
+ %  -- extra: string
  %
 {% endcomment %}
 
-<div class="sg-inline">
-  <span class="chv-icon-stack chv-icon-2x chv-icon-middle {{ stack }}">
+<div class="sg-specimen-inline chv-scheme-white ">
+  <span class="chv-icon-stack {{ extra }} {{ stack }}">
     {% for icon in icons|split:"," %}
       <i class="chv-icon {{ icon }}"></i>
     {% endfor %}

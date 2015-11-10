@@ -8,20 +8,24 @@
 {% endcomment %}
 
 
-{% with collapse_id=idgenerator.next %}
+{% with collapse_id=idgenerator.next checkbox_id=idgenerator.next %}
   <div class="sg-container">
     <h2 id="navbar">
       <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Navbar</a>
     </h2>
   </div>
   <div id="{{ collapse_id }}" class="collapse">
-    {% include "styleguide/navbar-first-brand.html" %}
-    {% include "styleguide/navbar-first-search.html" %}
-    {% include "styleguide/navbar-first-items.html" %}
-    {% include "styleguide/navbar-second-blue-items.html" %}
-    {% include "styleguide/navbar-second-gray-items.html" %}
-    {% include "styleguide/navbar-second-gray-blue-items.html" %}
-    {% include "styleguide/navbar-second-green-items.html" %}
-    {% include "styleguide/navbar-second-collapse.html" %}
+    <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox" checked="checked">
+    <label for="{{ checkbox_id }}">Show baseline</label>
+    <div class="sg-grid">
+      {% include "styleguide/navbar-first-brand.html" %}
+      {% include "styleguide/navbar-first-search.html" %}
+      {% include "styleguide/navbar-first-items.html" %}
+      {% include "styleguide/navbar-second-blue-items.html" %}
+      {% include "styleguide/navbar-second-gray-items.html" %}
+      {% include "styleguide/navbar-second-gray-blue-items.html" %}
+      {% include "styleguide/navbar-second-green-items.html" %}
+      {% include "styleguide/navbar-second-collapse.html" %}
+    </div>
   </div>
 {% endwith %}

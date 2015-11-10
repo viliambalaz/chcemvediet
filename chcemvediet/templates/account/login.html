@@ -19,16 +19,14 @@
   <form class="form-horizontal" method="post" action="{% url 'account_login' %}">
     {% csrf_token %}
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-md-8">
         <h1>{% trans 'account:login:heading' %}</h1>
+        {% include "account/texts/login_text.html" %}
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 col-md-push-8 chv-above-minus-3-md">
+      <div class="col-md-4 chv-pull-right-md chv-above-1-md">
         {% include "account/texts/why_register.html" %}
       </div>
-      <div class="col-md-8 col-md-pull-4">
-        {% include "account/texts/login_text.html" %}
+      <div class="col-md-8">
         {% include "main/forms/form_horizontal.html" %}
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
