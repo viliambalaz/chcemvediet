@@ -78,6 +78,8 @@
       display: none !important
 
 @include chv-hidden('xs', $screen-xs-max)
+@include chv-hidden('sm', $screen-sm-max)
+@include chv-hidden('md', $screen-md-max)
 @for $i from 1 through 10
   @include chv-hidden($i * 50, $i * 50px)
 

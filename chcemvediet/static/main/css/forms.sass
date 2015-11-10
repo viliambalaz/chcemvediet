@@ -10,7 +10,6 @@
   margin-top: -2px
   margin-bottom: 8px
 
-// Twice to override bootstrap padding
 .control-label.control-label
   padding-top: 5px
   padding-bottom: 5px
@@ -21,14 +20,18 @@
     margin-top: 0
     margin-bottom: 0
 
+.form-group,
+  margin-bottom: $chv-baseline
+.chv-form-dense
+  .form-group,
+    margin-bottom: 0
+
 .form-horizontal
   .checkbox,
   .radio,
     @include chv-baseline($chv-fontsize-base, 1, 0, 0.5)
-
-.form-group,
-  // FIXME: maybe we want a looser form sometimes ($chv-baseline/2 margin)
-  margin-bottom: 0
+  .help-block
+    @include chv-baseline($chv-fontsize-base, 1, 0, 1)
 
 //
 // Hide placeholder on active inputs

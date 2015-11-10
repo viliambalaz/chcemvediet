@@ -1,0 +1,26 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with field_id=idgenerator.next%}
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="{{ field_id }}">With addons</label>
+    <div class="col-sm-9">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="chv-icon icon-mail"></i></span>
+        <input id="{{ field_id }}" class="form-control" type="text" placeholder="With addons">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">
+            <i class="chv-icon icon-search"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+{% endwith %}

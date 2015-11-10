@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="form-group">
+  <label class="control-label col-sm-3">Checkboxes</label>
+  <div class="col-sm-9">
+    <div class="checkbox">
+      <label><input type="checkbox">{% lorem 3 %}</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox">Another one</label>
+    </div>
+  </div>
+</div>

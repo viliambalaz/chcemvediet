@@ -1,0 +1,26 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with field_id=idgenerator.next %}
+  <div class="form-group">
+    <label class="control-label col-sm-3">Radio buttons</label>
+    <div class="col-sm-9">
+      <div class="radio">
+        <label><input type="radio" name="{{ field_id }}">First</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="{{ field_id }}">Second</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="{{ field_id }}">Third</label>
+      </div>
+    </div>
+  </div>
+{% endwith %}
