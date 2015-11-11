@@ -1,0 +1,17 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="form-group has-error">
+  <div class="col-sm-9 col-sm-offset-3">
+    <span class="help-block">Non-field errors. {% lorem 3 %}</span>
+    <span class="help-block">{% lorem 4 %}</span>
+  </div>
+</div>

@@ -1,15 +1,16 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load yes from poleno.utils %}
 
 {% comment %}
  %
  % Context:
- %  -- None
+ %  -- error: boolean
  %
 {% endcomment %}
 
 
 {% with field_id=idgenerator.next%}
-  <div class="form-group">
+  <div class="form-group {{ error|yes:"has-error" }}">
     <label class="control-label col-sm-3" for="{{ field_id }}">With addons</label>
     <div class="col-sm-9">
       <div class="input-group">
@@ -21,6 +22,9 @@
           </button>
         </span>
       </div>
+      {% if error %}
+        <span class="help-block">Error text. Lorem ipsum dolor sit.</span>
+      {% endif %}
     </div>
   </div>
 {% endwith %}

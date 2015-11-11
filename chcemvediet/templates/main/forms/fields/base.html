@@ -31,9 +31,9 @@
     {% endblock %}
     {% block errors %}
       {% if field.errors %}
-        <span class="help-block">
-          {{ field.errors|join:" " }}
-        </span>
+        {% for error in field.errors %}
+          <span class="help-block">{{ error }}</span>
+        {% endfor %}
       {% endif %}
     {% endblock %}
   </div>

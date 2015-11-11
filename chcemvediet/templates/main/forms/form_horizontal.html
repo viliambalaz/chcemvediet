@@ -10,7 +10,13 @@
 
 {% block non-field-errors %}
   {% if form.non_field_errors %}
-    <p class="text-danger">{{ form.non_field_errors|join:" " }}</p>
+    <div class="form-group has-error">
+      <div class="col-sm-9 col-sm-offset-3">
+        {% for error in form.non_field_errors %}
+          <span class="help-block">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
   {% endif %}
 {% endblock %}
 {% block fields %}

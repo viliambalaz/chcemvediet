@@ -1,24 +1,26 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load lorem from poleno.utils %}
+{% load lorem yes from poleno.utils %}
 
 {% comment %}
  %
  % Context:
- %  -- label: string
- %  -- group_class: string
  %  -- help: boolean
+ %  -- error: boolean
  %
 {% endcomment %}
 
 
 {% with field_id=idgenerator.next%}
-  <div class="form-group {{ group_class }}">
-    <label class="control-label col-sm-3" for="{{ field_id }}">
-      {{ label|default:"Simple input" }}
-    </label>
+  <div class="form-group {{ error|yes:"has-error" }}">
+    <label class="control-label col-sm-3" for="{{ field_id }}">Simple input</label>
     <div class="col-sm-9">
       <input id="{{ field_id }}" class="form-control" type="text" placeholder="Simple input box">
-      {% if help %}<span class="help-block">{% lorem 3 %}</span>{% endif %}
+      {% if help %}
+        <span class="help-block">Help text. {% lorem 3 %}</span>
+      {% endif %}
+      {% if error %}
+        <span class="help-block">Error text. Lorem ipsum dolor sit.</span>
+      {% endif %}
     </div>
   </div>
 {% endwith %}

@@ -13,6 +13,7 @@
 .control-label.control-label
   padding-top: 5px
   padding-bottom: 5px
+  font-weight: normal
 
 .input-group,
   .btn,
@@ -20,18 +21,62 @@
     margin-top: 0
     margin-bottom: 0
 
-.form-group,
-  margin-bottom: $chv-baseline
-.chv-form-dense
-  .form-group,
-    margin-bottom: 0
-
 .form-horizontal
-  .checkbox,
-  .radio,
-    @include chv-baseline($chv-fontsize-base, 1, 0, 0.5)
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
+  .form-group
+    margin-bottom: ($chv-baseline * 0.5)
+  .checkbox, .radio
+    padding-top: $fix
+    padding-bottom: 0
+    margin-top: 0
+    margin-bottom: ($chv-baseline * 0.5 - $fix)
   .help-block
-    @include chv-baseline($chv-fontsize-base, 1, 0, 1)
+    padding-top: $fix
+    padding-bottom: 0
+    margin-top: 0
+    margin-bottom: ($chv-baseline * 0.5 - $fix)
+
+.form-horizontal.chv-form-dense
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
+  .form-group
+    margin-bottom: 0
+  .checkbox, .radio
+    padding-top: $fix
+    padding-bottom: 0
+    margin-top: 0
+    margin-bottom: (0 - $fix)
+    &:last-child
+      padding-bottom: $chv-baseline
+    + .help-block
+      padding-top: ($fix + $chv-baseline * 0.5)
+  .help-block
+    padding-top: 0
+    padding-bottom: 0
+    margin-top: ($fix - $chv-baseline * 0.5)
+    margin-bottom: ($chv-baseline - $fix)
+
+.form-control
+  box-shadow: none !important
+
+.has-error
+  @include form-control-validation($chv-color-red, $chv-color-red-ll, $chv-color-red-w)
+  .input-group-btn
+    .btn-default
+      border-color: $chv-color-red-ll
+      background-color: $chv-color-red-w
+      &:hover, &:focus, &:active
+        background-color: mix($chv-color-red-w, $chv-color-gray, 90%)
+  .chv-icon
+    color: $chv-color-red
+
+//
+// Social icons used is forms
+//
+
+.chv-social-login-buttons
+  height: ($chv-baseline * 2)
+  margin-top: -4px
+  margin-bottom: 14px
 
 //
 // Hide placeholder on active inputs
