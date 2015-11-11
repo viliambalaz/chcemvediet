@@ -14,10 +14,9 @@
     {{ icon }}
   </li>
   <li>
-    <span class="chv-icon-stack chv-icon-li {{ icon }}">
-      <i class="chv-icon icon-circle"></i>
-      <i class="chv-icon chv-icon-inv chv-icon-half icon-ok"></i>
-    </span>
+    {% with stack="chv-icon-li "|add:icon icon="icon-ok" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
     {{ icon }}
   </li>
 </ul>

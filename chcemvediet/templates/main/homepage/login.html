@@ -57,10 +57,7 @@
 </form>
 <p>
   <a class="chv-color-gray chv-hover-gray-d" href="{% url 'account_reset_password' %}">
-    <span class="chv-icon-stack">
-      <i class="chv-icon icon-circle"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-help"></i>
-    </span>
+    {% include "main/snippets/icons/circled.html" with icon="icon-help" %}
     {% trans 'main:homepage:login:reset_password' %}
   </a>
 </p>

@@ -4,12 +4,13 @@
 {% comment %}
  %
  % Context:
+ %  -- pull: string
  %  -- collapse_id: string
  %
 {% endcomment %}
 
 
-<div class="chv-navbar-search">
+<div class="chv-navbar-search {{ pull }}">
   <div id="{{ collapse_id }}" class="chv-navbar-search-inner collapse">
     <form action=".">
       <div class="input-group">

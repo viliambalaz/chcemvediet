@@ -1,36 +1,30 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/carousel/item.html" %}
 {% load trans from i18n %}
-{% load yes from poleno.utils %}
 
 {% comment %}
  %
  % Context:
- %  -- active: bool
+ %  -- text: string
  %
 {% endcomment %}
 
 
-<div class="item {{ active|yes:"active" }}">
-  <div class="chv-thinner text-center">
-    <div class="panel chv-scheme-blue">
-      <div class="panel-body">
-        <div class="chv-height-4">
-          {% block text %}{% endblock %}
-        </div>
-        <div class="chv-above-1 chv-bellow-1">
-          <a class="btn chv-btn-blue" href="#">
-            <i class="chv-icon icon-twitter"></i>
-            &nbsp;
-            {% trans 'main:homepage:didyouknow:twitter' %}
-          </a>
-          &nbsp;
-          <a class="btn chv-btn-blue" href="#">
-            <i class="chv-icon icon-facebook"></i>
-            &nbsp;
-            {% trans 'main:homepage:didyouknow:facebook' %}
-          </a>
-        </div>
-      </div>
-    </div>
+{% block content %}
+  <div class="chv-height-4">
+    {% block text %}{{ text }}{% endblock %}
   </div>
-</div>
+  <div class="chv-above-1 chv-bellow-1">
+    <a class="btn chv-btn-blue" href="#">
+      <i class="chv-icon icon-twitter"></i>
+      &nbsp;
+      {% trans 'main:homepage:didyouknow:twitter' %}
+    </a>
+    &nbsp;
+    <a class="btn chv-btn-blue" href="#">
+      <i class="chv-icon icon-facebook"></i>
+      &nbsp;
+      {% trans 'main:homepage:didyouknow:facebook' %}
+    </a>
+  </div>
+{% endblock %}

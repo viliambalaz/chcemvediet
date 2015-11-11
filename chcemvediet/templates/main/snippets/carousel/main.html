@@ -1,0 +1,38 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load yes from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% block carousel %}
+  {% with carousel_id=idgenerator.next carousel_items=""|make_list %}
+    <div id="{{ carousel_id }}" class="carousel chv-carousel-blue slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {% block items %}{% endblock %}
+      </div>
+      {% block indicators %}
+        <ol class="carousel-indicators">
+          {% for item in carousel_items %}
+            <li class="{{ forloop.first|yes:"active" }}" data-target="#{{ carousel_id }}"
+                data-slide-to="{{ forloop.counter0 }}"></li>
+          {% endfor %}
+        </ol>
+      {% endblock %}
+      {% block prev %}
+        <a class="left carousel-control" href="#{{ carousel_id }}" data-slide="prev">
+          <span class="chv-icon icon-chevron-left"></span>
+        </a>
+      {% endblock %}
+      {% block next %}
+        <a class="right carousel-control" href="#{{ carousel_id }}" data-slide="next">
+          <span class="chv-icon icon-chevron-right"></span>
+        </a>
+      {% endblock %}
+    </div>
+  {% endwith %}
+{% endblock %}

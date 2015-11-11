@@ -3,13 +3,19 @@
 {% comment %}
  %
  % Context:
- %  -- None
+ %  -- title: string
+ %  -- navbarclass: string
+ %  -- itemclass: string
  %
 {% endcomment %}
 
 
 <div class="sg-container">
   <h3>{{ title }}</h3>
+  <p>
+    {% if navbarclass %}{{ navbarclass }}<br>{% endif %}
+    {% if itemclass %}{{ itemclass }}<br>{% endif %}
+  </p>
 </div>
 <div class="sg-specimen">
   <nav class="chv-navbar {{ navbarclass }}">

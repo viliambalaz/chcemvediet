@@ -10,13 +10,10 @@
 
 
 <div class="sg-specimen-inline chv-scheme-white">
-  <span class="chv-icon-stack {{ extra }}">
-    <i class="chv-icon icon-circle"></i>
-    <i class="chv-icon chv-icon-half chv-icon-inv {{ icon }}"></i>
-  </span>
+  {% include "main/snippets/icons/circled.html" with stack=extra icon=icon %}
   &nbsp;
   <span class="chv-middle">
-    icon-circle<br>
+    circled.html<br>
     {{ icon }}<br>
   </span>
 </div>

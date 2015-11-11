@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/full_width.html" %}
+{% load trans from i18n %}
 
 {% comment %}
  %
@@ -32,10 +33,12 @@
         {% include "main/homepage/funding.html" %}
       </div>
       <div class="col-sm-6 col-md-4">
-        {% include "main/homepage/blogs.html" %}
+        <h2 class="text-center">{% trans 'main:homepage:blogs:heading' %}</h2>
+        {% include "main/homepage/blogs/items.html" %}
       </div>
       <div class="hidden-xs col-sm-6 col-md-4">
-        {% include "main/homepage/didyouknow.html" %}
+        <h2 class="text-center">{% trans 'main:homepage:didyouknow:heading' %}</h2>
+        {% include "main/homepage/didyouknow/items.html" %}
       </div>
     </div>
   </div>

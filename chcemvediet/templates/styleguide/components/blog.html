@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/homepage/blogs/base.html" %}
 {% load static from staticfiles %}
 {% load lorem from poleno.utils %}
 
@@ -10,13 +11,14 @@
 {% endcomment %}
 
 
-<h3>Blog</h3>
-<div class="sg-specimen chv-scheme-white">
-  <a class="chv-blog" href="#">
-    <img class="chv-blog-img" src="{% static "main/images/blog/a.jpg" %}">
-    <span class="chv-blog-date">9. apríl 2015</span>
-    <span class="chv-blog-text">
-      {% lorem 3 %}
-    </span>
-  </a>
-</div>
+{% block blog %}
+  <h3>Blog</h3>
+  <p>chv-blog <br>main/homepage/blogs/base.html</p>
+  <div class="sg-specimen chv-scheme-white">
+    {{ block.super }}
+  </div>
+{% endblock %}
+
+{% block img %}{% static "main/images/blog/a.jpg" %}{% endblock %}
+{% block date %}1. apríl 2015{% endblock %}
+{% block text %}{% lorem 3 %}{% endblock %}

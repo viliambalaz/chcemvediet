@@ -1,0 +1,19 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- icon: string
+ %  -- stats: string
+ %  -- text: string
+ %
+{% endcomment %}
+
+
+<div class="chv-bigstats">
+  <div class="chv-bigstats-icon">
+    {% include "main/snippets/icons/circled.html" with circle="chv-color-blue-ll" icon=icon %}
+  </div>
+  <div class="chv-bigstats-stats chv-color-blue">{{ stats }}</div>
+  <div class="chv-bigstats-text chv-color-blue-ll">{{ text }}</div>
+</div>

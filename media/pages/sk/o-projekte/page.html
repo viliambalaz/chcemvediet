@@ -102,8 +102,9 @@ a právnej pomoci advokátskej kancelárie <a href="http://http://www.taylorwess
 <h2 id="kontakt">Kontakt</h2>
 
 <p>
-Ak ste tu nenašli, čo ste hľadali, skúste si pozrieť sekciu <a href="{% page "/faq/" %}">FAQ (Často kladené otázky)</a>. Ak vaša
-otázka nie je zodpovedaná ani tam, napíšte nám. Rovnako sa na nás obráťte s akýmikoľvek
+Ak ste tu nenašli, čo ste hľadali, skúste si pozrieť sekciu
+<a href="{% page "/faq/" %}">FAQ (Často kladené otázky)</a>.
+Ak vaša otázka nie je zodpovedaná ani tam, napíšte nám. Rovnako sa na nás obráťte s akýmikoľvek
 pripomienkami a návrhmi na zlepšenie. Spätná väzba je pre nás veľmi dôležitá. Ďakujeme.
 </p>
 
@@ -113,28 +114,25 @@ pripomienkami a návrhmi na zlepšenie. Spätná väzba je pre nás veľmi dôle
       <div class="panel-body">
         <a class="chv-block chv-height-2 chv-nowrap"
            href="mailto:aj.ja@chcemvediet.sk">
-          <span class="chv-icon-stack chv-icon-2x chv-icon-middle">
-            <i class="chv-icon icon-circle chv-hover-blue"></i>
-            <i class="chv-icon chv-icon-half chv-icon-inv icon-mail"></i>
-          </span>
+          {% with stack="chv-icon-2x chv-icon-middle" circle="chv-hover-blue" icon="icon-mail" %}
+            {% include "main/snippets/icons/circled.html" %}
+          {% endwith %}
           &nbsp;
           <span class="chv-middle">aj.ja@chcemvediet.sk</span>
         </a>
         <a class="chv-block chv-height-2 chv-nowrap"
            href="https://twitter.com/chcemvedietsk">
-          <span class="chv-icon-stack chv-icon-2x chv-icon-middle">
-            <i class="chv-icon icon-circle chv-hover-twitter"></i>
-            <i class="chv-icon chv-icon-half chv-icon-inv icon-twitter"></i>
-          </span>
+          {% with stack="chv-icon-2x chv-icon-middle" circle="chv-hover-twitter" icon="icon-twitter" %}
+            {% include "main/snippets/icons/circled.html" %}
+          {% endwith %}
           &nbsp;
           <span class="chv-middle">@chcemvedietSK</span>
         </a>
         <a class="chv-block chv-height-2 chv-bellow-half chv-nowrap"
            href="https://www.facebook.com/chcemvedietsk/">
-          <span class="chv-icon-stack chv-icon-2x chv-icon-middle">
-            <i class="chv-icon icon-circle chv-hover-facebook"></i>
-            <i class="chv-icon chv-icon-half chv-icon-inv icon-facebook"></i>
-          </span>
+          {% with stack="chv-icon-2x chv-icon-middle" circle="chv-hover-facebook" icon="icon-facebook" %}
+            {% include "main/snippets/icons/circled.html" %}
+          {% endwith %}
           &nbsp;
           <span class="chv-middle">
             <span class="chv-text-default">facebook.com/</span>chcemvedietsk

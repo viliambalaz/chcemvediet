@@ -9,32 +9,16 @@
 
 <div class="sg-container">
   <h3>First navbar &ndash; Search field (collapses for screen-xs)</h3>
+  <p>chv-navbar-first <br>main/snippets/header/search.html <br>main/snippets/header/search_icon.html</p>
 </div>
 <div class="sg-specimen">
   {% with collapse_id=idgenerator.next %}
     <nav class="chv-navbar chv-navbar-first">
       <div class="container">
         <div class="chv-navbar-items">
-          <a class="chv-navbar-item chv-navbar-search-toggle visible-xs collapsed"
-             href="#{{ collapse_id }}" data-toggle="collapse">
-            <i class="chv-icon icon-search"></i>
-          </a>
+          {% include "main/snippets/header/search_icon.html" %}
         </div>
-        <div class="chv-navbar-search pull-left">
-          <div id="{{ collapse_id }}" class="chv-navbar-search-inner collapse">
-            <form action=".">
-              <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search...">
-                <span class="input-group-btn">
-                  <button class="btn" type="submit">
-                    <span class="hidden-xs"><i class="chv-icon icon-search"></i></span>
-                    <span class="visible-xs">Search</span>
-                  </button>
-                </span>
-              </div>
-            </form>
-          </div>
-        </div>
+        {% include "main/snippets/header/search.html" with pull="pull-left" %}
       </div>
     </nav>
   {% endwith %}

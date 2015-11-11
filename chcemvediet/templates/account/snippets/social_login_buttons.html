@@ -1,7 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
 {% load provider_login_url from socialaccount %}
-{% load static from staticfiles %}
 
 {% comment %}
  %
@@ -14,30 +13,26 @@
 <div class="chv-social-login-buttons">
   <a href="{% provider_login_url "facebook" process=process %}"
      title="{% trans 'account:social_buttons:facebook' %}">
-    <span class="chv-icon-stack chv-icon-3x">
-      <i class="chv-icon icon-circle chv-color-facebook"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-facebook"></i>
-    </span>
+    {% with stack="chv-icon-3x" circle="chv-color-facebook" icon="icon-facebook" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
   </a>
   <a href="{% provider_login_url "google" process=process %}"
      title="{% trans 'account:social_buttons:google' %}">
-    <span class="chv-icon-stack chv-icon-3x">
-      <i class="chv-icon icon-circle chv-color-gplus"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-gplus"></i>
-    </span>
+    {% with stack="chv-icon-3x" circle="chv-color-gplus" icon="icon-gplus" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
   </a>
   <a href="{% provider_login_url "twitter" process=process %}"
      title="{% trans 'account:social_buttons:twitter' %}">
-    <span class="chv-icon-stack chv-icon-3x">
-      <i class="chv-icon icon-circle chv-color-twitter"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-twitter"></i>
-    </span>
+    {% with stack="chv-icon-3x" circle="chv-color-twitter" icon="icon-twitter" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
   </a>
   <a href="{% provider_login_url "linkedin" process=process %}"
      title="{% trans 'account:social_buttons:linkedin' %}">
-    <span class="chv-icon-stack chv-icon-3x">
-      <i class="chv-icon icon-circle chv-color-linkedin"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-linkedin"></i>
-    </span>
+    {% with stack="chv-icon-3x" circle="chv-color-linkedin" icon="icon-linkedin" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
   </a>
 </div>

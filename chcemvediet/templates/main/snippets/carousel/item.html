@@ -1,0 +1,23 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load no assign method call_with from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- carousel_id: string
+ %  -- carousel_items: list
+ %
+{% endcomment %}
+
+
+<div class="item {{ carousel_items|no:"active" }}">
+  <div class="chv-thinner text-center">
+    <div class="panel chv-scheme-blue">
+      <div class="panel-body">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{# Count slides in the carousel and prevent printing anything #}
+{% assign tmp=carousel_items|method:"append"|call_with:"x" %}

@@ -65,7 +65,7 @@
       <h3>Other stacked icons</h3>
       <div>
         {% with extra="chv-icon-middle chv-icon-2x" %}
-          {% with icons="icon-chv-horiz-40,icon-chv-horiz-70,icon-chv-horiz-100" %}
+          {% with tpl="main/snippets/icons/chv-horiz.html" %}
             {% include "styleguide/icons/stacked.html" %}
             {% include "styleguide/icons/stacked.html" with stack="chv-icon-rotate-90" %}
           {% endwith %}

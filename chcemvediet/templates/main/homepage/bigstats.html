@@ -13,46 +13,19 @@
 
 <div class="row">
   <div class="col-sm-4">
-    <div class="chv-bigstats">
-      <div class="chv-bigstats-icon">
-        <span class="chv-icon-stack">
-          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
-          <i class="chv-icon chv-icon-half chv-icon-inv icon-users"></i>
-        </span>
-      </div>
-      <div class="chv-bigstats-stats chv-color-blue">{{ users }}</div>
-      <div class="chv-bigstats-text chv-color-blue-ll">
-        {% trans 'main:homepage:bigstats:users' %}
-      </div>
-    </div>
+    {% with icon="icon-users" stats=users text=_('main:homepage:bigstats:users') %}
+      {% include "main/homepage/bigstats_item.html" %}
+    {% endwith %}
   </div>
   <div class="col-sm-4">
-    <div class="chv-bigstats">
-      <div class="chv-bigstats-icon">
-        <span class="chv-icon-stack">
-          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
-          <i class="chv-icon chv-icon-half chv-icon-inv icon-docs"></i>
-        </span>
-      </div>
-      <div class="chv-bigstats-stats chv-color-blue">{{ inforequests }}</div>
-      <div class="chv-bigstats-text chv-color-blue-ll">
-        {% trans 'main:homepage:bigstats:inforequests' %}
-      </div>
-    </div>
+    {% with icon="icon-docs" stats=inforequests text=_('main:homepage:bigstats:inforequests') %}
+      {% include "main/homepage/bigstats_item.html" %}
+    {% endwith %}
   </div>
   <div class="col-sm-4">
-    <div class="chv-bigstats">
-      <div class="chv-bigstats-icon">
-        <span class="chv-icon-stack">
-          <i class="chv-icon icon-circle chv-color-blue-ll"></i>
-          <i class="chv-icon chv-icon-half chv-icon-inv icon-building"></i>
-        </span>
-      </div>
-      <div class="chv-bigstats-stats chv-color-blue">{{ obligees }}</div>
-      <div class="chv-bigstats-text chv-color-blue-ll">
-        {% trans 'main:homepage:bigstats:obligees' %}
-      </div>
-    </div>
+    {% with icon="icon-building" stats=obligees text=_('main:homepage:bigstats:obligees') %}
+      {% include "main/homepage/bigstats_item.html" %}
+    {% endwith %}
   </div>
 </div>
 <div class="chv-above-1">

@@ -17,10 +17,9 @@
 </li>
 <li>
   <a href="{% page "/faq/" %}">
-    <span class="chv-icon-stack chv-icon-li">
-      <i class="chv-icon icon-circle chv-color-blue-l"></i>
-      <i class="chv-icon chv-icon-half chv-icon-inv icon-help"></i>
-    </span>
+    {% with stack="chv-icon-li" circle="chv-color-blue-l" icon="icon-help" %}
+      {% include "main/snippets/icons/circled.html" %}
+    {% endwith %}
     FAQ
   </a>
 </li>

@@ -10,22 +10,13 @@
 
 <div class="sg-container">
   <h3>First navbar &ndash; Brand</h3>
+  <p>chv-navbar-first<br> main/snippets/header/brand.html</p>
 </div>
 <div class="sg-specimen">
   <nav class="chv-navbar chv-navbar-first">
     <div class="container">
       <div class="chv-navbar-items">
-        <div class="chv-navbar-item chv-navbar-brand">
-          <div class="chv-navbar-item chv-navbar-logo">
-            <span class="chv-icon-stack">
-              <i class="chv-icon icon-chv-horiz-40"></i>
-              <i class="chv-icon icon-chv-horiz-70"></i>
-              <i class="chv-icon icon-chv-horiz-100"></i>
-            </span>
-          </div>
-          <a href="#">chem<b>vediet</b>.<tt>sk</tt></a>
-          <span class="badge">beta</span>
-        </div>
+        {% include "main/snippets/header/brand.html" %}
       </div>
     </div>
   </nav>

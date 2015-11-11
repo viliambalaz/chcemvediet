@@ -8,8 +8,10 @@
 {% endcomment %}
 
 
-<a class="chv-blog" href="#">
-  <img class="chv-blog-img" src="{% block img %}{% endblock %}">
-  <span class="chv-blog-date">{% block date %}{% endblock %}</span>
-  <span class="chv-blog-text">{% block text %}{% endblock %}</span>
-</a>
+{% block blog %}
+  <a class="chv-blog" href="#">
+    <img class="chv-blog-img" src="{% block img %}{% endblock %}">
+    <span class="chv-blog-date">{% block date %}{% endblock %}</span>
+    <span class="chv-blog-text">{% block text %}{% endblock %}</span>
+  </a>
+{% endblock %}
