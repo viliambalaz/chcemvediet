@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-09 10:30+0100\n"
+"POT-Creation-Date: 2015-11-11 11:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1217,6 +1217,21 @@ msgstr "Obnoviť stránku"
 msgid "main:ajax_fail:close"
 msgstr "Zavrieť"
 
+msgid "main:alerts:debug"
+msgstr "Debug:"
+
+msgid "main:alerts:error"
+msgstr "Chyba:"
+
+msgid "main:alerts:info"
+msgstr "Poznámka:"
+
+msgid "main:alerts:success"
+msgstr "Hotovo:"
+
+msgid "main:alerts:warning"
+msgstr "Pozor:"
+
 msgid "main:footer:partners:heading"
 msgstr "Partneri projektu"
 
@@ -1267,21 +1282,6 @@ msgstr "Hľadaj..."
 
 msgid "main:header:search:button"
 msgstr "Hľadaj"
-
-msgid "main:messages:debug"
-msgstr "Debug:"
-
-msgid "main:messages:info"
-msgstr "Poznámka:"
-
-msgid "main:messages:success"
-msgstr "Hotovo:"
-
-msgid "main:messages:warning"
-msgstr "Pozor:"
-
-msgid "main:messages:error"
-msgstr "Chyba:"
 
 msgid "socialaccount:authentication_error:title"
 msgstr "Zlyhalo prihlásenie cez sociálnu sieť"

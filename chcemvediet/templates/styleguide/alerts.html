@@ -17,7 +17,11 @@
       <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox" checked="checked">
       <label for="{{ checkbox_id }}">Show baseline</label>
       <div class="sg-grid">
-        {% include "styleguide/alerts-alert.html" with class="chv-alert-info" %}
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-info"    tpl="main/snippets/alerts/info.html" %}
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-success" tpl="main/snippets/alerts/success.html" %}
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-warning" tpl="main/snippets/alerts/warning.html" %}
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-error"   tpl="main/snippets/alerts/error.html" %}
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-debug"   tpl="main/snippets/alerts/debug.html" %}
       </div>
     </div>
   </div>

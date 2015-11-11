@@ -1,0 +1,17 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/alerts/base.html" %}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- close: boolean
+ %  -- message: string (optional)
+ %  -- message_template: string (optional)
+ %
+{% endcomment %}
+
+
+{% block class %}chv-alert-success{% endblock %}
+{% block icon-class %}icon-ok{% endblock %}
+{% block lead-text %}{% trans "main:alerts:success" %}{% endblock %}

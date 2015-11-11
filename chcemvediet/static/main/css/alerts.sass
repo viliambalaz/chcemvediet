@@ -9,9 +9,36 @@
   // Cancel bootstrap override for p inside alert
   > p
     @extend p
+  .close
+    padding-top: chv_baseline_fix($chv-fontsize-base * 1.5, 1)
+    opacity: 1
 
 .chv-alert-info
   color: $chv-color-blue
   border-color: $chv-color-blue-ll
   .chv-icon
     color: $chv-color-blue
+  .close
+    color: $chv-color-blue-ll
+
+.chv-alert-success
+  color: $chv-color-green
+  border-color: $chv-color-green-l
+  .chv-icon
+    color: $chv-color-green
+  .close
+    color: $chv-color-green-l
+
+.chv-alert-warning,
+.chv-alert-error,
+  color: $chv-color-red
+  border-color: $chv-color-red-l
+  .chv-icon
+    color: $chv-color-red
+  .close
+    color: $chv-color-red-l
+
+.chv-alert-debug
+  border-color: $chv-color-gray-l
+  .close
+    color: $chv-color-gray-l

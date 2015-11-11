@@ -1,0 +1,42 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- close: boolean
+ %  -- message: string (optional)
+ %  -- message_template: string (optional)
+ %
+{% endcomment %}
+
+
+{% block alert %}
+  <div class="alert {% block class %}{% endblock %}">
+    {% block close %}
+      {% if close %}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {% endif %}
+    {% endblock %}
+    {% block content %}
+      <p>
+        {% block icon %}
+          <span class="chv-icon-stack chv-icon-lg">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon chv-icon-inv chv-icon-half {% block icon-class %}{% endblock %}"></i>
+          </span>
+          &nbsp;
+        {% endblock %}
+        {% block lead %}
+          <strong>{% block lead-text %}{% endblock %}</strong>
+        {% endblock %}
+        {% block message %}
+          {% if message_template %}
+            {% include message_template %}
+          {% else %}
+            {{ message }}
+          {% endif %}
+        {% endblock %}
+      </p>
+    {% endblock %}
+  </div>
+{% endblock %}

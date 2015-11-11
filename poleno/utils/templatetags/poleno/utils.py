@@ -4,7 +4,6 @@ import re
 import random
 from functools import partial
 
-from django.template import Library
 from django.template.defaultfilters import stringfilter
 from django.core.urlresolvers import resolve
 from django.conf import settings
@@ -17,6 +16,7 @@ from poleno.utils.urls import reverse
 from poleno.utils.misc import squeeze as squeeze_func
 from poleno.utils.date import utc_date as utc_date_func, local_date as local_date_func
 from poleno.utils.translation import translation
+from poleno.utils.template import Library
 
 
 register = Library()
@@ -255,6 +255,11 @@ def assign(context, **kwargs):
         context[key] = val
     return u''
 
+@register.simple_pair_tag(takes_context=True)
+def capture(content, context, variable):
+    context[variable] = content
+    return u''
+
 @register.simple_tag(takes_context=True)
 def change_lang(context, lang=None):
     u"""
@@ -282,7 +287,6 @@ def change_lang(context, lang=None):
 @register.simple_tag
 def url(viewname, *args, **kwargs):
     return reverse(viewname, args=args, kwargs=kwargs)
-
 
 ASSETS_TYPES = { # {{{
         u'js': (
