@@ -1,0 +1,17 @@
+
+.alert
+  border-style: dashed
+  padding-top: ($chv-baseline * 0.5 - 1px)
+  padding-bottom: 0
+  margin-top: 0
+  margin-bottom: ($chv-baseline * 0.5 - 1px)
+  text-align: center
+  // Cancel bootstrap override for p inside alert
+  > p
+    @extend p
+
+.chv-alert-info
+  color: $chv-color-blue
+  border-color: $chv-color-blue-ll
+  .chv-icon
+    color: $chv-color-blue

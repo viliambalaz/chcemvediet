@@ -16,26 +16,24 @@
 {% block title %}{% trans 'account:signup:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1>{% trans 'account:signup:heading' %}</h1>
   <form class="form-horizontal" method="post" action="{% url 'account_signup' %}">
     {% csrf_token %}
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-md-8">
+        <h1>{% trans 'account:signup:heading' %}</h1>
         {% include "account/texts/signup_text.html" %}
       </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6 col-sm-push-6">
+      <div class="col-md-4 chv-pull-right-md chv-above-1-md">
         {% include "account/texts/why_register.html" %}
       </div>
-      <div class="col-sm-6 col-sm-pull-6">
+      <div class="col-md-8">
         {% include "main/forms/form_horizontal.html" %}
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
         {% endif %}
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn chv-btn-primary">
               {% trans 'account:signup:submit' %}
             </button>
           </div>

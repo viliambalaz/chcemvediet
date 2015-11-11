@@ -14,13 +14,14 @@ body#styleguide
       vertical-align: middle
 
   .sg-specimen
-    margin-bottom: $chv-baseline
+    padding-bottom: $chv-baseline
 
   .sg-specimen-inline
     display: inline-block
     min-width: 200px
-    margin-right: 20px
-    margin-bottom: $chv-baseline
+    min-height: ($chv-baseline * 2)
+    padding-right: 20px
+    padding-bottom: $chv-baseline
     vertical-align: top
 
   .sg-color
@@ -37,6 +38,11 @@ body#styleguide
     padding-bottom: 0
     border-radius: 1em
 
+  .sg-checkbox
+    line-height: $chv-baseline
+    vertical-align: top
+  .sg-checkbox ~ label
+    margin-bottom: $chv-baseline
   .sg-checkbox:checked ~ .sg-grid
     @extend .chv-baseline-grid
   .sg-grid

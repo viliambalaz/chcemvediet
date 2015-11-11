@@ -1023,7 +1023,7 @@ msgid "account:login:reset_password"
 msgstr "Zabudnuté heslo?"
 
 msgid "account:login:social_buttons"
-msgstr "Prihlásiť sa s"
+msgstr "Použiť"
 
 msgid "account:logout:title"
 msgstr "Odhlásiť sa"

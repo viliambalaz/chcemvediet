@@ -1,0 +1,24 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with collapse_id=idgenerator.next checkbox_id=idgenerator.next %}
+  <div class="sg-container">
+    <h2 id="alerts">
+      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Alerts</a>
+    </h2>
+    <div id="{{ collapse_id }}" class="collapse">
+      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox" checked="checked">
+      <label for="{{ checkbox_id }}">Show baseline</label>
+      <div class="sg-grid">
+        {% include "styleguide/alerts-alert.html" with class="chv-alert-info" %}
+      </div>
+    </div>
+  </div>
+{% endwith %}

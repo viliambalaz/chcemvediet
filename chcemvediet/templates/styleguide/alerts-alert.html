@@ -1,0 +1,23 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %
+{% endcomment %}
+
+<p class="text-center">{{ class }}</p>
+<div class="sg-specimen chv-scheme-white">
+  <div class="alert {{ class }}">
+    <p>
+      <span class="chv-icon-stack chv-icon-lg">
+        <i class="chv-icon icon-circle"></i>
+        <i class="chv-icon chv-icon-inv chv-icon-half icon-info"></i>
+      </span>
+      &nbsp;
+      <strong>Poznámka:</strong> {% lorem 3 %}
+    </p>
+  </div>
+</div>
