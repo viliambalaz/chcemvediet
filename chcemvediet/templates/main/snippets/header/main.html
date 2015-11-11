@@ -20,22 +20,22 @@
   <div class="container">
     {% with search_id=idgenerator.next %}
       <div class="chv-navbar-items">
-        {% include "main/snippets/header_brand.html" %}
+        {% include "main/snippets/header/brand.html" %}
       </div>
       <div class="chv-navbar-items pull-right chv-hidden-300">
-        {% include "main/snippets/header_search_icon.html" with collapse_id=search_id %}
-        {% include "main/snippets/header_language.html" %}
+        {% include "main/snippets/header/search_icon.html" with collapse_id=search_id %}
+        {% include "main/snippets/header/language.html" %}
       </div>
-      {% include "main/snippets/header_search.html" with collapse_id=search_id %}
+      {% include "main/snippets/header/search.html" with collapse_id=search_id %}
     {% endwith %}
   </div>
 </nav>
 <nav class="chv-navbar chv-navbar-second">
   <div class="container">
     <div class="chv-navbar-items pull-right">
-      {% include "main/snippets/header_devtools.html" %}
-      {% include "main/snippets/header_account.html" %}
-      {% include "main/snippets/header_menu_right.html" %}
+      {% include "main/snippets/header/devtools.html" %}
+      {% include "main/snippets/header/account.html" %}
+      {% include "main/snippets/header/menu_right.html" %}
     </div>
     {% with collapse_id=idgenerator.next %}
       <a class="chv-navbar-item chv-navbar-toggle collapsed" href="#{{ collapse_id }}"
@@ -43,7 +43,7 @@
         <i class="chv-icon chv-icon-lg icon-menu"></i>
       </a>
       <div id="{{ collapse_id }}" class="chv-navbar-items chv-navbar-collapse collapse">
-        {% include "main/snippets/header_menu_left.html" %}
+        {% include "main/snippets/header/menu_left.html" %}
       </div>
     {% endwith %}
   </div>

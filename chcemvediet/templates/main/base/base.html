@@ -26,13 +26,13 @@
   <body class="{% if DEBUG and "grid" in request.GET %}chv-baseline-grid{% endif %}">
     <div class="chv-body-clip">
       <header>
-        {% include "main/snippets/header.html" %}
+        {% include "main/snippets/header/main.html" %}
       </header>
       <div class="chv-scheme-white">
         {% block container %}{% endblock %}
       </div>
       <footer>
-        {% include "main/snippets/footer.html" %}
+        {% include "main/snippets/footer/main.html" %}
       </footer>
       <div id="ajax-fail-modal" class="modal fade">
         {% include "main/snippets/ajax_fail.html" %}

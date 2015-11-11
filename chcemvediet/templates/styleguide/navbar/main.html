@@ -1,0 +1,31 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with collapse_id=idgenerator.next checkbox_id=idgenerator.next %}
+  <div class="sg-container">
+    <h2 id="navbar">
+      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Navbar</a>
+    </h2>
+  </div>
+  <div id="{{ collapse_id }}" class="collapse">
+    <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
+    <label for="{{ checkbox_id }}">Show baseline</label>
+    <div class="sg-grid">
+      {% include "styleguide/navbar/first_brand.html" %}
+      {% include "styleguide/navbar/first_search.html" %}
+      {% include "styleguide/navbar/first_items.html" %}
+      {% include "styleguide/navbar/second_blue_items.html" %}
+      {% include "styleguide/navbar/second_gray_items.html" %}
+      {% include "styleguide/navbar/second_gray_blue_items.html" %}
+      {% include "styleguide/navbar/second_green_items.html" %}
+      {% include "styleguide/navbar/second_collapse.html" %}
+    </div>
+  </div>
+{% endwith %}

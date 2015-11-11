@@ -1,0 +1,71 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- sg: dict with defined colors
+ %
+{% endcomment %}
+
+
+<table class="table sg-table">
+  <thead>
+    <tr>
+      <td></td>
+      <td>More darker</td>
+      <td>Darker</td>
+      <th>Featured color</th>
+      <td>Lighter</td>
+      <td>More lighter</td>
+      <td>Even lighter</td>
+      <td>Whitish</td>
+    </tr>
+  </thead>
+  <tbody>
+    {% for color in "blue green red gray"|split %}
+      <tr>
+        <th>{{ color|capfirst }}</th>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-dd" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-d" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-l" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-ll" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-lll" %}</td>
+        <td>{% include "styleguide/colors/color.html" with name=color|add:"-w" %}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Special colors</h3>
+<table class="table sg-table">
+  <tbody>
+    <tr>
+      <td>{% include "styleguide/colors/color.html" with name="facebook" %}</td>
+      <td>{% include "styleguide/colors/color.html" with name="gplus" %}</td>
+      <td>{% include "styleguide/colors/color.html" with name="twitter" %}</td>
+      <td>{% include "styleguide/colors/color.html" with name="linkedin" %}</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Color usage</h3>
+<table class="table sg-table">
+  <tbody>
+    <tr>
+      <td>{% include "styleguide/colors/usage.html" with color="chv-color-blue" %}</td>
+      <td>{% include "styleguide/colors/usage.html" with bg="chv-bg-blue" %}</td>
+      <td>{% include "styleguide/colors/usage.html" with hover="chv-hover-blue" %}</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+      <td>&mdash;</td>
+    </tr>
+  </tbody>
+</table>

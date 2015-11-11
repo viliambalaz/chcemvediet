@@ -14,15 +14,15 @@
       <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Forms</a>
     </h2>
     <div id="{{ collapse_id }}" class="collapse">
-      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox" checked="checked">
+      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
       <label for="{{ checkbox_id }}">Show baseline</label>
       <div class="sg-grid">
         <div class="row">
           <div class="col-md-6">
-            {% include "styleguide/forms-form.html" with class="form-horizontal" %}
+            {% include "styleguide/forms/form.html" with class="form-horizontal" %}
           </div>
           <div class="col-md-6">
-            {% include "styleguide/forms-form.html" with class="chv-form-dense" %}
+            {% include "styleguide/forms/form.html" with class="chv-form-dense" %}
           </div>
         </div>
       </div>
