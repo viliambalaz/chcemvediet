@@ -1,50 +1,59 @@
 
-@mixin chv-btn($color)
+@mixin chv-btn($color, $active)
   @include button-variant($color, transparent, #cccccc)
   font-weight: 700
   .chv-icon
     color: $color
-  &:hover, &:focus, &:active, &.active
-    color: $chv-color-white
+  &:hover
     background-color: $color
+  &:active, &.active
+    background-color: $active
+  &:hover, &:active, &.active
+    color: $chv-color-white
     border-color: transparent
     .chv-icon
       color: $chv-color-white
 
-@mixin chv-btn-inv($color)
+@mixin chv-btn-inv($color, $active)
   @include button-variant($chv-color-white, $color, $color)
   font-weight: 700
   .chv-icon
     color: $chv-color-white
+  &:active, &.active
+    border-color: $active
+    background-color: $active
 
 //
 // Colored buttons
-// Note: The extra .btn is to raise specificity so ".chv-scheme-* a" won't owerride it
+// (The extra .btn is to raise specificity so ".chv-scheme-* a" won't owerride it)
 //
 
+.btn.chv-btn-plain
+  @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border)
+
 .btn.chv-btn-blue
-  @include chv-btn($chv-color-blue)
+  @include chv-btn($chv-color-blue, $chv-color-blue-ll)
 .btn.chv-btn-green
-  @include chv-btn($chv-color-green)
+  @include chv-btn($chv-color-green, $chv-color-green-l)
 .btn.chv-btn-red
-  @include chv-btn($chv-color-red)
+  @include chv-btn($chv-color-red, $chv-color-red-l)
 .btn.chv-btn-gray
-  @include chv-btn($chv-color-gray)
+  @include chv-btn($chv-color-gray, $chv-color-gray-l)
 
 .btn.chv-btn-inv-blue
-  @include chv-btn-inv($chv-color-blue)
+  @include chv-btn-inv($chv-color-blue, $chv-color-blue-ll)
 .btn.chv-btn-inv-green
-  @include chv-btn-inv($chv-color-green)
+  @include chv-btn-inv($chv-color-green, $chv-color-green-l)
 .btn.chv-btn-inv-red
-  @include chv-btn-inv($chv-color-red)
+  @include chv-btn-inv($chv-color-red, $chv-color-red-l)
 
 //
 // Semantic names for buttons
 //
 
-.chv-btn-default
+.btn-default
   @extend .chv-btn-blue
-.chv-btn-primary
+.btn-primary
   @extend .chv-btn-inv-blue
 
 //
