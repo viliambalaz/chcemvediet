@@ -1,0 +1,23 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- tpl: string
+ %  -- class: string
+ %  -- extra: string
+ %
+{% endcomment %}
+
+
+<div class="sg-specimen-inline chv-scheme-white">
+  <p>
+    {% include tpl with class=class|add:" "|add:extra %}
+    &nbsp;
+    <span class="chv-inline">
+      {{ tpl|split:'/'|last }}<br>
+      {{ class }}
+    </span>
+  </p>
+</div>

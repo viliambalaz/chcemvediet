@@ -15,11 +15,7 @@
     <div class="chv-navbar-item chv-navbar-item-gray-blue dropdown {{ active|yes:"active" }}">
       <a class="dropdown-toggle" href="#" data-toggle="dropdown">
         <span class="chv-hidden-450">{{ user.email }}  </span>
-        {% with stack="chv-icon-2x chv-middle" circle="chv-color-blue-ll chv-hover-blue-lll" %}
-          {% with inv="chv-color-blue" icon="icon-user chv-hover-blue-ll" %}
-            {% include "main/snippets/icons/circled.html" %}
-          {% endwith %}
-        {% endwith %}
+        {% include "main/snippets/header/account_icon.html" with class="chv-icon-2x" %}
         <i class="chv-icon icon-down-dir"></i>
       </a>
       <ul class="dropdown-menu pull-right">

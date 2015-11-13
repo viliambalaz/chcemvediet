@@ -2,6 +2,20 @@
 body#styleguide
   padding-bottom: ($chv-baseline * 5)
 
+  .sg-collapse
+    display: none
+  .sg-collapse-open
+    display: block
+  .sg-collapse-close
+    display: none
+  *:target
+    + .sg-collapse
+      display: block
+    .sg-collapse-open
+      display: none
+    .sg-collapse-close
+      display: block
+
   .sg-container
     margin-left: 50px
     margin-right: 50px

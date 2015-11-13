@@ -9,12 +9,13 @@
 {% endcomment %}
 
 
-{% with collapse_id=idgenerator.next checkbox_id=idgenerator.next %}
+{% with checkbox_id=idgenerator.next %}
   <div class="sg-container">
     <h2 id="typography">
-      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Typography</a>
+      <a class="sg-collapse-open" href="#typography">Typography</a>
+      <a class="sg-collapse-close" href="#">Typography</a>
     </h2>
-    <div id="{{ collapse_id }}" class="collapse chv-scheme-white">
+    <div class="sg-collapse">
       <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
       <label for="{{ checkbox_id }}">Show baseline</label>
       <div class="sg-grid">

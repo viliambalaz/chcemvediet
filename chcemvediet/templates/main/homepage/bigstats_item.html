@@ -12,7 +12,10 @@
 
 <div class="chv-bigstats">
   <div class="chv-bigstats-icon">
-    {% include "main/snippets/icons/circled.html" with circle="chv-color-blue-ll" icon=icon %}
+    <span class="chv-icon-stack">
+      <i class="chv-icon icon-circle chv-color-blue-ll"></i>
+      <i class="chv-icon chv-icon-half chv-icon-inv {{ icon }}"></i>
+    </span>
   </div>
   <div class="chv-bigstats-stats chv-color-blue">{{ stats }}</div>
   <div class="chv-bigstats-text chv-color-blue-ll">{{ text }}</div>

@@ -9,16 +9,15 @@
 {% endcomment %}
 
 
-{% with collapse_id=idgenerator.next %}
-  <div class="sg-container">
-    <h2 id="colors">
-      <a href="#{{ collapse_id }}" class="collapsed" data-toggle="collapse">Colors</a>
-    </h2>
-    <div id="{{ collapse_id }}" class="collapse">
-      {% with sg="main/css/vars.sass"|sass_variables %}
-        {% include "styleguide/colors/colors.html" %}
-        {% include "styleguide/colors/schemes.html" %}
-      {% endwith %}
-    </div>
+<div class="sg-container">
+  <h2 id="colors">
+    <a class="sg-collapse-open" href="#colors">Colors</a>
+    <a class="sg-collapse-close" href="#">Colors</a>
+  </h2>
+  <div class="sg-collapse">
+    {% with sg="main/css/vars.sass"|sass_variables %}
+      {% include "styleguide/colors/colors.html" %}
+      {% include "styleguide/colors/schemes.html" %}
+    {% endwith %}
   </div>
-{% endwith %}
+</div>

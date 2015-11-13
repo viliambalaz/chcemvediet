@@ -1,0 +1,47 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load capture from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- font: string
+ %  -- color: string
+ %  -- size: string
+ %  -- align: string
+ %  -- transform: string
+ %  -- text: string
+ %  -- envelope: bool
+ %  -- transparent: bool
+ %
+{% endcomment %}
+
+
+{% capture "p_style" %}
+  {% if font %}font-size: {{ font }};{% endif %}
+{% endcapture %}
+{% capture "i_style" %}
+  {% if transparent %}opacity: 0.5;{% endif %}
+{% endcapture %}
+
+<div class="sg-specimen-inline chv-scheme-white">
+  <p style="{{ p_style }}">
+    {% spaceless %}
+      {% if envelope %}&gt;&gt;&gt;&gt;&gt;&gt;&gt;{% endif %}
+    {% endspaceless %}{% spaceless %}
+      <i class="chv-icon icon-home {{ size }} {{ align }} {{ transform }} {{ color }}" style="{{ i_style }}"></i>
+    {% endspaceless %}{% spaceless %}
+      {% if envelope %}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&ensp;{% endif %}
+    {% endspaceless %}
+    {% spaceless %}
+      {% if envelope %}&gt;&gt;&gt;&gt;&gt;&gt;&gt;{% endif %}
+    {% endspaceless %}{% spaceless %}
+      <span class="chv-icon-stack {{ size }} {{ align }} {{ transform }}" style="{{ i_style }}">
+        <i class="chv-icon icon-circle {{ color }} "></i>
+        <i class="chv-icon icon-ok chv-icon-half chv-color-white"></i>
+      </span>
+    {% endspaceless %}{% spaceless %}
+      {% if envelope %}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&ensp;{% endif %}
+    {% endspaceless %}
+    {{ text }}
+  </p>
+</div>

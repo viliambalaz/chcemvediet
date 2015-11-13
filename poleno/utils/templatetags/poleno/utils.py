@@ -56,6 +56,14 @@ def negate(value):
     """
     return -value
 
+@register.filter(name=u'min')
+def min_(value, arg):
+    return min(value, arg)
+
+@register.filter(name=u'max')
+def max_(value, arg):
+    return max(value, arg)
+
 @register.filter
 def yes(value, arg):
     if value:

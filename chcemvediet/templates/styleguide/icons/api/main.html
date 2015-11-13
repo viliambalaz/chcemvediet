@@ -1,0 +1,233 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with collapse_id=idgenerator.next %}
+  <h3>
+    <a class="collapsed" href="#{{ collapse_id }}" data-toggle="collapse">Icons API</a>
+  </h3>
+  <div id="{{ collapse_id }}" class="collapse">
+    <h3>Icons respect paragraph font size</h3>
+    <div>
+      {% for font in "7px,10px,14px,22px,30px"|split:"," %}
+        {% include "styleguide/icons/api/sample.html" with text=font %}
+      {% endfor %}
+    </div>
+
+    <h3>Relative icon sizes</h3>
+    <div>
+      {% for size in "chv-icon-half,,chv-icon-lg,chv-icon-2x,chv-icon-3x"|split:"," %}
+        {% include "styleguide/icons/api/sample.html" with text=size|default:"(default size)" %}
+      {% endfor %}
+    </div>
+
+    <h3>Vertical alignment</h3>
+    {% for align in "chv-icon-top,,chv-icon-bottom"|split:"," %}
+      <div>
+        {% for size in "chv-icon-half,,chv-icon-lg,chv-icon-2x,chv-icon-3x"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=align|default:"(centered by default)" %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <h3>Rotated, fliped and animated icons</h3>
+    {% with size="chv-icon-2x" %}
+      <div>
+        {% for transform in ",chv-icon-rotate-90,chv-icon-rotate-180,chv-icon-rotate-270"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=transform|default:"(no rotation)" %}
+        {% endfor %}
+      </div>
+      <div>
+        {% for transform in ",chv-icon-flip-horizontal,chv-icon-flip-vertical"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=transform|default:"(no translation)" %}
+        {% endfor %}
+      </div>
+      <div>
+        {% for transform in ",chv-icon-spin,chv-icon-pulse"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=transform|default:"(no animation)" %}
+        {% endfor %}
+      </div>
+    {% endwith %}
+
+    <h3>Colored icons</h3>
+    {% with size="chv-icon-2x" %}
+      <div>
+        {% for color in ",chv-color-blue,chv-color-red,chv-color-green,chv-color-gray"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=color|default:"(no color)" %}
+        {% endfor %}
+      </div>
+      <div>
+        {% for color in ",chv-hover-blue,chv-hover-red,chv-hover-green,chv-hover-gray"|split:"," %}
+          {% include "styleguide/icons/api/sample.html" with text=color|default:"(no hover color)" %}
+        {% endfor %}
+      </div>
+    {% endwith %}
+
+    <h3>Zero width icons</h3>
+    {% with size="chv-icon-3x" transparent=True envelope=True %}
+      {% for align in "chv-icon-zero-width chv-icon-left,chv-icon-zero-width,chv-icon-zero-width chv-icon-right"|split:"," %}
+        <div>
+          {% include "styleguide/icons/api/sample.html" with text=align %}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <h3>List icons</h3>
+    {% for align in "chv-icon-top,,chv-icon-bottom"|split:"," %}
+      <p><em>{{ align|default:"(no alignment)" }}</em></p>
+      <div>
+        {% for size in "chv-icon-half,,chv-icon-lg,chv-icon-2x,chv-icon-3x"|split:"," %}
+          <div class="sg-specimen-inline chv-scheme-white">
+            <ul class="chv-icon-ul">
+              {% for i in "12" %}
+                <li>
+                  <i class="chv-icon chv-icon-li icon-ok {{ size }} {{ align }}"></i>
+                  {{ size|default:"(default size)" }}
+                </li>
+              {% endfor %}
+              {% for i in "12" %}
+                <li>
+                  <span class="chv-icon-stack chv-icon-li {{ size }} {{ align }}">
+                    <i class="chv-icon icon-circle"></i>
+                    <i class="chv-icon icon-ok chv-icon-inv chv-icon-half"></i>
+                  </span>
+                  {{ size|default:"(default size)" }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <h3>Stacked icons</h3>
+    <div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <i class="chv-icon icon-circle chv-icon-2x"></i> +
+          <i class="chv-icon icon-ok chv-icon-2x"></i> =
+          <span class="chv-icon-stack chv-icon-2x">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-ok chv-icon-half chv-icon-inv"></i>
+          </span>
+          chv-icon-stack
+        </p>
+      </div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <i class="chv-icon icon-ok chv-icon-2x"></i> +
+          <i class="chv-icon icon-ok chv-icon-2x"></i> +
+          <i class="chv-icon icon-ok chv-icon-2x"></i> =
+          <span class="chv-icon-stack chv-icon-3x">
+            <i class="chv-icon icon-ok chv-icon-half chv-color-blue chv-icon-left"></i>
+            <i class="chv-icon icon-ok chv-icon-half chv-color-green"></i>
+            <i class="chv-icon icon-ok chv-icon-half chv-color-red chv-icon-right"></i>
+          </span>
+          chv-icon-stack
+        </p>
+      </div>
+    </div>
+
+    <p><em>Internal size</em></p>
+    <div>
+      {% for size in ",chv-icon-half"|split:"," %}
+        <div class="sg-specimen-inline chv-scheme-white">
+          <p>
+            <span class="chv-icon-stack chv-icon-2x">
+              <i class="chv-icon icon-circle"></i>
+              <i class="chv-icon icon-ok {{ size }} chv-icon-inv"></i>
+            </span>
+            {{ size|default:"(default size)" }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <p><em>Internal alignment</em></p>
+    <div>
+      {% for align in ",chv-icon-left,chv-icon-top,chv-icon-right,chv-icon-bottom"|split:"," %}
+        <div class="sg-specimen-inline chv-scheme-white">
+          <p>
+            <span class="chv-icon-stack chv-icon-2x">
+              <i class="chv-icon icon-circle"></i>
+              <i class="chv-icon icon-ok chv-icon-half chv-icon-inv {{ align }}"></i>
+            </span>
+            {{ align|default:"(no alignment)" }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <p><em>Internal transformation</em></p>
+    <div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-left"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-right chv-icon-flip-horizontal"></i>
+          </span>
+          chv-icon-flip-horizontal
+        </p>
+      </div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-left"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-right chv-icon-flip-vertical"></i>
+          </span>
+          chv-icon-flip-vertical
+        </p>
+      </div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-top chv-icon-rotate-90"></i>
+            <i class="chv-icon icon-help chv-icon-half chv-icon-inv chv-icon-bottom chv-icon-rotate-270"></i>
+          </span>
+          chv-icon-rotate-*
+        </p>
+      </div>
+    </div>
+
+    <p><em>Internal vs. external animation</em></p>
+    <div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-cancel chv-icon-half chv-icon-inv chv-icon-top chv-icon-spin"></i>
+          </span>
+          internal chv-icon-spin
+        </p>
+      </div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x chv-icon-spin">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-cancel chv-icon-half chv-icon-inv chv-icon-top"></i>
+          </span>
+          external chv-icon-spin
+        </p>
+      </div>
+      <div class="sg-specimen-inline chv-scheme-white">
+        <p>
+          <span class="chv-icon-stack chv-icon-3x chv-icon-spin">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon icon-cancel chv-icon-half chv-icon-inv chv-icon-top chv-icon-spin"></i>
+          </span>
+          combined chv-icon-spin
+        </p>
+      </div>
+    </div>
+  </div>
+{% endwith %}

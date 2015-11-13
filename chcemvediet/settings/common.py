@@ -1,5 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from chcemvediet import sass_functions
 
 SITE_ID = 1
 USE_I18N = True
@@ -155,6 +156,11 @@ COMPRESS_PRECOMPILERS = (
     (u'text/x-scss', u'django_libsass.SassCompiler'),
     )
 
+LIBSASS_CUSTOM_FUNCTIONS = {
+    u'static': sass_functions.static,
+    u'md5': sass_functions.md5,
+    }
+
 # JS and CSS assets settings
 ASSETS = (
     # JQuery
@@ -171,7 +177,7 @@ ASSETS = (
     u'main/3part/jqueryplugins/jquery.PrintArea.js',
     # Fonts
     u'//fonts.googleapis.com/css?family=Ubuntu:400,500,700',
-    u'fontello/css/fontello.css',
+    u'fontello/css/fontello-codes.css',
     # Custom Bootstrap
     u'main/css/main.sass',
     u'javascripts/affix.js',

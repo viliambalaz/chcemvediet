@@ -1,75 +1,188 @@
 
+$chv-icon-sizes: ('half': 0.5, 'lg': 4/3, '2x': 2, '3x': 3)
+$chv-icon-rotations: ('90': 90deg, '180': 180deg, '270': 270deg)
+$chv-icon-flips: ('horizontal': (-1, 1), 'vertical': (1, -1))
+
+//
+// Fontello font definiton
+// Requires: fontello/css/fontello-codes.css
+//
+
+@font-face
+  $hash: md5('fontello/css/fontello-codes.css')
+  $dir: static('fontello/font')
+  $eot1: url('#{$dir}/fontello.eot?#{$hash}')
+  $eot2: url('#{$dir}/fontello.eot?#{$hash}#iefix') format('embedded-opentype')
+  $woff: url('#{$dir}/fontello.woff?#{$hash}') format('woff')
+  $ttf:  url('#{$dir}/fontello.ttf?#{$hash}') format('truetype')
+  $svg:  url('#{$dir}/fontello.svg?#{$hash}#fontello') format('svg')
+  font-family: 'fontello'
+  src: $eot1
+  src: $eot2, $woff, $ttf, $svg
+  font-weight: normal
+  font-style: normal
+
 //
 // Simple icon
 //
+
 .chv-icon
   display: inline-block
-  width: 1em
-  height: 1em
-  line-height: 1em
+  position: relative
   text-align: center
-  // Drop Fontello margins
+  vertical-align: bottom
   &:before
-    margin: 0
+    display: inline-block
+    position: relative
+    width: 1em
+    text-align: center
+    vertical-align: bottom
+    // Taken from fontello
+    font-family: "fontello"
+    font-style: normal
+    font-weight: normal
+    font-variant: normal
+    text-decoration: inherit
+    text-transform: none
+    speak: none
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
 
 //
 // Stacked icons
 //
+
 .chv-icon-stack
   display: inline-block
   position: relative
   width: 1em
-  height: 1em
-  line-height: 1em
-  vertical-align: -15%
+  text-align: center
+  vertical-align: top
   > .chv-icon
-    position: absolute
-    left: 0
-    width: 100%
-    line-height: inherit
-
-//
-// Smaller and larger icons
-//
-.chv-icon-half
-  font-size: 0.5em
-.chv-icon-lg // 33% larger
-  font-size: (4em / 3)
-.chv-icon-2x
-  font-size: 2em
-.chv-icon-3x
-  font-size: 3em
+    float: left
+    width: 1em
+    margin-right: -1em
 
 //
 // List icons
 //
+
 .chv-icon-ul
   list-style-type: none
-  > li
-    position: relative
 .chv-icon-li
-  position: absolute
-  top: ($chv-baseline * 0.75)
-  left: (-$chv-list-indent * 0.25)
-  margin-top: -0.5em
-  margin-left: -1em
+  float: left
+  left: (-1 * $chv-list-indent / 4)
+  &.chv-icon:before,
+  &.chv-icon-stack,
+    margin-left: -1em
 
 //
-// Vertically centered icon
+// Icon sizes
 //
-.chv-icon-middle
-  vertical-align: middle
+
+@each $name, $size in $chv-icon-sizes
+  .chv-icon-#{$name}
+    &.chv-icon:before,
+    &.chv-icon-stack,
+      font-size: (1em * $size)
+
+//
+// Icon alignment (centered by default)
+//
+
+.chv-icon-left
+  text-align: left
+.chv-icon-right
+  text-align: right
+.chv-icon-top
+  &.chv-icon
+    bottom: 0.35em
+    &:before
+      bottom: -0.35em
+  &.chv-icon-stack
+    @each $name, $size in $chv-icon-sizes
+      &.chv-icon-#{$name}
+        bottom: (0.35em * (1/$size - 1))
+.chv-icon-bottom
+  &.chv-icon
+    bottom: -0.35em
+    &:before
+      bottom: 0.35em
+  &.chv-icon-stack
+    @each $name, $size in $chv-icon-sizes
+      &.chv-icon-#{$name}
+        bottom: (0.35em * (1 - 1/$size))
 
 //
 // Zero width icon
 //
+
 .chv-icon-zero-width
-  margin-left: -0.5em
-  margin-right: -0.5em
+  &.chv-icon:before,
+  &.chv-icon-stack,
+    margin-left: -0.5em
+    margin-right: -0.5em
+  &.chv-icon-left
+    &.chv-icon:before,
+    &.chv-icon-stack,
+      margin-left: 0
+      margin-right: -1em
+  &.chv-icon-right
+    &.chv-icon:before,
+    &.chv-icon-stack,
+      margin-left: -1em
+      margin-right: 0
+
+//
+// Rotated & flipped icons
+//
+
+@each $name, $rotation in $chv-icon-rotations
+  .chv-icon-rotate-#{$name}
+    &.chv-icon:before,
+    &.chv-icon-stack,
+      -webkit-transform: rotate($rotation)
+      -ms-transform:     rotate($rotation)
+      transform:         rotate($rotation)
+
+@each $name, $flip in $chv-icon-flips
+  .chv-icon-flip-#{$name}
+    &.chv-icon:before,
+    &.chv-icon-stack,
+      -webkit-transform: scale($flip)
+      -ms-transform:     scale($flip)
+      transform:         scale($flip)
+
+//
+// Spinning icons
+//
+
+.chv-icon-spin
+  &.chv-icon:before,
+  &.chv-icon-stack,
+    -webkit-animation: chv-icon-spin 2s infinite linear
+    animation:         chv-icon-spin 2s infinite linear
+.chv-icon-pulse
+  &.chv-icon:before,
+  &.chv-icon-stack,
+    -webkit-animation: chv-icon-spin 1s infinite steps(8)
+    animation:         chv-icon-spin 1s infinite steps(8)
+
+@-webkit-keyframes chv-icon-spin
+  0%
+    -webkit-transform: rotate(0deg)
+  100%
+    -webkit-transform: rotate(359deg)
+@keyframes chv-icon-spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(359deg)
 
 //
 // Custom fixes for particular icons
 //
+
 .icon-chv-horiz-40
   opacity: 0.4
 .icon-chv-horiz-70
@@ -78,64 +191,3 @@
   width: 3.4em
   &:before
     width: 3.4em
-
-
-///////////////////////////////////////////////////////////
-// Icon manipulation adapted from Font Awesome
-// See: https://fortawesome.github.io/Font-Awesome/examples/
-//
-
-//
-// Spinning Icons
-//
-.chv-icon-spin
-  -webkit-animation: chv-icon-spin 2s infinite linear
-  animation:         chv-icon-spin 2s infinite linear
-.chv-icon-pulse
-  -webkit-animation: chv-icon-spin 1s infinite steps(8)
-  animation:         chv-icon-spin 1s infinite steps(8)
-@-webkit-keyframes chv-icon-spin
-  0%
-    -webkit-transform: rotate(0deg)
-    transform:         rotate(0deg)
-  100%
-    -webkit-transform: rotate(359deg)
-    transform:         rotate(359deg)
-@keyframes chv-icon-spin
-  0%
-    -webkit-transform: rotate(0deg)
-    transform:         rotate(0deg)
-  100%
-    -webkit-transform: rotate(359deg)
-    transform:         rotate(359deg)
-
-//
-// Rotated & Flipped Icons
-//
-@mixin chv-icon-rotate($degrees, $rotation)
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})
-  -webkit-transform: rotate($degrees)
-  -ms-transform:     rotate($degrees)
-  transform:         rotate($degrees)
-@mixin chv-icon-flip($horiz, $vert, $rotation)
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=#{$rotation})
-  -webkit-transform: scale($horiz, $vert)
-  -ms-transform:     scale($horiz, $vert)
-  transform:         scale($horiz, $vert)
-.chv-icon-rotate-90
-  @include chv-icon-rotate(90deg, 1)
-.chv-icon-rotate-180
-  @include chv-icon-rotate(180deg, 2)
-.chv-icon-rotate-270
-  @include chv-icon-rotate(270deg, 3)
-.chv-icon-flip-horizontal
-  @include chv-icon-flip(-1, 1, 0)
-.chv-icon-flip-vertical
-  @include chv-icon-flip(1, -1, 2)
-// Hook for IE8-9
-:root .chv-icon-rotate-90,
-:root .chv-icon-rotate-180,
-:root .chv-icon-rotate-270,
-:root .chv-icon-flip-horizontal,
-:root .chv-icon-flip-vertical,
-  filter: none

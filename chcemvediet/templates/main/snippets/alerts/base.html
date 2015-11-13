@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load capture from poleno.utils %}
 
 {% comment %}
  %
@@ -21,8 +20,10 @@
     {% block content %}
       <p>
         {% block icon %}
-          {% capture "icon" %}{% block icon-class %}{% endblock %}{% endcapture %}
-          {% include "main/snippets/icons/circled.html" %}
+          <span class="chv-icon-stack chv-icon-lg">
+            <i class="chv-icon icon-circle"></i>
+            <i class="chv-icon chv-icon-half chv-icon-inv {% block icon-class %}{% endblock %}"></i>
+          </span>
           &nbsp;
         {% endblock %}
         {% block lead %}

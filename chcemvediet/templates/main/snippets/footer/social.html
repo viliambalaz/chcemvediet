@@ -8,14 +8,21 @@
 {% endcomment %}
 
 
-{% with stack="chv-icon-2x" circle="chv-hover-white" %}
-  <a href="mailto:aj.ja@chcemvediet.sk">
-    {% include "main/snippets/icons/circled.html" with icon="icon-mail" %}
-  </a>
-  <a href="https://twitter.com/chcemvedietsk">
-    {% include "main/snippets/icons/circled.html" with icon="icon-twitter" %}
-  </a>
-  <a href="https://www.facebook.com/chcemvedietsk/">
-    {% include "main/snippets/icons/circled.html" with icon="icon-facebook" %}
-  </a>
-{% endwith %}
+<a href="mailto:aj.ja@chcemvediet.sk">
+  <span class="chv-icon-stack chv-icon-2x">
+    <i class="chv-icon icon-circle chv-hover-white"></i>
+    <i class="chv-icon chv-icon-half chv-icon-inv icon-mail"></i>
+  </span>
+</a>
+<a href="https://twitter.com/chcemvedietsk">
+  <span class="chv-icon-stack chv-icon-2x">
+    <i class="chv-icon icon-circle chv-hover-white"></i>
+    <i class="chv-icon chv-icon-half chv-icon-inv icon-twitter"></i>
+  </span>
+</a>
+<a href="https://www.facebook.com/chcemvedietsk/">
+  <span class="chv-icon-stack chv-icon-2x">
+    <i class="chv-icon icon-circle chv-hover-white"></i>
+    <i class="chv-icon chv-icon-half chv-icon-inv icon-facebook"></i>
+  </span>
+</a>
