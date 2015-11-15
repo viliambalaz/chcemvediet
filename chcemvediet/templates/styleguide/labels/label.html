@@ -1,0 +1,19 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load lorem capture from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %  -- tooltip: boolean
+ %
+{% endcomment %}
+
+
+<div class="sg-specimen-inline chv-scheme-white">
+  <p>
+    <span class="label {{ class }}">Lorem impum</span>
+    &nbsp;
+    {{ class }}
+  </p>
+</div>

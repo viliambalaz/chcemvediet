@@ -30,15 +30,16 @@
                   <span class="{{ emailaddress.verified|no:"text-muted" }}">
                     {{ emailaddress.email }}
                   </span>
-                  {% if emailaddress.verified %}
-                    <span class="text-success">{% trans 'account:email:verified' %}</span>
-                  {% else %}
-                    <span class="text-danger">{% trans 'account:email:unverified' %}</span>
-                  {% endif %}
-                  {% if emailaddress.primary %}
-                    <span class="text-info">{% trans 'account:email:primary' %}</span>
-                  {% endif %}
                 </label>
+                &nbsp;
+                {% if emailaddress.verified %}
+                  <span class="label label-success">{% trans 'account:email:verified' %}</span>
+                {% else %}
+                  <span class="label label-danger">{% trans 'account:email:unverified' %}</span>
+                {% endif %}
+                {% if emailaddress.primary %}
+                  <span class="label label-info">{% trans 'account:email:primary' %}</span>
+                {% endif %}
               </div>
             {% endfor %}
           </div>
@@ -59,7 +60,7 @@
         </div>
       </form>
     {% else %}
-      {% include "account/texts/email_empty.html" %}
+      {% include "main/snippets/alerts/warning.html" with message_template="account/texts/email_empty.html" %}
     {% endif %}
   {% endwith %}
 
