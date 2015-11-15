@@ -1,0 +1,20 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- drafts: [chcemvediet.apps.inforequests.models.InforequestDraft]
+ %
+{% endcomment %}
+
+
+{% if drafts %}
+  <h2>
+    <i class="chv-icon chv-color-green-l icon-doc-inv"></i>&nbsp;
+    {% trans 'inforequests:index:drafts:heading' %}
+  </h2>
+  {% with class="chv-table-green" objects=drafts %}
+    {% include "inforequests/index/tables/drafts.html" %}
+  {% endwith %}
+{% endif %}

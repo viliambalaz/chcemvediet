@@ -1,0 +1,45 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "inforequests/index/tables/base.html" %}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %  -- objects: [chcemvediet.apps.inforequests.models.Inforequest]
+ %
+{% endcomment %}
+
+
+{% block collapse %}
+  {{ object.subject }}
+{% endblock %}
+
+{% block href %}
+  {{ object.get_absolute_url }}
+{% endblock %}
+
+{% block subject %}
+  {{ object.subject }}
+{% endblock %}
+
+{% block obligee %}
+  {{ object.main_branch.historicalobligee.name }}
+  {% with branch=object.main_branch %}
+    {% include "inforequests/index/tables/inforequests_advanced.html" %}
+  {% endwith %}
+{% endblock %}
+
+{% block date %}
+  FIXME
+{% endblock %}
+
+{% block status %}
+  {% if object.has_undecided_emails %}
+    <i class="chv-icon chv-icon-li icon-mail"></i>
+    {% trans 'inforequests:index:status:new_email' %}
+  {% else %}
+    <i class="chv-icon chv-icon-li icon-help"></i>
+    FIXME
+  {% endif %}
+{% endblock %}

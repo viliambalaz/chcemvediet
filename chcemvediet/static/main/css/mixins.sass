@@ -4,3 +4,8 @@
     color: $link
     &:hover, &:focus
       color: $hover
+
+@mixin chv-bg-hover($bg, $hover: scale-color($bg, $lightness: -2%))
+  background-color: $bg
+  &:hover
+    background-color: $hover

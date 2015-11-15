@@ -1,0 +1,53 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load split from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %
+{% endcomment %}
+
+
+<p class="text-center">{{ class }}</p>
+<div class="sg-specimen chv-scheme-white">
+  <div class="chv-table {{ class }}">
+    <div class="chv-colgroup">
+      <div class="chv-col chv-width-4"></div>
+      <div class="chv-col chv-width-4"></div>
+      <div class="chv-col chv-width-2"></div>
+      <div class="chv-col chv-width-2"></div>
+    </div>
+    <div class="chv-thead">
+      <div class="chv-td">Predmet žiadosti</div>
+      <div class="chv-td">Inštitúcia</div>
+      <div class="chv-td">Posledná akcia</div>
+      <div class="chv-td">Aktivita</div>
+    </div>
+    <div class="chv-tbody">
+      {% for i in "1 2 3 4"|split %}
+        {% with collapse_id=idgenerator.next %}
+          <div class="chv-tr-collapse collapsed" data-toggle="collapse" data-target="#{{ collapse_id }}">
+            <b>Lorem ipsum</b>
+            <i class="chv-icon icon-down-dir pull-right"></i>
+          </div>
+          <div id="{{ collapse_id }}" class="chv-tr collapse">
+            <div class="chv-td chv-hidden-xs">
+              <b>Lorem ipsum</b>
+            </div>
+            <div class="chv-td">
+              <i class="chv-icon icon-building"></i> &nbsp; Dolor sit amet
+            </div>
+            <div class="chv-td">
+              <i class="chv-icon icon-calendar"></i> &nbsp;
+              16. 7. 2015
+            </div>
+            <div class="chv-td">
+              <i class="chv-icon icon-pencil"></i> &nbsp; Rozpísané
+            </div>
+          </div>
+        {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

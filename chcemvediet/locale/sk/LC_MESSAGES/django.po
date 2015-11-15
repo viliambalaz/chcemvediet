@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-15 02:29+0100\n"
+"POT-Creation-Date: 2015-11-15 13:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -774,55 +774,64 @@ msgid "inforequests:detail:request:content"
 msgstr "Obsah"
 
 msgid "inforequests:index:title"
-msgstr "Odoslané žiadosti"
+msgstr "Moje žiadosti"
 
 msgid "inforequests:index:heading"
-msgstr "Odoslané žiadosti"
+msgstr "Moje žiadosti"
+
+msgid "inforequests:index:drafts:heading"
+msgstr "Rozpísané"
+
+msgid "inforequests:index:pending:heading"
+msgstr "Podané"
+
+msgid "inforequests:index:closed:heading"
+msgstr "Uzavreté"
+
+msgid "inforequests:index:create:heading"
+msgstr "Chcem niečo vedieť"
+
+msgid "inforequests:index:create:button"
+msgstr "Podať infožiadosť"
+
+msgid "inforequests:index:email:heading"
+msgstr "Prišla mi odpoveď emailom"
+
+msgid "inforequests:index:email:button"
+msgstr "Reagovať"
+
+msgid "inforequests:index:smail:heading"
+msgstr "Prišla mi odpoveď poštou"
+
+msgid "inforequests:index:smail:button"
+msgstr "Nahrať odpoveď"
+
+msgid "inforequests:index:subject"
+msgstr "Predmet žiadosti"
 
 msgid "inforequests:index:obligee"
 msgstr "Inštitúcia"
 
-msgid "inforequests:index:subject"
-msgstr "Subjekt"
+msgid "inforequests:index:date"
+msgstr "Posledná akcia"
 
-msgid "inforequests:index:submission_date"
-msgstr "Dátum odoslania"
+msgid "inforequests:index:status"
+msgstr "Aktivita"
 
-msgid "inforequests:index:new_mail"
-msgstr "Nový e-mail"
-
-msgid "inforequests:index:create"
-msgstr "Nová žiadosť"
-
-msgid "inforequests:index:drafts:heading"
-msgstr "Rozpracované žiadosti"
-
-msgid "inforequests:index:drafts:obligee"
-msgstr "Inštitúcia"
+msgid "inforequests:index:drafts:empty_subject"
+msgstr "(nebol vyplnený žiadny predmet)"
 
 msgid "inforequests:index:drafts:empty_obligee"
-msgstr "(neboli vybrané žiadne inštitúcie)"
+msgstr "(nebola vybraná žiadna inštitúcia)"
 
-msgid "inforequests:index:drafts:create_from_draft"
-msgstr "Editovať a odoslať"
+msgid "inforequests:index:status:draft"
+msgstr "Rozpísané"
 
 msgid "inforequests:index:draft:delete:confirm"
 msgstr "Chcete naozaj vymazať túto rozpracovanú žiadosť?"
 
-msgid "inforequests:index:draft:delete"
-msgstr "Zmazať"
-
-msgid "inforequests:index:closed:heading"
-msgstr "Uzavreté žiadosti"
-
-msgid "inforequests:index:closed:obligee"
-msgstr "Inštitúcia"
-
-msgid "inforequests:index:closed:subject"
-msgstr "Subjekt"
-
-msgid "inforequests:index:closed:submission_date"
-msgstr "Dátum odoslania"
+msgid "inforequests:index:status:new_email"
+msgstr "Nový email"
 
 msgid "inforequests:modals:snooze:heading"
 msgstr "Počkať ešte 3 dni"

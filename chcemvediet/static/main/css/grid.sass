@@ -37,32 +37,42 @@
     @include chv-height("#{$i}#{$screen}", $i)
     @include chv-height("#{$i}-half#{$screen}", $i + 0.5)
 
-@include chv-heights()
-@include chv-heights("-xs")
-@media(min-width:$screen-sm-min)
-  @include chv-heights("-sm")
-@media(min-width:$screen-md-min)
-  @include chv-heights("-md")
-@media(min-width:$screen-lg-min)
-  @include chv-heights("-lg")
+//
+// Column widths without float
+//
+
+@mixin chv-widths($screen: "")
+  @for $i from 1 through 12
+    .chv-width-#{$i}#{$screen}
+      width: (100% * $i / 12)
 
 //
 // Pull left/right based on screen size
 //
 
-@mixin chv-pull($screen)
+@mixin chv-pull($screen: "")
   .chv-pull-left#{$screen}
     float: left !important
   .chv-pull-right#{$screen}
     float: right !important
 
-@include chv-pull("-xs")
+//
+// Define chv-heights(), chv-widths() and chv-pull() for all screens
+//
+
+@mixin tmp($screen: "")
+  @include chv-heights($screen)
+  @include chv-widths($screen)
+  @include chv-pull($screen)
+
+@include tmp()
+@include tmp("-xs")
 @media(min-width:$screen-sm-min)
-  @include chv-pull("-sm")
+  @include tmp("-sm")
 @media(min-width:$screen-md-min)
-  @include chv-pull("-md")
+  @include tmp("-md")
 @media(min-width:$screen-lg-min)
-  @include chv-pull("-lg")
+  @include tmp("-lg")
 
 //
 // Content hidden for (visible only to) vieports up to X.
@@ -98,3 +108,43 @@
   bottom: 0
 .chv-aspect-parners
   padding-top: 8%
+
+//
+// Columns with equal heights using tables
+//
+
+@media(min-width:$screen-sm-min)
+  .chv-eq-rows
+    display: table
+    width: calc(100% + #{$grid-gutter-width} * 2)
+    margin-left: (-$grid-gutter-width)
+    border-collapse: separate
+    border-spacing: $grid-gutter-width 0
+  .chv-eq-row
+    display: table-row
+  .chv-eq-col
+    display: table-cell
+    &.chv-eq-col-border
+      border: solid 1px red
+      border-radius: 5px
+      padding: ($chv-baseline - 1px)
+    &.chv-eq-col-border-first
+      border: solid 1px red
+      border-bottom: none
+      border-radius: 5px 5px 0 0
+      padding: ($chv-baseline - 1px)
+      padding-bottom: 0
+    &.chv-eq-col-border-mid
+      border: solid 1px red
+      border-top: none
+      border-bottom: none
+      border-radius: 0
+      padding: ($chv-baseline - 1px)
+      padding-top: 0
+      padding-bottom: 0
+    &.chv-eq-col-border-last
+      border: solid 1px red
+      border-top: none
+      border-radius: 0 0 5px 5px
+      padding: ($chv-baseline - 1px)
+      padding-top: 0

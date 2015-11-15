@@ -8,3 +8,90 @@
     tr
       th, td
         padding-bottom: ($table-cell-padding - 1px)
+
+//
+// Collapsible table
+//
+
+@media(max-width:$screen-xs-max)
+  .chv-colgroup
+    display: none
+  .chv-thead
+    display: none
+  .chv-tr-collapse
+    padding: ($chv-baseline / 2)
+    cursor: pointer
+  .chv-tr:not(.collapse)
+    display: block
+  .chv-td
+    padding: ($chv-baseline / 2)
+    border-bottom: solid 1px transparent
+    &:last-child
+      border-bottom: none
+
+@media(min-width:$screen-sm-min)
+  .chv-table
+    display: table
+    width: 100%
+  .chv-colgroup
+    display: table-column-group
+  .chv-col
+    display: table-column
+  .chv-thead
+    display: table-header-group
+    color: #999999
+  .chv-tbody
+    display: table-row-group
+  .chv-tr-collapse
+    display: none
+  .chv-tr
+    display: table-row
+  .chv-td
+    display: table-cell
+    padding: ($chv-baseline / 2)
+    border-right: solid 1px transparent
+    &:last-child
+      border-right: none
+
+.chv-table-delete
+  @extend .close
+  margin-left: 10px
+  text-shadow: none
+  opacity: 0.5
+  &:hover
+    opacity: 1
+
+@mixin chv-table($bg, $text, $icon)
+  .chv-tbody
+    @include chv-scheme($bg, $text, $text, $text, $text, $icon)
+  .chv-table-delete
+    color: $text
+  @media(max-width:$screen-xs-max)
+    .chv-tr-collapse
+      background-color: darken($bg, 15%)
+      .chv-icon
+        color: $bg
+    .chv-tr-collapse.collapsed
+      @include chv-bg-hover(darken($bg, 3%))
+      .chv-icon
+        color: darken($bg, 15%)
+    .chv-tr-collapse.collapsed:nth-child(4n+3)
+      @include chv-bg-hover(darken($bg, 8%))
+    .chv-td
+      border-color: darken($bg, 5%)
+  @media(min-width:$screen-sm-min)
+    .chv-tr
+      @include chv-bg-hover($bg)
+    .chv-tr:nth-child(4n)
+      @include chv-bg-hover(darken($bg, 5%))
+    .chv-tbody .chv-td
+      border-color: darken($bg, 7%)
+
+.chv-table-blue
+  @include chv-table($chv-color-blue-w, #4d4d4d, $chv-color-blue-ll)
+.chv-table-green
+  @include chv-table($chv-color-green-w, #4d4d4d, $chv-color-green-l)
+.chv-table-red
+  @include chv-table($chv-color-red-w, #4d4d4d, $chv-color-red-l)
+.chv-table-gray
+  @include chv-table($chv-color-gray-w, #4d4d4d, $chv-color-gray-l)

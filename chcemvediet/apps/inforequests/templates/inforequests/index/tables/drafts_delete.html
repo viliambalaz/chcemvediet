@@ -1,0 +1,19 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- draft: chcemvediet.apps.inforequests.models.InforequestDraft
+ %
+{% endcomment %}
+
+
+<form method="post" action="{% url 'inforequests:delete_draft' draft=draft %}X">
+  {% csrf_token %}
+  <button type="submit" class="chv-table-delete pln-confirm"
+          data-confirm="{% trans 'inforequests:index:draft:delete:confirm' %}">
+    &times;
+  </button>
+</form>

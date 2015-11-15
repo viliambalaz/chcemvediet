@@ -1,0 +1,61 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %  -- objects: list
+ %
+{% endcomment %}
+
+
+{% block table %}
+  <div class="chv-table {{ class }} chv-bellow-1">
+    <div class="chv-colgroup">
+      <div class="chv-col chv-width-4"></div>
+      <div class="chv-col chv-width-4"></div>
+      <div class="chv-col chv-width-2"></div>
+      <div class="chv-col chv-width-2"></div>
+    </div>
+    <div class="chv-thead">
+      <div class="chv-td">{% trans 'inforequests:index:subject' %}</div>
+      <div class="chv-td">{% trans 'inforequests:index:obligee' %}</div>
+      <div class="chv-td">{% trans 'inforequests:index:date' %}</div>
+      <div class="chv-td">{% trans 'inforequests:index:status' %}</div>
+    </div>
+    <div class="chv-tbody">
+      {% for object in objects %}
+        {% with collapse_id=idgenerator.next %}
+          <div class="chv-tr-collapse collapsed" data-toggle="collapse"
+               data-target="#{{ collapse_id }}">
+            <b>{% block collapse %}{% endblock %}</b>
+            <i class="chv-icon icon-down-dir pull-right"></i>
+          </div>
+          <a id="{{ collapse_id }}" class="chv-tr collapse" href="{% block href %}{% endblock %}">
+            <div class="chv-td chv-hidden-xs">
+              <b>{% block subject %}{% endblock %}</b>
+            </div>
+            <div class="chv-td">
+              <div class="chv-indent">
+                <i class="chv-icon chv-icon-li icon-building"></i>
+                {% block obligee %}{% endblock %}
+              </div>
+            </div>
+            <div class="chv-td">
+              <div class="chv-indent">
+                <i class="chv-icon chv-icon-li icon-calendar"></i>
+                {% block date %}{% endblock %}
+              </div>
+            </div>
+            <div class="chv-td">
+              <div class="chv-indent">
+                {% block status %}{% endblock %}
+              </div>
+            </div>
+          </a>
+        {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

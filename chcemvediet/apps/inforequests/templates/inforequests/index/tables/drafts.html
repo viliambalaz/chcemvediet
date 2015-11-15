@@ -1,0 +1,40 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "inforequests/index/tables/base.html" %}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %  -- objects: [chcemvediet.apps.inforequests.models.InforequestDraft]
+ %
+{% endcomment %}
+
+
+{% block collapse %}
+  {% include "inforequests/index/tables/drafts_delete.html" with draft=object %}
+  {{ object.subject.0|default:_('inforequests:index:drafts:empty_subject') }}
+{% endblock %}
+
+{% block href %}{% url 'inforequests:create' draft=object %}{% endblock %}
+
+{% block subject %}
+  {{ object.subject.0|default:_('inforequests:index:drafts:empty_subject') }}
+{% endblock %}
+
+{% block obligee %}
+  {{ object.obligee.name|default:_('inforequests:index:drafts:empty_obligee') }}
+{% endblock %}
+
+{% block date %}
+  FIXME
+{% endblock %}
+
+{% block status %}
+  <div class="hidden-xs">
+    {% include "inforequests/index/tables/drafts_delete.html" with draft=object %}
+  </div>
+  <i class="chv-icon chv-icon-li icon-pencil"></i>
+  {% trans 'inforequests:index:status:draft' %}
+{% endblock %}

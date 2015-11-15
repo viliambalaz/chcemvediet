@@ -1,0 +1,20 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- closed_inforequests: [chcemvediet.apps.inforequests.models.Inforequest]
+ %
+{% endcomment %}
+
+
+{% if closed_inforequests %}
+  <h2>
+    <i class="chv-icon chv-color-blue-ll icon-ok"></i>&nbsp;
+    {% trans 'inforequests:index:closed:heading' %}
+  </h2>
+  {% with class="chv-table-blue" objects=closed_inforequests %}
+    {% include "inforequests/index/tables/inforequests.html" %}
+  {% endwith %}
+{% endif %}
