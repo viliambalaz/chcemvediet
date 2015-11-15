@@ -43,17 +43,21 @@
       </div>
     </form>
   {% else %}
-    {% include "socialaccount/texts/connections_empty.html" %}
+    {% with message_template="socialaccount/texts/connections_empty.html" %}
+      {% include "main/snippets/alerts/warning.html" %}
+    {% endwith %}
   {% endif %}
 
   <h3>{% trans 'socialaccount:connections:add:heading' %}</h3>
   {% include "socialaccount/texts/connections_add.html" %}
-  <div class="row">
-    <p class="col-sm-3 text-right" style="padding-top: 5px;">
-      {% trans 'socialaccount:connections:add:social_buttons' %}
-    </p>
-    <p class="col-sm-9">
-      {% include "account/snippets/social_login_buttons.html" with process="connect" %}
-    </p>
+  <div class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-sm-3">
+        {% trans 'socialaccount:connections:add:social_buttons' %}
+      </label>
+      <div class="col-sm-9">
+        {% include "account/snippets/social_login_buttons.html" with process="connect" %}
+      </div>
+    </div>
   </div>
 {% endblock %}

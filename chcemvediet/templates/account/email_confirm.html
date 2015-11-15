@@ -18,11 +18,9 @@
     {% include "account/texts/email_confirm_text.html" %}
     <form class="form-horizontal" method="post" action="{% url 'account_confirm_email' confirmation.key %}">
       {% csrf_token %}
-      <p>
-        <button type="submit" class="btn btn-primary">
-          {% trans 'account:email_confirm:submit' %}
-        </button>
-      </p>
+      <button type="submit" class="btn btn-primary">
+        {% trans 'account:email_confirm:submit' %}
+      </button>
     </form>
   {% else %}
     {% include "account/texts/email_confirm_invalid.html" %}

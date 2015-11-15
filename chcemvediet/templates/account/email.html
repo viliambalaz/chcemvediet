@@ -60,7 +60,9 @@
         </div>
       </form>
     {% else %}
-      {% include "main/snippets/alerts/warning.html" with message_template="account/texts/email_empty.html" %}
+      {% with message_template="account/texts/email_empty.html" %}
+        {% include "main/snippets/alerts/warning.html" %}
+      {% endwith %}
     {% endif %}
   {% endwith %}
 
