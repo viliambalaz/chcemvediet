@@ -13,7 +13,11 @@
 {% block title %}{% trans 'accounts:profile:title' %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-  <h1>{% trans 'accounts:profile:heading' %} <small>{{ user.get_full_name }}</small></h1>
+  <h1>{% trans 'accounts:profile:heading' %}</h1>
+  <div class="row">
+    <p class="col-sm-3 text-right">{% trans 'accounts:profile:name' %}:</p>
+    <p class="col-sm-9">{{ user.get_full_name }}</p>
+  </div>
   <div class="row">
     <p class="col-sm-3 text-right">{% trans 'accounts:profile:email' %}:</p>
     <p class="col-sm-9">{{ user.email }}</p>
@@ -41,6 +45,11 @@
       <a class="btn btn-default" href="{% url 'socialaccount_connections' %}">
         {% trans 'accounts:profile:manage_connections' %}
       </a>
+      {% if user.invitationsupply.can_use_invitations %}
+        <a class="btn btn-default" href="{% url 'invitations:invite' %}">
+          {% trans 'accounts:profile:invitations' %}
+        </a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
