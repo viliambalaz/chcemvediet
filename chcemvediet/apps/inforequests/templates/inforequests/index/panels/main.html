@@ -1,0 +1,32 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with undecided_emails_count=user.profile.undecided_emails_count %}
+  <div class="chv-eq-rows chv-above-1 chv-bellow-1">
+    <div class="chv-eq-row chv-hidden-xs">
+      {% include "inforequests/index/panels/create_top.html" %}
+      {% if undecided_emails_count %}
+        {% include "inforequests/index/panels/email_top.html" %}
+      {% else %}
+        {% include "inforequests/index/panels/smail_top.html" %}
+      {% endif %}
+      {% include "inforequests/index/panels/archive_top.html" %}
+    </div>
+    <div class="chv-eq-row">
+      {% include "inforequests/index/panels/create_bottom.html" %}
+      {% if undecided_emails_count %}
+        {% include "inforequests/index/panels/email_bottom.html" %}
+      {% else %}
+        {% include "inforequests/index/panels/smail_bottom.html" %}
+      {% endif %}
+      {% include "inforequests/index/panels/archive_bottom.html" %}
+    </div>
+  </div>
+{% endwith %}

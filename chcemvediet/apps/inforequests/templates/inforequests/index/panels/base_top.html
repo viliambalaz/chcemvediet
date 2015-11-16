@@ -1,0 +1,25 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% block panel-top %}
+  <div class="chv-eq-col chv-eq-col-border-first chv-width-4-sm chv-border-gray-ll">
+    <div class="text-center">
+      <h2>
+        <span class="chv-icon-stack chv-icon-3x chv-above-1 chv-bellow-1">
+          <i class="chv-icon icon-circle {% block color %}{% endblock %}"></i>
+          <i class="chv-icon chv-icon-inv chv-icon-half {% block icon %}{% endblock %}"></i>
+        </span>
+        <br>
+        {% block heading %}{% endblock %}
+      </h2>
+      {% block text %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}
