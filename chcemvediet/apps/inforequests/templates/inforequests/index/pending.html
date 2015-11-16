@@ -11,9 +11,9 @@
 
 {% if inforequests %}
   <h2>
-    {% spaceless %}
-      {% include "main/snippets/icons/chv-horiz.html" with color="chv-color-red-l" %}
-    {% endspaceless %}&nbsp;
+    {% with class="chv-icon-lg" color="chv-color-red-l" %}
+      {% include "main/snippets/icons/chv-diag.html" %}
+    {% endwith %}
     {% trans 'inforequests:index:pending:heading' %}
   </h2>
   {% with class="chv-table-red" objects=inforequests %}

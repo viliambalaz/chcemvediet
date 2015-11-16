@@ -63,6 +63,48 @@
       ]
     },
     {
+      "uid": "79c4bbecfde67c34efee8977a55b293b",
+      "css": "chv-diag-40",
+      "code": 59430,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M627.3 144.7L382.4 312.6 805.3 720.4 258.3 444.9 0 690.1 1000 850 627.3 144.7ZM258.3 444.9L804 719.5 360.3 445.8 258.3 444.9Z",
+        "width": 1000
+      },
+      "search": [
+        "chv-diag-40"
+      ]
+    },
+    {
+      "uid": "0f267d7de485361336b7f4ec102c957c",
+      "css": "chv-diag-70",
+      "code": 59431,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M627.3 144.7L382.4 312.6 805.3 720.4 258.3 444.9 0 690.1 1000 850 627.3 144.7ZM382.4 312.6L360.3 445.8 804 719.5 382.4 312.6Z",
+        "width": 1000
+      },
+      "search": [
+        "chv-diag-70"
+      ]
+    },
+    {
+      "uid": "bc24729e2e79d78b722cb0b2f22d4f06",
+      "css": "chv-diag-100",
+      "code": 59432,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M627.3 144.7L382.4 312.6 805.3 720.4 258.3 444.9 0 690.1 1000 850 627.3 144.7Z",
+        "width": 1000
+      },
+      "search": [
+        "chv-diag-100"
+      ]
+    },
+    {
       "uid": "9dd9e835aebe1060ba7190ad2b2ed951",
       "css": "search",
       "code": 59392,
