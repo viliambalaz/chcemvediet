@@ -180,6 +180,25 @@ $chv-icon-flips: ('horizontal': (-1, 1), 'vertical': (1, -1))
     transform: rotate(359deg)
 
 //
+// Icon badge
+//
+
+.chv-icon-badge
+  position: relative
+  bottom: 0.7em
+  margin-left: -1em
+  padding: 0.1em 0.3em
+  color: $chv-color-white
+  background-color: $chv-color-red
+  border-radius: 1em
+  font-size: 60%
+  &:empty
+    display: none
+@each $name, $size in $chv-icon-sizes
+  .chv-icon-#{$name} + .chv-icon-badge
+    font-size: 60% * $size
+
+//
 // Custom fixes for particular icons
 //
 

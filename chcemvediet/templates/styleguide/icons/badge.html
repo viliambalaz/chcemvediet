@@ -1,0 +1,19 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- size: string
+ %  -- badge: string
+ %
+{% endcomment %}
+
+
+<div class="sg-specimen-inline chv-scheme-white">
+  <p>
+    <i class="chv-icon icon-mail chv-icon-lg"></i>
+    <span class="chv-icon-badge">{{ badge }}</span>
+    &nbsp;
+    {{ text|default:"chv-icon-badge" }}
+  </p>
+</div>
