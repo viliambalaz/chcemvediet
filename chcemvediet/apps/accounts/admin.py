@@ -3,7 +3,7 @@
 from django.contrib import admin
 
 from poleno.utils.misc import decorate
-from poleno.utils.admin import admin_obj_format
+from poleno.utils.admin import simple_list_filter_factory, admin_obj_format
 
 from .models import Profile
 
@@ -22,8 +22,17 @@ class ProfileAdmin(admin.ModelAdmin):
             u'street',
             u'city',
             u'zip',
+            decorate(
+                lambda o: o.undecided_emails_count,
+                short_description=u'Undecided E-mails',
+                admin_order_field=u'undecided_emails_count',
+                ),
             ]
     list_filter = [
+            simple_list_filter_factory(u'Undecided E-mail', u'undecided', [
+                (u'1', u'With', lambda qs: qs.filter(undecided_emails_count__gt=0)),
+                (u'0', u'Without', lambda qs: qs.filter(undecided_emails_count=0)),
+                ]),
             ]
     search_fields = [
             u'=id',
@@ -50,4 +59,5 @@ class ProfileAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super(ProfileAdmin, self).get_queryset(request)
         queryset = queryset.select_related(u'user')
+        queryset = queryset.select_undecided_emails_count()
         return queryset
