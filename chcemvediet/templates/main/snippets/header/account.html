@@ -13,14 +13,12 @@
 {% if user.is_authenticated %}
   {% with active=request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations' %}
     {% if user.profile.undecided_emails_count %}
-      <div class="chv-navbar-item chv-navbar-item-gray">
-        <a href="#">
-          <i class="chv-icon chv-icon-lg icon-mail"></i>
-          <span class="chv-icon-badge">{{ user.profile.undecided_emails_count }}</span>
-        </a>
-      </div>
+      <a class="chv-navbar-item chv-navbar-item-gray" href="#">
+        <i class="chv-icon chv-icon-lg icon-mail"></i>
+        <span class="chv-icon-badge">{{ user.profile.undecided_emails_count }}</span>
+      </a>
     {% endif %}
-    <div class="chv-navbar-item chv-navbar-item-gray-blue dropdown {{ active|yes:"active" }}">
+    <span class="chv-navbar-item chv-navbar-item-gray-blue dropdown {{ active|yes:"active" }}">
       <a class="dropdown-toggle" href="#" data-toggle="dropdown">
         <span class="chv-hidden-450">{{ user.email }}  </span>
         {% include "main/snippets/header/account_icon.html" with class="chv-icon-2x" %}
@@ -63,7 +61,7 @@
           </a>
         </li>
       </ul>
-    </div>
+    </span>
   {% endwith %}
 {% else %}
   <a class="chv-navbar-item chv-navbar-item-gray" href="{% url 'account_login' %}">
