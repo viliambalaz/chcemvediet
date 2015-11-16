@@ -12,8 +12,11 @@
 {% endcomment %}
 
 
-{% block collapse %}
+{% block collapse-actions %}
   {% include "inforequests/index/tables/drafts_delete.html" with draft=object %}
+{% endblock %}
+
+{% block collapse %}
   {{ object.subject.0|default:_('inforequests:index:drafts:empty_subject') }}
 {% endblock %}
 
@@ -32,9 +35,12 @@
 {% endblock %}
 
 {% block status %}
+  <i class="chv-icon chv-icon-li icon-pencil"></i>
+  {% trans 'inforequests:index:status:draft' %}
+{% endblock %}
+
+{% block actions %}
   <div class="hidden-xs">
     {% include "inforequests/index/tables/drafts_delete.html" with draft=object %}
   </div>
-  <i class="chv-icon chv-icon-li icon-pencil"></i>
-  {% trans 'inforequests:index:status:draft' %}
 {% endblock %}

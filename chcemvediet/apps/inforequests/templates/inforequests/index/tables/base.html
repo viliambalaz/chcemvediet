@@ -29,8 +29,9 @@
         {% with collapse_id=idgenerator.next %}
           <div class="chv-tr-collapse collapsed" data-toggle="collapse"
                data-target="#{{ collapse_id }}">
-            <b>{% block collapse %}{% endblock %}</b>
+            {% block collapse-actions %}{% endblock %}
             <i class="chv-icon icon-down-dir pull-right"></i>
+            <b>{% block collapse %}{% endblock %}</b>
           </div>
           <a id="{{ collapse_id }}" class="chv-tr collapse" href="{% block href %}{% endblock %}">
             <div class="chv-td chv-hidden-xs">
@@ -43,14 +44,16 @@
               </div>
             </div>
             <div class="chv-td">
-              <div class="chv-indent">
+              <div class="chv-indent chv-nowrap">
                 <i class="chv-icon chv-icon-li icon-calendar"></i>
                 {% block date %}{% endblock %}
               </div>
             </div>
             <div class="chv-td">
-              <div class="chv-indent">
+              {% block actions %}{% endblock %}
+              <div class="chv-indent chv-nowrap">
                 {% block status %}{% endblock %}
+                &emsp;
               </div>
             </div>
           </a>
