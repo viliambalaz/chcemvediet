@@ -35,6 +35,9 @@ class InforequestDraft(FormatMixin, models.Model):
     subject = JSONField(blank=True, default=())
     content = JSONField(blank=True, default=())
 
+    # May NOT be NULL; Automatically updated on every save
+    modified = models.DateTimeField(auto_now=True)
+
     # May be empty
     attachment_set = generic.GenericRelation(u'attachments.Attachment',
             content_type_field=u'generic_type', object_id_field=u'generic_id')

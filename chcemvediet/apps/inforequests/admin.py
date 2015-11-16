@@ -74,7 +74,7 @@ class InforequestAdmin(admin.ModelAdmin):
 
 @admin.register(InforequestDraft, site=admin.site)
 class InforequestDraftAdmin(admin.ModelAdmin):
-    date_hierarchy = None
+    date_hierarchy = u'modified'
     list_display = [
             u'id',
             decorate(
@@ -88,8 +88,10 @@ class InforequestDraftAdmin(admin.ModelAdmin):
                 short_description=u'Obligee',
                 admin_order_field=u'obligee',
                 ),
+            u'modified',
             ]
     list_filter = [
+            u'modified',
             ]
     search_fields = [
             u'=id',

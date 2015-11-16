@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block date %}
-  FIXME
+  {{ object.modified|date:"j. n. Y" }}
 {% endblock %}
 
 {% block status %}
