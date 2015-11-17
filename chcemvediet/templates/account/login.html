@@ -23,8 +23,12 @@
         <h1>{% trans 'account:login:heading' %}</h1>
         {% include "account/texts/login_text.html" %}
       </div>
-      <div class="col-md-4 chv-pull-right-md chv-above-1-md">
-        {% include "account/texts/why_register.html" %}
+      <div class="col-md-4 chv-pull-right-md">
+        <div class="panel chv-scheme-gray">
+          <div class="panel-body">
+            {% include "account/texts/why_register.html" %}
+          </div>
+        </div>
       </div>
       <div class="col-md-8">
         {% include "main/forms/form_horizontal.html" %}
