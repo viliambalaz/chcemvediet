@@ -7,6 +7,7 @@
  %  -- tpl: string
  %  -- class: string
  %  -- extra: string
+ %  -- text: string
  %
 {% endcomment %}
 
@@ -17,7 +18,7 @@
     &nbsp;
     <span class="chv-inline">
       {{ tpl|split:'/'|last }}<br>
-      {{ class }}
+      {{ class }} {{ text }}
     </span>
   </p>
 </div>

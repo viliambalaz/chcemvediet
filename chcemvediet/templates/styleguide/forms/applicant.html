@@ -1,0 +1,18 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+<div class="form-group">
+  <label class="control-label col-sm-3">Applicant</label>
+  <div class="col-sm-9">
+    {% with name="John Smith" street="Mulberry Lane 47" zip="123 45" city="Wheat Ridge" %}
+      {% include "inforequests/create/snippets/applicant_field.html" %}
+    {% endwith %}
+  </div>
+</div>

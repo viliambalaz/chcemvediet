@@ -16,7 +16,7 @@
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-md-8">
         <h1>{% trans 'inforequests:create:heding' %}</h1>
         {% include "inforequests/create/texts/main.html" %}
       </div>
@@ -33,11 +33,11 @@
             {% trans 'inforequests:create:applicant_label' %}
           </label>
           <div class="col-sm-9">
-            <div class="form-control-static">
-              {{ user.get_full_name }}<br>
-              {{ user.profile.street }}<br>
-              {{ user.profile.zip }} {{ user.profile.city }}
-            </div>
+            {% with name=user.get_full_name street=user.profile.street %}
+              {% with zip=user.profile.zip city=user.profile.city %}
+                {% include "inforequests/create/snippets/applicant_field.html" %}
+              {% endwith %}
+            {% endwith %}
           </div>
         </div>
         {% include "main/forms/form_horizontal.html" %}

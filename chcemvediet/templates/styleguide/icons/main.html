@@ -89,8 +89,9 @@
         </div>
         <h3>Other prepared icons</h3>
         <div>
-          {% with extra="chv-icon-2x" %}
-            {% include "styleguide/icons/prepared.html" with tpl="main/snippets/header/account_icon.html" %}
+          {% with extra="chv-icon-2x" tpl="main/snippets/icons/account.html" %}
+            {% include "styleguide/icons/prepared.html" with hover=1 text="hover=True" %}
+            {% include "styleguide/icons/prepared.html" with hover=0 text="hover=False" %}
           {% endwith %}
         </div>
         <h3>Icon badges</h3>
