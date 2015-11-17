@@ -14,21 +14,21 @@
     <a class="collapsed" href="#{{ collapse_id }}" data-toggle="collapse">Icons API</a>
   </h3>
   <div id="{{ collapse_id }}" class="collapse">
-    <h3>Icons respect paragraph font size</h3>
+    <h4>Icons respect paragraph font size</h4>
     <div>
       {% for font in "7px,10px,14px,22px,30px"|split:"," %}
         {% include "styleguide/icons/api/sample.html" with text=font %}
       {% endfor %}
     </div>
 
-    <h3>Relative icon sizes</h3>
+    <h4>Relative icon sizes</h4>
     <div>
       {% for size in "chv-icon-half,,chv-icon-lg,chv-icon-2x,chv-icon-3x"|split:"," %}
         {% include "styleguide/icons/api/sample.html" with text=size|default:"(default size)" %}
       {% endfor %}
     </div>
 
-    <h3>Vertical alignment</h3>
+    <h4>Vertical alignment</h4>
     {% for align in "chv-icon-top,,chv-icon-bottom"|split:"," %}
       <div>
         {% for size in "chv-icon-half,,chv-icon-lg,chv-icon-2x,chv-icon-3x"|split:"," %}
@@ -37,7 +37,7 @@
       </div>
     {% endfor %}
 
-    <h3>Rotated, fliped and animated icons</h3>
+    <h4>Rotated, fliped and animated icons</h4>
     {% with size="chv-icon-2x" %}
       <div>
         {% for transform in ",chv-icon-rotate-90,chv-icon-rotate-180,chv-icon-rotate-270"|split:"," %}
@@ -56,7 +56,7 @@
       </div>
     {% endwith %}
 
-    <h3>Colored icons</h3>
+    <h4>Colored icons</h4>
     {% with size="chv-icon-2x" %}
       <div>
         {% for color in ",chv-color-blue,chv-color-red,chv-color-green,chv-color-gray"|split:"," %}
@@ -70,7 +70,7 @@
       </div>
     {% endwith %}
 
-    <h3>Zero width icons</h3>
+    <h4>Zero width icons</h4>
     {% with size="chv-icon-3x" transparent=True envelope=True %}
       {% for align in "chv-icon-zero-width chv-icon-left,chv-icon-zero-width,chv-icon-zero-width chv-icon-right"|split:"," %}
         <div>
@@ -79,7 +79,7 @@
       {% endfor %}
     {% endwith %}
 
-    <h3>List icons</h3>
+    <h4>List icons</h4>
     {% for align in "chv-icon-top,,chv-icon-bottom"|split:"," %}
       <p><em>{{ align|default:"(no alignment)" }}</em></p>
       <div>
@@ -107,7 +107,7 @@
       </div>
     {% endfor %}
 
-    <h3>Stacked icons</h3>
+    <h4>Stacked icons</h4>
     <div>
       <div class="sg-specimen-inline chv-scheme-white">
         <p>
