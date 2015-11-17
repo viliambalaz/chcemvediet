@@ -14,11 +14,11 @@
   margin-bottom: ($below * $chv-baseline - $fix)
   font-size: $fontsize
   line-height: $lead * $chv-baseline
-  @if $below == 0.5
-    &:nth-child(odd):last-child
-      padding-bottom: ($chv-baseline * 0.5)
-    &:nth-child(even):last-child
-      padding-bottom: $chv-baseline
+  //@if $below == 0.5
+  //  &:nth-child(odd):last-child
+  //    padding-bottom: ($chv-baseline * 0.5)
+  //  &:nth-child(even):last-child
+  //    padding-bottom: $chv-baseline
 
 h1
   @include chv-baseline($chv-fontsize-h1, 2, 0, 1)
