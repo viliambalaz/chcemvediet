@@ -14,11 +14,6 @@
   margin-bottom: ($below * $chv-baseline - $fix)
   font-size: $fontsize
   line-height: $lead * $chv-baseline
-  //@if $below == 0.5
-  //  &:nth-child(odd):last-child
-  //    padding-bottom: ($chv-baseline * 0.5)
-  //  &:nth-child(even):last-child
-  //    padding-bottom: $chv-baseline
 
 h1
   @include chv-baseline($chv-fontsize-h1, 2, 0, 1)
@@ -39,9 +34,14 @@ li
 // Adjust margins of some other elements
 //
 
-ul, ol, .chv-indent
+ul, ol
   margin-top: 0
   margin-bottom: 0
+  padding-top: 0
+  padding-bottom: ($chv-baseline / 2)
+  padding-left: $chv-list-indent
+
+.chv-indent
   padding-left: $chv-list-indent
 
 hr
