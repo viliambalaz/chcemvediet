@@ -10,7 +10,7 @@
 
 {% with undecided_emails_count=user.profile.undecided_emails_count %}
   <div class="chv-eq-rows chv-above-1 chv-bellow-1">
-    <div class="chv-eq-row chv-hidden-xs">
+    <div class="chv-eq-row chv-hidden chv-tablerow-sm">
       {% include "inforequests/index/panels/create_top.html" %}
       {% if undecided_emails_count %}
         {% include "inforequests/index/panels/email_top.html" %}

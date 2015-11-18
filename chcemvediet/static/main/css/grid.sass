@@ -30,7 +30,7 @@
   .chv-bellow-minus-#{$name}
     margin-bottom: (-1 * $chv-baseline * $lead) !important
 
-@mixin chv-heights($screen: "")
+@mixin chv-heights($screen)
   @include chv-height("0#{$screen}", 0)
   @include chv-height("half#{$screen}", 0.5)
   @for $i from 1 through 8
@@ -38,60 +38,83 @@
     @include chv-height("#{$i}-half#{$screen}", $i + 0.5)
 
 //
-// Column widths without float
+// Widths without float to use in columns or anywhere else
 //
 
-@mixin chv-widths($screen: "")
+@mixin chv-widths($screen)
   @for $i from 1 through 12
     .chv-width-#{$i}#{$screen}
-      width: (100% * $i / 12)
+      width: (100% * $i / 12) !important
+    .chv-maxwidth-#{$i * 5}#{$screen}
+      max-width: ($i * 50px)
 
 //
-// Pull left/right based on screen size
+// Common style settings based on screen size
 //
 
-@mixin chv-pull($screen: "")
+@mixin chv-common($screen)
+  //
+  // Width and seight
+  //
+  .chv-width-auto#{$screen}
+    width: auto !important
+  .chv-width-full#{$screen}
+    width: 100% !important
+  .chv-height-auto#{$screen}
+    height: auto !important
+  .chv-height-full#{$screen}
+    height: 100% !important
+  //
+  // Pull left/right
+  //
   .chv-pull-left#{$screen}
     float: left !important
   .chv-pull-right#{$screen}
     float: right !important
+  //
+  // Display style
+  //
+  .chv-hidden#{$screen}
+    display: none !important
+  .chv-block#{$screen}
+    display: block !important
+  .chv-inline#{$screen}
+    display: inline !important
+  .chv-inlineblock#{$screen}
+    display: inline-block !important
+  .chv-tablecell#{$screen}
+    display: table-cell !important
+  .chv-tablerow#{$screen}
+    display: table-row !important
+  //
+  // Cursor
+  //
+  .chv-pointer#{$screen}
+    cursor: pointer !important
+  .chv-cursor-default#{$screen}
+    cursor: default !important
 
 //
-// Define chv-heights(), chv-widths() and chv-pull() for all screens
+// Apply chv-heights(), chv-widths() and chv-common() for different screen sizes. Bigger screen
+// styles override smaller screen styles, and all screen styles override general styles.
 //
 
-@mixin tmp($screen: "")
+@mixin chv-responsive-styles($screen)
   @include chv-heights($screen)
   @include chv-widths($screen)
-  @include chv-pull($screen)
+  @include chv-common($screen)
 
-@include tmp()
-@include tmp("-xs")
-@media(min-width:$screen-sm-min)
-  @include tmp("-sm")
-@media(min-width:$screen-md-min)
-  @include tmp("-md")
-@media(min-width:$screen-lg-min)
-  @include tmp("-lg")
-
-//
-// Content hidden for (visible only to) vieports up to X.
-// Note that bootstrap .hidden-* is broken because it forces display block when visible.
-//
-
-@mixin chv-hidden($name, $upto)
-  .chv-hidden-#{$name}
-    @media(max-width:$upto)
-      display: none !important
-  .chv-visible-#{$name}
-    @media(min-width:($upto + 1px))
-      display: none !important
-
-@include chv-hidden('xs', $screen-xs-max)
-@include chv-hidden('sm', $screen-sm-max)
-@include chv-hidden('md', $screen-md-max)
+@include chv-responsive-styles("")
+@include chv-responsive-styles("-xs")
 @for $i from 1 through 10
-  @include chv-hidden($i * 50, $i * 50px)
+  @media(min-width:#{$i * 50px})
+    @include chv-responsive-styles("-#{$i * 50}")
+@media(min-width:$screen-sm-min)
+  @include chv-responsive-styles("-sm")
+@media(min-width:$screen-md-min)
+  @include chv-responsive-styles("-md")
+@media(min-width:$screen-lg-min)
+  @include chv-responsive-styles("-lg")
 
 //
 // Element with fixed aspect ratio

@@ -6,11 +6,6 @@
   padding-left: 10px
   padding-right: 10px
 
-.chv-block
-  display: block
-.chv-inline
-  display: inline-block
-
 .chv-nowrap
   white-space: nowrap
 .chv-prewrap
@@ -26,21 +21,6 @@
     content: ""
     display: inline-block
     width: 100%
-
-.chv-full-width
-  width: 100%
-.chv-full-height
-  height: 100%
-@media(max-width:$screen-xs-max)
-  .chv-full-width-xs-only
-    width: 100%
-
-@for $k from 1 through 10
-  .chv-maxw-#{$k * 5}
-    max-width: ($k * 50px)
-
-.chv-pointer
-  cursor: pointer
 
 .chv-body-clip
   overflow: hidden
