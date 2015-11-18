@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-16 09:31+0100\n"
+"POT-Creation-Date: 2015-11-18 12:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -680,6 +680,9 @@ msgstr "Nová infožiadosť"
 msgid "inforequests:create:heding"
 msgstr "Nová infožiadosť"
 
+msgid "inforequests:create:sidebar:heding"
+msgstr "Čo môžem chcieť vedieť?"
+
 msgid "inforequests:create:applicant_label"
 msgstr "Žiadateľ"
 
@@ -1036,6 +1039,9 @@ msgstr "Prihlásiť sa"
 
 msgid "account:login:heading"
 msgstr "Prihlásiť sa"
+
+msgid "account:why_register:heading"
+msgstr "Prečo sa zaregistrovať?"
 
 msgid "account:login:submit"
 msgstr "Prihlásiť sa"

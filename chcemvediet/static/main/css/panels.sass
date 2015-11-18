@@ -1,12 +1,19 @@
 
 .panel
-  margin-bottom: $chv-baseline
+  margin-top: -1px
+  margin-bottom: ($chv-baseline - 1px)
   border-width: 1px
   box-shadow: none
   overflow: hidden
 
+.panel-heading
+  padding-top: ($chv-baseline / 2)
+  padding-bottom: 0
+  margin-bottom: -1px
+
 .panel-body
   padding-top: $chv-baseline
   padding-bottom: 0
-  margin-top: -1px
-  margin-bottom: -1px
+
+.panel-heading + .panel-body
+  padding-top: 0

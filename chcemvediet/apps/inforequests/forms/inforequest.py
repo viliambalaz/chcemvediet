@@ -59,7 +59,7 @@ class InforequestForm(PrefixedForm):
         super(InforequestForm, self).__init__(*args, **kwargs)
 
         unique_email = settings.INFOREQUEST_UNIQUE_EMAIL.format(token=u'xxxx')
-        unique_email = mark_safe(render_to_string(u'inforequests/create/content_unique_email.html',
+        unique_email = mark_safe(render_to_string(u'inforequests/create/snippets/content_unique_email.html',
                 dict(unique_email=unique_email)).strip())
         self.fields[u'content'].widget.context[u'user'] = self.user
         self.fields[u'content'].widget.context[u'unique_email'] = unique_email

@@ -1,0 +1,30 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% with collapse_id=idgenerator.next %}
+  <div class="panel chv-scheme-gray">
+    <div class="panel-heading collapsed chv-pointer chv-cursor-auto-md"
+         data-toggle="collapse" data-target="#{{ collapse_id }}">
+      <h3>
+        <i class="chv-icon icon-down-dir pull-right chv-pointer chv-hidden-md"></i>
+        <span class="chv-icon-stack chv-icon-lg">
+          <i class="chv-icon icon-circle"></i>
+          <i class="chv-icon chv-icon-inv chv-icon-half icon-help"></i>
+        </span>
+        &nbsp;
+        {% trans 'account:why_register:heading' %}
+      </h3>
+    </div>
+    <div id="{{ collapse_id }}" class="panel-body collapse chv-block-md chv-height-auto-md">
+      {% include "account/texts/why_register.html" %}
+    </div>
+  </div>
+{% endwith %}

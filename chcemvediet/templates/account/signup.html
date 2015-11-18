@@ -23,14 +23,10 @@
         <h1>{% trans 'account:signup:heading' %}</h1>
         {% include "account/texts/signup_text.html" %}
       </div>
-      <div class="col-md-4 chv-pull-right-md">
-        <div class="panel chv-scheme-gray">
-          <div class="panel-body">
-            {% include "account/texts/why_register.html" %}
-          </div>
-        </div>
+      <div class="col-md-4 chv-pull-right-md chv-above-half">
+        {% include "account/snippets/why_register.html" %}
       </div>
-      <div class="col-md-8">
+      <div class="col-md-8 chv-above-1">
         {% include "main/forms/form_horizontal.html" %}
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
