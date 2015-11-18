@@ -17,7 +17,6 @@ $(function(){
 		var contentHeight = this.scrollHeight - paddingHeight;
 		var computedLines = Math.max(3, Math.ceil(contentHeight / lineHeight));
 		var computedHeight = computedLines * lineHeight;
-		console.log(lineHeight, paddingHeight, contentHeight, computedHeight);
 		$(this).height(computedHeight);
 
 	};
