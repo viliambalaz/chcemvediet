@@ -21,21 +21,26 @@
 @mixin chv-height($name, $lead)
   .chv-height-#{$name}
     height: ($chv-baseline * $lead) !important
+
+@mixin chv-above($name, $lead)
   .chv-above-#{$name}
     padding-top: ($chv-baseline * $lead) !important
-  .chv-above-minus-#{$name}
-    margin-top: (-1 * $chv-baseline * $lead) !important
   .chv-bellow-#{$name}
     padding-bottom: ($chv-baseline * $lead) !important
-  .chv-bellow-minus-#{$name}
-    margin-bottom: (-1 * $chv-baseline * $lead) !important
 
 @mixin chv-heights($screen)
+  // height
   @include chv-height("0#{$screen}", 0)
   @include chv-height("half#{$screen}", 0.5)
-  @for $i from 1 through 8
+  @for $i from 1 through 5
     @include chv-height("#{$i}#{$screen}", $i)
     @include chv-height("#{$i}-half#{$screen}", $i + 0.5)
+  // above and bellow
+  @include chv-above("0#{$screen}", 0)
+  @include chv-above("half#{$screen}", 0.5)
+  @for $i from 1 through 3
+    @include chv-above("#{$i}#{$screen}", $i)
+    @include chv-above("#{$i}-half#{$screen}", $i + 0.5)
 
 //
 // Widths without float to use in columns or anywhere else
@@ -45,8 +50,9 @@
   @for $i from 1 through 12
     .chv-width-#{$i}#{$screen}
       width: (100% * $i / 12) !important
-    .chv-maxwidth-#{$i * 5}#{$screen}
-      max-width: ($i * 50px)
+  @for $i from 1 through 5
+    .chv-maxwidth-#{$i * 100}#{$screen}
+      max-width: ($i * 100px)
 
 //
 // Common style settings based on screen size
@@ -106,9 +112,9 @@
 
 @include chv-responsive-styles("")
 @include chv-responsive-styles("-xs")
-@for $i from 1 through 10
-  @media(min-width:#{$i * 50px})
-    @include chv-responsive-styles("-#{$i * 50}")
+@for $i from 1 through 5
+  @media(min-width:#{$i * 100px})
+    @include chv-responsive-styles("-#{$i * 100}")
 @media(min-width:$screen-sm-min)
   @include chv-responsive-styles("-sm")
 @media(min-width:$screen-md-min)
