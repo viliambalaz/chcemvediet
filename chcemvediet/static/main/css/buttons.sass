@@ -6,8 +6,12 @@
     color: $color
   &:hover
     background-color: $color
+    .chv-icon.chv-icon-inv
+      color: $color !important
   &:active, &.active
     background-color: $active
+    .chv-icon.chv-icon-inv
+      color: $active !important
   &:hover, &:active, &.active
     color: $chv-color-white
     border-color: transparent
@@ -19,9 +23,13 @@
   font-weight: 700
   .chv-icon
     color: $chv-color-white
+  .chv-icon.chv-icon-inv
+    color: $color !important
   &:active, &.active
     border-color: $active
     background-color: $active
+    .chv-icon.chv-icon-inv
+      color: $active !important
 
 //
 // Colored buttons
@@ -55,6 +63,17 @@
   @extend .chv-btn-blue
 .btn-primary
   @extend .chv-btn-inv-blue
+
+//
+// Icon color for link button
+//
+
+.btn-link
+  .chv-icon
+    color: $link-color
+  &:hover, &:focus
+    .chv-icon
+      color: $link-hover-color
 
 //
 // Button variants
