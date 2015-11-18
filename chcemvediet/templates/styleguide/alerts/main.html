@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 
 {% comment %}
  %
@@ -8,22 +9,11 @@
 {% endcomment %}
 
 
-{% with checkbox_id=idgenerator.next %}
-  <div class="sg-container">
-    <h2 id="alerts">
-      <a class="sg-collapse-open" href="#alerts">Alerts</a>
-      <a class="sg-collapse-close" href="#">Alerts</a>
-    </h2>
-    <div class="sg-collapse">
-      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
-      <label for="{{ checkbox_id }}">Show baseline</label>
-      <div class="sg-grid">
-        {% include "styleguide/alerts/alert.html" with class="chv-alert-info"    tpl="main/snippets/alerts/info.html" %}
-        {% include "styleguide/alerts/alert.html" with class="chv-alert-success" tpl="main/snippets/alerts/success.html" %}
-        {% include "styleguide/alerts/alert.html" with class="chv-alert-warning" tpl="main/snippets/alerts/warning.html" %}
-        {% include "styleguide/alerts/alert.html" with class="chv-alert-error"   tpl="main/snippets/alerts/error.html" %}
-        {% include "styleguide/alerts/alert.html" with class="chv-alert-debug"   tpl="main/snippets/alerts/debug.html" %}
-      </div>
-    </div>
-  </div>
-{% endwith %}
+{% block heading %}Alerts{% endblock %}
+{% block content %}
+  {% include "styleguide/alerts/alert.html" with class="chv-alert-info"    tpl="main/snippets/alerts/info.html" %}
+  {% include "styleguide/alerts/alert.html" with class="chv-alert-success" tpl="main/snippets/alerts/success.html" %}
+  {% include "styleguide/alerts/alert.html" with class="chv-alert-warning" tpl="main/snippets/alerts/warning.html" %}
+  {% include "styleguide/alerts/alert.html" with class="chv-alert-error"   tpl="main/snippets/alerts/error.html" %}
+  {% include "styleguide/alerts/alert.html" with class="chv-alert-debug"   tpl="main/snippets/alerts/debug.html" %}
+{% endblock %}

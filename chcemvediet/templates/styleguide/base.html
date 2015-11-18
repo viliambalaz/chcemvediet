@@ -1,0 +1,30 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load capture from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+{% capture "heading" %}{% block heading %}{% endblock %}{% endcapture %}
+
+<h2 id="{{ heading|slugify }}" class="sg-container">
+  <a class="sg-collapse-open" href="#{{ heading|slugify }}">{{ heading }}</a>
+  <a class="sg-collapse-close" href="#">{{ heading }}</a>
+</h2>
+<div class="sg-collapse">
+  {% with checkbox_id=idgenerator.next %}
+    <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
+    <label for="{{ checkbox_id }}">Show baseline</label>
+  {% endwith %}
+  <div class="sg-grid">
+    {% block container %}
+      <div class="sg-container">
+        {% block content %}{% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+</div>

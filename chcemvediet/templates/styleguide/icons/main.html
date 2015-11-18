@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 
 {% comment %}
  %
@@ -8,101 +9,90 @@
 {% endcomment %}
 
 
-{% with checkbox_id=idgenerator.next %}
-  <div class="sg-container">
-    <h2 id="icons">
-      <a class="sg-collapse-open" href="#icons">Icons</a>
-      <a class="sg-collapse-close" href="#">Icons</a>
-    </h2>
-    <div class="sg-collapse">
-      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
-      <label for="{{ checkbox_id }}">Show baseline</label>
-      <div class="sg-grid">
-        <h3>Simple icons</h3>
-        <div>
-          {% with extra="chv-icon-2x" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-ok" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-cancel" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-plus" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-chevron-left" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-chevron-right" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-forward" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-info" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-help" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-attention" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-down-dir" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-circle" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-up-circled" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-asterisk" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-menu" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-search" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-pencil" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-user" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-users" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-mail" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-calendar" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-doc-inv" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-docs" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-floppy" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-home" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-building" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-wrench" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-print" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-link-ext" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-hammer" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-at" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-euro" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-facebook" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-gplus" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-twitter" %}
-            {% include "styleguide/icons/icon.html" with icon="icon-linkedin" %}
-          {% endwith %}
-        </div>
-        <h3>Circled icons</h3>
-        <div>
-          {% with extra="chv-icon-2x" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-ok" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-cancel" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-info" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-help" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-attention" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-user" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-users" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-docs" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-mail" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-building" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-facebook" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-gplus" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-twitter" %}
-            {% include "styleguide/icons/circled.html" with icon="icon-linkedin" %}
-          {% endwith %}
-        </div>
-        <h3>Other stacked icons</h3>
-        <div>
-          {% with extra="chv-icon-2x" tpl="main/snippets/icons/chv-horiz.html" %}
-            {% include "styleguide/icons/prepared.html" %}
-            {% include "styleguide/icons/prepared.html" with class="chv-icon-rotate-90" %}
-          {% endwith %}
-          {% with extra="chv-icon-2x" tpl="main/snippets/icons/chv-diag.html" %}
-            {% include "styleguide/icons/prepared.html" %}
-          {% endwith %}
-        </div>
-        <h3>Other prepared icons</h3>
-        <div>
-          {% with extra="chv-icon-2x" tpl="main/snippets/icons/account.html" %}
-            {% include "styleguide/icons/prepared.html" with hover=1 text="hover=True" %}
-            {% include "styleguide/icons/prepared.html" with hover=0 text="hover=False" %}
-          {% endwith %}
-        </div>
-        <h3>Icon badges</h3>
-        <div>
-          {% include "styleguide/icons/badge.html" with badge="1" %}
-          {% include "styleguide/icons/badge.html" with badge="47" %}
-          {% include "styleguide/icons/badge.html" with badge="8872" %}
-          {% include "styleguide/icons/badge.html" with badge="" text="(empty badge)" %}
-        </div>
-        {% include "styleguide/icons/api/main.html" %}
-      </div>
-    </div>
+{% block heading %}Icons{% endblock %}
+{% block content %}
+  <h3>Simple icons</h3>
+  <div>
+    {% with extra="chv-icon-2x" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-ok" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-cancel" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-plus" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-chevron-left" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-chevron-right" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-forward" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-info" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-help" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-attention" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-down-dir" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-circle" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-up-circled" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-asterisk" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-menu" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-search" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-pencil" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-user" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-users" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-mail" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-calendar" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-doc-inv" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-docs" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-floppy" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-home" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-building" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-wrench" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-print" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-link-ext" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-hammer" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-at" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-euro" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-facebook" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-gplus" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-twitter" %}
+      {% include "styleguide/icons/icon.html" with icon="icon-linkedin" %}
+    {% endwith %}
   </div>
-{% endwith %}
+  <h3>Circled icons</h3>
+  <div>
+    {% with extra="chv-icon-2x" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-ok" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-cancel" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-info" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-help" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-attention" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-user" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-users" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-docs" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-mail" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-building" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-facebook" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-gplus" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-twitter" %}
+      {% include "styleguide/icons/circled.html" with icon="icon-linkedin" %}
+    {% endwith %}
+  </div>
+  <h3>Other stacked icons</h3>
+  <div>
+    {% with extra="chv-icon-2x" tpl="main/snippets/icons/chv-horiz.html" %}
+      {% include "styleguide/icons/prepared.html" %}
+      {% include "styleguide/icons/prepared.html" with class="chv-icon-rotate-90" %}
+    {% endwith %}
+    {% with extra="chv-icon-2x" tpl="main/snippets/icons/chv-diag.html" %}
+      {% include "styleguide/icons/prepared.html" %}
+    {% endwith %}
+  </div>
+  <h3>Other prepared icons</h3>
+  <div>
+    {% with extra="chv-icon-2x" tpl="main/snippets/icons/account.html" %}
+      {% include "styleguide/icons/prepared.html" with hover=1 text="hover=True" %}
+      {% include "styleguide/icons/prepared.html" with hover=0 text="hover=False" %}
+    {% endwith %}
+  </div>
+  <h3>Icon badges</h3>
+  <div>
+    {% include "styleguide/icons/badge.html" with badge="1" %}
+    {% include "styleguide/icons/badge.html" with badge="47" %}
+    {% include "styleguide/icons/badge.html" with badge="8872" %}
+    {% include "styleguide/icons/badge.html" with badge="" text="(empty badge)" %}
+  </div>
+  {% include "styleguide/icons/api/main.html" %}
+{% endblock %}

@@ -20,7 +20,7 @@
 
 {% block items %}
   {% for i in "1 2 3 5 6"|split %}
-    {% capture "text" %}{% lorem i %}{% endcapture %}
+    {% capture "text" %}<p>{% lorem i %}</p>{% endcapture %}
     {% include "main/homepage/didyouknow/base.html" %}
   {% endfor %}
 {% endblock %}

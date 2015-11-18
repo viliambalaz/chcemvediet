@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 
 {% comment %}
  %
@@ -8,25 +9,14 @@
 {% endcomment %}
 
 
-{% with checkbox_id=idgenerator.next %}
-  <div id="navbar" class="sg-container">
-    <h2>
-      <a class="sg-collapse-open" href="#navbar">Navbar</a>
-      <a class="sg-collapse-close" href="#">Navbar</a>
-    </h2>
-  </div>
-  <div class="sg-collapse">
-    <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
-    <label for="{{ checkbox_id }}">Show baseline</label>
-    <div class="sg-grid">
-      {% include "styleguide/navbar/first_brand.html" %}
-      {% include "styleguide/navbar/first_search.html" %}
-      {% include "styleguide/navbar/first_items.html" %}
-      {% include "styleguide/navbar/second_blue_items.html" %}
-      {% include "styleguide/navbar/second_gray_items.html" %}
-      {% include "styleguide/navbar/second_gray_blue_items.html" %}
-      {% include "styleguide/navbar/second_green_items.html" %}
-      {% include "styleguide/navbar/second_collapse.html" %}
-    </div>
-  </div>
-{% endwith %}
+{% block heading %}Navbar{% endblock %}
+{% block container %}
+  {% include "styleguide/navbar/first_brand.html" %}
+  {% include "styleguide/navbar/first_search.html" %}
+  {% include "styleguide/navbar/first_items.html" %}
+  {% include "styleguide/navbar/second_blue_items.html" %}
+  {% include "styleguide/navbar/second_gray_items.html" %}
+  {% include "styleguide/navbar/second_gray_blue_items.html" %}
+  {% include "styleguide/navbar/second_green_items.html" %}
+  {% include "styleguide/navbar/second_collapse.html" %}
+{% endblock %}

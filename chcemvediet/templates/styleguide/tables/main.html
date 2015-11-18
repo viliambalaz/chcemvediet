@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 
 {% comment %}
  %
@@ -8,21 +9,10 @@
 {% endcomment %}
 
 
-{% with checkbox_id=idgenerator.next %}
-  <div class="sg-container">
-    <h2 id="tables">
-      <a class="sg-collapse-open" href="#tables">Tables</a>
-      <a class="sg-collapse-close" href="#">Tables</a>
-    </h2>
-    <div class="sg-collapse">
-      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
-      <label for="{{ checkbox_id }}">Show baseline</label>
-      <div class="sg-grid">
-        {% include "styleguide/tables/table.html" with class="chv-table-blue" %}
-        {% include "styleguide/tables/table.html" with class="chv-table-green" %}
-        {% include "styleguide/tables/table.html" with class="chv-table-red" %}
-        {% include "styleguide/tables/table.html" with class="chv-table-gray" %}
-      </div>
-    </div>
-  </div>
-{% endwith %}
+{% block heading %}Tables{% endblock %}
+{% block content %}
+  {% include "styleguide/tables/table.html" with class="chv-table-blue" %}
+  {% include "styleguide/tables/table.html" with class="chv-table-green" %}
+  {% include "styleguide/tables/table.html" with class="chv-table-red" %}
+  {% include "styleguide/tables/table.html" with class="chv-table-gray" %}
+{% endblock %}

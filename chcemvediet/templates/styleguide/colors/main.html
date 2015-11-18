@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 {% load sass_variables from chcemvediet.styleguide %}
 
 {% comment %}
@@ -9,15 +10,10 @@
 {% endcomment %}
 
 
-<div class="sg-container">
-  <h2 id="colors">
-    <a class="sg-collapse-open" href="#colors">Colors</a>
-    <a class="sg-collapse-close" href="#">Colors</a>
-  </h2>
-  <div class="sg-collapse">
-    {% with sg="main/css/vars.sass"|sass_variables %}
-      {% include "styleguide/colors/colors.html" %}
-      {% include "styleguide/colors/schemes.html" %}
-    {% endwith %}
-  </div>
-</div>
+{% block heading %}Colors{% endblock %}
+{% block content %}
+  {% with sg="main/css/vars.sass"|sass_variables %}
+    {% include "styleguide/colors/colors.html" %}
+    {% include "styleguide/colors/schemes.html" %}
+  {% endwith %}
+{% endblock %}

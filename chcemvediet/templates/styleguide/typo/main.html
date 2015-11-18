@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "styleguide/base.html" %}
 {% load lorem from poleno.utils %}
 
 {% comment %}
@@ -9,66 +10,55 @@
 {% endcomment %}
 
 
-{% with checkbox_id=idgenerator.next %}
-  <div class="sg-container">
-    <h2 id="typography">
-      <a class="sg-collapse-open" href="#typography">Typography</a>
-      <a class="sg-collapse-close" href="#">Typography</a>
-    </h2>
-    <div class="sg-collapse">
-      <input id="{{ checkbox_id }}" class="sg-checkbox" type="checkbox">
-      <label for="{{ checkbox_id }}">Show baseline</label>
-      <div class="sg-grid">
-        <div class="row">
-          <div class="col-md-4">
-            <h1>Heading 1</h1>
-            <p class="lead">Lead paragraph. {% lorem 3 %}</p>
-            <p>{% lorem 7 %}</p>
-            <h2>Heading 2 - Dolor sit amet, consectetur adipisicing elit</h2>
-            <p>{% lorem 10 %}</p>
-            <p>{% lorem 14 %}</p>
-            <h3>Heading 3 - Dolor sit amet</h3>
-            <p>{% lorem 8 %}</p>
-          </div>
-          <div class="col-md-4 chv-above-3">
-            <p>{% lorem 9 %}</p>
-            <p>{% lorem 3 %}</p>
-            <h2>Heading 2 - Dolor sit amet</h2>
-            <p>{% lorem 7 %}</p>
-            <p>{% lorem 10 %}</p>
-            <h3>Heading 3 - Dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt</h3>
-            <p>{% lorem 8 %}</p>
-          </div>
-          <div class="col-md-4 chv-above-1">
-            <h3>Heading 3</h3>
-            <p>{% lorem 8 %}</p>
-            <ul>
-              <li>List with even items</li>
-              <li>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt</li>
-            </ul>
-            <p>{% lorem 7 %}</p>
-            <ul class="chv-icon-ul">
-              <li>
-                <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
-                List with odd items
-              </li>
-              <li>
-                <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor
-                incididunt
-              </li>
-              <li>
-                <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor
-                incididunt
-              </li>
-            </ul>
-            <p>{% lorem 3 %}</p>
-            <h4>Heading 4</h4>
-            <p>{% lorem 12 %}</p>
-          </div>
-          </div>
-      </div>
+{% block heading %}Typography{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4">
+      <h1>Heading 1</h1>
+      <p class="lead">Lead paragraph. {% lorem 3 %}</p>
+      <p>{% lorem 7 %}</p>
+      <h2>Heading 2 - Dolor sit amet, consectetur adipisicing elit</h2>
+      <p>{% lorem 10 %}</p>
+      <p>{% lorem 14 %}</p>
+      <h3>Heading 3 - Dolor sit amet</h3>
+      <p>{% lorem 8 %}</p>
+    </div>
+    <div class="col-md-4 chv-above-3">
+      <p>{% lorem 9 %}</p>
+      <p>{% lorem 3 %}</p>
+      <h2>Heading 2 - Dolor sit amet</h2>
+      <p>{% lorem 7 %}</p>
+      <p>{% lorem 10 %}</p>
+      <h3>Heading 3 - Dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt</h3>
+      <p>{% lorem 8 %}</p>
+    </div>
+    <div class="col-md-4 chv-above-1">
+      <h3>Heading 3</h3>
+      <p>{% lorem 8 %}</p>
+      <ul>
+        <li>List with even items</li>
+        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt</li>
+      </ul>
+      <p>{% lorem 7 %}</p>
+      <ul class="chv-icon-ul">
+        <li>
+          <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
+          List with odd items
+        </li>
+        <li>
+          <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor
+          incididunt
+        </li>
+        <li>
+          <i class="chv-icon chv-icon-li chv-icon-lg icon-ok"></i>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor
+          incididunt
+        </li>
+      </ul>
+      <p>{% lorem 3 %}</p>
+      <h4>Heading 4</h4>
+      <p>{% lorem 12 %}</p>
     </div>
   </div>
-{% endwith %}
+{% endblock %}
