@@ -13,11 +13,12 @@ $(function(){
 		var container = $(this);
 		var field = $(container.data('field'));
 		var skel = container.find('.pln-attachments-skel');
+		var list = container.find('.pln-attachments-list');
 		data.result.files.forEach(function(file){
 			var attachment = $(skel.html());
 			attachment.data('attachment', file.pk);
 			attachment.find('a').attr('href', file.url).html(file.name);
-			container.append(attachment).append(' ');
+			list.append(attachment).append(' ');
 			field.val(field.val() + ',' + file.pk + ',');
 		});
 	});

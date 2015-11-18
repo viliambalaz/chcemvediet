@@ -209,7 +209,6 @@ ASSETS = (
     u'poleno/js/scrollto.js',
     u'poleno/js/toggle_changed.js',
     u'poleno/js/tooltip.js',
-    u'attachments/css/fileupload.css',
     u'attachments/js/fileupload.js',
     # Local to the project
     u'obligees/css/obligee_widget.css',

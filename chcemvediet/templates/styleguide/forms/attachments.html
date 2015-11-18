@@ -1,0 +1,47 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load range lorem yes from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- count: integer
+ %  -- error: boolean
+ %
+{% endcomment %}
+
+
+<div class="form-group {{ error|yes:"has-error" }}">
+  <label class="control-label col-sm-3">Attachments</label>
+  <div class="col-sm-9">
+    <div class="pln-attachments" data-field="#">
+      <div class="pln-attachments-controls">
+        <div class="btn btn-default pln-attachments-btn">
+          <i class="chv-icon chv-icon-lg icon-attach"></i>
+          &nbsp;
+          Browse
+          <input type="file" name="files" multiple="multiple" data-url="#">
+        </div>
+      </div>
+      <div class="pln-attachments-skel">
+        <div class="pln-attachment" data-attachment="">
+          <a href=""></a>
+          <button type="button" class="pln-attachment-del"><i class="chv-icon icon-cancel"></i></button>
+        </div>
+      </div>
+      <div class="pln-attachments-list">
+        {% for i in 0|range:count %}
+          <div class="pln-attachment" data-attachment="">
+            <a href="#">{% cycle "lorem.txt" "ipsum.txt" "dolor.txt" "sit.txt" "amet.txt" %}</a>
+            <button type="button" class="pln-attachment-del"><i class="chv-icon icon-cancel"></i></button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if help %}
+      <span class="help-block">Help text. {% lorem 3 %}</span>
+    {% endif %}
+    {% if error %}
+      <span class="help-block">Error text. Lorem ipsum dolor sit.</span>
+    {% endif %}
+  </div>
+</div>

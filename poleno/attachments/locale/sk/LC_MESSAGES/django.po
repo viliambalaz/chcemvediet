@@ -21,4 +21,4 @@ msgid "attachments:AttachmentsField:error:invalid"
 msgstr "Invalid attachments."
 
 msgid "attachments:widget:browse"
-msgstr "Browse"
+msgstr "Priložiť"

@@ -1,3 +1,7 @@
+/* Required for ``poleno.attachments.forms.AttachmentsWidget`` form widget.
+ * NOTE: Not used in chcemvediet. Chcemvediet has custom style. So, it's probably outdated.
+ */
+
 .pln-attachments-btn { position: relative; float: left; margin-right: 20px; overflow: hidden; }
 .pln-attachments-btn input { position: absolute; display: block; top: 0; left: 0; }
 .pln-attachments-btn input { min-width: 100%; min-height: 100%; cursor: inherit; }

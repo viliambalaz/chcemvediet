@@ -127,6 +127,60 @@
   @extend .form-control:focus
 
 //
+// Attachments field
+//
+
+.pln-attachments-btn
+  position: relative
+  margin-right: ($chv-baseline/2)
+  overflow: hidden
+  > input
+    position: absolute
+    display: block
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    cursor: inherit
+    @include opacity(0)
+.pln-attachments-skel
+  display: none
+.pln-attachments-list
+  padding-bottom: ($chv-baseline/2)
+.pln-attachment
+  float: left
+  margin: ($chv-baseline/4) ($chv-baseline/2) ($chv-baseline/4) 0
+  padding: 0 0 0 ($chv-baseline*0.2)
+  border-radius: ($chv-baseline*0.2)
+  color: $chv-color-white
+  background-color: $chv-color-blue-ll
+  white-space: nowrap
+  a, a:focus, a:hover
+    color: inherit
+.pln-attachment-del
+  padding: 0 ($chv-baseline*0.1)
+  background-color: transparent
+  border: none
+  border-radius: 0 ($chv-baseline*0.2) ($chv-baseline*0.2) 0
+  .chv-icon
+    color: $chv-color-blue-l
+  &:hover
+    background-color: $chv-color-blue-l
+    .chv-icon
+      color: $chv-color-blue-ll
+@media(min-width:$screen-sm-min)
+  .pln-attachments
+    display: table
+    width: 100%
+  .pln-attachments-controls
+    display: table-cell
+    vertical-align: top
+  .pln-attachments-list
+    display: table-cell
+    width: 100%
+    vertical-align: top
+
+//
 // Hide placeholder on active inputs
 //
 
