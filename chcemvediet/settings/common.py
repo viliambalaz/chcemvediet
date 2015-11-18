@@ -211,7 +211,6 @@ ASSETS = (
     u'poleno/js/tooltip.js',
     u'attachments/js/fileupload.js',
     # Local to the project
-    u'obligees/css/obligee_widget.css',
     u'obligees/js/obligee_widget.js',
     u'main/css/01.bootstrapfix.css',
     u'main/js/01.bootstrapfix.js',

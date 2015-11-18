@@ -106,6 +106,26 @@
   font-size: ($chv-baseline * 2)
 
 //
+// Obligee autocomplete field
+// FIXME: multiple obligees not implemented yet.
+// See: /chcemvediet/apps/obligees/static/obligees/css/obligee_widget.css
+//
+
+.chv-obligee-widget-input
+  input
+    border-top-left-radius: 4px !important
+    border-bottom-left-radius: 4px !important
+.chv-obligee-widget-details
+  margin: -8px 0 8px 0
+  padding: 13px $padding-base-horizontal 6px
+  border: solid #CCC
+  border-width: 0 1px 1px 1px
+  border-radius: 0 0 4px 4px
+.chv-obligee-widget-hide,
+.chv-obligee-widget-skel,
+  display: none
+
+//
 // Composite text field
 //
 
@@ -115,7 +135,6 @@
   white-space: pre-wrap
   textarea
     width: calc(100% + 2px * 2)
-    min-height: ($chv-baseline * 4)
   textarea, input
     margin: -2px
     padding: 2px

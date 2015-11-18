@@ -1,4 +1,6 @@
-/* For chcemvediet.apps.obligees.forms.ObligeeWidget and MultipleObligeeWidget */
+/* For chcemvediet.apps.obligees.forms.ObligeeWidget and MultipleObligeeWidget
+ * NOTE: Not used in chcemvediet. Chcemvediet has custom style. So, it's probably outdated.
+ */
 
 .chv-obligee-widget-input { margin-top: 20px; }
 .chv-obligee-widget-input:first-child { margin-top: 0; }
