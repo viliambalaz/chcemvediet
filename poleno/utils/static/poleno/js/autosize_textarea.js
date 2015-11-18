@@ -15,7 +15,9 @@ $(function(){
 		var lineHeight = parseFloat($(this).css('line-height'));
 		var paddingHeight = $(this).innerHeight() - $(this).height();
 		var contentHeight = this.scrollHeight - paddingHeight;
-		var computedHeight = Math.ceil(contentHeight / lineHeight) * lineHeight;
+		var computedLines = Math.max(3, Math.ceil(contentHeight / lineHeight));
+		var computedHeight = computedLines * lineHeight;
+		console.log(lineHeight, paddingHeight, contentHeight, computedHeight);
 		$(this).height(computedHeight);
 
 	};
