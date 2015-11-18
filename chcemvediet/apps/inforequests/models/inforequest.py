@@ -418,7 +418,7 @@ class Inforequest(FormatMixin, models.Model):
         Returns list of branches advanced by ``action``. Takes advantage of cached list of all
         inforequest branches stored in ``Inforequest.branches`` property.
         """
-        return (b for b in self.branches if b.advanced_by_id == action.id)
+        return list(b for b in self.branches if b.advanced_by_id == action.id)
 
     def branch_by_pk(self, pk):
         u"""
