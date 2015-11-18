@@ -1,4 +1,5 @@
 /* Required for ``poleno.utils.forms.CompositeText`` form widget.
+ * NOTE: Not used in chcemvediet. Chcemvediet has custom style.
  */
 
 .pln-composite-text {

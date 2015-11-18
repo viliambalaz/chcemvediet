@@ -106,8 +106,30 @@
   font-size: ($chv-baseline * 2)
 
 //
+// Composite text field
+//
+
+.pln-composite-text
+  @extend .form-control
+  height: auto
+  white-space: pre-wrap
+  textarea
+    width: calc(100% + 2px * 2)
+    min-height: ($chv-baseline * 4)
+  textarea, input
+    margin: -2px
+    padding: 2px
+    border: none
+    border-radius: 0
+    background-color: $chv-color-blue-w
+    resize: none
+.pln-composite-text-focus
+  @extend .form-control:focus
+
+//
 // Hide placeholder on active inputs
 //
 
-input:focus
-  @include placeholder(transparent)
+textarea, input
+  &:focus
+    @include placeholder(transparent)

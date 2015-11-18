@@ -197,7 +197,6 @@ ASSETS = (
     u'poleno/js/ajax.js',
     u'poleno/js/autocomplete.js',
     u'poleno/js/autosize_textarea.js',
-    u'poleno/css/composite_text.css',
     u'poleno/js/composite_text.js',
     u'poleno/js/datepicker.js',
     u'poleno/css/editable.css',

@@ -11,7 +11,13 @@ $(function(){
 		$(this).css({
 			'height': 'auto',
 			'overflow-y': 'hidden',
-		}).height(this.scrollHeight);
+		});
+		var lineHeight = parseFloat($(this).css('line-height'));
+		var paddingHeight = $(this).innerHeight() - $(this).height();
+		var contentHeight = this.scrollHeight - paddingHeight;
+		var computedHeight = Math.ceil(contentHeight / lineHeight) * lineHeight;
+		$(this).height(computedHeight);
+
 	};
 	function autosizeAll(){
 		$('textarea.pln-autosize').each(autosize);
