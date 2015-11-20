@@ -11,12 +11,10 @@
 {% endcomment %}
 
 
-<div class="chv-action-content">
-  <div id="{{ print_id }}">
-    {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
-      <p class="chv-preline">{{ action.content }}</p>
-    {% elif action.content_type == action.CONTENT_TYPES.HTML %}
-      {{ action.content|safe }}
-    {% endif %}
-  </div>
+<div id="{{ print_id }}" class="chv-color-black">
+  {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
+    <p class="chv-preline">{{ action.content }}</p>
+  {% elif action.content_type == action.CONTENT_TYPES.HTML %}
+    {{ action.content|safe }}
+  {% endif %}
 </div>
