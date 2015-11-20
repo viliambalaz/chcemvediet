@@ -6,12 +6,13 @@
  % Context:
  %  -- color: string | undefined
  %  -- bg: string | undefined
+ %  -- border: string | undefined
  %  -- hover: string | undefined
  %
 {% endcomment %}
 
 
-{{ color }} {{ bg }} {{ hover }}
-<div class="sg-color {{ bg }}">
+{{ color }} {{ bg }} {{ border }} {{ hover }}
+<div class="sg-color {{ bg }} {{ border }}">
   <i class="chv-icon icon-ok {{ color }} {{ hover }}"></i>
 </div>
