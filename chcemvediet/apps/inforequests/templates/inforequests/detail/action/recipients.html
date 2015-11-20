@@ -11,7 +11,7 @@
 
 
 {% for recipient in action.email.recipients %}
-  <p class="chv-dense">
+  <p class="chv-semidense">
     {% if recipient.mail == action.email.received_for %}
       <b>{{ recipient.formatted }}</b>
     {% else %}
