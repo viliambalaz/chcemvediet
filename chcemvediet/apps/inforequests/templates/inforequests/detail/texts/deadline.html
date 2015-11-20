@@ -22,16 +22,19 @@
   na podanie odvolania
 {% endif %}
 &mdash;
-{% if not action.deadline.is_deadline_missed %}
-  Lehota uplynie {{ action.deadline.deadline_date }}.
-{% elif not action.deadline.is_snoozed %}
-  Lehota uplynula {{ action.deadline.deadline_date }}.
-{% elif not action.deadline.is_snooze_missed %}
-  Lehota uplynula {{ action.deadline.deadline_date }}.<br>
-  Uviedli ste, že ešte počkáte {{ action.deadline.snooze_in_calendar_days }} kalendárne dni od
-  uplynutia lehoty.
+{% if action.deadline.is_deadline_missed %}
+  <span class="chv-color-red">Lehota uplynula {{ action.deadline.deadline_date }}</span>.
 {% else %}
-  Lehota uplynula {{ action.deadline.deadline_date }}.<br>
-  Uviedli ste, že ešte počkáte {{ action.deadline.snooze_in_calendar_days }} kalendárne dni od
-  uplynutia lehoty, ale aj tie už uplynuli.
+  <span class="chv-color-green">Lehota uplynie {{ action.deadline.deadline_date }}</span>.
+{% endif %}
+{% if action.deadline.is_deadline_missed and action.deadline.is_snoozed %}
+  {% if action.deadline.is_snooze_missed %}
+    <br>
+    Uviedli ste, že ešte počkáte {{ action.deadline.snooze_in_calendar_days }} kalendárne dni od
+    uplynutia lehoty, ale aj tie už uplynuli.
+  {% else %}
+    <br>
+    Uviedli ste, že ešte počkáte {{ action.deadline.snooze_in_calendar_days }} kalendárne dni od
+    uplynutia lehoty.
+  {% endif %}
 {% endif %}
