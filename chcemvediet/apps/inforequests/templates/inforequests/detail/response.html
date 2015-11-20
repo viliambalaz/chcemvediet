@@ -11,14 +11,18 @@
 
 
 {% if not inforequest.closed %}
-  <h2>
-    <span class="chv-icon-stack">
-      <i class="chv-icon icon-circle"></i>
-      <i class="chv-icon chv-icon-inv chv-icon-half icon-attention"></i>
-    </span>
-    {% trans 'inforequests:detail:response:heading' %}
-  </h2>
-  <div class="text-center">
+  <div class="chv-bar chv-bar-red">
+    <div class="chv-bar-icon">
+      <span class="chv-icon-stack">
+        <i class="chv-icon icon-circle"></i>
+        <i class="chv-icon chv-icon-inv chv-icon-half icon-attention"></i>
+      </span>
+    </div>
+    <div class="chv-bar-heading">
+      {% trans 'inforequests:detail:response:heading' %}
+    </div>
+  </div>
+  <div class="text-center chv-bellow-1">
     {% if inforequest.has_undecided_emails %}
       {% include "inforequests/detail/texts/add_email.html" %}
       <a class="btn chv-btn-red"

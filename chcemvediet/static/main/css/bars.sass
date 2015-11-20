@@ -1,0 +1,53 @@
+
+.chv-bar
+  margin-bottom: ($chv-baseline / 2)
+  @include clearfix()
+
+.chv-bar-icon
+  float: left
+  width: $chv-bar-height
+  height: $chv-bar-height
+  line-height: $chv-bar-height
+  font-size: 2em
+  text-align: center
+
+.chv-bar-control
+  float: right
+  margin: 0 ($chv-bar-height * 0.1)
+  height: $chv-bar-height
+  line-height: $chv-bar-height
+
+.chv-bar-heading
+  padding-left: ($chv-bar-height * 1.3)
+  line-height: $chv-bar-height
+  font-size: $font-size-h2
+
+.chv-bar-text
+  padding-top: chv_baseline_fix($chv-fontsize-base, 1)
+  padding-left: ($chv-bar-height * 1.3)
+
+.chv-bar-blue
+  color: $chv-color-blue
+  background-color: $chv-color-blue-w
+  .chv-bar-icon
+    background-color: $chv-color-blue-ll
+    .chv-icon
+      color: $chv-color-white
+    .chv-icon.chv-icon-inv
+      color: $chv-color-blue-ll !important
+  .chv-bar-control
+    .chv-icon
+      color: $chv-color-blue-ll
+
+.chv-bar-red
+  color: $chv-color-red
+  background-color: $chv-color-red-w
+  .chv-bar-icon
+    background-color: $chv-color-red-l
+    .chv-icon
+      color: $chv-color-white
+    .chv-icon.chv-icon-inv
+      color: $chv-color-red-l !important
+  .chv-bar-control
+    .chv-icon
+      color: $chv-color-red-l

@@ -1,0 +1,41 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %
+{% endcomment %}
+
+
+<p class="text-center">{{ class }}</p>
+<div class="sg-specimen chv-scheme-white">
+  <div class="chv-bar {{ class }}">
+    <div class="chv-bar-icon">
+      <i class="chv-icon icon-ok"></i>
+    </div>
+    <div class="chv-bar-control">
+      <i class="chv-icon icon-down-dir"></i>
+    </div>
+    <div class="chv-bar-heading">
+      Lorem Ipsum
+    </div>
+  </div>
+</div>
+<div class="sg-specimen chv-scheme-white">
+  <div class="chv-indent">
+    <i class="chv-icon chv-icon-li chv-icon-lg chv-icon-flip-vertical icon-forward"></i>
+    <div class="chv-bar {{ class }}">
+      <div class="chv-bar-icon">
+        <i class="chv-icon icon-ok"></i>
+      </div>
+      <div class="chv-bar-control">
+        <i class="chv-icon icon-down-dir"></i>
+      </div>
+      <div class="chv-bar-text">
+        Lorem ipsum dolor sit amet.<br>
+        <span class="chv-color-gray">Sed do eiusmod tempor incididunt ut labore et.</span>
+      </div>
+    </div>
+  </div>
+</div>

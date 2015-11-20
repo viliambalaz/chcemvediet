@@ -9,11 +9,15 @@
 {% endcomment %}
 
 
-<h2>
-  {% include "main/snippets/icons/chv-horiz.html" %}
-  {% trans 'inforequests:detail:mainbranch:heading' %}
-</h2>
-<div>
+<div class="chv-bar chv-bar-blue">
+  <div class="chv-bar-icon">
+    {% include "main/snippets/icons/chv-horiz.html" %}
+  </div>
+  <div class="chv-bar-heading">
+    {% trans 'inforequests:detail:mainbranch:heading' %}
+  </div>
+</div>
+<div class="chv-above-1">
   {% with branch=inforequest.main_branch %}
     {% for action in branch.actions %}
       {% include "inforequests/detail/action/main.html" %}
