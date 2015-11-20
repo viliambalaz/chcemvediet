@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-18 12:18+0100\n"
+"POT-Creation-Date: 2015-11-20 12:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -699,13 +699,22 @@ msgid "inforequests:detail:action:snooze"
 msgstr "Počkať ešte 3 dni"
 
 msgid "inforequests:detail:action:clarification_response"
-msgstr "Odpoveď na výzvu na doplnenie žiadosti"
+msgstr "Doplnenie žiadosti"
 
 msgid "inforequests:detail:action:appeal"
 msgstr "Odvolanie"
 
 msgid "inforequests:detail:action:print"
 msgstr "Vytlačiť"
+
+msgid "inforequests:detail:action:subject"
+msgstr "Predmet"
+
+msgid "inforequests:detail:action:email_from"
+msgstr "Odosielateľ"
+
+msgid "inforequests:detail:action:email_to"
+msgstr "Adresát"
 
 msgid "inforequests:detail:action:legal_date"
 msgstr "Dátum úkonu"
@@ -725,15 +734,6 @@ msgstr "Lehota"
 msgid "inforequests:detail:action:file_number"
 msgstr "Číslo spisu"
 
-msgid "inforequests:detail:action:email_from"
-msgstr "Odosielateľ"
-
-msgid "inforequests:detail:action:email_to"
-msgstr "Adresát"
-
-msgid "inforequests:detail:action:subject"
-msgstr "Predmet"
-
 msgid "inforequests:detail:action:disclosure_level"
 msgstr "Miera sprístupnenia"
 
@@ -743,7 +743,10 @@ msgstr "Dôvod odmietnutia"
 msgid "inforequests:detail:action:attachments"
 msgstr "Prílohy"
 
-msgid "inforequests:detail:action:advanced_to"
+msgid "inforequests:detail:mainbranch:heading"
+msgstr "Priebeh infožiadosti"
+
+msgid "inforequests:detail:branch:sub:heading"
 msgstr "Nová povinná osoba"
 
 msgid "inforequests:detail:title"
@@ -752,29 +755,14 @@ msgstr "Detail žiadosti"
 msgid "inforequests:detail:heading"
 msgstr "Detail žiadosti"
 
-msgid "inforequests:detail:add_email_button"
-msgstr "Otvotiť e-mail"
+msgid "inforequests:detail:response:heading"
+msgstr "Nová aktivita"
 
-msgid "inforequests:detail:add_smail_button"
-msgstr "Prišla mi pošta"
+msgid "inforequests:detail:response:email:button"
+msgstr "Reagovať na e-mail"
 
-msgid "inforequests:detail:request:applicant"
-msgstr "Žiadateľ"
-
-msgid "inforequests:detail:request:obligee"
-msgstr "Inštitúcia"
-
-msgid "inforequests:detail:request:unique_email"
-msgstr "Unikátna emailová adresa"
-
-msgid "inforequests:detail:request:submission_date"
-msgstr "Dátum odoslania"
-
-msgid "inforequests:detail:request:subject"
-msgstr "Subjekt"
-
-msgid "inforequests:detail:request:content"
-msgstr "Obsah"
+msgid "inforequests:detail:response:smail:button"
+msgstr "Prišla ti pošta?"
 
 msgid "inforequests:index:closed:heading"
 msgstr "Uzavreté"
@@ -1040,9 +1028,6 @@ msgstr "Prihlásiť sa"
 msgid "account:login:heading"
 msgstr "Prihlásiť sa"
 
-msgid "account:why_register:heading"
-msgstr "Prečo sa zaregistrovať?"
-
 msgid "account:login:submit"
 msgstr "Prihlásiť sa"
 
@@ -1144,6 +1129,9 @@ msgstr "Prihlásiť pomocou Twittra"
 
 msgid "account:social_buttons:linkedin"
 msgstr "Prihlásiť pomocou LinkedInu"
+
+msgid "account:why_register:heading"
+msgstr "Prečo sa zaregistrovať?"
 
 msgid "account:verification_sent:title"
 msgstr "Overiť e-mailovú adresu"

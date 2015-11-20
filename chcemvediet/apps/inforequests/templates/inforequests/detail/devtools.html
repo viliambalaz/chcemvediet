@@ -9,7 +9,7 @@
 {% endcomment %}
 
 
-<h4>Mock Obligee Response</h4>
+<h3>Mock Obligee Response</h3>
 <p>
   Simulate a response from the obligee. It will be processed in a minute or two after sending it.
 </p>
@@ -25,7 +25,7 @@
 </form>
 
 {% if inforequest.main_branch.last_action.type != ACTION_TYPES.REQUEST %}
-  <h4>Undo the last action</h4>
+  <h3>Undo the last action</h3>
   <p>
     Select a branch to delete its last action. Notice that if you delete an advancement, all it's
     sub-branches will be deleted as well. All actions except requests and advanced requests may be
@@ -59,7 +59,7 @@
   </form>
 {% endif %}
 
-<h4>Push Inforequest in History</h4>
+<h3>Push Inforequest in History</h3>
 <p>
   Make the inforequest and all its related objects older by the given number of days. Use it to
   test deadlines.

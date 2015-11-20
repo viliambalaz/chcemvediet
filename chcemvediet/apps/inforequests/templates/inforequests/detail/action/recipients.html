@@ -1,0 +1,70 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- action: chcemvediet.apps.inforequests.models.Action
+ %
+{% endcomment %}
+
+
+{% for recipient in action.email.recipients %}
+  <p>
+    {% if recipient.mail == action.email.received_for %}
+      <b>{{ recipient.formatted }}</b>
+    {% else %}
+      <span>{{ recipient.formatted }}</span>
+    {% endif %}
+    {% if recipient.status == RECIPIENT_STATUSES.QUEUED %}
+      &nbsp;
+      <span class="label label-default pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_queued.txt" %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% elif recipient.status == RECIPIENT_STATUSES.REJECTED %}
+      &nbsp;
+      <span class="label label-danger pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_rejected.txt" %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% elif recipient.status == RECIPIENT_STATUSES.INVALID %}
+      &nbsp;
+      <span class="label label-danger pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_invalid.txt"   %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% elif recipient.status == RECIPIENT_STATUSES.SENT %}
+      &nbsp;
+      <span class="label label-info pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_sent.txt" %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% elif recipient.status == RECIPIENT_STATUSES.DELIVERED %}
+      &nbsp;
+      <span class="label label-success pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_delivered.txt" %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% elif recipient.status == RECIPIENT_STATUSES.OPENED %}
+      &nbsp;
+      <span class="label label-success pln-with-tooltip" data-toggle="tooltip"
+            data-placement="right" title="{% spaceless %}
+              {% include "inforequests/detail/tooltips/email_opened.txt" %}
+              {% endspaceless %}">
+        {{ recipient.get_status_display }}
+      </span>
+    {% endif %}
+  </p>
+{% endfor %}

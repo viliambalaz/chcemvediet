@@ -1,0 +1,107 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load method call_with from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- action: chcemvediet.apps.inforequests.models.Action
+ %  -- forloop
+ %
+{% endcomment %}
+
+
+<div id="a{{ action.pk }}">
+  {% with print_id=idgenerator.next col1="col-sm-3 col-md-2" col2="col-sm-9 col-md-10" %}
+    <div class="panel panel-border-gray">
+      <div class="panel-heading">
+        <div class="pull-right">
+          {% include "inforequests/detail/action/controls.html" %}
+        </div>
+        <h3>{{ action.get_type_display }}</h3>
+        {% if action.subject %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:subject' %}:</p>
+            <p class="{{ col2 }}"><strong>{{ action.subject }}</strong></p>
+          </div>
+        {% endif %}
+      </div>
+      <div class="panel-body chv-scheme-gray">
+        {% if action.email %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:email_from' %}:</p>
+            <p class="{{ col2 }}">{{ action.email.from_formatted }}</p>
+          </div>
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:email_to' %}:</p>
+            <div class="{{ col2 }}">{% include "inforequests/detail/action/recipients.html" %}</div>
+          </div>
+        {% endif %}
+        {% if action.legal_date %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:legal_date' %}:</p>
+            <p class="{{ col2 }}">{{ action.legal_date }}</p>
+          </div>
+        {% endif %}
+        {% if action.sent_date %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:sent_date' %}:</p>
+            <p class="{{ col2 }}">{{ action.sent_date }}</p>
+          </div>
+        {% endif %}
+        {% if action.delivered_date %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:delivered_date' %}:</p>
+            <p class="{{ col2 }}">{{ action.delivered_date }}</p>
+          </div>
+        {% endif %}
+        {% if action.type == ACTION_TYPES.EXTENSION %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:extension' %}:</p>
+            <p class="{{ col2 }}">{% include "inforequests/detail/texts/extension.html" %}</p>
+          </div>
+        {% endif %}
+        {% if forloop.last and action.deadline  %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:deadline' %}:</p>
+            <p class="{{ col2 }}">{% include "inforequests/detail/texts/deadline.html" %}</p>
+          </div>
+        {% endif %}
+        {% if action.file_number %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:file_number' %}:</p>
+            <p class="{{ col2 }}">{{ action.file_number }}</p>
+          </div>
+        {% endif %}
+        {% if action.disclosure_level %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:disclosure_level' %}:</p>
+            <p class="{{ col2 }}">{{ action.get_disclosure_level_display }}</p>
+          </div>
+        {% endif %}
+        {% if action.refusal_reason %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:refusal_reason' %}:</p>
+            <p class="{{ col2 }}">{{ action.get_refusal_reason_display }}</p>
+          </div>
+        {% endif %}
+        {% if action.attachments %}
+          <div class="row">
+            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:attachments' %}:</p>
+            <div class="{{ col2 }}">{% include "inforequests/detail/action/attachments.html" %}</div>
+          </div>
+        {% endif %}
+      </div>
+      {% if action.content %}
+        <div class="panel-body">
+          {% include "inforequests/detail/action/content.html" %}
+        </div>
+      {% endif %}
+    </div>
+  {% endwith %}
+  {% for sub_branch in inforequest|method:'branches_advanced_by'|call_with:action %}
+    {% include "inforequests/detail/branch/sub.html" with branch=sub_branch %}
+  {% endfor %}
+</div>

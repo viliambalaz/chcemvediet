@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %  -- action: chcemvediet.apps.inforequests.models.Action
+ %  -- print_id: string
+ %
+{% endcomment %}
+
+
+<div class="chv-action-content">
+  <div id="{{ print_id }}">
+    {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
+      <p class="chv-preline">{{ action.content }}</p>
+    {% elif action.content_type == action.CONTENT_TYPES.HTML %}
+      {{ action.content|safe }}
+    {% endif %}
+  </div>
+</div>

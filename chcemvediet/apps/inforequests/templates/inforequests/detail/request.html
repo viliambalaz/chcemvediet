@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load trans from i18n %}
 
 {% comment %}
  %
@@ -9,49 +8,25 @@
 {% endcomment %}
 
 
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:applicant' %}:</p>
-  <div class="col-sm-9">
-    <p>
-      {{ inforequest.applicant_name }}
-    </p>
-    <p>
-      {{ inforequest.applicant_street }}<br>
-      {{ inforequest.applicant_zip }} {{ inforequest.applicant_city }}
-    </p>
+<div class="panel panel-border-gray">
+  <div class="panel-body">
+    <ul class="chv-icon-ul">
+      <li>
+        <i class="chv-icon chv-icon-li chv-icon-lg icon-doc-inv"></i>
+        <strong>{{ inforequest.subject }}</strong>
+      </li>
+      <li>
+        <i class="chv-icon chv-icon-li chv-icon-lg icon-building"></i>
+        {{ inforequest.main_branch.historicalobligee.name }}
+      </li>
+      <li>
+        <i class="chv-icon chv-icon-li chv-icon-lg icon-user"></i>
+        {{ inforequest.applicant_name }}
+      </li>
+      <li>
+        <i class="chv-icon chv-icon-li chv-icon-lg icon-calendar"></i>
+        {{ inforequest.submission_date }}
+      </li>
+    </ul>
   </div>
-</div>
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:obligee' %}:</p>
-  <div class="col-sm-9">
-    <p>
-      {{ inforequest.main_branch.historicalobligee.official_name }}
-    </p>
-    <p>
-      {{ inforequest.main_branch.historicalobligee.street }}<br>
-      {{ inforequest.main_branch.historicalobligee.zip }}
-      {{ inforequest.main_branch.historicalobligee.city }}
-    </p>
-  </div>
-</div>
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:unique_email' %}:</p>
-  <p class="col-sm-9">{{ inforequest.unique_email }}
-    <span class="glyphicon glyphicon-question-sign pln-with-tooltip" data-toggle="tooltip"
-       data-placement="right" title="{% spaceless %}
-         {% include "inforequests/detail/tooltips/unique_email.txt" %}
-         {% endspaceless %}"></span>
-  </p>
-</div>
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:submission_date' %}:</p>
-  <p class="col-sm-9">{{ inforequest.submission_date }}</p>
-</div>
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:subject' %}:</p>
-  <p class="col-sm-9">{{ inforequest.subject }}</p>
-</div>
-<div class="row">
-  <p class="col-sm-3 text-right">{% trans 'inforequests:detail:request:content' %}:</p>
-  <p class="col-sm-9 chv-prewrap">{{ inforequest.content }}</p>
 </div>

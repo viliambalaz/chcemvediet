@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %
+{% endcomment %}
+
+
+<h2>
+  {% include "main/snippets/icons/chv-horiz.html" %}
+  {% trans 'inforequests:detail:mainbranch:heading' %}
+</h2>
+<div>
+  {% with branch=inforequest.main_branch %}
+    {% for action in branch.actions %}
+      {% include "inforequests/detail/action/main.html" %}
+    {% endfor %}
+  {% endwith %}
+</div>

@@ -1,0 +1,40 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %
+{% endcomment %}
+
+
+{% if not inforequest.closed %}
+  <h2>
+    <span class="chv-icon-stack">
+      <i class="chv-icon icon-circle"></i>
+      <i class="chv-icon chv-icon-inv chv-icon-half icon-attention"></i>
+    </span>
+    {% trans 'inforequests:detail:response:heading' %}
+  </h2>
+  <div class="text-center">
+    {% if inforequest.has_undecided_emails %}
+      {% include "inforequests/detail/texts/add_email.html" %}
+      <a class="btn chv-btn-red"
+          href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
+        <i class="chv-icon chv-icon-lg icon-at"></i>
+        &nbsp;
+        {% trans 'inforequests:detail:response:email:button' %}
+      </a>
+    {% else %}
+      {% include "inforequests/detail/texts/add_smail.html" %}
+      <a class="btn chv-btn-red"
+          href="{% url "inforequests:obligee_action" inforequest=inforequest %}">
+        <i class="chv-icon chv-icon-lg icon-mail"></i>
+        &nbsp;
+        {% trans 'inforequests:detail:response:smail:button' %}
+      </a>
+    {% endif %}
+  </div>
+{% endif %}
