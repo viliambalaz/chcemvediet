@@ -31,66 +31,66 @@
       <div class="panel-body chv-scheme-gray">
         {% if action.email %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:email_from' %}:</p>
-            <p class="{{ col2 }}">{{ action.email.from_formatted }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:email_from' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.email.from_formatted }}</p>
           </div>
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:email_to' %}:</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:email_to' %}:</p>
             <div class="{{ col2 }}">{% include "inforequests/detail/action/recipients.html" %}</div>
           </div>
         {% endif %}
         {% if action.legal_date %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:legal_date' %}:</p>
-            <p class="{{ col2 }}">{{ action.legal_date }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:legal_date' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.legal_date }}</p>
           </div>
         {% endif %}
         {% if action.sent_date %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:sent_date' %}:</p>
-            <p class="{{ col2 }}">{{ action.sent_date }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:sent_date' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.sent_date }}</p>
           </div>
         {% endif %}
         {% if action.delivered_date %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:delivered_date' %}:</p>
-            <p class="{{ col2 }}">{{ action.delivered_date }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:delivered_date' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.delivered_date }}</p>
           </div>
         {% endif %}
         {% if action.type == ACTION_TYPES.EXTENSION %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:extension' %}:</p>
-            <p class="{{ col2 }}">{% include "inforequests/detail/texts/extension.html" %}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:extension' %}:</p>
+            <p class="{{ col2 }} chv-dense">{% include "inforequests/detail/texts/extension.html" %}</p>
           </div>
         {% endif %}
         {% if forloop.last and action.deadline  %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:deadline' %}:</p>
-            <p class="{{ col2 }}">{% include "inforequests/detail/texts/deadline.html" %}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:deadline' %}:</p>
+            <p class="{{ col2 }} chv-dense">{% include "inforequests/detail/texts/deadline.html" %}</p>
           </div>
         {% endif %}
         {% if action.file_number %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:file_number' %}:</p>
-            <p class="{{ col2 }}">{{ action.file_number }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:file_number' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.file_number }}</p>
           </div>
         {% endif %}
         {% if action.disclosure_level %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:disclosure_level' %}:</p>
-            <p class="{{ col2 }}">{{ action.get_disclosure_level_display }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:disclosure_level' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.get_disclosure_level_display }}</p>
           </div>
         {% endif %}
         {% if action.refusal_reason %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:refusal_reason' %}:</p>
-            <p class="{{ col2 }}">{{ action.get_refusal_reason_display }}</p>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:refusal_reason' %}:</p>
+            <p class="{{ col2 }} chv-dense">{{ action.get_refusal_reason_display }}</p>
           </div>
         {% endif %}
         {% if action.attachments %}
           <div class="row">
-            <p class="{{ col1 }}">{% trans 'inforequests:detail:action:attachments' %}:</p>
-            <div class="{{ col2 }}">{% include "inforequests/detail/action/attachments.html" %}</div>
+            <p class="{{ col1 }} chv-dense">{% trans 'inforequests:detail:action:attachments' %}:</p>
+            <div class="{{ col2 }} chv-dense">{% include "inforequests/detail/action/attachments.html" %}</div>
           </div>
         {% endif %}
       </div>
