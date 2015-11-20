@@ -1,0 +1,51 @@
+
+# Fixed alternative month names used by "E" format character of Django ``date`` template filter.
+# Default Django locales have them wrong.
+
+msgctxt "alt. month"
+msgid "January"
+msgstr "januára"
+
+msgctxt "alt. month"
+msgid "February"
+msgstr "februára"
+
+msgctxt "alt. month"
+msgid "March"
+msgstr "marca"
+
+msgctxt "alt. month"
+msgid "April"
+msgstr "apríla"
+
+msgctxt "alt. month"
+msgid "May"
+msgstr "mája"
+
+msgctxt "alt. month"
+msgid "June"
+msgstr "júna"
+
+msgctxt "alt. month"
+msgid "July"
+msgstr "júla"
+
+msgctxt "alt. month"
+msgid "August"
+msgstr "augusta"
+
+msgctxt "alt. month"
+msgid "September"
+msgstr "septembra"
+
+msgctxt "alt. month"
+msgid "October"
+msgstr "októbra"
+
+msgctxt "alt. month"
+msgid "November"
+msgstr "novembra"
+
+msgctxt "alt. month"
+msgid "December"
+msgstr "decembra"

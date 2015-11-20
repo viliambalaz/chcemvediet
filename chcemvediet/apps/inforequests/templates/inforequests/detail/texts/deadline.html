@@ -10,9 +10,9 @@
 
 
 {% if action.deadline.is_in_calendar_days %}
-  {{ action.deadline.value }} kalendárnych dni od {{ action.deadline.base_date }}
+  {{ action.deadline.value }} kalendárnych dni od {{ action.deadline.base_date|date:"j. E Y" }}
 {% else %}
-  {{ action.deadline.value }} pracovných dni od {{ action.deadline.base_date }}
+  {{ action.deadline.value }} pracovných dni od {{ action.deadline.base_date|date:"j. E Y" }}
 {% endif %}
 {% if action.deadline.is_obligee_deadline %}
   na odpoveď od inštitúcie
@@ -23,9 +23,13 @@
 {% endif %}
 &mdash;
 {% if action.deadline.is_deadline_missed %}
-  <span class="chv-color-red">Lehota uplynula {{ action.deadline.deadline_date }}</span>.
+  <span class="chv-color-red">
+    Lehota uplynula {{ action.deadline.deadline_date|date:"j. E Y" }}.
+  </span>
 {% else %}
-  <span class="chv-color-green">Lehota uplynie {{ action.deadline.deadline_date }}</span>.
+  <span class="chv-color-green">
+    Lehota uplynie {{ action.deadline.deadline_date|date:"j. E Y" }}.
+  </span>
 {% endif %}
 {% if action.deadline.is_deadline_missed and action.deadline.is_snoozed %}
   {% if action.deadline.is_snooze_missed %}

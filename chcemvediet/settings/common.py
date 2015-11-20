@@ -22,6 +22,9 @@ LANGUAGES = (
     (u'sk', u'Slovensky'),
     (u'en', u'English'),
     )
+LOCALE_PATHS = (
+    os.path.join(PROJECT_PATH, u'chcemvediet/locale/overrides'),
+    )
 
 INSTALLED_APPS = (
     # Project core app
