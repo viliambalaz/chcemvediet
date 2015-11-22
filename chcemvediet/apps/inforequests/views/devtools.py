@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 
 from poleno.mail.models import Message, Recipient
+from poleno.utils.urls import reverse
 from poleno.utils.views import login_required
 from chcemvediet.apps.inforequests.models import Inforequest, Action
 
@@ -104,3 +105,14 @@ def devtools_push_history(request, inforequest_pk):
         messages.error(request, u'Invalid number of days.')
 
     return HttpResponseRedirect(inforequest.get_absolute_url())
+
+@require_http_methods([u'POST'])
+@transaction.atomic
+@login_required
+def devtools_delete(request, inforequest_pk):
+    assert settings.DEBUG
+
+    inforequest = Inforequest.objects.owned_by(request.user).get_or_404(pk=inforequest_pk)
+    inforequest.delete()
+
+    return HttpResponseRedirect(reverse(u'inforequests:index'))

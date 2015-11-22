@@ -14,3 +14,4 @@ from .attachment import attachment_download
 from .devtools import devtools_mock_response
 from .devtools import devtools_undo_last_action
 from .devtools import devtools_push_history
+from .devtools import devtools_delete

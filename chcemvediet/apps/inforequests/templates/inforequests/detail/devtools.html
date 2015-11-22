@@ -16,12 +16,12 @@
 <form action="{% url 'inforequests:devtools_mock_response' inforequest=inforequest %}"
       method="post">
   {% csrf_token %}
-  <p>
+  <div>
     <textarea name="content" class="form-control" placeholder="Response content"></textarea>
-  </p>
-  <p class="text-right">
+  </div>
+  <div class="text-right">
     <button type="submit" class="btn btn-primary">Send</button>
-  </p>
+  </div>
 </form>
 
 {% if inforequest.main_branch.last_action.type != ACTION_TYPES.REQUEST %}
@@ -34,7 +34,7 @@
   <form action="{% url 'inforequests:devtools_undo_last_action' inforequest=inforequest %}"
         method="post">
     {% csrf_token %}
-    <p>
+    <div>
       <select name="branch" class="form-control">
         {% for branch in inforequest.branches %}
           {% if branch.last_action.type == ACTION_TYPES.REQUEST %}
@@ -52,10 +52,10 @@
           {% endif %}
         {% endfor %}
       </select>
-    </p>
-    <p class="text-right">
+    </div>
+    <div class="text-right">
       <button type="submit" class="btn btn-primary">Undo</button>
-    </p>
+    </div>
   </form>
 {% endif %}
 
@@ -69,7 +69,18 @@
   <p>
     <input type="number" name="days" class="form-control" placeholder="Days" min="-200" max="200">
   </p>
-  <p class="text-right">
+  <div class="text-right">
     <button type="submit" class="btn btn-primary">Push</button>
-  </p>
+  </div>
+</form>
+
+<h3>Delete Inforequest</h3>
+<p>
+  Delete the inforequest and all its related objects.
+</p>
+<form action="{% url 'inforequests:devtools_delete' inforequest=inforequest %}" method="post">
+  {% csrf_token %}
+  <div class="text-right">
+    <button type="submit" class="btn btn-primary">Delete</button>
+  </div>
 </form>

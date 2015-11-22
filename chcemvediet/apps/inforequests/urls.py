@@ -47,6 +47,7 @@ if settings.DEBUG: # pragma: no cover
         url(lazy_format(r'^devtools/mock-response/{inforequest_pk}$', **parts),    views.devtools_mock_response,    name=u'devtools_mock_response'),
         url(lazy_format(r'^devtools/undo-last-action/{inforequest_pk}$', **parts), views.devtools_undo_last_action, name=u'devtools_undo_last_action'),
         url(lazy_format(r'^devtools/push-history/{inforequest_pk}$', **parts),     views.devtools_push_history,     name=u'devtools_push_history'),
+        url(lazy_format(r'^devtools/delete/{inforequest_pk}$', **parts),           views.devtools_delete,           name=u'devtools_delete'),
     )
 
 
@@ -66,6 +67,7 @@ def inforequest_adaptor_slug_and_pk(inforequest):
 @reverse_adaptor(u'inforequests:devtools_mock_response', u'inforequest')
 @reverse_adaptor(u'inforequests:devtools_undo_last_action', u'inforequest')
 @reverse_adaptor(u'inforequests:devtools_push_history', u'inforequest')
+@reverse_adaptor(u'inforequests:devtools_delete', u'inforequest')
 def inforequest_adaptor_pk(inforequest):
     return dict(
             inforequest_pk=inforequest.pk,
