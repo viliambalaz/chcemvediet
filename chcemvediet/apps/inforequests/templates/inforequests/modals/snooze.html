@@ -20,20 +20,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h3>{% trans 'inforequests:modals:snooze:heading' %}</h3>
+        <h2>{% trans 'inforequests:modals:snooze:heading' %}</h2>
       </div>
       <div class="modal-body">
         {% include "inforequests/modals/texts/snooze.html" %}
-        <div>
-          {% include "main/forms/form_horizontal.html" %}
-        </div>
+        {% include "main/forms/form_horizontal.html" %}
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" name="button" value="snooze">
           {% trans 'inforequests:modals:snooze:snooze' %}
         </button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          <span class="glyphicon glyphicon-remove"></span> {% trans 'inforequests:modals:close' %}
+        <button type="button" class="btn btn-link" data-dismiss="modal">
+          <i class="chv-icon icon-cancel"></i>
+          &nbsp;
+          {% trans 'inforequests:modals:close' %}
         </button>
       </div>
     </div>

@@ -16,8 +16,8 @@
   {% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name_dative }}{% endif %}
   bola {{ action.deadline.value }}
   {% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
-  dni od {{ action.deadline.base_date }}.
-  Lehota uplynula {{ action.deadline.deadline_date }}.
+  dni od {{ action.deadline.base_date|date:"j. E Y" }}.
+  Lehota uplynula {{ action.deadline.deadline_date|date:"j. E Y" }}.
   Od vtedy prešlo {{ action.deadline.calendar_days_behind }} kalendárnych dni.
 </p>
 <p>
