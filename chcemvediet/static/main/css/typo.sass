@@ -9,9 +9,13 @@
 @mixin chv-baseline($fontsize, $lead: 1, $above: 0, $below: 0)
   $fix: chv_baseline_fix($fontsize, $lead)
   padding-top: ($fix + $above * $chv-baseline)
-  padding-bottom: 0
   margin-top: 0
-  margin-bottom: ($below * $chv-baseline - $fix)
+  @if $below * $chv-baseline - $fix >= 0
+    padding-bottom: ($below * $chv-baseline - $fix)
+    margin-bottom: 0
+  @else
+    padding-bottom: 0
+    margin-bottom: ($below * $chv-baseline - $fix)
   font-size: $fontsize
   line-height: $lead * $chv-baseline
 
@@ -71,6 +75,12 @@ a, .btn-link
   text-decoration: none
   &:focus, &:hover
     text-decoration: none
+
+//
+// Override bootstrap close button line height
+//
+.close
+  line-height: $chv-baseline
 
 //
 // Simple grid overlay for baseline visualization

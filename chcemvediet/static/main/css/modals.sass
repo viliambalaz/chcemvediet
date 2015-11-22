@@ -4,4 +4,5 @@
   padding: $chv-baseline $chv-baseline 0 $chv-baseline
 
 .modal-footer .btn + .btn
-  margin-bottom: 8px
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
+  margin-bottom: (13px - $fix)
