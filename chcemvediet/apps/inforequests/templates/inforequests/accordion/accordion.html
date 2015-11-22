@@ -10,69 +10,75 @@
 {% endcomment %}
 
 
-<h4>{% trans 'inforequests:accordion:heading' %}</h4>
-<div id="accordion-actions" class="panel-group">
-  {% for action in last_action.action_path %}
-    <div class="panel panel-default">
-      <div class="panel-heading chv-pointer" data-toggle="collapse"
-           data-parent="#accordion-actions" data-target="#accordion-action-{{ action.pk }}">
-        <h4 class="panel-title">
-          <a href="#accordion-action-{{ action.pk }}" data-toggle="collapse"
-             data-parent="#accordion-actions">
-            {{ action.get_type_display }}
-          </a>
-        </h4>
-      </div>
-      <div id="accordion-action-{{ action.pk }}" class="panel-collapse collapse">
-        <div class="panel-body">
-          {% if action.legal_date %}
-            <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
-            {{ action.legal_date }}<br>
-          {% endif %}
-          {% if action.type == ACTION_TYPES.EXTENSION %}
-            <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
-            {% include "inforequests/accordion/texts/extension.html" %}<br>
-          {% endif %}
-          {% if action.file_number %}
-            <strong>{% trans 'inforequests:accordion:action:file_number' %}:</strong>
-            {{ action.file_number }}<br>
-          {% endif %}
-          {% if action.subject %}
-            <strong>{% trans 'inforequests:accordion:action:subject' %}:</strong>
-            {{ action.subject }}<br>
-          {% endif %}
-          {% if action.disclosure_level %}
-            <strong>{% trans 'inforequests:accordion:action:disclosure_level' %}:</strong>
-            {{ action.get_disclosure_level_display }}<br>
-          {% endif %}
-          {% if action.refusal_reason %}
-            <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
-            {{ action.get_refusal_reason_display }}<br>
-          {% endif %}
-          {% if action.attachments %}
-            <div class="pull-left form-control-static">
-              <strong>{% trans 'inforequests:accordion:action:attachments' %}:</strong>&nbsp;
-            </div>
-            <div class="pln-attachments clearfix">
-              {% for attachment in action.attachments %}
-                <div class="pln-attachment">
-                  <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
-                    {{ attachment.name }}
-                  </a>
+<h3>{% trans 'inforequests:accordion:heading' %}</h3>
+{% with accordion_id=idgenerator.next %}
+  <div id="{{ accordion_id }}" class="panel-group">
+    {% for action in last_action.action_path %}
+      {% with collapse_id=idgenerator.next %}
+        <div class="panel panel-default">
+          <div class="panel-heading chv-pointer" data-toggle="collapse"
+               data-parent="#{{ accordion_id }}" data-target="#{{ collapse_id }}">
+            <h4>
+              <i class="chv-icon icon-down-dir pull-right"></i>
+              {{ action.get_type_display }}
+            </h4>
+          </div>
+          <div id="{{ collapse_id }}" class="panel-collapse collapse">
+            <div class="panel-body">
+              {% if action.legal_date %}
+                <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
+                {{ action.legal_date }}<br>
+              {% endif %}
+              {% if action.type == ACTION_TYPES.EXTENSION %}
+                <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
+                {% include "inforequests/accordion/texts/extension.html" %}<br>
+              {% endif %}
+              {% if action.file_number %}
+                <strong>{% trans 'inforequests:accordion:action:file_number' %}:</strong>
+                {{ action.file_number }}<br>
+              {% endif %}
+              {% if action.subject %}
+                <strong>{% trans 'inforequests:accordion:action:subject' %}:</strong>
+                {{ action.subject }}<br>
+              {% endif %}
+              {% if action.disclosure_level %}
+                <strong>{% trans 'inforequests:accordion:action:disclosure_level' %}:</strong>
+                {{ action.get_disclosure_level_display }}<br>
+              {% endif %}
+              {% if action.refusal_reason %}
+                <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
+                {{ action.get_refusal_reason_display }}<br>
+              {% endif %}
+              {% if action.attachments %}
+                <div class="pln-attachments">
+                  <div class="pln-attachments-controls">
+                    <div class="form-control-static">
+                      <strong>{% trans 'inforequests:accordion:action:attachments' %}:&nbsp;</strong>
+                    </div>
+                  </div>
+                  <div class="pln-attachments-list">
+                    {% for attachment in action.attachments %}
+                      <div class="pln-attachment">
+                        <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+                          {{ attachment.name }}
+                        </a>
+                      </div>
+                    {% endfor %}
+                  </div>
                 </div>
-              {% endfor %}
+              {% endif %}
+              {% if action.content %}
+                <br>
+                {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
+                  <p class="chv-preline">{{ action.content }}</p>
+                {% elif action.content_type == action.CONTENT_TYPES.HTML %}
+                  {{ action.content|safe }}
+                {% endif %}
+              {% endif %}
             </div>
-          {% endif %}
-          {% if action.content %}
-            <br>
-            {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
-              <p class="chv-preline">{{ action.content }}</p>
-            {% elif action.content_type == action.CONTENT_TYPES.HTML %}
-              {{ action.content|safe }}
-            {% endif %}
-          {% endif %}
+          </div>
         </div>
-      </div>
-    </div>
-  {% endfor %}
-</div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+{% endwith %}
