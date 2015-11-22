@@ -9,20 +9,14 @@
 {% endcomment %}
 
 
-{% with inforequest=branch.inforequest action=branch.last_action %}
-  {% with sub_branches=inforequest|method:'branches_advanced_by'|call_with:action %}
-    {% if sub_branches %}
-      <ul class="chv-icon-ul">
-        {% for sub_branch in sub_branches %}
-          <li>
-            <i class="chv-icon chv-icon-li icon-forward"></i>
-            {{ sub_branch.historicalobligee.name }}
-            {% with branch=sub_branch %}
-              {% include "inforequests/index/tables/inforequests_advanced.html" %}
-            {% endwith %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-{% endwith %}
+<ul class="chv-icon-ul">
+  {% for action in branch.actions %}
+    {% for sub_branch in branch.inforequest|method:'branches_advanced_by'|call_with:action %}
+      <li>
+        <i class="chv-icon chv-icon-li icon-forward chv-icon-flip-vertical"></i>
+        {{ sub_branch.historicalobligee.name }}
+        {% include "inforequests/index/tables/inforequests_advanced.html" with branch=sub_branch %}
+      </li>
+    {% endfor %}
+  {% endfor %}
+</ul>
