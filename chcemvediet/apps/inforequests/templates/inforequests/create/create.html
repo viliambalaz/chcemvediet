@@ -47,11 +47,7 @@
             {% trans 'inforequests:create:applicant_label' %}
           </label>
           <div class="col-sm-9">
-            {% with name=user.get_full_name street=user.profile.street %}
-              {% with zip=user.profile.zip city=user.profile.city %}
-                {% include "inforequests/create/snippets/applicant_field.html" %}
-              {% endwith %}
-            {% endwith %}
+            {% include "main/snippets/fields/applicant.html" with applicant=user %}
           </div>
         </div>
         {% include "main/forms/form_horizontal.html" %}

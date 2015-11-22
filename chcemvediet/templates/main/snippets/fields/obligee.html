@@ -1,0 +1,18 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- obligee: chcemvediet.apps.obligees.models.Obligee
+ %
+{% endcomment %}
+
+
+<div class="chv-info-field">
+  <div class="chv-info-field-icon">
+    <i class="chv-icon icon-building chv-color-blue-ll"></i>
+  </div>
+  {{ obligee.official_name }}<br>
+  {{ obligee.street }}<br>
+  {{ obligee.zip }} {{ obligee.city }}<br>
+</div>

@@ -7,12 +7,12 @@
 .input-group,
 .form-control,
 .btn,
-  margin-top: -2px
-  margin-bottom: 8px
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
+  margin-top: ($fix - 7px)
+  margin-bottom: (13px - $fix)
 
 .control-label.control-label
-  padding-top: 5px
-  padding-bottom: 5px
+  @include chv-baseline($chv-fontsize-base, 1, 0, 0.5)
   font-weight: normal
 
 .form-horizontal
@@ -84,22 +84,21 @@
   margin-bottom: 14px
 
 //
-// Applicant field
+// Static info field used for applicant and obligee static adresses
 //
 
-.chv-applicant-field
+.chv-info-field
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
   position: relative
-  padding-top: ($padding-base-vertical + 1px)
-  padding-bottom: ($padding-base-vertical + 1px)
+  padding-top: $fix
+  padding-bottom: ($chv-baseline * 0.5 - $fix)
   padding-left: ($chv-baseline * 3.5)
   padding-right: ($padding-base-horizontal + 1px)
-  margin-top: -2px
-  margin-bottom: 8px
   background-color: $chv-color-blue-w
   @media(min-width:$screen-sm-min)
     width: 300px
     max-width: 100%
-.chv-applicant-field-icon
+.chv-info-field-icon
   position: absolute
   top: 50%
   left: ($chv-baseline * 0.75)

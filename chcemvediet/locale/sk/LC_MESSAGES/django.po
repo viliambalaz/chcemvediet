@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-20 12:47+0100\n"
+"POT-Creation-Date: 2015-11-22 12:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -662,6 +662,9 @@ msgstr "Žiadateľ"
 msgid "inforequests:clarification_response:obligee"
 msgstr "Inštitúcia"
 
+msgid "inforequests:clarification_response:obligee_email"
+msgstr "E-mail"
+
 msgid "inforequests:clarification_response:subject"
 msgstr "Predmet"
 
@@ -950,9 +953,6 @@ msgstr "E-mail"
 msgid "wizards:wizard:print"
 msgstr "Vytlačiť"
 
-msgid "wizards:wizard:save"
-msgstr "Uložiť"
-
 msgid "wizards:wizard:prev"
 msgstr "Späť"
 
@@ -961,6 +961,9 @@ msgstr "Dokončiť"
 
 msgid "wizards:wizard:next"
 msgstr "Ďalej"
+
+msgid "wizards:wizard:save"
+msgstr "Uložiť"
 
 msgid "wizards:wizard:cancel"
 msgstr "Zrušiť"
