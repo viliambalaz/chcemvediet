@@ -23,7 +23,9 @@
   font-size: $font-size-h2
 
 .chv-bar-text
-  padding-top: chv_baseline_fix($chv-fontsize-base, 1)
+  $fix: chv_baseline_fix($chv-fontsize-base, 1)
+  padding-top: $fix
+  padding-bottom: ($chv-baseline * 0.5 - $fix)
   padding-left: ($chv-bar-height * 1.3)
 
 .chv-bar-blue
