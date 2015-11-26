@@ -55,7 +55,8 @@ class NotCategorized(ObligeeActionStep):
                 widget=forms.Textarea(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:NotCategorized:help_request:placeholder'),
-                    u'class': u'chv-visible-if-wants-help',
+                    u'class': u'pln-autosize chv-visible-if-wants-help',
+                    u'cols': u'', u'rows': u'',
                     }),
                 )
 
@@ -193,6 +194,8 @@ class InvalidReversion(ObligeeActionStep):
                 widget=forms.Textarea(attrs={
                     u'placeholder':
                         _(u'inforequests:obligee_action:InvalidReversion:help_request:placeholder'),
+                    u'class': u'pln-autosize',
+                    u'cols': u'', u'rows': u'',
                     }),
                 )
 
