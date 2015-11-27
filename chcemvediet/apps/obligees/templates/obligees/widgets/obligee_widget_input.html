@@ -15,7 +15,9 @@
 <div class="chv-obligee-widget-input">
   <div class="input-group">
     <input {% for k, v in input_attrs.items %}{{ k }}="{{ v }}" {% endfor %}/>
-    <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+    <span class="input-group-addon">
+      <i class="chv-icon icon-search"></i>
+    </span>
     {% if allow_delete %}
       <span class="input-group-addon">
         <button class="close chv-obligee-widget-del">&times;</button>
