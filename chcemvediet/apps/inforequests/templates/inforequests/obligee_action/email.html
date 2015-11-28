@@ -23,7 +23,7 @@
       </h4>
     </div>
     <div id="{{ collapse_id }}" class="panel-collapse collapse {{ step.is_first|yes:"in" }}">
-      <div class="panel-body">
+      <div class="panel-body panel-body-max-height">
         <div class="row">
           <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
           <p class="col-sm-9 chv-semidense">{{ email.subject }}</p>
