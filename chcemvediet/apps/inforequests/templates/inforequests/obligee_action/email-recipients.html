@@ -1,0 +1,21 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionStep
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message
+ %
+{% endcomment %}
+
+
+{% for recipient in email.recipients %}
+  {% if recipient.mail == email.received_for %}
+    <b>{{ recipient.formatted }}</b>
+  {% else %}
+    <span>{{ recipient.formatted }}</span>
+  {% endif %}
+  <br>
+{% endfor %}

@@ -1,0 +1,23 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionStep
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message
+ %
+{% endcomment %}
+
+
+<div class="pln-attachments-list">
+  {% for attachment in email.attachments %}
+    <div class="pln-attachment">
+      <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+        {{ attachment.name }}
+      </a>
+    </div>
+  {% endfor %}
+</div>

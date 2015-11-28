@@ -1,6 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
-{% load url squeeze yes from poleno.utils %}
+{% load yes from poleno.utils %}
 
 {% comment %}
  %
@@ -8,70 +8,46 @@
  %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
  %  -- step: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionStep
  %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
- %  -- email: poleno.mail.models.Message | None
+ %  -- email: poleno.mail.models.Message
  %
 {% endcomment %}
 
 
-<div id="#accordion-email" class="panel-group">
+{% with collapse_id=idgenerator.next %}
   <div class="panel panel-default">
     <div class="panel-heading chv-pointer" data-toggle="collapse"
-         data-parent="#accordion-email" data-target="#accordion-email-{{ email.pk }}">
-      <h4 class="panel-title">
-        <a href="#accordion-email-{{ email.pk }}" data-toggle="collapse"
-           data-parent="#accordion-email">
-          {% trans 'inforequests:obligee_action:email:email:heading' %}
-        </a>
+         data-target="#{{ collapse_id }}">
+      <h4>
+        <i class="chv-icon icon-down-dir pull-right"></i>
+        {% trans 'inforequests:obligee_action:email:email:heading' %}
       </h4>
     </div>
-    <div id="accordion-email-{{ email.pk }}"
-         class="panel-collapse collapse {{ step.is_first|yes:"in" }}">
+    <div id="{{ collapse_id }}" class="panel-collapse collapse {{ step.is_first|yes:"in" }}">
       <div class="panel-body">
         <div class="row">
-          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
-          <p class="col-sm-9">{{ email.subject }}</p>
+          <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:subject' %}:</p>
+          <p class="col-sm-9 chv-semidense">{{ email.subject }}</p>
         </div>
         <div class="row">
-          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:from' %}:</p>
-          <p class="col-sm-9">{{ email.from_formatted }}</p>
+          <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:from' %}:</p>
+          <p class="col-sm-9 chv-semidense">{{ email.from_formatted }}</p>
         </div>
         <div class="row">
-          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:to' %}:</p>
-          <p class="col-sm-9">
-            {% for recipient in email.recipients %}
-              {% if recipient.mail == email.received_for %}
-                <b>{{ recipient.formatted }}</b>
-              {% else %}
-                <span>{{ recipient.formatted }}</span>
-              {% endif %}
-              <br>
-            {% endfor %}
-          </p>
+          <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:to' %}:</p>
+          <p class="col-sm-9 chv-semidense">{% include "inforequests/obligee_action/email-recipients.html" %}</p>
         </div>
         <div class="row">
-          <p class="col-sm-3 text-right">{% trans 'inforequests:obligee_action:email:processed' %}:</p>
-          <p class="col-sm-9">{{ email.processed }}</p>
+          <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:processed' %}:</p>
+          <p class="col-sm-9 chv-semidense">{{ email.processed|date:'j. F Y' }}</p>
         </div>
         {% if email.attachments %}
           <div class="row">
-            <div class="col-sm-3 text-right form-control-static">
-              {% trans 'inforequests:obligee_action:email:attachments' %}:
-            </div>
-            <div class="col-sm-9">
-              <div class="pln-attachments clearfix">
-                {% for attachment in email.attachments %}
-                  <div class="pln-attachment">
-                    <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
-                      {{ attachment.name }}
-                    </a>
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
+            <p class="col-sm-3 chv-dense">{% trans 'inforequests:obligee_action:email:attachments' %}:</p>
+            <div class="col-sm-9 chv-semidense">{% include "inforequests/obligee_action/email-attachments.html" %}</div>
           </div>
         {% endif %}
         <p class="chv-preline">{{ email.text }}</p>
       </div>
     </div>
   </div>
-</div>
+{% endwith %}
