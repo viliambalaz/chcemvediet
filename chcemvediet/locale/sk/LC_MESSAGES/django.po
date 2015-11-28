@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-22 12:38+0100\n"
+"POT-Creation-Date: 2015-11-28 17:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -952,6 +952,10 @@ msgstr "E-mail"
 
 msgid "wizards:wizard:print"
 msgstr "Vytlačiť"
+
+#, python-format
+msgid "wizards:wizard:steps %(index)s %(count)s"
+msgstr "Krok %(index)s / %(count)s"
 
 msgid "wizards:wizard:prev"
 msgstr "Späť"

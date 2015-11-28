@@ -1,6 +1,7 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
-{% load trans from i18n %}
+{% load trans blocktrans from i18n %}
+{% load eq yes no from poleno.utils %}
 
 {% comment %}
  %
@@ -18,26 +19,29 @@
       <h1>
         {% block header-heading %}{% endblock %}
       </h1>
-      {% block header-steps %}
-        {% if wizard.steps|length > 1 %}
-          <p>
-            {% for other_step in wizard.steps %}
-              <a class="pln-with-tooltip" href="{{ other_step.get_url }}" data-toggle="tooltip"
-                 title="{{ other_step.label }}">
-                {% if other_step == step %}
-                  <span class="label label-info">{{ other_step.index|add:1 }}</span>
-                {% elif other_step.accessible  %}
-                  <span class="label label-success">{{ other_step.index|add:1 }}</span>
-                {% else %}
-                  <span class="label label-default">{{ other_step.index|add:1 }}</span>
-                {% endif %}
-              </a>
-            {% endfor %}
-          </p>
-        {% endif %}
-      {% endblock %}
     {% endblock %}
     {% block body-plus-footer %}
+      {% block steps %}
+        {% if wizard.steps|length > 1 %}
+          <div class="chv-wizard-steps">
+            <div class="chv-wizard-steps-text">
+              {% with index=step.index|add:1 count=wizard.steps|length %}
+                {% blocktrans %}wizards:wizard:steps {{ index }} {{ count }}{% endblocktrans %}
+              {% endwith %}
+            </div>
+            <div class="chv-wizard-steps-dots">
+              {% for other_step in wizard.steps %}
+                <a class="chv-wizard-steps-dot pln-with-tooltip
+                          {{ other_step|eq:step|yes:"chv-wizard-steps-dot-current" }}
+                          {{ other_step.accessible|yes:"chv-wizard-steps-dot-accessible" }}"
+                   href="{{ other_step.get_url }}" data-toggle="tooltip"
+                   title="{{ other_step.label }}">
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endblock %}
       {% block body %}
         {% block body-text %}
           {% if step.text_template %}{% include step.text_template %}{% endif %}

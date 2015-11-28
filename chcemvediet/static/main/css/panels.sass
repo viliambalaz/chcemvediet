@@ -15,8 +15,11 @@
   padding-bottom: 0
 
 .panel-body-max-height
-  max-height: 400px
+  max-height: ($chv-baseline * 20)
   overflow: auto
+
+.panel-group .panel + .panel
+  margin-top: ($chv-baseline / 2 - 1px)
 
 .panel-border-gray
   border-color: $chv-color-gray-aw

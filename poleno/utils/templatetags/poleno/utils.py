@@ -78,6 +78,10 @@ def no(value, arg):
     else:
         return arg
 
+@register.filter
+def eq(value, arg):
+    return value == arg
+
 @register.filter(name=u'range')
 def range_(a, b):
     u"""

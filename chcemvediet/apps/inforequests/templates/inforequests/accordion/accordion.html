@@ -25,50 +25,63 @@
           </div>
           <div id="{{ collapse_id }}" class="panel-collapse collapse">
             <div class="panel-body panel-body-max-height">
-              {% if action.legal_date %}
-                <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
-                {{ action.legal_date }}<br>
-              {% endif %}
-              {% if action.type == ACTION_TYPES.EXTENSION %}
-                <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
-                {% include "inforequests/accordion/texts/extension.html" %}<br>
-              {% endif %}
-              {% if action.file_number %}
-                <strong>{% trans 'inforequests:accordion:action:file_number' %}:</strong>
-                {{ action.file_number }}<br>
-              {% endif %}
-              {% if action.subject %}
-                <strong>{% trans 'inforequests:accordion:action:subject' %}:</strong>
-                {{ action.subject }}<br>
-              {% endif %}
-              {% if action.disclosure_level %}
-                <strong>{% trans 'inforequests:accordion:action:disclosure_level' %}:</strong>
-                {{ action.get_disclosure_level_display }}<br>
-              {% endif %}
-              {% if action.refusal_reason %}
-                <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
-                {{ action.get_refusal_reason_display }}<br>
-              {% endif %}
-              {% if action.attachments %}
-                <div class="pln-attachments">
-                  <div class="pln-attachments-controls">
-                    <div class="form-control-static">
-                      <strong>{% trans 'inforequests:accordion:action:attachments' %}:&nbsp;</strong>
+              <div class="chv-bellow-1">
+                {% if action.legal_date %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:legal_date' %}:</strong>
+                    {{ action.legal_date }}
+                  </p>
+                {% endif %}
+                {% if action.type == ACTION_TYPES.EXTENSION %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:extension' %}:</strong>
+                    {% include "inforequests/accordion/texts/extension.html" %}
+                  </p>
+                {% endif %}
+                {% if action.file_number %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:file_number' %}:</strong>
+                    {{ action.file_number }}
+                  </p>
+                {% endif %}
+                {% if action.subject %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:subject' %}:</strong>
+                    {{ action.subject }}
+                  </p>
+                {% endif %}
+                {% if action.disclosure_level %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:disclosure_level' %}:</strong>
+                    {{ action.get_disclosure_level_display }}
+                  </p>
+                {% endif %}
+                {% if action.refusal_reason %}
+                  <p class="chv-dense">
+                    <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
+                    {{ action.get_refusal_reason_display }}
+                  </p>
+                {% endif %}
+                {% if action.attachments %}
+                  <div class="pln-attachments">
+                    <div class="pln-attachments-controls">
+                      <div class="form-control-static">
+                        <strong>{% trans 'inforequests:accordion:action:attachments' %}:&nbsp;</strong>
+                      </div>
+                    </div>
+                    <div class="pln-attachments-list">
+                      {% for attachment in action.attachments %}
+                        <div class="pln-attachment">
+                          <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
+                            {{ attachment.name }}
+                          </a>
+                        </div>
+                      {% endfor %}
                     </div>
                   </div>
-                  <div class="pln-attachments-list">
-                    {% for attachment in action.attachments %}
-                      <div class="pln-attachment">
-                        <a href="{% url 'inforequests:download_attachment' attachment=attachment %}">
-                          {{ attachment.name }}
-                        </a>
-                      </div>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endif %}
+                {% endif %}
+              </div>
               {% if action.content %}
-                <br>
                 {% if action.content_type == action.CONTENT_TYPES.PLAIN_TEXT %}
                   <p class="chv-preline">{{ action.content }}</p>
                 {% elif action.content_type == action.CONTENT_TYPES.HTML %}
