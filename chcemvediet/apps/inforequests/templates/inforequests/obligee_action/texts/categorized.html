@@ -27,7 +27,7 @@
     Vy nemusíte už urobiť žiadnu akciu, čakajte na odpoveď od novej inštitúcie.
   {% elif wizard.values.action == ACTION_TYPES.AFFIRMATION %}
     Odpoveď sa zaradí ako potvrdenie rozhodnutia a zamietnutie odvolania.
-    <span style="color: red;">FIXME</span>
+    FIXME
   {% elif wizard.values.action == ACTION_TYPES.CLARIFICATION_REQUEST %}
     Odpoveď sa zaradí ako <b>výzva na doplnenie žiadosti</b>. Prosím, poskytnite inštitúcii
     dodatočné informácie, ktoré od vás požadovala, a to čo najskôr. Od doplnenia žiadosti vám bude
@@ -38,10 +38,10 @@
   {% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
     {% if wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.NONE %}
       Odpoveď sa zaradí ako nesprístupnienie informácií (bez vydania rozhodnutia).
-      <span style="color: red;">FIXME</span>
+      FIXME
     {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.PARTIAL %}
       Odpoveď sa zaradí ako čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
-      <span style="color: red;">FIXME</span>
+      FIXME
     {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.FULL %}
       Odpoveď sa zaradí ako <b>sprístupnienie informácií</b>. Inštitúcia vám sprístupnila
       informácie, ktoré ste požadovali, v plnom rozsahu. Gratulujeme!
@@ -56,9 +56,9 @@
   {% elif wizard.values.action == ACTION_TYPES.REMANDMENT %}
     Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové
     prejednanie.
-    <span style="color: red;">FIXME</span>
+    FIXME
   {% elif wizard.values.action == ACTION_TYPES.REVERSION %}
     Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie mení.
-    <span style="color: red;">FIXME</span>
+    FIXME
   {% endif %}
 </p>
