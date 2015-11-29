@@ -209,6 +209,21 @@
     vertical-align: top
 
 //
+// Editable span field
+//
+
+.pln-editable-span
+  background-color: $chv-color-blue-aw
+  white-space: pre-wrap;
+  &:focus
+    outline: none
+  &:after
+    content: attr(data-padding)
+    visibility: hidden
+.pln-editable-container.focus
+  outline: 1px dotted
+
+//
 // Hide placeholder on active inputs
 //
 

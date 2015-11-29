@@ -202,7 +202,6 @@ ASSETS = (
     u'poleno/js/autosize_textarea.js',
     u'poleno/js/composite_text.js',
     u'poleno/js/datepicker.js',
-    u'poleno/css/editable.css',
     u'poleno/js/editable.js',
     u'poleno/js/hide_bootstrap_modal.js',
     u'poleno/js/post_link.js',
@@ -215,7 +214,6 @@ ASSETS = (
     u'attachments/js/fileupload.js',
     # Local to the project
     u'obligees/js/obligee_widget.js',
-    u'main/css/01.bootstrapfix.css',
     u'main/js/01.bootstrapfix.js',
     u'main/css/02.jqueryfix.css',
     )

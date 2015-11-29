@@ -1,3 +1,15 @@
 
 .tooltip.in
   @include opacity(1)
+
+.chv-tooltip-error + .tooltip
+  > .tooltip-inner
+    background-color: $chv-color-red
+  &.top > .tooltip-arrow
+    border-top-color: $chv-color-red
+  &.bottom > .tooltip-arrow
+    border-bottom-color: $chv-color-red
+  &.left > .tooltip-arrow
+    border-left-color: $chv-color-red
+  &.right > .tooltip-arrow
+    border-right-color: $chv-color-red

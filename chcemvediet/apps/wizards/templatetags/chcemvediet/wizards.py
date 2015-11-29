@@ -18,7 +18,7 @@ register = Library()
 def paper_field(context, field):
     attrs = {}
     if field.errors:
-        attrs[u'class'] = u'pln-with-tooltip tooltip-permanent chv-tooltip-error'
+        attrs[u'class'] = u'pln-with-tooltip pln-tooltip-permanent chv-tooltip-error'
         attrs[u'title'] = u' '.join(field.errors)
 
     if context.get(u'finalize'):

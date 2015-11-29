@@ -10,7 +10,7 @@
 $(function(){
 	function tooltip(base){
 		$(base).find('.pln-with-tooltip').not('.hasTooltip').addClass('hasTooltip').each(function(){
-			if ($(this).hasClass('tooltip-permanent')) {
+			if ($(this).hasClass('pln-tooltip-permanent')) {
 				$(this).tooltip({trigger: 'manual'}).tooltip('show');
 			} else {
 				$(this).tooltip();

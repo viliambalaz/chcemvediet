@@ -1,8 +1,0 @@
-/** Various fixes and tweaks for Bootstrap **/
-
-/* Colors for tooltips */
-.chv-tooltip-error + .tooltip > .tooltip-inner { background-color: #BD362F; }
-.chv-tooltip-error + .tooltip.top > .tooltip-arrow { border-top-color: #BD362F; }
-.chv-tooltip-error + .tooltip.bottom > .tooltip-arrow { border-bottom-color: #BD362F; }
-.chv-tooltip-error + .tooltip.left > .tooltip-arrow { border-left-color: #BD362F; }
-.chv-tooltip-error + .tooltip.right > .tooltip-arrow { border-right-color: #BD362F; }
