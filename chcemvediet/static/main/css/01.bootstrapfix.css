@@ -1,8 +1,5 @@
 /** Various fixes and tweaks for Bootstrap **/
 
-/* Box for action content  */
-.chv-action-content { margin: 20px; padding: 5%; border: solid 1px black; background: white; }
-
 /* Colors for tooltips */
 .chv-tooltip-error + .tooltip > .tooltip-inner { background-color: #BD362F; }
 .chv-tooltip-error + .tooltip.top > .tooltip-arrow { border-top-color: #BD362F; }

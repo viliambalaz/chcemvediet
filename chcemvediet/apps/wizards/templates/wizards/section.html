@@ -14,10 +14,12 @@
 {% block body %}
   {{ block.super }}
   {% if step.section_template %}
-    <div class="well chv-paper-section">
-      {% paragraphs %}
-        {% include step.section_template %}
-      {% endparagraphs %}
+    <div class="panel chv-scheme-gray chv-paper-section chv-bellow-1">
+      <div class="panel-body">
+        {% paragraphs %}
+          {% include step.section_template %}
+        {% endparagraphs %}
+      </div>
     </div>
   {% endif %}
 {% endblock %}
