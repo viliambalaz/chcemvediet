@@ -173,7 +173,10 @@ class EditableSpan(forms.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
             value = u''
-        span_attrs = merge_html_attrs(self.attrs, attrs,
+        # Workaround for Safari 7: If ``data-padding`` attribute is set in javascript only, Safari
+        # 7 ignores it until the span is clicked. So the span is invisible if it is empty.
+        # Therefore we must set it here as well.
+        span_attrs = merge_html_attrs(self.attrs, attrs, {'data-padding': '. '*47},
                 contenteditable=u'true', class_=u'pln-editable-span')
         input_attrs = dict(type=u'hidden', name=name, value=force_text(value))
         return format_html(u'<span{0}>{1}</span><input{2} />',
