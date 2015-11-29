@@ -33,11 +33,15 @@
         {% include "main/homepage/funding.html" %}
       </div>
       <div class="col-sm-6 col-md-4">
-        <h2 class="text-center">{% trans 'main:homepage:blogs:heading' %}</h2>
+        <h2 id="{% trans 'main:homepage:blogs:anchor' %}" class="text-center">
+          {% trans 'main:homepage:blogs:heading' %}
+        </h2>
         {% include "main/homepage/blogs/items.html" %}
       </div>
       <div class="hidden-xs col-sm-6 col-md-4">
-        <h2 class="text-center">{% trans 'main:homepage:didyouknow:heading' %}</h2>
+        <h2 id="{% trans 'main:homepage:didyouknow:anchor' %}" class="text-center">
+          {% trans 'main:homepage:didyouknow:heading' %}
+        </h2>
         {% include "main/homepage/didyouknow/items.html" %}
       </div>
     </div>

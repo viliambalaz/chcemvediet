@@ -64,7 +64,9 @@
     {% endif %}
   {% endwith %}
 
-  <h2>{% trans 'account:email:add:heading' %}</h2>
+  <h2 id="{% trans 'account:email:add:anchor' %}">
+    {% trans 'account:email:add:heading' %}
+  </h2>
   {% include "account/texts/email_add.html" %}
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}

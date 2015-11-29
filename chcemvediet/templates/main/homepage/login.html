@@ -9,7 +9,9 @@
 {% endcomment %}
 
 
-<h2>{% trans 'main:homepage:login:heading' %}</h2>
+<h2 id="{% trans 'main:homepage:login:anchor' %}">
+  {% trans 'main:homepage:login:heading' %}
+</h2>
 <form class="form-horizontal chv-form-dense" method="post" action="{% url 'account_login' %}">
   {% csrf_token %}
   <div class="form-group">

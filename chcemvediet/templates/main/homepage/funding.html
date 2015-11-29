@@ -9,7 +9,9 @@
 {% endcomment %}
 
 
-<h2>{% trans 'main:homepage:funding:heading' %}</h2>
+<h2 id="{% trans 'main:homepage:funding:anchor' %}">
+  {% trans 'main:homepage:funding:heading' %}
+</h2>
 <div class="panel chv-scheme-gray">
   <div class="panel-body">
     {% include "main/homepage/texts/funding.html" %}

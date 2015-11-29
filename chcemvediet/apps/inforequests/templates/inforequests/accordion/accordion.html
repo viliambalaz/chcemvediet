@@ -10,7 +10,9 @@
 {% endcomment %}
 
 
-<h3>{% trans 'inforequests:accordion:heading' %}</h3>
+<h3 id="{% trans 'inforequests:accordion:anchor' %}">
+  {% trans 'inforequests:accordion:heading' %}
+</h3>
 {% with accordion_id=idgenerator.next %}
   <div id="{{ accordion_id }}" class="panel-group">
     {% for action in last_action.action_path %}

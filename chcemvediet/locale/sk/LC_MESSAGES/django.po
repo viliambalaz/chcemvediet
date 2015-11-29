@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-28 17:23+0100\n"
+"POT-Creation-Date: 2015-11-29 23:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -626,6 +626,9 @@ msgstr "Nesúvisiace"
 msgid "inforequests:InforequestEmail:type:UNKNOWN"
 msgstr "Neznáme"
 
+msgid "inforequests:accordion:anchor"
+msgstr "historia-ziadosti"
+
 msgid "inforequests:accordion:heading"
 msgstr "História žiadosti"
 
@@ -682,6 +685,9 @@ msgstr "Nová infožiadosť"
 
 msgid "inforequests:create:heding"
 msgstr "Nová infožiadosť"
+
+msgid "inforequests:create:sidebar:anchor"
+msgstr "co-mozem-chciet-vediet"
 
 msgid "inforequests:create:sidebar:heding"
 msgstr "Čo môžem chcieť vedieť?"
@@ -767,8 +773,14 @@ msgstr "Reagovať na e-mail"
 msgid "inforequests:detail:response:smail:button"
 msgstr "Prišla ti pošta?"
 
+msgid "inforequests:index:closed:anchor"
+msgstr "uzavrete"
+
 msgid "inforequests:index:closed:heading"
 msgstr "Uzavreté"
+
+msgid "inforequests:index:drafts:anchor"
+msgstr "rozpisane"
 
 msgid "inforequests:index:drafts:heading"
 msgstr "Rozpísané"
@@ -802,6 +814,9 @@ msgstr "Nahrať odpoveď"
 
 msgid "inforequests:index:smail:heading"
 msgstr "Prišla mi odpoveď poštou"
+
+msgid "inforequests:index:pending:anchor"
+msgstr "podane"
 
 msgid "inforequests:index:pending:heading"
 msgstr "Podané"
@@ -1008,6 +1023,9 @@ msgstr "Naozaj chcete odobrať zvolenú e-mailovú adresu?"
 msgid "account:email:action_remove"
 msgstr "Odobrať"
 
+msgid "account:email:add:anchor"
+msgstr "pridat-e-mailovu-adresu"
+
 msgid "account:email:add:heading"
 msgstr "Pridať e-mailovú adresu"
 
@@ -1137,6 +1155,9 @@ msgstr "Prihlásiť pomocou Twittra"
 msgid "account:social_buttons:linkedin"
 msgstr "Prihlásiť pomocou LinkedInu"
 
+msgid "account:why_register:anchor"
+msgstr "preco-sa-zaregistrovat"
+
 msgid "account:why_register:heading"
 msgstr "Prečo sa zaregistrovať?"
 
@@ -1179,11 +1200,17 @@ msgstr "Tweet"
 msgid "main:homepage:didyouknow:facebook"
 msgstr "Share"
 
+msgid "main:homepage:funding:anchor"
+msgstr "financovanie"
+
 msgid "main:homepage:funding:heading"
 msgstr "Financovanie"
 
 msgid "main:homepage:funding:donate"
 msgstr "Chcem prispieť"
+
+msgid "main:homepage:login:anchor"
+msgstr "prihlasenie"
 
 msgid "main:homepage:login:heading"
 msgstr "Prihlásenie"
@@ -1206,8 +1233,14 @@ msgstr "Zabudnuté heslo?"
 msgid "main:homepage:login:social_buttons"
 msgstr "Použiť iný login"
 
+msgid "main:homepage:blogs:anchor"
+msgstr "blog"
+
 msgid "main:homepage:blogs:heading"
 msgstr "Blog"
+
+msgid "main:homepage:didyouknow:anchor"
+msgstr "vedeli-ste"
 
 msgid "main:homepage:didyouknow:heading"
 msgstr "Vedeli ste?"
@@ -1254,8 +1287,14 @@ msgstr "Hotovo:"
 msgid "main:alerts:warning"
 msgstr "Pozor:"
 
+msgid "main:footer:partners:anchor"
+msgstr "partneri-projektu"
+
 msgid "main:footer:partners:heading"
 msgstr "Partneri projektu"
+
+msgid "main:footer:donors:anchor"
+msgstr "individualni-darcovia"
 
 msgid "main:footer:donors:heading"
 msgstr "Individuálni darcovia"
@@ -1319,6 +1358,9 @@ msgstr "Napojenia účtu"
 
 msgid "socialaccount:connections:remove"
 msgstr "Odstrániť napojenie"
+
+msgid "socialaccount:connections:add:anchor"
+msgstr "pridat-ucet-tretej-strany"
 
 msgid "socialaccount:connections:add:heading"
 msgstr "Pridať účet tretej strany"

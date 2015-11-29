@@ -46,7 +46,9 @@
     {% include "socialaccount/texts/connections_empty.html" %}
   {% endif %}
 
-  <h2>{% trans 'socialaccount:connections:add:heading' %}</h2>
+  <h2 id="{% trans 'socialaccount:connections:add:anchor' %}">
+    {% trans 'socialaccount:connections:add:heading' %}
+  </h2>
   {% include "socialaccount/texts/connections_add.html" %}
   <div class="form-horizontal">
     <div class="form-group">
