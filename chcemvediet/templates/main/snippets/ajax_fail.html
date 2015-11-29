@@ -20,10 +20,14 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary pln-reload">
-        <span class="glyphicon glyphicon-refresh"></span> {% trans 'main:ajax_fail:reload' %}
+        <i class="chv-icon chv-icon-lg icon-reload"></i>
+        &nbsp;
+        {% trans 'main:ajax_fail:reload' %}
       </button>
-      <button type="button" class="btn btn-default" data-dismiss="modal">
-        <span class="glyphicon glyphicon-remove"></span> {% trans 'main:ajax_fail:close' %}
+      <button type="button" class="btn btn-link" data-dismiss="modal">
+        <i class="chv-icon chv-icon-lg icon-cancel"></i>
+        &nbsp;
+        {% trans 'main:ajax_fail:close' %}
       </button>
     </div>
   </div>
