@@ -26,7 +26,7 @@ South==1.0.2                  # django-cron
 django-common-helpers==0.6.4  # django-cron
 django-appconf==1.0.1         # django-compressor
 libsass==0.8.3                # django-libsass
-jdcal==1.0                    # openpyxl
+jdcal==1.2                    # openpyxl
 
 # Dependencies between base requirements
 # requests==2.5.1             # django-allauth
