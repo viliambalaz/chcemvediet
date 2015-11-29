@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -17,10 +16,7 @@
 
 
 <h4>Informáciu neposkytuje</h4>
-<div class="alert alert-warning">
-  <strong>Pozor:</strong> Ak inštitúcia dôveryhodne odôvodnila, že informáciu naozaj neposkytuje,
-  odvolanie nemá zmysel podávať.
-</div>
+{% include "inforequests/appeal/texts/refusal/does_not_provide_fallback_reason_alert.html" %}
 <p>
   Označili ste, že žiadaná informácia nosúvisí s použitím verejných prostriedkov. Je teda
   pravdepodobné, že inštitúcia žiadanú informáciu sprístupniť nemôže. Ak ste aj naďalej

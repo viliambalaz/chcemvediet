@@ -11,23 +11,30 @@
 {% endcomment %}
 
 
+{% block content %}
+  {% with print_id=idgenerator.next %}
+    {{ block.super }}
+  {% endwith %}
+{% endblock %}
+
 {% block body %}
   {{ block.super }}
   <div class="chv-action-content">
-    <div id="print-w{{ wizard.instance_id }}">
+    <div id="{{ print_id }}">
       {{ step.print_content }}
     </div>
   </div>
 {% endblock %}
 
 {% block footer %}
+  {{ block.super }}
   {% block footer-print %}
-    <button type="button" class="btn btn-default pln-print"
-            data-target="#print-w{{ wizard.instance_id }}">
+    <button type="button" class="btn btn-default pln-print" data-target="#{{ print_id }}">
       {% block footer-print-label %}
-        <span class="glyphicon glyphicon-print"></span> {% trans 'wizards:wizard:print' %}
+        <i class="chv-icon chv-icon-lg icon-print"></i>
+        &nbsp;
+        {% trans 'wizards:wizard:print' %}
       {% endblock %}
     </button>
   {% endblock %}
-  {{ block.super }}
 {% endblock %}

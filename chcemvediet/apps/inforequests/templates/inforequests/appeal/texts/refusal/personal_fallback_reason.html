@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -17,10 +16,7 @@
 
 
 <h4>Osobné údaje</h4>
-<div class="alert alert-warning">
-  <strong>Pozor:</strong> Ak inštitúcia dôveryhodne odôvodnila, že informácia naozaj podlieha
-  ochrane osobných údajov, odvolanie nemá zmysel podávať.
-</div>
+{% include "inforequests/appeal/texts/refusal/personal_fallback_reason_alert.html" %}
 <p>
   Označili ste, že žiadané osobné údaje sa týkaju iných osôb než verejných zamestnancov. Inštitúcia
   má pravdepodobne pravdu a žiadané osobné údaje sprístupneniť nemôže. Na záver odvolania

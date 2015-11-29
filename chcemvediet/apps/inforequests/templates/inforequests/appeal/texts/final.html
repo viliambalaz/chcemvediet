@@ -19,23 +19,10 @@
 {% endcomment %}
 
 
-{% if is_deadline_missed_at_today %}
-  <div class="alert alert-warning">
-    <h4>Zmeškaný termin</h4>
-    <p>
-      Termin na podanie odvolania vypršal pred {{ calendar_days_behind_at_today }} kalendárnymi
-      dnami.
-    </p>
-  </div>
-{% elif is_deadline_missed_at_legal_date %}
-  <div class="alert alert-warning">
-    <h4>Dátum po termíne</h4>
-    <p>
-      Zadaný dátum odvolania {{ wizard.values.legal_date }} je
-      {{ calendar_days_behind_at_legal_date }} kalendárnych dni po termíne na podanie odvolania.
-    </p>
-  </div>
-{% endif %}
-
 <h4>Dokončenie odvolania</h4>
+{% if is_deadline_missed_at_today %}
+  {% include "inforequests/appeal/texts/deadline_missed_at_today.html" %}
+{% elif is_deadline_missed_at_legal_date %}
+  {% include "inforequests/appeal/texts/deadline_missed_at_legal_date.html" %}
+{% endif %}
 <p>Vykonajte test tlače a dokončite odvolanie.</p>

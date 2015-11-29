@@ -1,5 +1,4 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load paper_field from chcemvediet.wizards %}
 
 {% comment %}
  %
@@ -17,10 +16,7 @@
 
 
 <h4>Utajovaná skutočnosť</h4>
-<div class="alert alert-warning">
-  <strong>Pozor:</strong> Ak inštitúcia uviedla relevantné dôvody, prečo vami požadovanú informáciu
-  považuje za utajovanú skutočnosť, tak odvolanie nemá zmysel podávať.
-</div>
+{% include "inforequests/appeal/texts/refusal/confidential_fallback_reason_alert.html" %}
 <p>
   Zvolili ste možnosť, že vami žiadanú informáciu nie je možné priradiť k uvedeným kategóriám.
   Žiaľ, náš portál v súčasnosti nedokáže pokryť všetky alternatívy. Z toho dôvodu, v závere
