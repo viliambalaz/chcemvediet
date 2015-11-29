@@ -30,7 +30,8 @@
           {% if not sibling.is_redirect and not sibling.is_disabled %}
             <li class="{% if sibling == page %}active{% endif %}">
               <a href="{{ sibling.url }}">
-                <span class="glyphicon glyphicon-chevron-right pull-right"></span>{{ sibling.label }}
+                <i class="chv-icon chv-icon-lg icon-chevron-right pull-right"></i>
+                {{ sibling.label }}
               </a>
             </li>
           {% endif %}
