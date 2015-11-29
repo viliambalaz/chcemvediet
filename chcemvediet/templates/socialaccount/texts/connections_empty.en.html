@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/alerts/info.html" %}
 
 {% comment %}
  %
@@ -8,4 +9,6 @@
 {% endcomment %}
 
 
-You currently have no social network accounts connected to this account.
+{% block message %}
+  You currently have no social network accounts connected to this account.
+{% endblock %}

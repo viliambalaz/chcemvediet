@@ -43,9 +43,7 @@
       </div>
     </form>
   {% else %}
-    {% with message_template="socialaccount/texts/connections_empty.html" %}
-      {% include "main/snippets/alerts/warning.html" %}
-    {% endwith %}
+    {% include "socialaccount/texts/connections_empty.html" %}
   {% endif %}
 
   <h2>{% trans 'socialaccount:connections:add:heading' %}</h2>

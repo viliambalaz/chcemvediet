@@ -24,14 +24,10 @@
 
 {% block body %}
   {% if inforequest.has_undecided_emails %}
-    {% with message_template="inforequests/clarification_response/texts/undecided_alert.html" %}
-      {% include "main/snippets/alerts/warning.html" %}
-    {% endwith %}
+    {% include "inforequests/clarification_response/texts/undecided_alert.html" %}
   {% endif %}
   {% if last_action.deadline and last_action.deadline.is_deadline_missed %}
-    {% with message_template="inforequests/clarification_response/texts/deadline_alert.html" %}
-      {% include "main/snippets/alerts/warning.html" %}
-    {% endwith %}
+    {% include "inforequests/clarification_response/texts/deadline_alert.html" %}
   {% endif %}
   {{ block.super }}
 {% endblock %}

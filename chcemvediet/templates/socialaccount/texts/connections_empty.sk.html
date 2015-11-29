@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/alerts/info.html" %}
 
 {% comment %}
  %
@@ -8,4 +9,6 @@
 {% endcomment %}
 
 
-K Vášmu účtu nemáte momentálne pripojené žiadne Vaše úcty na sociálnych sieťach.
+{% block message %}
+  K Vášmu účtu nemáte momentálne pripojené žiadne Vaše úcty na sociálnych sieťach.
+{% endblock %}

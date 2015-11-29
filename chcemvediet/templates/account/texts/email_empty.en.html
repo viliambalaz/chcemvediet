@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/alerts/warning.html" %}
 
 {% comment %}
  %
@@ -8,5 +9,7 @@
 {% endcomment %}
 
 
-You currently do not have any e-mail address set up. You should really add an e-mail address so you
-can receive notifications, reset your password, etc.
+{% block message %}
+  You currently do not have any e-mail address set up. You should really add an e-mail address so
+  you can receive notifications, reset your password, etc.
+{% endblock %}

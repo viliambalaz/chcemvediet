@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/snippets/alerts/warning.html" %}
 
 {% comment %}
  %
@@ -12,5 +13,7 @@
 {% endcomment %}
 
 
-Termin na doplnenie žiadosti vypršal pred {{ last_action.deadline.calendar_days_behind }}
-kalendárnymi dnami.
+{% block message %}
+  Termin na doplnenie žiadosti vypršal pred {{ last_action.deadline.calendar_days_behind }}
+  kalendárnymi dnami.
+{% endblock %}
