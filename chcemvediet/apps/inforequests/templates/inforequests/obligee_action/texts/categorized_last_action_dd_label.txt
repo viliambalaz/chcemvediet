@@ -12,11 +12,11 @@
 
 
 {% if wizard.values.branch.last_action.type == ACTION_TYPES.REQUEST %}
-  Dátum doručenia žiadosti
+  Doručenie žiadosti
 {% elif wizard.values.branch.last_action.type == ACTION_TYPES.CLARIFICATION_RESPONSE %}
-  Dátum doručenia doplnenia
+  Doručenie doplnenia
 {% elif wizard.values.branch.last_action.type == ACTION_TYPES.APPEAL %}
-  Dátum doručenia odvolania
+  Doručenie odvolania
 {% elif wizard.values.branch.last_action.type == ACTION_TYPES.ADVANCED_REQUEST %}
-  Dátum doručenia postúpenia
+  Doručenie postúpenia
 {% endif %}

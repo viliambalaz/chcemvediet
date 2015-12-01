@@ -11,7 +11,7 @@
 {% endcomment %}
 
 
-<h4>Zaradené</h4>
+<h4>Zaradenie odpovede</h4>
 <p>
   {% if wizard.values.action == ACTION_TYPES.ADVANCEMENT %}
     Odpoveď sa zaradí ako <b>postúpenie žiadosti</b>. Inštitúcia postúpila vašu žiadosť
@@ -26,8 +26,7 @@
     {% endfor %}
     Vy nemusíte už urobiť žiadnu akciu, čakajte na odpoveď od novej inštitúcie.
   {% elif wizard.values.action == ACTION_TYPES.AFFIRMATION %}
-    Odpoveď sa zaradí ako potvrdenie rozhodnutia a zamietnutie odvolania.
-    FIXME
+    Odpoveď sa zaradí ako <b>potvrdenie rozhodnutia</b> a zamietnutie odvolania.
   {% elif wizard.values.action == ACTION_TYPES.CLARIFICATION_REQUEST %}
     Odpoveď sa zaradí ako <b>výzva na doplnenie žiadosti</b>. Prosím, poskytnite inštitúcii
     dodatočné informácie, ktoré od vás požadovala, a to čo najskôr. Od doplnenia žiadosti vám bude
@@ -37,11 +36,9 @@
     vašu žiadosť. Teraz čakajte na ďalšiu reakciu inštitúcie.
   {% elif wizard.values.action == ACTION_TYPES.DISCLOSURE %}
     {% if wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.NONE %}
-      Odpoveď sa zaradí ako nesprístupnienie informácií (bez vydania rozhodnutia).
-      FIXME
+      Odpoveď sa zaradí ako <b>nesprístupnienie informácií</b> (bez vydania rozhodnutia).
     {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.PARTIAL %}
-      Odpoveď sa zaradí ako čiastočné nesprístupnienie informácií (bez vydania rozhodnutia).
-      FIXME
+      Odpoveď sa zaradí ako <b>čiastočné nesprístupnienie informácií</b> (bez vydania rozhodnutia).
     {% elif wizard.values.disclosure_level == ACTION_DISCLOSURE_LEVELS.FULL %}
       Odpoveď sa zaradí ako <b>sprístupnienie informácií</b>. Inštitúcia vám sprístupnila
       informácie, ktoré ste požadovali, v plnom rozsahu. Gratulujeme!
@@ -54,11 +51,9 @@
     rozhodnutiu presvedčení o tom, že vám inštitúcia mala informácie sprístupniť, pokračujte ďalej,
     pomôžeme vám s odvolaním.
   {% elif wizard.values.action == ACTION_TYPES.REMANDMENT %}
-    Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie ruší a vec vracia na nové
+    Odpoveď sa zaradí ako rozhodnutie, ktorým <b>pôvodné rozhodnutie ruší</b> a vec vracia na nové
     prejednanie.
-    FIXME
   {% elif wizard.values.action == ACTION_TYPES.REVERSION %}
-    Odpoveď sa zaradí ako rozhodnutie, ktorým pôvodné rozhodnutie mení.
-    FIXME
+    Odpoveď sa zaradí ako rozhodnutie, ktorým <b>pôvodné rozhodnutie mení</b>.
   {% endif %}
 </p>

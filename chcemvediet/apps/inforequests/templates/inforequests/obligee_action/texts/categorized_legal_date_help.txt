@@ -11,10 +11,10 @@
 {% endcomment %}
 
 
-Vyplňte prosím dátum úkonu, čiže dátum, ktorým je datovaný
+Vyplňte prosím dátum úkonu, čiže časový údaj, ktorým je datovaný
 {% if email %}email{% else %}list{% endif %}.
 
-Tentoraz je to dátum, ktorý označuje deň, kedy inštitúcia sformulovala
+V tomto prípade je to dátum, ktorý označuje deň, kedy inštitúcia sformulovala
 {% if wizard.values.action == ACTION_TYPES.ADVANCEMENT %}
   postúpenie žiadosti.
 {% elif wizard.values.action == ACTION_TYPES.AFFIRMATION %}

@@ -339,7 +339,7 @@ msgid "inforequests:obligee_action:Categorized:legal_date:error:older_than_previ
 msgstr "Nesmie byť starší ako dátum predošlej akcie."
 
 msgid "inforequests:obligee_action:Categorized:legal_date:error:from_future"
-msgstr "Nesmie byť z budúcnosti."
+msgstr "Zadať môžete len dátum dnešného dňa, alebo dní predchádzajúcich."
 
 msgid "inforequests:obligee_action:Categorized:legal_date:error:older_than_month"
 msgstr "Nesmie byť starší ako 1 mesiac."
@@ -351,7 +351,7 @@ msgid "inforequests:obligee_action:Categorized:last_action_dd:error:older_than_l
 msgstr "Nesmie byť starší ako dátum prílušného úkonu."
 
 msgid "inforequests:obligee_action:Categorized:last_action_dd:error:from_future"
-msgstr "Nesmie byť z budúcnosti."
+msgstr "Zadať môžete len dátum dnešného dňa, alebo dní predchádzajúcich."
 
 msgid "inforequests:obligee_action:InvalidReversion:label"
 msgstr "Chyba"
