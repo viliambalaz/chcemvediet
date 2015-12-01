@@ -17,10 +17,22 @@
     {% csrf_token %}
     <div class="row">
       <div class="col-md-8">
-        <h1>{% trans 'inforequests:create:heding' %}</h1>
-        {% include "inforequests/create/texts/main.html" %}
+        <h1>{% trans 'inforequests:create:heading' %}</h1>
+        <div class="panel chv-scheme-gray">
+          <div class="panel-body">
+            <h3 id="{% trans 'inforequests:create:main:anchor' %}">
+              <span class="chv-icon-stack chv-icon-lg">
+                <i class="chv-icon icon-circle"></i>
+                <i class="chv-icon chv-icon-inv chv-icon-half icon-info"></i>
+              </span>
+              &nbsp;
+              {% trans 'inforequests:create:main:heading' %}
+            </h3>
+            {% include "inforequests/create/texts/main.html" %}
+          </div>
+        </div>
       </div>
-      <div class="col-md-4 chv-pull-right-md chv-above-half">
+      <div class="col-md-4 chv-pull-right-md chv-above-3-md">
         {% with collapse_id=idgenerator.next %}
           <div class="panel chv-scheme-gray">
             <div class="panel-heading collapsed chv-pointer chv-cursor-auto-md"
@@ -29,10 +41,10 @@
                 <i class="chv-icon icon-down-dir pull-right chv-hidden-md"></i>
                 <span class="chv-icon-stack chv-icon-lg">
                   <i class="chv-icon icon-circle"></i>
-                  <i class="chv-icon chv-icon-inv chv-icon-half icon-info"></i>
+                  <i class="chv-icon chv-icon-inv chv-icon-half icon-help"></i>
                 </span>
                 &nbsp;
-                {% trans 'inforequests:create:sidebar:heding' %}
+                {% trans 'inforequests:create:sidebar:heading' %}
               </h3>
             </div>
             <div id="{{ collapse_id }}" class="panel-body collapse chv-block-md chv-height-auto-md">

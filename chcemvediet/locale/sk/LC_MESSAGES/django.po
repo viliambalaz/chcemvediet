@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-29 23:01+0100\n"
+"POT-Creation-Date: 2015-12-01 09:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -683,13 +683,19 @@ msgstr "Odpoveď na výzvu na doplnenie žiadosti"
 msgid "inforequests:create:title"
 msgstr "Nová infožiadosť"
 
-msgid "inforequests:create:heding"
+msgid "inforequests:create:heading"
 msgstr "Nová infožiadosť"
+
+msgid "inforequests:create:main:anchor"
+msgstr "dolezite-vediet"
+
+msgid "inforequests:create:main:heading"
+msgstr "Dôležité vedieť"
 
 msgid "inforequests:create:sidebar:anchor"
 msgstr "co-mozem-chciet-vediet"
 
-msgid "inforequests:create:sidebar:heding"
+msgid "inforequests:create:sidebar:heading"
 msgstr "Čo môžem chcieť vedieť?"
 
 msgid "inforequests:create:applicant_label"
