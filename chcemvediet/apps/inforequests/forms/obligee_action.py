@@ -807,6 +807,7 @@ class InputBasics(ObligeeActionStep):
 
         self.fields[u'attachments'] = AttachmentsField(
                 label=_(u'inforequests:obligee_action:InputBasics:attachments:label'),
+                help_text=_(u'inforequests:obligee_action:InputBasics:attachments:help_text'),
                 upload_url_func=(
                     lambda: reverse(u'inforequests:upload_attachment')),
                 download_url_func=(
@@ -826,7 +827,7 @@ class InputBasics(ObligeeActionStep):
             try:
                 if delivered_date < branch.last_action.legal_date:
                     msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_previous')
-                    raise ValidationError(msg)
+                    raise ValidationError(msg.format(date=branch.last_action.legal_date))
                 if delivered_date > local_today():
                     msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:from_future')
                     raise ValidationError(msg)
