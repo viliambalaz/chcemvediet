@@ -1,6 +1,7 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/base/single_column.html" %}
 {% load trans from i18n %}
+{% load page from poleno.pages %}
 
 {% comment %}
  %
@@ -31,6 +32,20 @@
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
         {% endif %}
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-9">
+            <p class="chv-dense">Najmä:</p>
+            <ul>
+              <li class="chv-dense">nebudem podávať obťažujúce žiadosti</li>
+              <li class="chv-dense">portál neslúži na podávanie sťažností</li>
+              <li class="chv-dense">ak mi príde papierová odpoveď poštou, odfotím ju alebo naskenujem, a nahrám ju späť na portál</li>
+              <li class="chv-dense">nebudem zneužívať portál na spamovanie, používať vulgarizmy, a pod. </li>
+            </ul>
+            <p>
+            <a href="{% page "/podmienky-pouzivania/" %}">Kompletné podmienky používania chcemvediet.sk</a>
+            </p>
+          </div>
+        </div>
         <div class="form-group">
           <div class="col-sm-offset-3 col-sm-9">
             <button type="submit" class="btn btn-primary">

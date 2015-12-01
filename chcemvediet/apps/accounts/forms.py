@@ -42,6 +42,17 @@ class SignupForm(forms.Form):
             regex=r'^\d{5}$',
             )
 
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+
+        # Defined here and not in the class definition above to make sure the field is places after
+        # allauth email and password fields.
+        self.fields[u'agreement'] = forms.BooleanField(
+            label=_(u'accounts:SignupForm:agreement:label'),
+            required=True,
+            )
+
+
     def signup(self, request, user):
         user.first_name = self.cleaned_data[u'first_name']
         user.last_name = self.cleaned_data[u'last_name']
