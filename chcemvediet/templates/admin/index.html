@@ -8,13 +8,13 @@
     <div class="module">
       <table>
         <caption>Misc</caption>
-{%comment%}
-        <tr>
-          <th scope="row"><a href="{% url "admin:timewarp" %}">Timewarp</a></th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-{%endcomment%}
+        {% if "poleno.timewarp" in INSTALLED_APPS %}
+          <tr>
+            <th scope="row"><a href="{% url "admin:timewarp" %}">Timewarp</a></th>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        {% endif %}
         <tr>
           <th scope="row"><a href="{% url "admin:pages_languages" %}">Pages</a></th>
           <td>&nbsp;</td>
