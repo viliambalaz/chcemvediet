@@ -524,7 +524,7 @@ def main():
             download_fontello(configure)
             configure_secret_key(configure, settings)
             configure_email_addresses(configure, settings)
-            configure_devbar(configure, settings)
+            # configure_devbar(configure, settings)
             configure_database(configure, settings)
             configure_mandrill(configure, settings)
 

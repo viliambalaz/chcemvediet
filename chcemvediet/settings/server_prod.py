@@ -7,8 +7,10 @@
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-PREPEND_WWW = True
+PREPEND_WWW = False
 ALLOWED_HOSTS = [u'.chcemvediet.sk']
 
 DATABASES = {
@@ -21,6 +23,14 @@ DATABASES = {
         u'PASSWORD': u'',
         },
     }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 
 LOGGING = {
     u'version': 1,

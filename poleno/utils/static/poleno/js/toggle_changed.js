@@ -66,4 +66,4 @@ $(function(){
 	$(document).on('change', '.pln-toggle-changed', toggle);
 	$(document).on('pln-dom-changed', toggleAll); // Triggered by: poleno/js/ajax.js
 	toggleAll();
-})
+});

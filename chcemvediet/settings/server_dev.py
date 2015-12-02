@@ -8,7 +8,7 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-PREPEND_WWW = True
+PREPEND_WWW = False 
 
 DATABASES = {
     u'default': {

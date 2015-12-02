@@ -20,7 +20,7 @@ TIME_ZONE = u'Europe/Bratislava'
 LANGUAGE_CODE = u'sk'
 LANGUAGES = (
     (u'sk', u'Slovensky'),
-    (u'en', u'English'),
+#    (u'en', u'English'),
     )
 LOCALE_PATHS = (
     os.path.join(PROJECT_PATH, u'chcemvediet/locale/overrides'),
@@ -227,5 +227,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_FORM_CLASS = u'chcemvediet.apps.accounts.forms.SignupForm'
 SOCIALACCOUNT_EMAIL_VERIFICATION = u'none'
 SOCIALACCOUNT_AUTO_SIGNUP = False
-INVITATIONS_INVITATION_ONLY = False
+INVITATIONS_INVITATION_ONLY = True 
 INVITATIONS_USERS_CAN_INVITE = True
