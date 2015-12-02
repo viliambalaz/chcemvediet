@@ -13,6 +13,11 @@ SESSION_COOKIE_SECURE = True
 PREPEND_WWW = False
 ALLOWED_HOSTS = [u'.chcemvediet.sk']
 
+# English on production server is disabled for now.
+LANGUAGES = (
+    (u'sk', u'Slovensky'),
+    )
+
 DATABASES = {
     u'default': {
         u'ENGINE': u'django.db.backends.mysql',

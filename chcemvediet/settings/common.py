@@ -20,7 +20,7 @@ TIME_ZONE = u'Europe/Bratislava'
 LANGUAGE_CODE = u'sk'
 LANGUAGES = (
     (u'sk', u'Slovensky'),
-#    (u'en', u'English'),
+    (u'en', u'English'),
     )
 LOCALE_PATHS = (
     os.path.join(PROJECT_PATH, u'chcemvediet/locale/overrides'),
