@@ -131,14 +131,6 @@ CRON_CLASSES = (
     u'chcemvediet.cron.send_admin_error_logs',
     )
 
-# FIXME: We should probably not use filebased cache on production environment
-CACHES = {
-    u'default': {
-        u'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        u'LOCATION': os.path.join(PROJECT_PATH, u'cache'),
-    },
-}
-
 # FIXME: Static and media files in production?
 MEDIA_ROOT = os.path.join(PROJECT_PATH, u'media')
 MEDIA_URL = u'/media/'
@@ -227,5 +219,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SIGNUP_FORM_CLASS = u'chcemvediet.apps.accounts.forms.SignupForm'
 SOCIALACCOUNT_EMAIL_VERIFICATION = u'none'
 SOCIALACCOUNT_AUTO_SIGNUP = False
-INVITATIONS_INVITATION_ONLY = True 
+INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_USERS_CAN_INVITE = True

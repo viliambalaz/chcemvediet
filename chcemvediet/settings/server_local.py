@@ -21,6 +21,13 @@ INSTALLED_APPS += (
     u'poleno.timewarp',
     )
 
+CACHES = {
+    u'default': {
+        u'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        u'LOCATION': os.path.join(PROJECT_PATH, u'cache'),
+    },
+}
+
 LOGGING = {
     u'version': 1,
     u'disable_existing_loggers': True,

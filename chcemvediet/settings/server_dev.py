@@ -8,7 +8,7 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-PREPEND_WWW = False 
+PREPEND_WWW = False
 
 DATABASES = {
     u'default': {
@@ -24,6 +24,13 @@ DATABASES = {
 INSTALLED_APPS += (
     u'poleno.timewarp',
     )
+
+CACHES = {
+    u'default': {
+        u'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        u'LOCATION': os.path.join(PROJECT_PATH, u'cache'),
+    },
+}
 
 # FIXME: ``logging.handlers.TimedRotatingFileHandler`` and all python logging file handlers in
 # general are broken when running multiple processes. Concurrent processes will overwrite each
