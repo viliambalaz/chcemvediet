@@ -7,5 +7,5 @@ def settings(request):
     return {
         u'DEBUG': django_settings.DEBUG,
         u'INSTALLED_APPS': django_settings.INSTALLED_APPS,
-        #u'DEVBAR_MESSAGE': django_settings.DEVBAR_MESSAGE,
+        u'DEVBAR_MESSAGE': django_settings.DEVBAR_MESSAGE,
         }

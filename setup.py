@@ -292,21 +292,20 @@ def configure_email_addresses(configure, settings):
 
 def configure_devbar(configure, settings):
     server_mode = configure.get(u'server_mode')
-    obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
-    devbar_message = {
-            u'local_with_no_mail': u'',
-            u'local_with_local_mail': u'',
-            u'dev_with_no_mail': squeeze(u"""
+    if server_mode == u'dev_with_no_mail':
+        devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. No emails are sent
                 anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin
                 interface</a>.
-                """),
-            u'dev_with_dummy_obligee_mail': squeeze(u"""
+                """)
+    elif server_mode == u'dev_with_dummy_obligee_mail':
+        obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
+        devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. All obligee email addresses
                 are replaced with dummies: {}.
-                """).format(obligee_dummy_mail),
-            u'production': u'',
-            }[server_mode]
+                """).format(obligee_dummy_mail)
+    else:
+        devbar_message = u''
     settings.setting(u'DEVBAR_MESSAGE', devbar_message)
 
 def configure_database(configure, settings):
@@ -524,7 +523,7 @@ def main():
             download_fontello(configure)
             configure_secret_key(configure, settings)
             configure_email_addresses(configure, settings)
-            # configure_devbar(configure, settings)
+            configure_devbar(configure, settings)
             configure_database(configure, settings)
             configure_mandrill(configure, settings)
 
