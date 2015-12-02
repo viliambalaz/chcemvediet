@@ -7,11 +7,11 @@
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 
 PREPEND_WWW = False
 ALLOWED_HOSTS = [u'.chcemvediet.sk']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # English on production server is disabled for now.
 LANGUAGES = (
