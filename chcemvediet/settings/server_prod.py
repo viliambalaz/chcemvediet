@@ -12,6 +12,7 @@ PREPEND_WWW = False
 ALLOWED_HOSTS = [u'.chcemvediet.sk']
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+LIBSASS_OUTPUT_STYLE = u'compressed'
 
 # English on production server is disabled for now.
 LANGUAGES = (
