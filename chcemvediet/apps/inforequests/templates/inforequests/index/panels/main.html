@@ -3,7 +3,9 @@
 {% comment %}
  %
  % Context:
- %  -- None
+ %  -- inforequests: [chcemvediet.apps.inforequests.models.Inforequest]
+ %  -- drafts: [chcemvediet.apps.inforequests.models.InforequestDraft]
+ %  -- closed_inforequests: [chcemvediet.apps.inforequests.models.Inforequest]
  %
 {% endcomment %}
 
@@ -14,8 +16,10 @@
       {% include "inforequests/index/panels/create_top.html" %}
       {% if undecided_emails_count %}
         {% include "inforequests/index/panels/email_top.html" %}
-      {% else %}
+      {% elif inforequests %}
         {% include "inforequests/index/panels/smail_top.html" %}
+      {% else %}
+        {% include "inforequests/index/panels/nomail_top.html" %}
       {% endif %}
       {% include "inforequests/index/panels/archive_top.html" %}
     </div>
@@ -23,8 +27,10 @@
       {% include "inforequests/index/panels/create_bottom.html" %}
       {% if undecided_emails_count %}
         {% include "inforequests/index/panels/email_bottom.html" %}
-      {% else %}
+      {% elif inforequests %}
         {% include "inforequests/index/panels/smail_bottom.html" %}
+      {% else %}
+        {% include "inforequests/index/panels/nomail_bottom.html" %}
       {% endif %}
       {% include "inforequests/index/panels/archive_bottom.html" %}
     </div>
