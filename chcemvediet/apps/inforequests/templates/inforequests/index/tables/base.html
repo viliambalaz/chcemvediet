@@ -31,11 +31,11 @@
                data-target="#{{ collapse_id }}">
             {% block collapse-actions %}{% endblock %}
             <i class="chv-icon icon-down-dir pull-right"></i>
-            <b>{% block collapse %}{% endblock %}</b>
+            {% block collapse %}{% endblock %}
           </div>
           <a id="{{ collapse_id }}" class="chv-tr collapse" href="{% block href %}{% endblock %}">
             <div class="chv-td chv-hidden chv-tablecell-sm">
-              <b>{% block subject %}{% endblock %}</b>
+              {% block subject %}{% endblock %}
             </div>
             <div class="chv-td">
               <div class="chv-indent">

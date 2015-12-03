@@ -17,17 +17,29 @@
 {% endblock %}
 
 {% block collapse %}
-  {{ object.subject.0|default:_('inforequests:index:drafts:empty_subject') }}
+  {% if object.subject.0 %}
+    <b>{{ object.subject.0 }}</b>
+  {% else %}
+    <span class="chv-color-gray-l">{% trans 'inforequests:index:drafts:empty_subject' %}</span>
+  {% endif %}
 {% endblock %}
 
 {% block href %}{% url 'inforequests:create' draft=object %}{% endblock %}
 
 {% block subject %}
-  {{ object.subject.0|default:_('inforequests:index:drafts:empty_subject') }}
+  {% if object.subject.0 %}
+    <b>{{ object.subject.0 }}</b>
+  {% else %}
+    <span class="chv-color-gray-l">{% trans 'inforequests:index:drafts:empty_subject' %}</span>
+  {% endif %}
 {% endblock %}
 
 {% block obligee %}
-  {{ object.obligee.name|default:_('inforequests:index:drafts:empty_obligee') }}
+  {% if object.obligee %}
+    {{ object.obligee.name }}
+  {% else %}
+    <span class="chv-color-gray-l">{% trans 'inforequests:index:drafts:empty_obligee' %}</span>
+  {% endif %}
 {% endblock %}
 
 {% block date %}
