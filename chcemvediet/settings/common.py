@@ -173,7 +173,7 @@ ASSETS = (
     # Fonts
     u'//fonts.googleapis.com/css?family=Ubuntu:400,500,700',
     u'fontello/css/fontello-codes.css',
-    # Custom Bootstrap
+    # Custom Bootstrap (tooltip must be before popover)
     u'main/css/main.sass',
     u'javascripts/affix.js',
     u'javascripts/alert.js',
@@ -182,10 +182,10 @@ ASSETS = (
     u'javascripts/collapse.js',
     u'javascripts/dropdown.js',
     u'javascripts/modal.js',
+    u'javascripts/tooltip.js',
     u'javascripts/popover.js',
     u'javascripts/scrollspy.js',
     u'javascripts/tab.js',
-    u'javascripts/tooltip.js',
     u'javascripts/transition.js',
     # Reused apps
     u'poleno/js/00.confirm_button.js',
