@@ -192,15 +192,19 @@ def configure_server_mode(configure, settings):
             (u'dev_with_dummy_obligee_mail', squeeze(u"""
                 Online development mode with working email infrastructure and dummy obligee email
                 addresses.""")),
+            (u'dev_without_debug', squeeze(u"""
+                Online development mode with debug mode disabled. It has working email
+                infrastructure and dummy obligee email addresses.""")),
             (u'production',
                 u'Production mode.'),
             ))
     includes = {
-            u'local_with_no_mail':          [u'server_local.py', u'mail_nomail.py'],
-            u'local_with_local_mail':       [u'server_local.py', u'mail_dummymail.py'],
-            u'dev_with_no_mail':            [u'server_dev.py',   u'mail_nomail.py'],
-            u'dev_with_dummy_obligee_mail': [u'server_dev.py',   u'mail_mandrill.py'],
-            u'production':                  [u'server_prod.py',  u'mail_mandrill.py'],
+            u'local_with_no_mail':          [u'server_local.py',         u'mail_nomail.py'],
+            u'local_with_local_mail':       [u'server_local.py',         u'mail_dummymail.py'],
+            u'dev_with_no_mail':            [u'server_dev.py',           u'mail_nomail.py'],
+            u'dev_with_dummy_obligee_mail': [u'server_dev.py',           u'mail_mandrill.py'],
+            u'dev_without_debug':           [u'server_dev_no_debug.py',  u'mail_mandrill.py'],
+            u'production':                  [u'server_prod.py',          u'mail_mandrill.py'],
             }[server_mode]
     for include in includes:
         settings.include(include)
@@ -224,6 +228,10 @@ def install_requirements(configure):
                 u'-r', u'requirements/online.txt',
                 ],
             u'dev_with_dummy_obligee_mail': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/online.txt',
+                ],
+            u'dev_without_debug': [
                 u'-r', u'requirements/base.txt',
                 u'-r', u'requirements/online.txt',
                 ],
@@ -299,7 +307,7 @@ def configure_devbar(configure, settings):
                 anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin
                 interface</a>.
                 """)
-    elif server_mode == u'dev_with_dummy_obligee_mail':
+    elif server_mode in [u'dev_with_dummy_obligee_mail', u'dev_without_debug']:
         obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
         devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. All obligee email addresses
@@ -311,7 +319,7 @@ def configure_devbar(configure, settings):
 
 def configure_database(configure, settings):
     server_mode = configure.get(u'server_mode')
-    if server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'production']:
+    if server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']:
         print(INFO + textwrap.dedent(u"""
                 Set MySQL database name, user and password.""") + RESET)
         db_name = configure.input(u'db_name', u'Database name', required=True)
@@ -325,7 +333,7 @@ def configure_database(configure, settings):
 def configure_mandrill(configure, settings):
     server_mode = configure.get(u'server_mode')
     server_domain = configure.get(u'server_domain')
-    if server_mode in [u'dev_with_dummy_obligee_mail', u'production']:
+    if server_mode in [u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']:
         print(INFO + textwrap.dedent(u"""
                 Madrill is a transactional mail service we use to send emails. To setup it, you
                 need to have a webhook URL Mandrill server can access. If you are running your
@@ -469,7 +477,7 @@ def help_run_server(configure):
                         $ env/bin/python manage.py dummymail
                     """) + RESET)
     else:
-        assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'production']
+        assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']
         print(INFO + textwrap.dedent(u"""
                 Make sure ``mod_wsgi`` Apache module is installed and enabled and add the
                 following directives to your virtualhost configuration:
