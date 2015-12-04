@@ -121,6 +121,9 @@ def _check_rec(lang, basedir, rootdir, curdir, autofix):
                     os.remove(rootlink)
                 os.symlink(u'.', rootlink)
 
+    # Skip known files and dirs
+    filenames.discard(u'_files')
+
     # Unexpected files
     if filenames:
         dirrel = os.path.relpath(curdir, basedir)
