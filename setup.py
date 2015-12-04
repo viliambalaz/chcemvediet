@@ -193,8 +193,9 @@ def configure_server_mode(configure, settings):
                 Online development mode with working email infrastructure and dummy obligee email
                 addresses.""")),
             (u'dev_without_debug', squeeze(u"""
-                Online development mode with debug mode disabled. It has working email
-                infrastructure and dummy obligee email addresses.""")),
+                Online development mode with debug mode disabled and no email infrastructure.
+                Enabling email infrastructure with debug mode disabled would require secure
+                connection.""")),
             (u'production',
                 u'Production mode.'),
             ))
@@ -203,7 +204,7 @@ def configure_server_mode(configure, settings):
             u'local_with_local_mail':       [u'server_local.py',         u'mail_dummymail.py'],
             u'dev_with_no_mail':            [u'server_dev.py',           u'mail_nomail.py'],
             u'dev_with_dummy_obligee_mail': [u'server_dev.py',           u'mail_mandrill.py'],
-            u'dev_without_debug':           [u'server_dev_no_debug.py',  u'mail_mandrill.py'],
+            u'dev_without_debug':           [u'server_dev_no_debug.py',  u'mail_nomail.py'],
             u'production':                  [u'server_prod.py',          u'mail_mandrill.py'],
             }[server_mode]
     for include in includes:
@@ -301,13 +302,13 @@ def configure_domain_and_emails(configure, settings):
 
 def configure_devbar(configure, settings):
     server_mode = configure.get(u'server_mode')
-    if server_mode == u'dev_with_no_mail':
+    if server_mode in [u'dev_with_no_mail', u'dev_without_debug']:
         devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. No emails are sent
                 anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin
                 interface</a>.
                 """)
-    elif server_mode in [u'dev_with_dummy_obligee_mail', u'dev_without_debug']:
+    elif server_mode in u'dev_with_dummy_obligee_mail':
         obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
         devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. All obligee email addresses
@@ -333,7 +334,7 @@ def configure_database(configure, settings):
 def configure_mandrill(configure, settings):
     server_mode = configure.get(u'server_mode')
     server_domain = configure.get(u'server_domain')
-    if server_mode in [u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']:
+    if server_mode in [u'dev_with_dummy_obligee_mail', u'production']:
         print(INFO + textwrap.dedent(u"""
                 Madrill is a transactional mail service we use to send emails. To setup it, you
                 need to have a webhook URL Mandrill server can access. If you are running your
