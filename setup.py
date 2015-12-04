@@ -247,17 +247,18 @@ def configure_secret_key(configure, settings):
             generate_secret_key(100, string.digits + string.letters + string.punctuation))
     settings.setting(u'SECRET_KEY', secret_key)
 
-def configure_email_addresses(configure, settings):
+def configure_domain_and_emails(configure, settings):
     server_domain = configure.input(u'server_domain',
             u'Server domain (with www and/or port number if used, eg. localhost:8000)',
             default=u'www.chcemvediet.sk', required=True)
-    mail_domain = re.sub(r'^(?:www[.])?([^:]*)(?:[:]\d+)?$', r'\1', server_domain)
+    base_domain = re.sub(r'^(?:www[.])?([^:]*)(?:[:]\d+)?$', r'\1', server_domain)
+    settings.setting(u'ALLOWED_HOSTS', [u'.' + base_domain])
 
     print(INFO + textwrap.dedent(u"""
             Set admin e-mail. It will be used for lowlevel error reporting and
             administration e-mails.""") + RESET)
     admin_email = configure.input(u'admin_email', u'Admin e-mail',
-            default=u'admin@{}'.format(mail_domain), required=True)
+            default=u'admin@{}'.format(base_domain), required=True)
     settings.setting(u'SERVER_EMAIL', admin_email)
     settings.setting(u'ADMINS[len(ADMINS):]', [(u'Admin', admin_email)])
 
@@ -267,7 +268,7 @@ def configure_email_addresses(configure, settings):
             '{token}' as a placeholder to distinguish individual inforequests. For instance
             '{token}@mail.example.com' may be expanded to 'lama@mail.example.com'.""") + RESET)
     inforequest_unique_email = configure.input(u'inforequest_unique_email',
-            u'Inforequest unique e-mail', default=u'{{token}}@mail.{}'.format(mail_domain),
+            u'Inforequest unique e-mail', default=u'{{token}}@mail.{}'.format(base_domain),
             required=True)
     settings.setting(u'INFOREQUEST_UNIQUE_EMAIL', inforequest_unique_email)
 
@@ -275,7 +276,7 @@ def configure_email_addresses(configure, settings):
             Set default from address. It will be used as the from e-mail addresses for all
             other e-mails.""") + RESET)
     default_from_email = configure.input(u'default_from_email', u'Default from e-mail',
-            default=u'info@{}'.format(mail_domain), required=True)
+            default=u'info@{}'.format(base_domain), required=True)
     settings.setting(u'DEFAULT_FROM_EMAIL', default_from_email)
 
     # Production mode uses real obligee emails.
@@ -522,7 +523,7 @@ def main():
             install_requirements(configure)
             download_fontello(configure)
             configure_secret_key(configure, settings)
-            configure_email_addresses(configure, settings)
+            configure_domain_and_emails(configure, settings)
             configure_devbar(configure, settings)
             configure_database(configure, settings)
             configure_mandrill(configure, settings)

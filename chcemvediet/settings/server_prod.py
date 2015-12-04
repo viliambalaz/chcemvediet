@@ -9,7 +9,6 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 PREPEND_WWW = True
-ALLOWED_HOSTS = [u'.chcemvediet.sk']
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 LIBSASS_OUTPUT_STYLE = u'compressed'
@@ -34,7 +33,7 @@ CACHES = {
     u'default': {
         u'BACKEND': u'django.core.cache.backends.memcached.MemcachedCache',
         u'LOCATION': u'127.0.0.1:11211',
-    }
+    },
 }
 
 LOGGING = {
