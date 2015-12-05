@@ -372,43 +372,43 @@ msgid "inforequests:obligee_action:WasItReturned:label"
 msgstr "Vrátenie"
 
 msgid "inforequests:obligee_action:WasItReturned:yes"
-msgstr "Áno, vracia"
+msgstr "Áno, odovolací orgnán rozhodol o vrátení veci povinnej osobe na nové konanie."
 
 msgid "inforequests:obligee_action:WasItReturned:no"
-msgstr "Nie, nevracia"
+msgstr "Nie, odovolací orgnán zamietol vrátiť vec povinnej osobe na nové konanie."
 
 msgid "inforequests:obligee_action:WasItAccepted:label"
 msgstr "Uznané argumenty"
 
 msgid "inforequests:obligee_action:WasItAccepted:all"
-msgstr "Áno, všetky"
+msgstr "Áno, odovlací orgán uznal všetky argumenty uvedené v odovolaní."
 
 msgid "inforequests:obligee_action:WasItAccepted:some"
-msgstr "Niektoré"
+msgstr "Odvolací orgán uznal len časť argumentov uvedených v odvolaní."
 
 msgid "inforequests:obligee_action:WasItAccepted:none"
-msgstr "Žiadne"
+msgstr "Nie, odovlací orgán neuznal žiaden argument uvedený v odovolaní."
 
 msgid "inforequests:obligee_action:ContainsAppealInfo:label"
 msgstr "Informácie"
 
 msgid "inforequests:obligee_action:ContainsAppealInfo:full"
-msgstr "Áno, som úplne spokojný"
+msgstr "Áno, inštitúcia mi poslala požadované informácie."
 
 msgid "inforequests:obligee_action:ContainsAppealInfo:partial"
-msgstr "Čiastočne"
+msgstr "Inštitúcia mi poslala požadované informácie len čiastočne."
 
 msgid "inforequests:obligee_action:ContainsAppealInfo:none"
-msgstr "Vôbec"
+msgstr "Nie, inštitúcia mi neposlala žiadne z informácií, o ktoré som žiadal."
 
 msgid "inforequests:obligee_action:IsItAppealDecision:label"
 msgstr "Rozhodnutie"
 
 msgid "inforequests:obligee_action:IsItAppealDecision:yes"
-msgstr "Áno, má"
+msgstr "Áno, obsahuje to dokument s nadpisom rozhodnutie."
 
 msgid "inforequests:obligee_action:IsItAppealDecision:no"
-msgstr "Nie, nemá"
+msgstr "Nie, neobsahuje to dokument s nadpisom rozhodnutie."
 
 msgid "inforequests:obligee_action:DisclosureReasons:label"
 msgstr "Dôvody"
@@ -426,7 +426,7 @@ msgid "inforequests:obligee_action:IsItExtension:extension:label"
 msgstr "Predĺženie lehoty"
 
 msgid "inforequests:obligee_action:IsItExtension:extension:help_text"
-msgstr "Vyplňte počet dní, o ktoré inštitúcia predlžuje lehotu."
+msgstr "Vyplňte počet dní, o ktoré inštitúcia predĺžuje lehotu. Maximálne možné predĺženie lehoty je 8 pracovných dní. 15 pracovných dní, ak sa sprístupňuje informácia nevidiacej osobe v prístupnej forme."
 
 msgid "inforequests:obligee_action:IsItExtension:extension:placeholder"
 msgstr "Kalendárne dni"
