@@ -1,0 +1,12 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- None
+ %
+{% endcomment %}
+
+
+Každá vytvorená žiadosť na našom portáli získa unikátnu emailovú adresu. Jej prostredníctvom budeme
+komunikovať s príslušnou inštitúciou. Vaše žiadosti nebudú podávané cez vašu emailovú adresu.
