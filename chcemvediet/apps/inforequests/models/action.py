@@ -238,6 +238,16 @@ class Action(FormatMixin, models.Model):
             (u'CONFIDENTIAL',     u'9', _(u'inforequests:Action:refusal_reason:CONFIDENTIAL')),
             (u'OTHER_REASON',    u'-2', _(u'inforequests:Action:refusal_reason:OTHER_REASON')),
             )
+    APPEAL_REFUSAL_REASONS = FieldChoices(
+            (u'DOES_NOT_HAVE',    u'3', _(u'inforequests:Action:appeal_refusal_reason:DOES_NOT_HAVE')),
+            (u'DOES_NOT_PROVIDE', u'4', _(u'inforequests:Action:appeal_refusal_reason:DOES_NOT_PROVIDE')),
+            (u'DOES_NOT_CREATE',  u'5', _(u'inforequests:Action:appeal_refusal_reason:DOES_NOT_CREATE')),
+            (u'COPYRIGHT',        u'6', _(u'inforequests:Action:appeal_refusal_reason:COPYRIGHT')),
+            (u'BUSINESS_SECRET',  u'7', _(u'inforequests:Action:appeal_refusal_reason:BUSINESS_SECRET')),
+            (u'PERSONAL',         u'8', _(u'inforequests:Action:appeal_refusal_reason:PERSONAL')),
+            (u'CONFIDENTIAL',     u'9', _(u'inforequests:Action:appeal_refusal_reason:CONFIDENTIAL')),
+            (u'OTHER_REASON',    u'-2', _(u'inforequests:Action:appeal_refusal_reason:OTHER_REASON')),
+            )
     refusal_reason = MultiSelectField(choices=REFUSAL_REASONS._choices, blank=True,
             help_text=squeeze(u"""
                 Optional multichoice for obligee actions that may provide a reason for not

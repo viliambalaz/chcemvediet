@@ -53,7 +53,7 @@ class RefusalReasonField(MultiSelectFormField):
         self.section_3 = kwargs.pop(u'section_3', False)
         kwargs.setdefault(u'label', u' ')
 
-        choices = Action.REFUSAL_REASONS._choices
+        choices = kwargs.pop(u'choices', Action.REFUSAL_REASONS._choices)
         if not self.section_3:
             # Only obligees defined in section 3 (of §2) may refuse to disclose information saying
             # they are not obliged to provide such information.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 03:35+0100\n"
+"POT-Creation-Date: 2015-12-05 22:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -613,6 +613,30 @@ msgstr "Inštitúcia uviedla, že požadovaná informácia je predmetom utajovan
 
 msgid "inforequests:Action:refusal_reason:OTHER_REASON"
 msgstr "Inštitúcia uviedla inú príčinu."
+
+msgid "inforequests:Action:appeal_refusal_reason:DOES_NOT_HAVE"
+msgstr "Odvolací orgán potvrdil, že ištitúcia nedisponuje požadovanou informáciou."
+
+msgid "inforequests:Action:appeal_refusal_reason:DOES_NOT_PROVIDE"
+msgstr "Odvolací orgán potvrdil, že ištitúcia nie je povinná poskytovať požadovanú informáciu."
+
+msgid "inforequests:Action:appeal_refusal_reason:DOES_NOT_CREATE"
+msgstr "Odvolací orgán potvrdil, že sprístupnenie požadovanej informácie inštitúciou si vyžaduje túto informáciu nanovo vytvoriť, a inštitúcia nie je povinná vytvárať nové informácie."
+
+msgid "inforequests:Action:appeal_refusal_reason:COPYRIGHT"
+msgstr "Odvolací orgán potvrdil, že sprístupnením požadovanej informácie by inštitúcia porušia autorské právo."
+
+msgid "inforequests:Action:appeal_refusal_reason:BUSINESS_SECRET"
+msgstr "Odvolací orgán potvrdil, že požadovaná informácia je predmetom obchodného tajomstva."
+
+msgid "inforequests:Action:appeal_refusal_reason:PERSONAL"
+msgstr "Odvolací orgán potvrdil, že sprístupnením požadovanej informácie by inštitúcia porušila ochranu osobných údajov."
+
+msgid "inforequests:Action:appeal_refusal_reason:CONFIDENTIAL"
+msgstr "Odvolací orgán potvrdil, že požadovaná informácia je predmetom utajovanej skutočnosti."
+
+msgid "inforequests:Action:appeal_refusal_reason:OTHER_REASON"
+msgstr "FIXME Inštitúcia uviedla inú príčinu."
 
 msgid "inforequests:Inforequest:fallback_slug"
 msgstr "ziadost"

@@ -216,6 +216,7 @@ class ReversionReasons(ObligeeActionStep):
         branch = self.wizard.values[u'branch']
         self.fields[u'refusal_reason'] = RefusalReasonField(
                 section_3=(branch.obligee.type == Obligee.TYPES.SECTION_3),
+                choices=Action.APPEAL_REFUSAL_REASONS._choices,
                 )
 
     def post_transition(self):

@@ -84,7 +84,7 @@
         {% if action.refusal_reason %}
           <div class="row">
             <p class="col-sm-3 col-md-2 chv-dense">{% trans 'inforequests:detail:action:refusal_reason' %}:</p>
-            <p class="col-sm-9 col-md-10 chv-semidense">{{ action.get_refusal_reason_display }}</p>
+            <p class="col-sm-9 col-md-10 chv-semidense">{{ action.get_refusal_reason_list|join:"<br>" }}</p>
           </div>
         {% endif %}
         {% if action.attachments %}

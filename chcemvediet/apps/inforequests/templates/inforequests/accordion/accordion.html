@@ -61,7 +61,7 @@
                 {% if action.refusal_reason %}
                   <p class="chv-dense">
                     <strong>{% trans 'inforequests:accordion:action:refusal_reason' %}:</strong>
-                    {{ action.get_refusal_reason_display }}
+                    {{ action.get_refusal_reason_list|join:" " }}
                   </p>
                 {% endif %}
                 {% if action.attachments %}
