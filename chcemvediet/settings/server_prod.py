@@ -12,6 +12,7 @@ PREPEND_WWW = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 LIBSASS_OUTPUT_STYLE = u'compressed'
+INVITATIONS_INVITATION_ONLY = True
 
 # English on production server is disabled for now.
 LANGUAGES = (
