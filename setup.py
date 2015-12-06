@@ -211,6 +211,10 @@ def configure_server_mode(configure, settings):
                 Online development mode with debug mode disabled and no email infrastructure.
                 Enabling email infrastructure with debug mode disabled would require secure
                 connection.""")),
+            (u'production_with_no_mail', squeeze(u"""
+                Production mode with no email infrastructure. Usefull for testing on production
+                server just before deploying. WARNING: This mode uses real obligee email
+                addresses.""")),
             (u'production',
                 u'Production mode.'),
             ))
@@ -220,6 +224,7 @@ def configure_server_mode(configure, settings):
             u'dev_with_no_mail':            [u'server_dev.py',           u'mail_nomail.py'],
             u'dev_with_dummy_obligee_mail': [u'server_dev.py',           u'mail_mandrill.py'],
             u'dev_without_debug':           [u'server_dev_no_debug.py',  u'mail_nomail.py'],
+            u'production_with_no_mail':     [u'server_prod.py',          u'mail_nomail.py'],
             u'production':                  [u'server_prod.py',          u'mail_mandrill.py'],
             }[server_mode]
     for include in includes:
@@ -248,6 +253,10 @@ def install_requirements(configure):
                 u'-r', u'requirements/online.txt',
                 ],
             u'dev_without_debug': [
+                u'-r', u'requirements/base.txt',
+                u'-r', u'requirements/online.txt',
+                ],
+            u'production_with_no_mail': [
                 u'-r', u'requirements/base.txt',
                 u'-r', u'requirements/online.txt',
                 ],
@@ -305,7 +314,7 @@ def configure_domain_and_emails(configure, settings):
 
     # Production mode uses real obligee emails.
     server_mode = configure.get(u'server_mode')
-    if server_mode != u'production':
+    if server_mode not in [u'production_with_no_mail', u'production']:
         print(INFO + textwrap.dedent(u"""
                 To prevent unsolicited emails to obligees while testing we replace their
                 addresses with dummies. Use '{name}' as a placeholder to distinguish individual
@@ -335,7 +344,8 @@ def configure_devbar(configure, settings):
 
 def configure_database(configure, settings):
     server_mode = configure.get(u'server_mode')
-    if server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']:
+    if server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'dev_without_debug',
+            u'production_with_no_mail', u'production']:
         print(INFO + textwrap.dedent(u"""
                 Set MySQL database name, user and password.""") + RESET)
         db_name = configure.input(u'db_name', u'Database name', required=True)
@@ -464,7 +474,7 @@ def configure_dummy_obligee_emails(configure):
 
     # Production mode uses real obligee emails.
     server_mode = configure.get(u'server_mode')
-    if server_mode == u'production':
+    if server_mode in [u'production_with_no_mail', u'production']:
         return
 
     mail_tpl = configure.get(u'obligee_dummy_mail')
@@ -501,7 +511,8 @@ def help_run_server(configure):
                         $ env/bin/python manage.py dummymail
                     """) + RESET)
     else:
-        assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail', u'dev_without_debug', u'production']
+        assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail',
+                u'dev_without_debug', u'production_with_no_mail', u'production']
         print(INFO + textwrap.dedent(u"""
                 Make sure ``mod_wsgi`` Apache module is installed and enabled and add the
                 following directives to your virtualhost configuration:
