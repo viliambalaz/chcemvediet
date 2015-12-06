@@ -142,8 +142,9 @@ class CompositeTextField(forms.MultiValueField):
         return data_list
 
     def finalize(self, cleaned_data, context={}):
-        context = dict(self.widget.context, inputs=cleaned_data, finalize=True, **context)
-        return render_to_string(self.widget.template, context).strip()
+        context = dict(self.widget.context, inputs=cleaned_data, finalize=True,
+                template=self.widget.template, **context)
+        return render_to_string(u'utils/forms/compositetextfield/finalize.txt', context).strip()
 
 class PrefixedForm(forms.Form):
     def __init__(self, *args, **kwargs):

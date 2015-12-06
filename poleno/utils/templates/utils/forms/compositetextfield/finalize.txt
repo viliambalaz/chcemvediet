@@ -1,0 +1,13 @@
+{# vim: set filetype=htmldjango :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- template: string
+ %
+{% endcomment %}
+
+
+{% autoescape off %}
+  {% include template %}
+{% endautoescape %}
