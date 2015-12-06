@@ -332,12 +332,17 @@ def configure_devbar(configure, settings):
                 anywhere. To view what would be sent, use <a href="/admin/mail/message/">admin
                 interface</a>.
                 """)
-    elif server_mode in u'dev_with_dummy_obligee_mail':
+    elif server_mode in [u'dev_with_dummy_obligee_mail']:
         obligee_dummy_mail = configure.get(u'obligee_dummy_mail')
         devbar_message = squeeze(u"""
                 <strong>Warning:</strong> This is a development server. All obligee email addresses
                 are replaced with dummies: {}.
                 """).format(obligee_dummy_mail)
+    elif server_mode in [u'production_with_no_mail']:
+        devbar_message = squeeze(u"""
+                <strong>Warning:</strong> This is a testing server. No emails are sent anywhere,
+                however, real obligee email addresses are used.
+                """)
     else:
         devbar_message = u''
     settings.setting(u'DEVBAR_MESSAGE', devbar_message)
