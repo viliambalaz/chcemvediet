@@ -10,6 +10,7 @@ import random
 import json
 import getpass
 import textwrap
+import unicodedata
 
 INFO = u'\033[93m'
 SHELL = u'\033[92m'
@@ -19,6 +20,12 @@ RESET = u'\033[0m'
 
 def squeeze(s):
     return u' '.join(s.split())
+
+def slugify(s):
+    s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
+    s = re.sub(r'\W+', '-', s)
+    s = s.lower().strip('-')
+    return s
 
 def call(msg, args, cwd=None):
     if cwd:
@@ -68,6 +75,14 @@ class Configure(object):
     def auto(self, key, default):
         self.configured[key] = True
         return self.data.setdefault(key, default)
+
+    def increment(self, key, default=1):
+        self.configured[key] = True
+        try:
+            self.data[key] += 1
+        except KeyError:
+            self.data[key] = default
+        return self.data[key]
 
     def input(self, key, prompt, default=u'', required=False):
         configured = self.data.get(key, default)
@@ -331,6 +346,14 @@ def configure_database(configure, settings):
         settings.setting(u'DATABASES[u"default"][u"USER"]', db_user)
         settings.setting(u'DATABASES[u"default"][u"PASSWORD"]', db_password)
 
+def configure_cache(configure, settings):
+    default_prefix = slugify(configure.get(u'server_domain'))
+    cache_prefix = configure.input(u'cache_prefix', u'Unique cache key prefix',
+            default=default_prefix, required=True)
+    cache_version = configure.increment(u'cache_version')
+    settings.setting(u'CACHES[u"default"][u"KEY_PREFIX"]', cache_prefix)
+    settings.setting(u'CACHES[u"default"][u"VERSION"]', cache_version)
+
 def configure_mandrill(configure, settings):
     server_mode = configure.get(u'server_mode')
     server_domain = configure.get(u'server_domain')
@@ -535,6 +558,7 @@ def main():
             configure_domain_and_emails(configure, settings)
             configure_devbar(configure, settings)
             configure_database(configure, settings)
+            configure_cache(configure, settings)
             configure_mandrill(configure, settings)
 
         # Settings module is configured, so we may use Django now.

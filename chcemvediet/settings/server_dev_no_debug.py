@@ -26,6 +26,9 @@ CACHES = {
     u'default': {
         u'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         u'LOCATION': os.path.join(PROJECT_PATH, u'cache'),
+        # Filled in 'configured.py'
+        u'KEY_PREFIX': None,
+        u'VERSION': None,
     },
 }
 
