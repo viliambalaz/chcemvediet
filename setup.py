@@ -495,7 +495,7 @@ def compile_locales(configure):
 def run_datachecks(configure):
     call(u'Running data checks:', [u'env/bin/python', u'manage.py', u'datacheck', u'--autofix'])
 
-def help_run_server(configure):
+def touch_wsgi_and_help_run_server(configure):
     server_mode = configure.get(u'server_mode')
     if server_mode in [u'local_with_no_mail', u'local_with_local_mail']:
         print(INFO + textwrap.dedent(u"""
@@ -513,6 +513,7 @@ def help_run_server(configure):
     else:
         assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail',
                 u'dev_without_debug', u'production_with_no_mail', u'production']
+        call(u'Reloading server:', [u'touch', u'chcemvediet/wsgi.py'])
         print(INFO + textwrap.dedent(u"""
                 Make sure ``mod_wsgi`` Apache module is installed and enabled and add the
                 following directives to your virtualhost configuration:
@@ -537,9 +538,6 @@ def help_run_server(configure):
 
                 Finally add a cron job running the following command every minute:
                     cd {path} && env/bin/python manage.py runcrons
-
-                To tell server to reload from new sources write:
-                    $ touch chcemvediet/wsgi.py
                 """) + RESET)
 
 def main():
@@ -588,7 +586,7 @@ def main():
 
         compile_locales(configure)
         run_datachecks(configure)
-        help_run_server(configure)
+        touch_wsgi_and_help_run_server(configure)
 
 
 if __name__ == u'__main__':
