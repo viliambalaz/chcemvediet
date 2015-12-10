@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-10 01:36+0100\n"
+"POT-Creation-Date: 2015-12-10 06:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1025,6 +1025,30 @@ msgstr "Uložiť"
 
 msgid "wizards:wizard:cancel"
 msgstr "Zrušiť"
+
+msgid "main:400:title"
+msgstr "400 Bad Request"
+
+msgid "main:400:heading"
+msgstr "400 Bad Request"
+
+msgid "main:403:title"
+msgstr "403 Forbidden"
+
+msgid "main:403:heading"
+msgstr "403 Forbidden"
+
+msgid "main:404:title"
+msgstr "404 Not Found"
+
+msgid "main:404:heading"
+msgstr "404 Not Found"
+
+msgid "main:500:title"
+msgstr "500 Internal Error"
+
+msgid "main:500:heading"
+msgstr "500 Internal Error"
 
 msgid "account:inactive:title"
 msgstr "Neaktívny účet"

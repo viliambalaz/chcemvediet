@@ -1,8 +1,9 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect
 from django.contrib.sessions.models import Session
 from django.shortcuts import render
 from allauth.account.decorators import verified_email_required
@@ -85,7 +86,7 @@ def inforequest_create(request, draft_pk=None):
             draft.delete()
         return HttpResponseRedirect(inforequest.get_absolute_url())
 
-    return HttpResponseBadRequest()
+    raise SuspiciousOperation()
 
 @require_http_methods([u'HEAD', u'GET'])
 @login_required

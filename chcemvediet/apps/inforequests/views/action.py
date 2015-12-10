@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import transaction
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 
 from poleno.utils.urls import reverse
 from poleno.utils.views import require_ajax, login_required
@@ -40,7 +40,7 @@ def clarification_response(request, inforequest_slug, inforequest_pk, branch_pk,
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if not branch.can_add_clarification_response:
-        return HttpResponseNotFound()
+        raise Http404()
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:clarification_response',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
@@ -56,7 +56,7 @@ def appeal(request, inforequest_slug, inforequest_pk, branch_pk, step_idx=None):
     branch = inforequest.branch_set.get_or_404(pk=branch_pk)
 
     if not branch.can_add_appeal:
-        return HttpResponseNotFound()
+        raise Http404()
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:appeal',
                 kwargs=dict(branch=branch, step_idx=step_idx)))
@@ -74,11 +74,11 @@ def snooze(request, inforequest_slug, inforequest_pk, branch_pk, action_pk):
     action = branch.last_action
 
     if action.pk != Action._meta.pk.to_python(action_pk):
-        return HttpResponseNotFound()
+        raise Http404()
     if not action.can_applicant_snooze:
-        return HttpResponseNotFound()
+        raise Http404()
     if inforequest.has_undecided_emails:
-        return HttpResponseNotFound()
+        raise Http404()
     if inforequest_slug != inforequest.slug:
         return HttpResponseRedirect(reverse(u'inforequests:snooze', kwargs=dict(action=action)))
 

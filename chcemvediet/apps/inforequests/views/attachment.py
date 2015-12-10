@@ -3,7 +3,7 @@
 from django.db import transaction
 from django.db.models import Q
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseNotFound
+from django.http import Http404
 from django.contrib.sessions.models import Session
 
 from poleno.attachments import views as attachments_views
@@ -41,11 +41,11 @@ def attachment_download(request, attachment_pk):
     try:
         condition = permitted[attached_to_class]
     except KeyError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     try:
         attached_to_class.objects.filter(condition).get(pk=attachment.generic_id)
     except attached_to_class.DoesNotExist:
-        return HttpResponseNotFound()
+        raise Http404()
 
     return attachments_views.download(request, attachment)

@@ -1,7 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -18,7 +18,7 @@ from .models import Invitation
 @login_required
 def invite(request):
     if not request.user.invitationsupply.can_use_invitations:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if request.method == u'POST':
         form = forms.InviteForm(request.POST)

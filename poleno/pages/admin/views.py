@@ -1,8 +1,8 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from django.core.exceptions import SuspiciousOperation
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse, HttpResponseNotFound
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import Template, Context
 from django.shortcuts import render
 from django.contrib import admin
@@ -45,11 +45,11 @@ def create_or_edit(request, lang, path, create):
     try:
         page = Page(path, lang, keep_last=True)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
-        return HttpResponseNotFound()
+        raise Http404()
     if create and page.is_redirect:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if request.method == u'POST':
         button = clean_button(request.POST, [u'save', u'save-and-continue'])
@@ -69,7 +69,7 @@ def create_or_edit(request, lang, path, create):
                                 reverse(u'admin:pages_edit', args=[lang, new_page.lpath]))
 
         else: # Invalid button
-            return HttpResponseBadRequest()
+            raise SuspiciousOperation()
 
     else: # GET
         form = forms.PageEditForm(page, create)
@@ -99,11 +99,11 @@ def delete(request, lang, path):
     try:
         page = Page(path, lang, keep_last=True)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.is_root:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if request.method == u'POST':
         button = clean_button(request.POST, [u'delete'])
@@ -113,7 +113,7 @@ def delete(request, lang, path):
             return HttpResponseRedirect(reverse(u'admin:pages_index', args=[lang]))
 
         else: # Invalid button
-            return HttpResponseBadRequest()
+            raise SuspiciousOperation()
 
     return render(request, u'pages/admin/delete.html', {
             u'title': u'Delete Page',
@@ -147,14 +147,14 @@ def file_create_or_edit(request, lang, path, name, create):
     try:
         page = Page(path, lang)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
-        return HttpResponseNotFound()
+        raise Http404()
 
     try:
         file = File(page, name) if not create else None
     except InvalidFileError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if request.method == u'POST':
         button = clean_button(request.POST, [u'save', u'save-and-continue'])
@@ -175,7 +175,7 @@ def file_create_or_edit(request, lang, path, name, create):
                                 args=[lang, page.lpath, new_file.name]))
 
         else: # Invalid button
-            return HttpResponseBadRequest()
+            raise SuspiciousOperation()
 
     else: # GET
         form = forms.FileEditForm(page, file, create)
@@ -206,14 +206,14 @@ def file_delete(request, lang, path, name):
     try:
         page = Page(path, lang)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
-        return HttpResponseNotFound()
+        raise Http404()
 
     try:
         file = File(page, name)
     except InvalidFileError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if request.method == u'POST':
         button = clean_button(request.POST, [u'delete'])
@@ -223,7 +223,7 @@ def file_delete(request, lang, path, name):
             return HttpResponseRedirect(reverse(u'admin:pages_edit', args=[lang, page.lpath]))
 
         else: # Invalid button
-            return HttpResponseBadRequest()
+            raise SuspiciousOperation()
 
     return render(request, u'pages/admin/file_delete.html', {
             u'title': u'Delete Page Attachment',

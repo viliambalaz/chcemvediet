@@ -3,7 +3,7 @@
 import logging
 
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.conf import settings
 from django.shortcuts import render
 from django.utils.translation import get_language
@@ -30,7 +30,7 @@ def view(request, path):
     try:
         page = Page(path)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
@@ -38,7 +38,7 @@ def view(request, path):
                 page.lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--')))
 
     if page.is_disabled:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
         return HttpResponseRedirect(reverse(u'pages:view', args=[page.lpath]))
 
@@ -51,7 +51,7 @@ def alternatives(request, lang, path):
     try:
         page = Page(path, lang)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
@@ -59,7 +59,7 @@ def alternatives(request, lang, path):
                 lang, path, page.lang, page.path, request.META.get(u'HTTP_REFERER', u'--')))
 
     if page.is_disabled:
-        return HttpResponseNotFound()
+        raise Http404()
     if page.lpath != path:
         return HttpResponseRedirect(reverse(u'pages:alternatives', args=[lang, page.lpath]))
 
@@ -83,7 +83,7 @@ def file(request, path, name):
     try:
         page = Page(path)
     except InvalidPageError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if page.lpath != path:
         logger = logging.getLogger(u'poleno.pages')
@@ -93,7 +93,7 @@ def file(request, path, name):
     try:
         file = File(page, name)
     except InvalidFileError:
-        return HttpResponseNotFound()
+        raise Http404()
 
     if page.lpath != path:
         return HttpResponseRedirect(reverse(u'pages:file', args=[page.lpath, name]))

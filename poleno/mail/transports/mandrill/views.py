@@ -5,11 +5,11 @@ import hmac
 import json
 from base64 import b64encode
 
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied, SuspiciousOperation
 from django.db import transaction
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponse
 from django.conf import settings
 
 from poleno.utils.views import secure_required
@@ -31,7 +31,7 @@ def webhook(request):
     if not secret:
         raise ImproperlyConfigured(u'Setting MANDRILL_WEBHOOK_SECRET is not set.')
     if request.GET.get(secret_name) != secret:
-        return HttpResponseForbidden(u'Secret does not match')
+        raise PermissionDenied(u'Secret does not match')
 
     if request.method == u'POST':
         if not webhook_url:
@@ -41,7 +41,7 @@ def webhook(request):
 
         signature = request.META.get(u'HTTP_X_MANDRILL_SIGNATURE', None)
         if not signature:
-            return HttpResponseForbidden(u'X-Mandrill-Signature not set')
+            raise PermissionDenied(u'X-Mandrill-Signature not set')
 
         post_parts = [webhook_url]
         post_lists = sorted(request.POST.lists())
@@ -56,12 +56,12 @@ def webhook(request):
             if signature == hash_string:
                 break
         else:
-            return HttpResponseForbidden(u'Signature does not match')
+            raise PermissionDenied(u'Signature does not match')
 
         try:
             data = json.loads(request.POST.get(u'mandrill_events'))
         except (TypeError, ValueError):
-            return HttpResponseBadRequest(u'Request syntax error')
+            raise SuspiciousOperation(u'Request syntax error')
         for event in data:
             webhook_event.send(sender=None, event_type=event['event'], data=event)
 

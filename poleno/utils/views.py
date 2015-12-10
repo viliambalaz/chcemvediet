@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
+from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import available_attrs
@@ -21,7 +21,7 @@ def require_ajax(view):
     @wraps(view, assigned=available_attrs(view))
     def wrapped_view(request, *args, **kwargs):
         if not request.is_ajax():
-            return HttpResponseBadRequest()
+            raise SuspiciousOperation()
         return view(request, *args, **kwargs)
     return wrapped_view
 

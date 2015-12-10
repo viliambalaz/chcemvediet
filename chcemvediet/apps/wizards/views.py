@@ -1,6 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.core.exceptions import SuspiciousOperation
+from django.http import HttpResponseRedirect
 
 from poleno.utils.forms import clean_button
 
@@ -32,4 +33,4 @@ def wizard_view(wizard_class, request, index, *args, **kwargs):
         wizard.reset()
         return HttpResponseRedirect(url)
 
-    return HttpResponseBadRequest()
+    raise SuspiciousOperation()
