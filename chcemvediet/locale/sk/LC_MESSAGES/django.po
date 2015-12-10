@@ -1027,28 +1027,28 @@ msgid "wizards:wizard:cancel"
 msgstr "Zrušiť"
 
 msgid "main:400:title"
-msgstr "400 Bad Request"
+msgstr "400 Nesprávna požiadavka"
 
 msgid "main:400:heading"
-msgstr "400 Bad Request"
+msgstr "400 Nesprávna požiadavka"
 
 msgid "main:403:title"
-msgstr "403 Forbidden"
+msgstr "403 Nepovolený prístup"
 
 msgid "main:403:heading"
-msgstr "403 Forbidden"
+msgstr "403 Nepovolený prístup"
 
 msgid "main:404:title"
-msgstr "404 Not Found"
+msgstr "404 Stránka neexistuje"
 
 msgid "main:404:heading"
-msgstr "404 Not Found"
+msgstr "404 Stránka neexistuje"
 
 msgid "main:500:title"
-msgstr "500 Internal Error"
+msgstr "500 Chyba servera"
 
 msgid "main:500:heading"
-msgstr "500 Internal Error"
+msgstr "500 Chyba servera"
 
 msgid "account:inactive:title"
 msgstr "Neaktívny účet"
