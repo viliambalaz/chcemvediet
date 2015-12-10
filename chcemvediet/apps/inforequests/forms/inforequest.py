@@ -25,6 +25,7 @@ class InforequestForm(PrefixedForm):
             )
     subject = CompositeTextField(
             label=_(u'inforequests:InforequestForm:subject:label'),
+            help_text=_(u'inforequests:InforequestForm:subject:help_text'),
             template=u'inforequests/create/forms/subject.txt',
             fields=[
                 forms.CharField(max_length=50, widget=forms.TextInput(attrs={

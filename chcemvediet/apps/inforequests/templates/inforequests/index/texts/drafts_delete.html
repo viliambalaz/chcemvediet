@@ -1,0 +1,14 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- draft: chcemvediet.apps.inforequests.models.InforequestDraft
+ %
+{% endcomment %}
+
+
+Chcete naozaj vymazať túto rozpracovanú žiadosť?
+
+Predmet: {{ object.subject.0|default:"(bez predmetu)" }}
+Inštitúcia: {{ object.obligee.name|default:"(bez inštitúcie)" }}
