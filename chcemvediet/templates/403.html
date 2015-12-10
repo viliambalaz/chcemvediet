@@ -1,0 +1,18 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/base/single_column.html" %}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- exception: string
+ %
+{% endcomment %}
+
+
+{% block title %}{% trans 'main:403:title' %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'main:403:heading' %}</h1>
+  {% include "main/texts/403.html" %}
+{% endblock %}
