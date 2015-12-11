@@ -39,7 +39,7 @@ msgid "mail:Recipient:status:UNDEFINED"
 msgstr "Nedefinovaný"
 
 msgid "mail:Recipient:status:QUEUED"
-msgstr "Zaradený do fronty"
+msgstr "Zaradený do radu"
 
 msgid "mail:Recipient:status:REJECTED"
 msgstr "Odmietnutý email"

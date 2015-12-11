@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-10 06:08+0100\n"
+"POT-Creation-Date: 2015-12-11 02:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -543,16 +543,16 @@ msgid "inforequests:Action:type:REQUEST"
 msgstr "Žiadosť"
 
 msgid "inforequests:Action:type:CLARIFICATION_RESPONSE"
-msgstr "Odpoveď na výzvu na doplnenie"
+msgstr "Doplnenie žiadosti"
 
 msgid "inforequests:Action:type:APPEAL"
 msgstr "Odvolanie"
 
 msgid "inforequests:Action:type:CONFIRMATION"
-msgstr "Potvrdenie prijatia"
+msgstr "Potvrdenie prijatia žiadosti"
 
 msgid "inforequests:Action:type:EXTENSION"
-msgstr "Predĺženie lehoty"
+msgstr "Predĺženie lehoty na odpoveď od inštitúcie"
 
 msgid "inforequests:Action:type:ADVANCEMENT"
 msgstr "Postúpenie žiadosti"
@@ -561,10 +561,10 @@ msgid "inforequests:Action:type:CLARIFICATION_REQUEST"
 msgstr "Výzva na doplnenie žiadosti"
 
 msgid "inforequests:Action:type:DISCLOSURE"
-msgstr "Sprístupnenie informácií"
+msgstr "Sprístupnenie informácie"
 
 msgid "inforequests:Action:type:REFUSAL"
-msgstr "Rozhodnutie o odmietnutí"
+msgstr "Rozhodnutie o nesprístupnení informácie"
 
 msgid "inforequests:Action:type:AFFIRMATION"
 msgstr "Potvrdenie rozhodnutia"
@@ -576,13 +576,13 @@ msgid "inforequests:Action:type:REMANDMENT"
 msgstr "Vrátenie rozhodnutia"
 
 msgid "inforequests:Action:type:ADVANCED_REQUEST"
-msgstr "Doručenie postúpenia žiadosti"
+msgstr "Doručenie postúpenej žiadosti novej povinnej osobe"
 
 msgid "inforequests:Action:type:EXPIRATION"
 msgstr "Vypršanie lehoty"
 
 msgid "inforequests:Action:type:APPEAL_EXPIRATION"
-msgstr "Vypršanie lehoty na odvolanie"
+msgstr "Vypršanie lehoty po podaní odvolania"
 
 msgid "inforequests:Action:disclosure_level:NONE"
 msgstr "Nesprístupnenie"
@@ -640,6 +640,15 @@ msgstr "Odvolací orgán potvrdil, že požadovaná informácia je predmetom uta
 
 msgid "inforequests:Action:appeal_refusal_reason:OTHER_REASON"
 msgstr "FIXME Inštitúcia uviedla inú príčinu."
+
+msgid "inforequests:Action:type:DISCLOSURE:NONE"
+msgstr "Nesprístupnenie informácie bez vydania rozhodnutia"
+
+msgid "inforequests:Action:type:DISCLOSURE:PARTIAL"
+msgstr "Neúplné sprístupnenie informácie bez vydania rozhodnutia"
+
+msgid "inforequests:Action:type:DISCLOSURE:FULL"
+msgstr "Úplne sprístupnenie informácie"
 
 msgid "inforequests:Inforequest:fallback_slug"
 msgstr "ziadost"
@@ -855,7 +864,7 @@ msgid "inforequests:index:smail:button"
 msgstr "Nahrať odpoveď"
 
 msgid "inforequests:index:smail:heading"
-msgstr "Prišla mi odpoveď poštou"
+msgstr "Prišla odpoveď klasickou poštou"
 
 msgid "inforequests:index:pending:anchor"
 msgstr "podane"

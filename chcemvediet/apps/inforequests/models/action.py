@@ -468,6 +468,21 @@ class Action(FormatMixin, models.Model):
 
         return action
 
+    def get_extended_type_display(self):
+        u"""
+        Return a bit more verbose action type description. It is not based only on the action type.
+        For instance ``DISCLOSURE`` actions have different descriptions based on their disclosure
+        levels.
+        """
+        if self.type == self.TYPES.DISCLOSURE:
+            if self.disclosure_level == self.DISCLOSURE_LEVELS.NONE:
+                return _(u'inforequests:Action:type:DISCLOSURE:NONE')
+            if self.disclosure_level == self.DISCLOSURE_LEVELS.PARTIAL:
+                return _(u'inforequests:Action:type:DISCLOSURE:PARTIAL')
+            if self.disclosure_level == self.DISCLOSURE_LEVELS.FULL:
+                return _(u'inforequests:Action:type:DISCLOSURE:FULL')
+        return self.get_type_display()
+
     def get_absolute_url(self):
         return self.branch.inforequest.get_absolute_url(u'#a{}'.format(self.pk))
 

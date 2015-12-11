@@ -1,5 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
-{% load url from poleno.utils %}
+{% load url eq yes from poleno.utils %}
 
 {% comment %}
  %
@@ -37,19 +37,11 @@
     <div>
       <select name="branch" class="form-control">
         {% for branch in inforequest.branches %}
-          {% if branch.last_action.type == ACTION_TYPES.REQUEST %}
-            <option value="{{ branch.pk }}" disabled="disabled">
-              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-            </option>
-          {% elif branch.last_action.type == ACTION_TYPES.ADVANCED_REQUEST %}
-            <option value="{{ branch.pk }}" disabled="disabled">
-              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-            </option>
-          {% else %}
-            <option value="{{ branch.pk }}">
-              {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_type_display }}
-            </option>
-          {% endif %}
+          <option value="{{ branch.pk }}"
+                  {{ branch.last_action.type|eq:ACTION_TYPES.REQUEST|yes:"disabled='disabled'" }}
+                  {{ branch.last_action.type|eq:ACTION_TYPES.ADVANCED_REQUEST|yes:"disabled='disabled'" }}>
+            {{ branch.historicalobligee.name }} &mdash; {{ branch.last_action.get_extended_type_display }}
+          </option>
         {% endfor %}
       </select>
     </div>

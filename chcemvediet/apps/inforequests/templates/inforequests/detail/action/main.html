@@ -20,7 +20,7 @@
         <div class="pull-right">
           {% include "inforequests/detail/action/controls.html" %}
         </div>
-        <h3>{{ action.get_type_display }}</h3>
+        <h3>{{ action.get_extended_type_display }}</h3>
         {% if action.subject %}
           <div class="row">
             <p class="col-sm-3 col-md-2 chv-dense">{% trans 'inforequests:detail:action:subject' %}:</p>

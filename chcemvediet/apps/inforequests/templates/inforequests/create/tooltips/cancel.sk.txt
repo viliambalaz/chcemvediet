@@ -8,4 +8,4 @@
 {% endcomment %}
 
 
-Zruší vytváranie žiadosti. Vaše zmeny budú navždy stratené.
+Vami vykonané zmeny nebudú uložené.
