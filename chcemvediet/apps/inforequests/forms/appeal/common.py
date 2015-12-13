@@ -94,6 +94,7 @@ class AppealLegalDateStep(AppealStep):
                     msg = _(u'inforequests:appeal:AppealLegalDateStep:legal_date:error:too_far_from_future')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'legal_date', e)
+                if u'legal_date' in cleaned_data:
+                    self.add_error(u'legal_date', e)
 
         return cleaned_data

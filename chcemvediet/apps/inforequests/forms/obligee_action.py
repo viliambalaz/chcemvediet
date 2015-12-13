@@ -67,7 +67,8 @@ class NotCategorized(ObligeeActionStep):
         help_request = cleaned_data.get(u'help_request', None)
         if wants_help and not help_request:
             msg = self.fields[u'help_request'].error_messages[u'required']
-            self.add_error(u'help_request', msg)
+            if u'help_request' in cleaned_data:
+                self.add_error(u'help_request', msg)
 
         return cleaned_data
 
@@ -159,7 +160,8 @@ class Categorized(ObligeeActionStep):
                     msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_month')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'legal_date', e)
+                if u'legal_date' in cleaned_data:
+                    self.add_error(u'legal_date', e)
 
         if last_action_dd is not None:
             try:
@@ -174,7 +176,8 @@ class Categorized(ObligeeActionStep):
                     raise ValidationError(msg)
                 pass
             except ValidationError as e:
-                self.add_error(u'last_action_dd', e)
+                if u'last_action_dd' in cleaned_data:
+                    self.add_error(u'last_action_dd', e)
 
         return cleaned_data
 
@@ -445,7 +448,8 @@ class IsItExtension(ObligeeActionStep):
         extension = cleaned_data.get(u'extension', None)
         if is_extension and not extension:
             msg = self.fields[u'extension'].error_messages[u'required']
-            self.add_error(u'extension', msg)
+            if u'extension' in cleaned_data:
+                self.add_error(u'extension', msg)
 
         return cleaned_data
 
@@ -516,22 +520,23 @@ class IsItAdvancement(ObligeeActionStep):
     def clean(self):
         cleaned_data = super(IsItAdvancement, self).clean()
 
-        if u'is_advancement' in cleaned_data and u'advanced_to' in cleaned_data:
-            is_advancement = cleaned_data[u'is_advancement']
-            advanced_to = cleaned_data[u'advanced_to']
-            branch = self.wizard.values[u'branch']
-            if is_advancement:
-                try:
-                    if not advanced_to:
-                        raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
-                    for obligee in advanced_to:
-                        if obligee == branch.obligee:
-                            msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
-                            raise ValidationError(msg)
-                    if len(advanced_to) != len(set(advanced_to)):
-                        msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
+        is_advancement = cleaned_data.get(u'is_advancement', None)
+        advanced_to = cleaned_data.get(u'advanced_to', None)
+        branch = self.wizard.values[u'branch']
+        if is_advancement:
+            try:
+                if not advanced_to:
+                    msg = self.fields[u'advanced_to'].error_messages[u'required']
+                    raise ValidationError(msg)
+                for obligee in advanced_to:
+                    if obligee == branch.obligee:
+                        msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
                         raise ValidationError(msg)
-                except ValidationError as e:
+                if len(advanced_to) != len(set(advanced_to)):
+                    msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
+                    raise ValidationError(msg)
+            except ValidationError as e:
+                if u'advanced_to' in cleaned_data:
                     self.add_error(u'advanced_to', e)
 
         return cleaned_data
@@ -838,7 +843,8 @@ class InputBasics(ObligeeActionStep):
                     msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'delivered_date', e)
+                if u'delivered_date' in cleaned_data:
+                    self.add_error(u'delivered_date', e)
 
         return cleaned_data
 
