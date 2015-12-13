@@ -5,6 +5,7 @@ from email.utils import formataddr, getaddresses
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import escape
+from django.utils.functional import cached_property
 
 from poleno import datacheck
 from poleno.utils.models import FieldChoices, QuerySet
@@ -287,13 +288,13 @@ class Obligee(FormatMixin, models.Model):
         slug = slugify(name)[:30].strip(u'-')
         return tpl.format(name=slug)
 
-    @property
+    @cached_property
     def emails_parsed(self):
-        return ((n, a) for n, a in getaddresses([self.emails]) if a)
+        return [(n, a) for n, a in getaddresses([self.emails]) if a]
 
-    @property
+    @cached_property
     def emails_formatted(self):
-        return (formataddr((n, a)) for n, a in getaddresses([self.emails]) if a)
+        return [formataddr((n, a)) for n, a in getaddresses([self.emails]) if a]
 
     @decorate(prevent_bulk_create=True)
     def save(self, *args, **kwargs):

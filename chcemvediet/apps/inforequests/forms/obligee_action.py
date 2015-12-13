@@ -505,6 +505,7 @@ class IsItAdvancement(ObligeeActionStep):
                 label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
                 help_text=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:help_text'),
                 required=False,
+                email_required=False,
                 widget=MultipleObligeeWidget(input_attrs={
                     u'class': u'chv-visible-if-advancement',
                     u'placeholder':
@@ -515,22 +516,23 @@ class IsItAdvancement(ObligeeActionStep):
     def clean(self):
         cleaned_data = super(IsItAdvancement, self).clean()
 
-        is_advancement = cleaned_data.get(u'is_advancement', None)
-        advanced_to = cleaned_data.get(u'advanced_to', None)
-        branch = self.wizard.values[u'branch']
-        if is_advancement:
-            try:
-                if not advanced_to:
-                    raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
-                for obligee in advanced_to:
-                    if obligee == branch.obligee:
-                        msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
+        if u'is_advancement' in cleaned_data and u'advanced_to' in cleaned_data:
+            is_advancement = cleaned_data[u'is_advancement']
+            advanced_to = cleaned_data[u'advanced_to']
+            branch = self.wizard.values[u'branch']
+            if is_advancement:
+                try:
+                    if not advanced_to:
+                        raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
+                    for obligee in advanced_to:
+                        if obligee == branch.obligee:
+                            msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
+                            raise ValidationError(msg)
+                    if len(advanced_to) != len(set(advanced_to)):
+                        msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
                         raise ValidationError(msg)
-                if len(advanced_to) != len(set(advanced_to)):
-                    msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
-                    raise ValidationError(msg)
-            except ValidationError as e:
-                self.add_error(u'advanced_to', e)
+                except ValidationError as e:
+                    self.add_error(u'advanced_to', e)
 
         return cleaned_data
 

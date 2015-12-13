@@ -67,6 +67,10 @@ class MultipleObligeeWidget(ObligeeWidget):
 class ObligeeField(forms.Field):
     widget = ObligeeWidget
 
+    def __init__(self, *args, **kwargs):
+        self.email_required = kwargs.pop(u'email_required', True)
+        super(ObligeeField, self).__init__(*args, **kwargs)
+
     def prepare_value(self, value):
         if isinstance(value, Obligee):
             return value
@@ -88,6 +92,8 @@ class ObligeeField(forms.Field):
         value = Obligee.objects.pending().filter(name=value).order_by_pk().first()
         if value is None:
             raise ValidationError(_(u'obligees:ObligeeField:error:invalid_obligee'))
+        if self.email_required and not value.emails_parsed:
+            raise ValidationError(_(u'obligees:ObligeeField:error:no_email'))
         return value
 
 class MultipleObligeeField(ObligeeField):

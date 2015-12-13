@@ -339,6 +339,7 @@ class Branch(FormatMixin, models.Model):
                 )
         expiration.save()
 
+    @cached_property
     def collect_obligee_emails(self):
         res = {}
         for action in self.actions_by_email:
@@ -349,7 +350,7 @@ class Branch(FormatMixin, models.Model):
         # Current obligee emails
         res.update({mail: name for name, mail in self.obligee.emails_parsed})
 
-        return ((name, mail) for mail, name in res.items())
+        return [(name, mail) for mail, name in res.items()]
 
     def __unicode__(self):
         return format(self.pk)
