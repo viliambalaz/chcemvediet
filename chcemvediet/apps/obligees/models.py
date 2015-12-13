@@ -218,8 +218,8 @@ class Obligee(FormatMixin, models.Model):
     longitude = models.FloatField(null=True, blank=True, help_text=u'Obligee GPS longitude')
 
     # May be empty
-    tags = models.ManyToManyField(ObligeeTag)
-    groups = models.ManyToManyField(ObligeeGroup)
+    tags = models.ManyToManyField(ObligeeTag, blank=True)
+    groups = models.ManyToManyField(ObligeeGroup, blank=True)
 
     # May NOT be NULL
     TYPES = FieldChoices(
