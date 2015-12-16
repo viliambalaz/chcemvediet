@@ -51,9 +51,8 @@ LOGGING = {
     u'handlers': {
         u'mail_admins': {
             u'level': u'ERROR',
-            u'class': u'logging.handlers.WatchedFileHandler',
-            u'filename': os.path.join(PROJECT_PATH, u'logs/mail_admins.log'),
-            u'formatter': u'verbose',
+            u'class': u'django.utils.log.AdminEmailHandler',
+            u'include_html': True,
             },
         u'file_request': {
             u'level': u'WARNING',
