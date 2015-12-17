@@ -13,7 +13,7 @@
 {% if user.is_authenticated %}
   {% with active=request|active:'accounts,account_change_password,account_email,socialaccount_connections,invitations' %}
     {% if user.profile.undecided_emails_count %}
-      <a class="chv-navbar-item chv-navbar-item-gray" href="#">
+      <a class="chv-navbar-item chv-navbar-item-gray" href="{% url 'inforequests:obligee_action_dispatcher' %}">
         <i class="chv-icon chv-icon-lg icon-mail"></i>
         <span class="chv-icon-badge">{{ user.profile.undecided_emails_count }}</span>
       </a>

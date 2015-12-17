@@ -1,0 +1,21 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "inforequests/index/tables/inforequests.html" %}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- class: string
+ %  -- objects: [chcemvediet.apps.inforequests.models.Inforequest]
+ %
+{% endcomment %}
+
+
+{% block actions %}
+  <div class="hidden-xs">
+    <a class="btn chv-btn-red pull-right" href="{% url 'inforequests:obligee_action' inforequest=object %}">
+      {% trans 'inforequests:obligee_action_dispatcher:select' %}
+    </a>
+  </div>
+{% endblock %}

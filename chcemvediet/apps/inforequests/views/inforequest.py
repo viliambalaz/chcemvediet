@@ -110,3 +110,25 @@ def inforequest_delete_draft(request, draft_pk):
     draft = InforequestDraft.objects.owned_by(request.user).get_or_404(pk=draft_pk)
     draft.delete()
     return HttpResponseRedirect(reverse(u'inforequests:index'))
+
+@require_http_methods([u'HEAD', u'GET'])
+@login_required
+def obligee_action_dispatcher(request):
+    inforequests = (Inforequest.objects
+            .not_closed()
+            .owned_by(request.user)
+            .order_by_submission_date()
+            .select_undecided_emails_count()
+            .prefetch_related(
+                Inforequest.prefetch_main_branch(None,
+                    Branch.objects.select_related(u'historicalobligee')))
+            )
+
+    for inforequest in inforequests:
+        if inforequest.has_undecided_emails:
+            return HttpResponseRedirect(
+                    reverse(u'inforequests:obligee_action', kwargs=dict(inforequest=inforequest)))
+
+    return render(request, u'inforequests/obligee_action_dispatcher/dispatcher.html', {
+            u'inforequests': inforequests,
+            })
