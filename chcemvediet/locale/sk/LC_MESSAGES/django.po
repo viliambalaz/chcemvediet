@@ -264,7 +264,7 @@ msgid "inforequests:clarification_response:Main:content:label"
 msgstr "Odpoveď"
 
 msgid "inforequests:clarification_response:Main:content:placeholder"
-msgstr "Uveďte, čo inštitúcia chcela doplniť"
+msgstr "Uveďte to, čo inštitúcia chcela doplniť"
 
 msgid "inforequests:clarification_response:Main:attachments:label"
 msgstr "Prílohy"
