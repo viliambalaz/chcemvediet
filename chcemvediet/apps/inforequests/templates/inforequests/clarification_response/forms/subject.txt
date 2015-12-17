@@ -8,4 +8,4 @@
 {% endcomment %}
 
 
-Doplnenie žiadosti o informacie.
+Doplnenie žiadosti o informácie
