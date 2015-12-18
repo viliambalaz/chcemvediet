@@ -124,10 +124,19 @@ def obligee_action_dispatcher(request):
                     Branch.objects.select_related(u'historicalobligee')))
             )
 
+    # If the user has an inforequest with a new email, continue with it. If there is no new email
+    # and the user has only one pending inforequest, continue with it. If the user has no pending
+    # inforequests, return to inforequest index. Finally, if the user has at least two pending
+    # inforequests, let him choose with which to continue.
     for inforequest in inforequests:
         if inforequest.has_undecided_emails:
             return HttpResponseRedirect(
                     reverse(u'inforequests:obligee_action', kwargs=dict(inforequest=inforequest)))
+    if len(inforequests) == 1:
+        return HttpResponseRedirect(
+                reverse(u'inforequests:obligee_action', kwargs=dict(inforequest=inforequests[0])))
+    if len(inforequests) == 0:
+        return HttpResponseRedirect(reverse(u'inforequests:index'))
 
     return render(request, u'inforequests/obligee_action_dispatcher/dispatcher.html', {
             u'inforequests': inforequests,
