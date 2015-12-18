@@ -15,7 +15,5 @@
 {% block content %}
   <h1>{% trans 'inforequests:obligee_action_dispatcher:heading' %}</h1>
   {% include "inforequests/obligee_action_dispatcher/texts/dispatcher.html" %}
-  {% with class="chv-table-red" objects=inforequests %}
-    {% include "inforequests/obligee_action_dispatcher/inforequests.html" %}
-  {% endwith %}
+  {% include "inforequests/obligee_action_dispatcher/inforequests.html" %}
 {% endblock %}
