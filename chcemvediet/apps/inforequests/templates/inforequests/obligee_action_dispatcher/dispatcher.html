@@ -1,0 +1,19 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% extends "main/base/single_column.html" %}
+{% load trans from i18n %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequests: [chcemvediet.apps.inforequests.models.Inforequest]
+ %
+{% endcomment %}
+
+
+{% block title %}{% trans 'inforequests:obligee_action_dispatcher:title' %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>{% trans 'inforequests:obligee_action_dispatcher:heading' %}</h1>
+  {% include "inforequests/obligee_action_dispatcher/texts/dispatcher.html" %}
+  {% include "inforequests/obligee_action_dispatcher/inforequests.html" %}
+{% endblock %}

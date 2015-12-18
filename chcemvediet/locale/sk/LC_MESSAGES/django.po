@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 07:49+0100\n"
+"POT-Creation-Date: 2015-12-18 12:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -941,6 +941,18 @@ msgstr "Nový e-mail od inštitúcie"
 msgid "inforequests:obligee_action:smail:heading"
 msgstr "Nová pošta od inštitúcie"
 
+msgid "inforequests:obligee_action_dispatcher:title"
+msgstr "Prišla odpoveď klasickou poštou"
+
+msgid "inforequests:obligee_action_dispatcher:heading"
+msgstr "Prišla odpoveď klasickou poštou"
+
+msgid "inforequests:obligee_action_dispatcher:subject"
+msgstr "Predmet žiadosti"
+
+msgid "inforequests:obligee_action_dispatcher:obligee"
+msgstr "Inštitúcia"
+
 msgid "inforequests:urls:create"
 msgstr "nova-ziadost"
 
@@ -948,6 +960,9 @@ msgid "inforequests:urls:delete_draft"
 msgstr "zmazat-draft"
 
 msgid "inforequests:urls:obligee_action"
+msgstr "prisla-posta"
+
+msgid "inforequests:urls:obligee_action_dispatcher"
 msgstr "prisla-posta"
 
 msgid "inforequests:urls:clarification_response"
