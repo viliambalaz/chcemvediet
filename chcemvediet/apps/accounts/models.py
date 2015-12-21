@@ -42,6 +42,7 @@ class Profile(FormatMixin, models.Model):
         Queryset of all undecided emails assigned to inforequests owned by the user.
         """
         return Message.objects.filter(
+                inforequest__closed=False,
                 inforequest__applicant_id=self.user_id,
                 inforequestemail__type=InforequestEmail.TYPES.UNDECIDED,
                 )
