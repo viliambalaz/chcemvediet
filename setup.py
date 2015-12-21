@@ -22,6 +22,7 @@ def squeeze(s):
     return u' '.join(s.split())
 
 def slugify(s):
+    s = unicode(s, u'utf-8')
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
     s = re.sub(r'\W+', '-', s)
     s = s.lower().strip('-')
