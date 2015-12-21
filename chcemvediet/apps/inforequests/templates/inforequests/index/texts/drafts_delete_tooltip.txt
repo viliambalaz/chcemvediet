@@ -1,0 +1,11 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- draft: chcemvediet.apps.inforequests.models.InforequestDraft
+ %
+{% endcomment %}
+
+
+Kliknutím môžete rozpracovanú žiadosť vymazať
