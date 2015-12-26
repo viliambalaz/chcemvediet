@@ -1,0 +1,22 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load method call_with from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- branch: chcemvediet.apps.inforequests.models.Branch
+ %
+{% endcomment %}
+
+
+<ul class="chv-icon-ul">
+  {% for action in branch.actions %}
+    {% for sub_branch in branch.inforequest|method:'branches_advanced_by'|call_with:action %}
+      <li>
+        <i class="chv-icon chv-icon-li icon-forward chv-icon-flip-vertical"></i>
+        {{ sub_branch.historicalobligee.name }}
+        {% include "inforequests/obligee_action_dispatcher/inforequests_advanced.html" with branch=sub_branch %}
+      </li>
+    {% endfor %}
+  {% endfor %}
+</ul>

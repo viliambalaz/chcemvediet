@@ -1,0 +1,48 @@
+{# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load trans from i18n %}
+{% load url from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- inforequests: [chcemvediet.apps.inforequests.models.Inforequest]
+ %
+{% endcomment %}
+
+
+<div class="chv-table chv-table-red chv-bellow-1">
+  <div class="chv-colgroup">
+    <div class="chv-col chv-width-6"></div>
+    <div class="chv-col chv-width-6"></div>
+  </div>
+  <div class="chv-thead">
+    <div class="chv-td">{% trans 'inforequests:obligee_action_dispatcher:subject' %}</div>
+    <div class="chv-td">{% trans 'inforequests:obligee_action_dispatcher:obligee' %}</div>
+  </div>
+  <div class="chv-tbody">
+    {% for inforequest in inforequests %}
+      {% with collapse_id=idgenerator.next %}
+        <div class="chv-tr-collapse collapsed" data-toggle="collapse" data-target="#{{ collapse_id }}">
+          <i class="chv-icon icon-down-dir pull-right"></i>
+          <b>{{ inforequest.subject }}</b>
+        </div>
+        <a id="{{ collapse_id }}" class="chv-tr collapse"
+           href="{% url 'inforequests:obligee_action' inforequest=inforequest %}">
+          <div class="chv-td chv-hidden chv-tablecell-sm">
+            <b>{{ inforequest.subject }}</b>
+          </div>
+          <div class="chv-td">
+            <i class="chv-icon icon-chevron-right pull-right"></i>
+            <div class="chv-indent">
+              <i class="chv-icon chv-icon-li icon-building"></i>
+              {{ inforequest.main_branch.historicalobligee.name }}
+              {% with branch=inforequest.main_branch %}
+                {% include "inforequests/obligee_action_dispatcher/inforequests_advanced.html" %}
+              {% endwith %}
+            </div>
+          </div>
+        </a>
+      {% endwith %}
+    {% endfor %}
+  </div>
+</div>
