@@ -59,6 +59,9 @@ class Main(Step):
         if self.wizard.branch.inforequest.has_undecided_emails:
             msg = _(u'inforequests:clarification_response:Main:error:undecided_emails')
             self.add_error(None, msg)
+        if not self.wizard.branch.collect_obligee_emails:
+            msg = _(u'inforequests:clarification_response:Main:error:no_email')
+            self.add_error(None, msg)
 
         return cleaned_data
 

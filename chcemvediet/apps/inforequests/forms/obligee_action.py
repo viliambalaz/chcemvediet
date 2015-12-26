@@ -67,7 +67,8 @@ class NotCategorized(ObligeeActionStep):
         help_request = cleaned_data.get(u'help_request', None)
         if wants_help and not help_request:
             msg = self.fields[u'help_request'].error_messages[u'required']
-            self.add_error(u'help_request', msg)
+            if u'help_request' in cleaned_data:
+                self.add_error(u'help_request', msg)
 
         return cleaned_data
 
@@ -159,7 +160,8 @@ class Categorized(ObligeeActionStep):
                     msg = _(u'inforequests:obligee_action:Categorized:legal_date:error:older_than_month')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'legal_date', e)
+                if u'legal_date' in cleaned_data:
+                    self.add_error(u'legal_date', e)
 
         if last_action_dd is not None:
             try:
@@ -174,7 +176,8 @@ class Categorized(ObligeeActionStep):
                     raise ValidationError(msg)
                 pass
             except ValidationError as e:
-                self.add_error(u'last_action_dd', e)
+                if u'last_action_dd' in cleaned_data:
+                    self.add_error(u'last_action_dd', e)
 
         return cleaned_data
 
@@ -445,7 +448,8 @@ class IsItExtension(ObligeeActionStep):
         extension = cleaned_data.get(u'extension', None)
         if is_extension and not extension:
             msg = self.fields[u'extension'].error_messages[u'required']
-            self.add_error(u'extension', msg)
+            if u'extension' in cleaned_data:
+                self.add_error(u'extension', msg)
 
         return cleaned_data
 
@@ -505,6 +509,7 @@ class IsItAdvancement(ObligeeActionStep):
                 label=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:label'),
                 help_text=_(u'inforequests:obligee_action:IsItAdvancement:advanced_to:help_text'),
                 required=False,
+                email_required=False,
                 widget=MultipleObligeeWidget(input_attrs={
                     u'class': u'chv-visible-if-advancement',
                     u'placeholder':
@@ -521,7 +526,8 @@ class IsItAdvancement(ObligeeActionStep):
         if is_advancement:
             try:
                 if not advanced_to:
-                    raise ValidationError(self.fields[u'advanced_to'].error_messages[u'required'])
+                    msg = self.fields[u'advanced_to'].error_messages[u'required']
+                    raise ValidationError(msg)
                 for obligee in advanced_to:
                     if obligee == branch.obligee:
                         msg = _(u'inforequests:obligee_action:IsItAdvancement:error:same_obligee')
@@ -530,7 +536,8 @@ class IsItAdvancement(ObligeeActionStep):
                     msg = _(u'inforequests:obligee_action:IsItAdvancement:error:duplicate_obligee')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'advanced_to', e)
+                if u'advanced_to' in cleaned_data:
+                    self.add_error(u'advanced_to', e)
 
         return cleaned_data
 
@@ -836,7 +843,8 @@ class InputBasics(ObligeeActionStep):
                     msg = _(u'inforequests:obligee_action:InputBasics:delivered_date:error:older_than_month')
                     raise ValidationError(msg)
             except ValidationError as e:
-                self.add_error(u'delivered_date', e)
+                if u'delivered_date' in cleaned_data:
+                    self.add_error(u'delivered_date', e)
 
         return cleaned_data
 

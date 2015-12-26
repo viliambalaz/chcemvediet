@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-11 02:05+0100\n"
+"POT-Creation-Date: 2015-12-13 07:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,6 +271,9 @@ msgstr "Prílohy"
 
 msgid "inforequests:clarification_response:Main:error:undecided_emails"
 msgstr "Clarification response sa neda poslat, kym nezaradite nove maily"
+
+msgid "inforequests:clarification_response:Main:error:no_email"
+msgstr "E-mailovú adresu tejto inštitúcie nepoznáme"
 
 msgid "inforequests:RefusalReasonField:no_reason"
 msgstr "V texte rozhodnutia sa nespomínajú žiadne dôvody."
@@ -710,6 +713,9 @@ msgstr "Inštitúcia"
 msgid "inforequests:clarification_response:obligee_email"
 msgstr "E-mail"
 
+msgid "inforequests:clarification_response:no_email"
+msgstr "Adresu nepoznáme"
+
 msgid "inforequests:clarification_response:subject"
 msgstr "Predmet"
 
@@ -959,6 +965,9 @@ msgstr "prilohy"
 msgid "obligees:ObligeeField:error:invalid_obligee"
 msgstr "Neplatný názov inštitúcie, zvoľte z menu."
 
+msgid "obligees:ObligeeField:error:no_email"
+msgstr "E-mailovú adresu tejto inštitúcie nepoznáme"
+
 msgid "obligees:ObligeeField:error:invalid_list"
 msgstr "Neplatný názov inštitúcie, zvoľte z menu."
 
@@ -1012,6 +1021,9 @@ msgstr "Viac inštitúcií"
 
 msgid "obligees:obligee_widget:email"
 msgstr "E-mail"
+
+msgid "obligees:obligee_widget:no_email"
+msgstr "Adresu nepoznáme"
 
 msgid "wizards:wizard:print"
 msgstr "Vytlačiť"

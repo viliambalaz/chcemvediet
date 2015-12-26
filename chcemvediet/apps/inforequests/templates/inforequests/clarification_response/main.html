@@ -38,6 +38,8 @@
     <div class="col-sm-9 form-control-static">
       {% for name, address in branch.collect_obligee_emails %}
         {{ address }}<br>
+      {% empty %}
+        <span class="text-danger">{% trans 'inforequests:clarification_response:no_email' %}</span>
       {% endfor %}
     </div>
   </div>

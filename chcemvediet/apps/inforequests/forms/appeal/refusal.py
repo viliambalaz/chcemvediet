@@ -247,7 +247,8 @@ class ConfidentialFallbackReason(AppealSectionStep, ReasonStep):
         fallback_reason = cleaned_data.get(u'confidential_fallback_reason', None)
         if fallback and not fallback_reason:
             msg = self.fields[u'confidential_fallback_reason'].error_messages[u'required']
-            self.add_error(u'confidential_fallback_reason', msg)
+            if u'confidential_fallback_reason' in cleaned_data:
+                self.add_error(u'confidential_fallback_reason', msg)
 
         return cleaned_data
 
@@ -333,7 +334,8 @@ class PersonalFallbackReason(AppealSectionStep, ReasonStep):
         fallback_reason = cleaned_data.get(u'personal_fallback_reason', None)
         if fallback and not fallback_reason:
             msg = self.fields[u'personal_fallback_reason'].error_messages[u'required']
-            self.add_error(u'personal_fallback_reason', msg)
+            if u'personal_fallback_reason' in cleaned_data:
+                self.add_error(u'personal_fallback_reason', msg)
 
         return cleaned_data
 
@@ -419,7 +421,8 @@ class BusinessSecretFallbackReason(AppealSectionStep, ReasonStep):
         fallback_reason = cleaned_data.get(u'business_secret_fallback_reason', None)
         if fallback and not fallback_reason:
             msg = self.fields[u'business_secret_fallback_reason'].error_messages[u'required']
-            self.add_error(u'business_secret_fallback_reason', msg)
+            if u'business_secret_fallback_reason' in cleaned_data:
+                self.add_error(u'business_secret_fallback_reason', msg)
 
         return cleaned_data
 
