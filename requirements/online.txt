@@ -1,5 +1,6 @@
 # Requirements for online server
 MySQL-python==1.2.5
+python-memcached==1.57
 
 # Dependencies for requirements for online server
 # (nothing yet)
