@@ -4,7 +4,7 @@ from email.utils import parseaddr
 from email.mime.base import MIMEBase
 
 from django.core.files.base import ContentFile
-from django.core.mail.message import sanitize_address, DEFAULT_ATTACHMENT_MIME_TYPE
+from django.core.mail.message import DEFAULT_ATTACHMENT_MIME_TYPE
 from django.core.mail.backends.base import BaseEmailBackend
 
 from poleno.utils.misc import guess_extension
@@ -23,9 +23,7 @@ class EmailBackend(BaseEmailBackend):
     def _enqueue(self, message):
         # Based on djrill.mail.backends.DjrillBackend; We can't use Djrill directly because it
         # sends the mail synchronously during user requests.
-        sanitized = sanitize_address(message.from_email, message.encoding)
-        from_name, from_mail = parseaddr(sanitized)
-
+        from_name, from_mail = parseaddr(message.from_email)
         subject = message.subject
         text = message.body if message.content_subtype != u'html' else None
         html = message.body if message.content_subtype == u'html' else None
@@ -48,8 +46,7 @@ class EmailBackend(BaseEmailBackend):
                                 (message.cc, Recipient.TYPES.CC),
                                 (message.bcc, Recipient.TYPES.BCC)):
             for addr in addresses:
-                sanitized = sanitize_address(addr, message.encoding)
-                name, mail = parseaddr(sanitized)
+                name, mail = parseaddr(addr)
                 recipients.append(Recipient(
                         name=name,
                         mail=mail,
