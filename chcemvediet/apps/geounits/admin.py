@@ -155,7 +155,6 @@ class NeighbourhoodAdmin(admin.ModelAdmin):
     exclude = [
             ]
     readonly_fields = [
-            u'slug',
             ]
     raw_id_fields = [
             u'municipality',
