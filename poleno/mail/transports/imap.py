@@ -1,7 +1,6 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
 import email
-import email.header
 import email.message
 from email.utils import parseaddr
 from imaplib import IMAP4, IMAP4_SSL, IMAP4_PORT, IMAP4_SSL_PORT
@@ -10,6 +9,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 
 from poleno.attachments.models import Attachment
+from poleno.utils.mail import full_decode_header
 from poleno.utils.misc import guess_extension
 
 from .base import BaseTransport
@@ -45,12 +45,8 @@ class ImapTransport(BaseTransport):
             raise email.errors.MessageParseError(e)
 
     def _decode_header(self, header):
-        # FIXME: Decoding "=?UTF-8?...?=" fails sometimes. Eg. if it is followed with "\r\n". This
-        # happens with local dummy email infrastructure used with Thunderbird for instance.
-        # See http://stackoverflow.com/questions/20816766/python-email-header-decode-header-fails-for-multiline-headers
-        parts = email.header.decode_header(header)
         try:
-            decoded = u''.join(unicode(part, enc or u'utf-8', u'replace') for part, enc in parts)
+            decoded = full_decode_header(header)
             return decoded
         except LookupError as e:
             raise email.errors.MessageParseError(e)
