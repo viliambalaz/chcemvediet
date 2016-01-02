@@ -4,6 +4,7 @@
  %
  % Context:
  %  -- close: boolean
+ %  -- hide: boolean
  %  -- message: string (optional)
  %  -- message_template: string (optional)
  %
@@ -15,6 +16,8 @@
     {% block close %}
       {% if close %}
         <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {% elif hide %}
+        <button type="button" class="close" data-hide="alert">&times;</button>
       {% endif %}
     {% endblock %}
     {% block content %}
