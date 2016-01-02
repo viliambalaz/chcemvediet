@@ -507,10 +507,10 @@ msgid "inforequests:obligee_action:IsItQuestion:label"
 msgstr "Je odpoveď inštitúcie otázka?"
 
 msgid "inforequests:obligee_action:IsItQuestion:yes"
-msgstr "Áno, je to otázka"
+msgstr "Áno, je to otázka a inštitúcia vyžaduje doplnenie žiadosti o ďalšie informácie"
 
 msgid "inforequests:obligee_action:IsItQuestion:no"
-msgstr "Nie, nie je to otázka"
+msgstr "Nie, nie je to otázka. Inštitúcia nevyžaduje doplnenie žiadosti o ďalšie informácie"
 
 msgid "inforequests:obligee_action:InputBasics:label"
 msgstr "Kedy vám prišla odpoveď od inštitúcie?"
