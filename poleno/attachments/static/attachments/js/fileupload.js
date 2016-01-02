@@ -9,6 +9,38 @@ $(function(){
 			});
 		});
 	};
+	function disable(container, disabled){
+		var button = container.find('.pln-attachments-btn');
+		var widget = button.find('input[type=file]');
+		button.toggleClass('disabled', disabled);
+		widget.prop('disabled', disabled);
+	};
+	function progress(container, percent, toggle){
+		var progress = container.find('.pln-attachments-progress');
+		var progressbar = progress.find('.progress-bar');
+		progressbar.css({width: percent + '%'});
+		progressbar.text(percent + '%');
+		if (toggle == 'show') progress.show();
+		if (toggle == 'hide') progress.hide();
+		if (toggle == 'in') progress.slideDown(300);
+		if (toggle == 'out') progress.slideUp(300);
+	};
+	function error(container, toggle){
+		var alert = container.find('.pln-attachments-error .alert');
+		if (toggle == 'show') alert.show();
+		if (toggle == 'hide') alert.hide();
+	};
+	$(document).on('fileuploadstart', '.pln-attachments', function(event, data){
+		var container = $(this);
+		error(container, 'hide');
+		disable(container, true);
+		progress(container, 0, 'in');
+	});
+	$(document).on('fileuploadprogressall', '.pln-attachments', function(event, data){
+		var container = $(this);
+		var percent = (data.loaded / data.total * 100).toFixed();
+		progress(container, percent)
+	});
 	$(document).on('fileuploaddone', '.pln-attachments', function(event, data){
 		var container = $(this);
 		var field = $(container.data('field'));
@@ -21,6 +53,16 @@ $(function(){
 			list.append(attachment).append(' ');
 			field.val(field.val() + ',' + file.pk + ',');
 		});
+	});
+	$(document).on('fileuploadfail', '.pln-attachments', function(event, data){
+		var container = $(this);
+		progress(container, 0, 'hide');
+		error(container, 'show');
+	});
+	$(document).on('fileuploadstop', '.pln-attachments', function(event, data){
+		var container = $(this);
+		disable(container, false);
+		progress(container, 100, 'out');
 	});
 	$(document).on('click', '.pln-attachment-del', function(event){
 		var container = $(this).closest('.pln-attachments');
