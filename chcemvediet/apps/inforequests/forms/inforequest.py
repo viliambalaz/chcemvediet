@@ -68,6 +68,7 @@ class InforequestForm(PrefixedForm):
 
         if self.draft:
             self.fields[u'obligee'].required = False
+            self.fields[u'obligee'].email_required = False
             self.fields[u'subject'].required = False
             self.fields[u'content'].required = False
 

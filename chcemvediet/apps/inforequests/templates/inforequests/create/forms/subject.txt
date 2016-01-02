@@ -11,4 +11,4 @@
 {% endcomment %}
 
 
-Žiadosť o informácie podľa 211/2000 Z.z. {{ inputs.0 }}
+Žiadosť o informácie podľa 211/2000 Z.z.: {{ inputs.0 }}
