@@ -9,7 +9,7 @@
 {% endcomment %}
 
 
-<form method="post" action="{% url 'inforequests:delete_draft' draft=draft %}X">
+<form method="post" action="{% url 'inforequests:delete_draft' draft=draft %}">
   {% csrf_token %}
   <button type="submit" class="chv-table-delete pln-with-tooltip pln-confirm"
           title="{% spaceless %}
