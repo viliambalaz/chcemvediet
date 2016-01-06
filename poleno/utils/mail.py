@@ -1,5 +1,7 @@
 # vim: expandtab
 # -*- coding: utf-8 -*-
+from email.header import decode_header
+
 from django.core.mail import EmailMultiAlternatives, EmailMessage
 from django.template import TemplateDoesNotExist
 from django.contrib.sites.models import Site
@@ -50,3 +52,17 @@ def render_mail(template_prefix, dictionary=None, **kwargs):
         msg = EmailMessage(subject, bodies[u'txt'], **kwargs)
 
     return msg
+
+def full_decode_header(header):
+    u"""
+    Use python ``email.header.decode_header`` function to decode email header parts, convert them
+    to unicode and join them to single unicode string.
+    """
+    # FIXME: Decoding "=?UTF-8?...?=" fails sometimes. Eg. if it is followed with "\r\n". This
+    # happens with local dummy email infrastructure used with Thunderbird for instance.
+    # See http://stackoverflow.com/questions/20816766/python-email-header-decode-header-fails-for-multiline-headers
+    if isinstance(header, unicode):
+        header = header.encode(u'utf-8')
+    parts = decode_header(header)
+    decoded = u''.join(unicode(part, enc or u'utf-8', u'replace') for part, enc in parts)
+    return decoded
