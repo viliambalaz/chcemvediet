@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from django.dispatch import Signal, receiver
 
 from poleno.attachments.models import Attachment
+from poleno.utils.mail import full_decode_header
 
 from ...models import Message, Recipient
 
@@ -61,6 +62,7 @@ def inbound_email_webhook_event(sender, event_type, data, **kwargs):
         attachments = []
         for attch in msg.get(u'attachments', {}).values():
             filename = attch.get(u'name', u'')
+            filename = full_decode_header(filename) # Mandrill does not decode '=?utf-8?...?=' in attachment names.
             content_type = attch.get(u'type', u'')
             content = attch.get(u'content', u'')
             if attch.get(u'base64', False):
