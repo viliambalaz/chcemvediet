@@ -23,6 +23,7 @@ Povinná osoba:
   {{ obligee.city }} {{ obligee.zip }},
   {{ obligee.emails }}
 {% endfilter %}
+
 {% filter squeeze %}
 Žiadateľ:
   {{ user.get_full_name }},
@@ -46,4 +47,5 @@ Informáciu žiadam zaslať v elektronickej podobe na moju emailovú adresu: {{ 
 V zmysle § 14 ods 5. zákona žiadam o potvrdenie prijatia žiadosti o informácie.
 
 Ďakujem,
+
 {{ user.get_full_name }}
