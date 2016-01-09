@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/snippets/alerts/warning.html" %}
+{% load plural from poleno.utils %}
 
 {% comment %}
  %
@@ -17,8 +18,9 @@
 
 
 {% block message %}
-  FIXME {{ inforequest.undecided_emails_count }} nerozhodnutych mailov; Odvolanie sa neda podat,
-  kym sa nezaradia maily; Rozpracovane odvolanie ulozte, zaradte dosle maily; Potom, ak to bude
-  stale aktualne, mozete pokracovat.
+  FIXME
+  {% plural inforequest.undecided_emails_count "1:{n} nerozhodnutý mail" "2~4:{n} nerozhodnuté maily" "{n} nerozhodnutých mailov" %};
+  Odvolanie sa neda podat, kym sa nezaradia maily; Rozpracovane odvolanie ulozte, zaradte dosle
+  maily; Potom, ak to bude stale aktualne, mozete pokracovat.
   <a href="{{ inforequest.get_absolute_url }}">Linka na maily</a>
 {% endblock %}

@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load plural from poleno.utils %}
 
 {% comment %}
  %
@@ -14,9 +15,13 @@
   Lehota na odpoveď od inštitúcie ohľadom Vašej infožiadosti pre
   {{ branch.historicalobligee.name_accusative }}
   {% if not branch.is_main %}postúpenej {{ branch.historicalobligee.name_dative }}{% endif %}
-  bola {{ action.deadline.value }}
-  {% if action.deadline.is_in_calendar_days %}kalendárnych{% else %}pracovných{%endif%}
-  dni od {{ action.deadline.base_date|date:"j. E Y" }}.
+  bola
+  {% if action.deadline.is_in_calendar_days %}
+    {% plural action.deadline.value "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dni" %}
+  {% else %}
+    {% plural action.deadline.value "1:{n} pracovný deň" "2~4:{n} pracovné dni" "{n} pracovných dni" %}
+  {%endif%}
+  od {{ action.deadline.base_date|date:"j. E Y" }}.
   Lehota uplynula {{ action.deadline.deadline_date|date:"j. E Y" }}.
   Od vtedy prešlo {{ action.deadline.calendar_days_behind }} kalendárnych dni.
 </p>

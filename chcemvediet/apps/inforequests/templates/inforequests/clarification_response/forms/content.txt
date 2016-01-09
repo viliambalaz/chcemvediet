@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango :#}
 {% load squeeze from poleno.utils %}
+{% load gender from chcemvediet.obligees %}
 
 {% comment %}
  %
@@ -42,16 +43,8 @@ o poskytnutie informácie: {{ inforequest.subject }}.
   Dňa {{ branch.advanced_by.delivered_date|date:"d.m.Y" }} mi bolo doručené oznámenie o postúpení
   žiadosti {{ branch.historicalobligee.name_dative }}.
 {% endif %}
-Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi
-{% if branch.obligee.gender == OBLIGEE_GENDERS.MASCULINE %}
-  {{ branch.obligee.name }} doručil
-{% elif branch.obligee.gender == OBLIGEE_GENDERS.FEMININE %}
-  {{ branch.obligee.name }} doručila
-{% elif branch.obligee.gender == OBLIGEE_GENDERS.NEUTER %}
-  {{ branch.obligee.name }} doručilo
-{% elif branch.obligee.gender == OBLIGEE_GENDERS.PLURALE %}
-  {{ branch.obligee.name }} doručili
-{% endif %}
+Dňa {{ last_action.delivered_date|date:"d.m.Y" }} mi {{ branch.obligee.name }}
+{% gender branch.obligee.gender "doručil" "doručila" "doručilo" "doručili" %}
 výzvu {% if last_action.file_number %} číslo {{ last_action.file_number}}{% endif %}
 na doplnenie žiadosti.
 {% endfilter %}

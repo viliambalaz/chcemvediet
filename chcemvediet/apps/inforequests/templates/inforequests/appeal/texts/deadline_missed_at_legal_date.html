@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/snippets/alerts/warning.html" %}
+{% load plural from poleno.utils %}
 
 {% comment %}
  %
@@ -18,6 +19,7 @@
 
 
 {% block message %}
-  Zadaný dátum odvolania {{ wizard.values.legal_date }} je {{ calendar_days_behind_at_legal_date }}
-  kalendárnych dni po termíne na podanie odvolania.
+  Zadaný dátum odvolania {{ wizard.values.legal_date }} je
+  {% plural calendar_days_behind_at_legal_date "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dni" %}
+  po termíne na podanie odvolania.
 {% endblock %}

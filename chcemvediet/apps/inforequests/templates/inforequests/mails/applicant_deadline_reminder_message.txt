@@ -1,5 +1,5 @@
 {# vim: set filetype=django :#}
-{% load squeeze from poleno.utils %}
+{% load plural squeeze from poleno.utils %}
 
 {% comment %}
  %
@@ -21,9 +21,11 @@
     Vaša lehota
   {% endif %}
   {% if action.deadline.is_deadline_missed %}
-    uplynula pred {{ action.deadline.calendar_days_behind }} kalendárnymi dňami.
+    uplynula pred
+    {% plural action.deadline.calendar_days_behind "1:{n} kalendárnym dňom" "{n} kalendárnymi dňami" %}.
   {% else %}
-    uplynie o {{ action.deadline.calendar_days_remaining }} kalendárnych dni.
+    uplynie o
+    {% plural action.deadline.calendar_days_remaining "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dni" %}.
   {% endif %}
   {% if action.branch.can_add_clarification_response  %}
     Žiadosť by ste mali inštitúcii doplniť čo najskôr ako je to možné.

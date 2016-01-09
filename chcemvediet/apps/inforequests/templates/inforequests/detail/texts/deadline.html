@@ -1,4 +1,5 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
+{% load plural from poleno.utils %}
 
 {% comment %}
  %
@@ -10,9 +11,11 @@
 
 
 {% if action.deadline.is_in_calendar_days %}
-  {{ action.deadline.value }} kalendárnych dni od {{ action.deadline.base_date|date:"j. E Y" }}
+  {% plural action.deadline.value "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dni" %}
+  od {{ action.deadline.base_date|date:"j. E Y" }}
 {% else %}
-  {{ action.deadline.value }} pracovných dni od {{ action.deadline.base_date|date:"j. E Y" }}
+  {% plural action.deadline.value "1:{n} pracovný deň" "2~4:{n} pracovné dni" "{n} pracovných dni" %}
+  od {{ action.deadline.base_date|date:"j. E Y" }}
 {% endif %}
 {% if action.deadline.is_obligee_deadline %}
   na odpoveď od inštitúcie
@@ -32,29 +35,15 @@
   </span>
 {% endif %}
 {% if action.deadline.is_deadline_missed and action.deadline.is_snoozed %}
-  {% with snooze=action.deadline.snooze_in_calendar_days %}
-    {% if action.deadline.is_snooze_missed %}
-      <br>
-      Uviedli ste, že ešte počkáte
-      {% if snooze == 1 %}
-        {{ snooze }} kalendárny deň
-      {% elif 2 <= snooze and snooze <= 4 %}
-        {{ snooze }} kalendárne dni
-      {% else %}
-        {{ snooze }} kalendárnych dní
-      {% endif %}
-      od uplynutia lehoty, ale aj tie už uplynuli.
-    {% else %}
-      <br>
-      Uviedli ste, že ešte počkáte
-      {% if snooze == 1 %}
-        {{ snooze }} kalendárny deň
-      {% elif 2 <= snooze and snooze <= 4 %}
-        {{ snooze }} kalendárne dni
-      {% else %}
-        {{ snooze }} kalendárnych dní
-      {% endif %}
-      od uplynutia lehoty.
-    {% endif %}
-  {% endwith %}
+  {% if action.deadline.is_snooze_missed %}
+    <br>
+    Uviedli ste, že ešte počkáte
+    {% plural action.deadline.snooze_in_calendar_days "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dní" %}
+    od uplynutia lehoty, ale aj tie už uplynuli.
+  {% else %}
+    <br>
+    Uviedli ste, že ešte počkáte
+    {% plural action.deadline.snooze_in_calendar_days "1:{n} kalendárny deň" "2~4:{n} kalendárne dni" "{n} kalendárnych dní" %}
+    od uplynutia lehoty.
+  {% endif %}
 {% endif %}
