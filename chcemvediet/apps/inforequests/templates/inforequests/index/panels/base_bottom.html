@@ -12,7 +12,7 @@
   <div class="chv-eq-col chv-eq-col-border-last chv-border-gray-ll">
     <div class="text-center chv-above-1-md">
       {% block button %}
-        <a class="btn btn-default chv-width-full chv-width-auto-sm"
+        <a class="btn btn-default chv-width-full chv-width-auto-sm {% block button-class %}{% endblock %}"
            href="{% block button-href %}{% endblock %}">
           <i class="chv-icon {% block button-icon %}{% endblock %}"></i>
           &nbsp;
