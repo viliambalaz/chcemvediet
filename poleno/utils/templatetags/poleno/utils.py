@@ -261,6 +261,42 @@ def lorem(randseed=None, count=1, method=None):
         res = [u'<p>{}</p>'.format(p) for p in res]
     return u'\n'.join(res)
 
+@register.simple_tag
+def plural(value, *args):
+    u"""
+    Return plural variant of text.
+
+    Usage format:
+
+        {% plural <value> "cond:text" ... %}
+
+    where ``value`` is a number, ``text`` is any string and ``cond`` is a comma separated list of
+    terms. Every term is an empty string, a single integer or an interval. Intervals are specified by
+    their lower and upper bounds separated by "~". The bounds are inclusive and may be any positive
+    or negative integer. Any of the bounds may be omitted. Omitted bounds mean infinity.
+
+    The text may contain "{n}" to format the value.
+
+    Examples:
+        {% plural n "1:jablko" "2~4:jablká" "jabĺk" %}
+        {% plural n "-1,1:jablko" "-4~-2,2~4:jablká" "jabĺk" %}
+        {% plural n "1:bol {n} strom" "2~4:boli {n} stromy" "bolo {n} stromov" %}
+    """
+    value = int(value)
+    for arg in args:
+        if u':' in arg:
+            cond, res = arg.split(u':', 1)
+        else:
+            cond, res = u'', arg
+        for term in cond.split(u','):
+            if u'~' in term:
+                a, b = term.split(u'~', 1)
+            else:
+                a, b = term, term
+            if (a == u'' or int(a) <= value) and (b == u'' or value <= int(b)):
+                return res.format(n=value)
+    return u''
+
 @register.simple_tag(takes_context=True)
 def assign(context, **kwargs):
     for key, val in kwargs.items():

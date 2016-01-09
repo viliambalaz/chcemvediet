@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% extends "main/snippets/alerts/warning.html" %}
+{% load plural from poleno.utils %}
 
 {% comment %}
  %
@@ -18,5 +19,6 @@
 
 
 {% block message %}
-  Termin na podanie odvolania vypršal pred {{ calendar_days_behind_at_today }} kalendárnymi dnami.
+  Termin na podanie odvolania vypršal pred
+  {% plural calendar_days_behind_at_today "1:{n} kalendárnym dňom" "{n} kalendárnymi dňami" %}.
 {% endblock %}
