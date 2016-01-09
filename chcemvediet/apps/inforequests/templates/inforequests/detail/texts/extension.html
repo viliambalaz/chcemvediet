@@ -8,4 +8,10 @@
 {% endcomment %}
 
 
-o {{ action.extension }} pracovných dni
+{% if action.extension == 1 %}
+  o {{ action.extension }} pracovný deň
+{% elif 2 <= action.extension and action.extension <= 4 %}
+  o {{ action.extension }} pracovné dni
+{% else %}
+  o {{ action.extension }} pracovných dni
+{% endif %}
