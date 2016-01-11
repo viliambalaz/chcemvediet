@@ -10,7 +10,7 @@
  */
 $(function(){
 	function inform(){
-		window.alert('Prepáčte, ale táto operácia ešte nie je implementovaná. Pracujeme na tom.');
+		window.alert('Na vývoji tejto časti portálu ešte pracujeme. Ďakujeme za trpezlivosť.');
 	};
 	$(document).on('click', 'a.pln-not-implemented', function(event){
 		event.preventDefault();
