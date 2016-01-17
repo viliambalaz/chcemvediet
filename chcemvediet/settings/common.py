@@ -195,6 +195,7 @@ ASSETS = (
     u'poleno/js/datepicker.js',
     u'poleno/js/editable.js',
     u'poleno/js/hide_bootstrap_modal.js',
+    u'poleno/js/not_implemented.js',
     u'poleno/js/post_link.js',
     u'poleno/js/print_button.js',
     u'poleno/js/recursive_bootstrap_modal.js',
