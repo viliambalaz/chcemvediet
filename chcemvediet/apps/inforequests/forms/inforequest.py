@@ -101,7 +101,20 @@ class InforequestForm(PrefixedForm):
 
         @after_saved(draft)
         def deferred(draft):
-            draft.attachment_set = self.cleaned_data[u'attachments']
+            # The new list of attachments may not be directly assigned to ``draft.attachment_set``
+            # because the assignment would clear ``draft.attachment_set`` before adding the new
+            # attachments. Any attachment that is in both the old and the new list would be deleted
+            # and then saved again emitting ``*_delete`` signals and deleting its cascaded
+            # relations.
+            old_attachments = set(draft.attachment_set.all())
+            new_attachments = []
+            for attachment in self.cleaned_data[u'attachments']:
+                if attachment in old_attachments:
+                    old_attachments.remove(attachment)
+                else:
+                    new_attachments.append(attachment)
+            draft.attachment_set.remove(*old_attachments)
+            draft.attachment_set.add(*new_attachments)
 
     def load_from_draft(self, draft):
         self.initial[u'obligee'] = draft.obligee
