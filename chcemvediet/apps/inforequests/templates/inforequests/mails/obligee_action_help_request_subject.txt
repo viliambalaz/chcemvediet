@@ -1,0 +1,15 @@
+{# vim: set filetype=django :#}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message | None
+ %
+{% endcomment %}
+
+
+{% autoescape off %}
+Obligee action help request
+{% endautoescape %}

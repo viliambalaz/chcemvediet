@@ -12,7 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.html import format_html
 
-from poleno.utils.urls import reverse
+from poleno.utils.urls import reverse, complete_url
 from poleno.utils.misc import squeeze as squeeze_func
 from poleno.utils.date import utc_date as utc_date_func, local_date as local_date_func
 from poleno.utils.translation import translation
@@ -139,6 +139,21 @@ def active(request, view_prefixes):
         if (resolved.view_name + u':').startswith(view_prefix + u':'):
             return True
     return False
+
+@register.filter
+def completeurl(path, secure=False):
+    if path:
+        return complete_url(path, secure)
+    else:
+        return u''
+
+@register.filter
+def adminurl(obj, view=u'change'):
+    try:
+        view_name = u'admin:{}_{}_{}'.format(obj._meta.app_label, obj._meta.model_name, view)
+        return reverse(view_name, args=[obj.pk])
+    except:
+        return u''
 
 @register.filter(is_safe=True)
 @stringfilter

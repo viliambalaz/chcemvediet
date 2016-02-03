@@ -4,12 +4,14 @@ from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.sessions.models import Session
 
 from poleno.attachments.forms import AttachmentsField
 from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
+from poleno.utils.mail import render_mail
 from poleno.utils.date import local_date, local_today
 from poleno.utils.template import render_to_string
 from chcemvediet.apps.wizards.wizard import Bottom, Step, Wizard
@@ -968,7 +970,18 @@ class ObligeeActionWizard(Wizard):
         return action.get_absolute_url()
 
     def finish_help(self):
-        # FIXME: use wizard.values[u'help_request'] to create a ticket
+        msg = render_mail(u'inforequests/mails/obligee_action_help_request',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[settings.SUPPORT_EMAIL],
+                attachments=[(a.name, a.content, a.content_type)
+                    for a in self.values[u'attachments'] or []],
+                dictionary={
+                    u'wizard': self,
+                    u'inforequest': self.inforequest,
+                    u'email': self.email,
+                    },
+                )
+        msg.send()
 
         if self.email:
             self.inforequestemail.type = InforequestEmail.TYPES.UNKNOWN

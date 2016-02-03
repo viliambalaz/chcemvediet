@@ -298,6 +298,12 @@ def configure_domain_and_emails(configure, settings):
     settings.setting(u'ADMINS[len(ADMINS):]', [(u'Admin', admin_email)])
 
     print(INFO + textwrap.dedent(u"""
+            Set support e-mail. It will be used for user support requests.""") + RESET)
+    support_email = configure.input(u'support_email', u'Support e-mail',
+            default=u'info@{}'.format(base_domain), required=True)
+    settings.setting(u'SUPPORT_EMAIL', support_email)
+
+    print(INFO + textwrap.dedent(u"""
             Set inforequest unique e-mail template. It will be used to generate unique from
             e-mail addresses used by inforequests. The unique e-mail template must contain
             '{token}' as a placeholder to distinguish individual inforequests. For instance
@@ -311,7 +317,7 @@ def configure_domain_and_emails(configure, settings):
             Set default from address. It will be used as the from e-mail addresses for all
             other e-mails.""") + RESET)
     default_from_email = configure.input(u'default_from_email', u'Default from e-mail',
-            default=u'info@{}'.format(base_domain), required=True)
+            default=support_email, required=True)
     settings.setting(u'DEFAULT_FROM_EMAIL', default_from_email)
 
     # Production mode uses real obligee emails.

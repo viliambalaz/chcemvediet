@@ -1,0 +1,46 @@
+{# vim: set filetype=django :#}
+{% load adminurl completeurl getkey from poleno.utils %}
+
+{% comment %}
+ %
+ % Context:
+ %  -- wizard: chcemvediet.apps.inforequests.forms.obligee_action.ObligeeActionWizard
+ %  -- inforequest: chcemvediet.apps.inforequests.models.Inforequest
+ %  -- email: poleno.mail.models.Message | None
+ %
+{% endcomment %}
+
+
+{% autoescape off %}
+User: [{{ user.pk }}] {{ user }} ({{ user.email }}); {{ user|adminurl|completeurl }}
+
+Inforequest: {{ inforequest }}; {{ inforequest|adminurl|completeurl }}
+
+Branch: {{ wizard.values.branch }}; {{ wizard.values.branch|adminurl|completeurl }}
+
+InforequestEmail: {{ wizard.inforequestemail }}; {{ wizard.inforequestemail|adminurl|completeurl }}
+
+Email: {{ email }}; {{ email|adminurl|completeurl }}
+{% for attachment in email.attachment_set.all %}
+- Attachment: {{ attachment }}; {{ attachment|adminurl|completeurl }}
+{% endfor %}
+
+HELP REQUEST:
+
+{{ wizard.values.help_request }}
+
+
+WIZARD DUMP:
+{% for step in wizard.steps %}
+* Step {{ step.index }}: {{ step.label }}
+  {% for key in step.global_fields %}
+  - {{ key }}: {{ wizard.values|getkey:key }}
+  {% endfor %}{% for key, val in step.values.items %}
+  - {{ key }}: {{ val }}
+  {% endfor %}
+{% endfor %}
+* Globals:
+  {% for key, val in wizard.values.items %}
+  - {{ key }}: {{ val }}
+  {% endfor %}
+{% endautoescape %}
