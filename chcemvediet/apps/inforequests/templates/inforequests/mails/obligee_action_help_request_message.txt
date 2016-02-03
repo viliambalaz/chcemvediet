@@ -12,7 +12,7 @@
 
 
 {% autoescape off %}
-User: [{{ user.pk }}] {{ user }} ({{ user.email }}); {{ user|adminurl|completeurl }}
+User: [{{ user.pk }}] {{ user.get_full_name }} ({{ user.email }}); {{ user|adminurl|completeurl }}
 
 Inforequest: {{ inforequest }}; {{ inforequest|adminurl|completeurl }}
 
@@ -33,14 +33,14 @@ HELP REQUEST:
 WIZARD DUMP:
 {% for step in wizard.steps %}
 * Step {{ step.index }}: {{ step.label }}
-  {% for key in step.global_fields %}
+{% for key in step.global_fields %}
   - {{ key }}: {{ wizard.values|getkey:key }}
-  {% endfor %}{% for key, val in step.values.items %}
+{% endfor %}{% for key, val in step.values.items %}
   - {{ key }}: {{ val }}
-  {% endfor %}
+{% endfor %}
 {% endfor %}
 * Globals:
-  {% for key, val in wizard.values.items %}
+{% for key, val in wizard.values.items %}
   - {{ key }}: {{ val }}
-  {% endfor %}
+{% endfor %}
 {% endautoescape %}
