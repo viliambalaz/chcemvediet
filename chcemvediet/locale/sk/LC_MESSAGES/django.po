@@ -1159,7 +1159,7 @@ msgid "account:login:reset_password"
 msgstr "Zabudnuté heslo?"
 
 msgid "account:login:social_buttons"
-msgstr "Použiť"
+msgstr "Login cez účet na sociálnej sieti"
 
 msgid "account:logout:title"
 msgstr "Odhlásiť sa"
@@ -1231,7 +1231,7 @@ msgid "account:signup:submit"
 msgstr "Zaregistrovať"
 
 msgid "account:signup:social_buttons"
-msgstr "Použiť"
+msgstr "Regstrácia cez účet na sociálnej sieti"
 
 msgid "account:signup_closed:title"
 msgstr "Registrácia pozastavená"
