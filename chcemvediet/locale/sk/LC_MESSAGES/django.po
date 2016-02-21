@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-18 12:33+0100\n"
+"POT-Creation-Date: 2016-02-21 18:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,6 +269,9 @@ msgstr "Uveďte to, čo inštitúcia chcela doplniť"
 msgid "inforequests:clarification_response:Main:attachments:label"
 msgstr "Prílohy"
 
+msgid "inforequests:clarification_response:Main:attachments:help_text"
+msgstr "Priložiť môžete najviac 20 príloh s celkovou velkosťou najviac 15 MB."
+
 msgid "inforequests:clarification_response:Main:error:undecided_emails"
 msgstr "Clarification response sa neda poslat, kym nezaradite nove maily"
 
@@ -307,6 +310,9 @@ msgstr "Uveďte čo najkonkrétnejšie, o aké informácie máte záujem."
 
 msgid "inforequests:InforequestForm:attachments:label"
 msgstr "Prílohy"
+
+msgid "inforequests:InforequestForm:attachments:help_text"
+msgstr "Priložiť môžete najviac 20 príloh s celkovou velkosťou najviac 15 MB."
 
 msgid "inforequests:obligee_action:NotCategorized:label"
 msgstr "Nezaradené"

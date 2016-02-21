@@ -42,6 +42,7 @@ class Main(Step):
 
         self.fields[u'attachments'] = AttachmentsField(
                 label=_(u'inforequests:clarification_response:Main:attachments:label'),
+                help_text=_(u'inforequests:clarification_response:Main:attachments:help_text'),
                 required=False,
                 max_count=20,
                 max_size=parsefilesize(u'15 MB'),

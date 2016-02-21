@@ -49,6 +49,7 @@ class InforequestForm(PrefixedForm):
             )
     attachments = AttachmentsField(
             label=_(u'inforequests:InforequestForm:attachments:label'),
+            help_text=_(u'inforequests:InforequestForm:attachments:help_text'),
             required=False,
             max_count=20,
             max_size=parsefilesize(u'15 MB'),
