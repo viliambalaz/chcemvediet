@@ -11,6 +11,7 @@ from poleno.utils.models import after_saved
 from poleno.utils.urls import reverse
 from poleno.utils.forms import CompositeTextField, PrefixedForm
 from poleno.utils.template import render_to_string
+from poleno.utils.misc import parsefilesize
 from chcemvediet.apps.obligees.forms import ObligeeWidget, ObligeeField
 from chcemvediet.apps.inforequests.models import Inforequest
 
@@ -49,6 +50,9 @@ class InforequestForm(PrefixedForm):
     attachments = AttachmentsField(
             label=_(u'inforequests:InforequestForm:attachments:label'),
             required=False,
+            max_count=20,
+            max_size=parsefilesize(u'15 MB'),
+            max_total_size=parsefilesize(u'15 MB'),
             upload_url_func=(lambda: reverse(u'inforequests:upload_attachment')),
             download_url_func=(lambda a: reverse(u'inforequests:download_attachment', args=[a.pk])),
             )
@@ -71,6 +75,9 @@ class InforequestForm(PrefixedForm):
             self.fields[u'obligee'].email_required = False
             self.fields[u'subject'].required = False
             self.fields[u'content'].required = False
+            self.fields[u'attachments'].max_count = None
+            self.fields[u'attachments'].max_size = None
+            self.fields[u'attachments'].max_total_size = None
 
     def save(self):
         assert self.is_valid()

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-04 20:19+0200\n"
+"POT-Creation-Date: 2016-02-21 17:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,15 @@ msgstr ""
 
 msgid "attachments:AttachmentsField:error:invalid"
 msgstr "Invalid attachments."
+
+msgid "attachments:AttachmentsField:error:max_count"
+msgstr "You may add at most {max_count} attachments."
+
+msgid "attachments:AttachmentsField:error:max_size"
+msgstr "Attachment size may be at most {max_size}, but '{attachment.name}' has {size}."
+
+msgid "attachments:AttachmentsField:error:max_total_size"
+msgstr "Total attachments size may be at most {max_total_size}, but they have {total_size}."
 
 msgid "attachments:widget:browse"
 msgstr "Browse"

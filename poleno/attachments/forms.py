@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from poleno.utils.template import render_to_string
-from poleno.utils.misc import cached_method
+from poleno.utils.misc import cached_method, filesize
 
 from .models import Attachment
 
@@ -37,6 +37,9 @@ class AttachmentsField(forms.Field):
     widget = AttachmentsWidget
 
     def __init__(self, *args, **kwargs):
+        max_count = kwargs.pop(u'max_count', None)
+        max_size = kwargs.pop(u'max_size', None)
+        max_total_size = kwargs.pop(u'max_total_size', None)
         attached_to = kwargs.pop(u'attached_to', None)
         upload_url_func = kwargs.pop(u'upload_url_func', None)
         download_url_func = kwargs.pop(u'download_url_func', None)
@@ -45,6 +48,9 @@ class AttachmentsField(forms.Field):
         self._upload_url_func = None
         self._download_url_func = None
 
+        self.max_count = max_count
+        self.max_size = max_size
+        self.max_total_size = max_total_size
         self.attached_to = attached_to
         self.upload_url_func = upload_url_func
         self.download_url_func = download_url_func
@@ -95,3 +101,29 @@ class AttachmentsField(forms.Field):
         if len(attachments) != len(keys):
             raise ValidationError(_(u'attachments:AttachmentsField:error:invalid'))
         return attachments
+
+    def validate(self, value):
+        super(AttachmentsField, self).validate(value)
+
+        if self.max_count is not None and len(value) > self.max_count:
+            msg = _(u'attachments:AttachmentsField:error:max_count')
+            raise ValidationError(msg.format(max_count=self.max_count, count=len(value)))
+
+        if self.max_size is not None:
+            for attachment in value:
+                if attachment.size > self.max_size:
+                    msg = _(u'attachments:AttachmentsField:error:max_size')
+                    raise ValidationError(msg.format(
+                            max_size=filesize(self.max_size),
+                            size=filesize(attachment.size),
+                            attachment=attachment,
+                            ))
+
+        if self.max_total_size is not None:
+            total_size = sum(a.size for a in value)
+            if total_size > self.max_total_size:
+                msg = _(u'attachments:AttachmentsField:error:max_total_size')
+                raise ValidationError(msg.format(
+                        max_total_size=filesize(self.max_total_size),
+                        total_size=filesize(total_size),
+                        ))

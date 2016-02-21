@@ -10,7 +10,7 @@ from poleno.utils.urls import reverse
 from poleno.utils.date import local_today
 from poleno.utils.forms import CompositeTextField
 from poleno.utils.template import render_to_string
-from poleno.utils.misc import squeeze
+from poleno.utils.misc import squeeze, parsefilesize
 from chcemvediet.apps.wizards.wizard import Step, Wizard
 from chcemvediet.apps.inforequests.models import Action
 
@@ -43,6 +43,9 @@ class Main(Step):
         self.fields[u'attachments'] = AttachmentsField(
                 label=_(u'inforequests:clarification_response:Main:attachments:label'),
                 required=False,
+                max_count=20,
+                max_size=parsefilesize(u'15 MB'),
+                max_total_size=parsefilesize(u'15 MB'),
                 attached_to=(
                     self.wizard.draft,
                     Session.objects.get(session_key=self.wizard.request.session.session_key),

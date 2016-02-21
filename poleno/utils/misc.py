@@ -175,9 +175,26 @@ def filesize(size):
     """
     for fmt in ['{:.0f} bytes', u'{:.1f} kB', u'{:.1f} MB', u'{:.1f} GB', u'{:.1f} TB']:
         if abs(size) < 1024.0:
-            return fmt.format(size)
+            return fmt.format(round(size + 0.05, 1))
         size /= 1024.0
-    return u'{:.1f} PB'.format(size)
+    return u'{:.1f} PB'.format(round(size + 0.05, 1))
+
+def parsefilesize(value):
+    u"""
+    Parses files sizes formated with `filesize` function above.
+
+    Example:
+        "0 bytes" -> 0.0
+        "1023 bytes" -> 1023.0
+        "46.2 GB" -> 49606872268.8
+        "-3.8 kB" -> -3891.2
+    """
+    base = 1
+    for unit in [u'bytes', u'kB', u'MB', u'GB', u'TB', u'PB']:
+        if value.endswith(unit):
+            return float(value[:-len(unit)]) * base
+        base *= 1024.0
+    raise ValueError
 
 @contextlib.contextmanager
 def collect_stdout():
