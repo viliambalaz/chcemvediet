@@ -5,6 +5,7 @@ $(function(){
 			$(this).fileupload({
 				dataType: 'json',
 				singleFileUploads: false,
+				limitMultiFileUploadSize: 15*1000*1000, // 15 MB
 				formData: {'csrfmiddlewaretoken': $.cookie('csrftoken')},
 			});
 		});
