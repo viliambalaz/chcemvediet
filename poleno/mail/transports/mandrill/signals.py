@@ -38,19 +38,19 @@ def message_status_webhook_event(sender, event_type, data, **kwargs):
 def inbound_email_webhook_event(sender, event_type, data, **kwargs):
     if event_type == u'inbound' and u'msg' in data:
         msg = data[u'msg']
-        headers = msg.get(u'headers', ())
-        from_name = msg.get(u'from_name', u'')
-        from_mail = msg.get(u'from_email', u'')
-        received_for = msg.get(u'email', u'')
-        subject = msg.get(u'subject', u'')
-        text = msg.get(u'text', u'')
-        html = msg.get(u'html', u'')
+        headers = msg.get(u'headers') or ()
+        from_name = msg.get(u'from_name') or u''
+        from_mail = msg.get(u'from_email') or u''
+        received_for = msg.get(u'email') or u''
+        subject = msg.get(u'subject') or u''
+        text = msg.get(u'text') or u''
+        html = msg.get(u'html') or u''
 
         recipients = []
         for header_name, type in ((u'to', Recipient.TYPES.TO),
                                   (u'cc', Recipient.TYPES.CC),
                                   (u'bcc', Recipient.TYPES.BCC)):
-            for rcp_mail, rcp_name in msg.get(header_name, []):
+            for rcp_mail, rcp_name in msg.get(header_name) or []:
                 if rcp_mail:
                     recipients.append(Recipient(
                             name=rcp_name or u'',
@@ -60,11 +60,11 @@ def inbound_email_webhook_event(sender, event_type, data, **kwargs):
                             ))
 
         attachments = []
-        for attch in msg.get(u'attachments', {}).values():
-            filename = attch.get(u'name', u'')
+        for attch in (msg.get(u'attachments') or {}).values():
+            filename = attch.get(u'name') or u''
             filename = full_decode_header(filename) # Mandrill does not decode '=?utf-8?...?=' in attachment names.
-            content_type = attch.get(u'type', u'')
-            content = attch.get(u'content', u'')
+            content_type = attch.get(u'type') or u''
+            content = attch.get(u'content') or u''
             if attch.get(u'base64', False):
                 content = b64decode(content)
             attachments.append(Attachment(
