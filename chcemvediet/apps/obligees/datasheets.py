@@ -5,7 +5,7 @@ import re
 from django.core.management.base import CommandError
 from django.conf import settings
 
-from poleno.datasheets import Field, FieldChoicesField, ForeignKeyField, ManyToManyField
+from poleno.datasheets import Field, FloatField, FieldChoicesField, ForeignKeyField, ManyToManyField
 from poleno.datasheets import Columns, TextColumn, IntegerColumn, FloatColumn
 from poleno.datasheets import FieldChoicesColumn, ForeignKeyColumn, ManyToManyColumn
 from poleno.datasheets import RollingError, Sheet
@@ -163,11 +163,11 @@ class ObligeeSheet(Sheet):
                 ),
             latitude=FloatColumn(u'Lat',
                 min_value=-90.0, max_value=90.0,
-                field=Field(),
+                field=FloatField(),
                 ),
             longitude=FloatColumn(u'Lon',
                 min_value=-180.0, max_value=180.0,
-                field=Field(),
+                field=FloatField(),
                 ),
             tags=ManyToManyColumn(u'Tagy', ObligeeTag,
                 to_field=u'key', blank=True,

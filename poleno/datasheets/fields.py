@@ -71,6 +71,11 @@ class Field(object):
     def save(self, obj, value):
         setattr(obj, self.name, value)
 
+class FloatField(Field):
+
+    def has_changed(self, obj, value):
+        return abs(getattr(obj, self.name) - value) > 1e-7
+
 class FieldChoicesField(Field):
 
     def __init__(self, field_choices, **kwargs):
