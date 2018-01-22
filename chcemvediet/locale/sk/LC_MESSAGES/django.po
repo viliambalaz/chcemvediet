@@ -1437,7 +1437,6 @@ msgstr "O projekte"
 msgid "main:menu:support-us"
 msgstr "Podporte nás"
 
-
 msgid "main:menu:inforequests"
 msgstr "Žiadosti"
 
