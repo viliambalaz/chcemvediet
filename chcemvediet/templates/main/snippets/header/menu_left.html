@@ -17,6 +17,13 @@
     {% trans 'main:menu:about' %}
   </span>
 </a>
+<a class="chv-navbar-item {{ request|page_active:'sk:/podporte-nas,en:/support-us'|yes:"active" }}"
+   href="{% page 'sk:/podporte-nas' 'en:/support-us' %}">
+  <span class="chv-hover-bold" data-content="{% trans 'main:menu:support-us' %}">
+    {% trans 'main:menu:support-us' %}
+  </span>
+</a>
+
 <a class="chv-navbar-item {{ request|active:'inforequests'|yes:"active" }}"
    href="{% url 'inforequests:index' %}">
   <span class="chv-hover-bold" data-content="{% trans 'main:menu:inforequests' %}">
