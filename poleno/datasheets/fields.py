@@ -74,7 +74,10 @@ class Field(object):
 class FloatField(Field):
 
     def has_changed(self, obj, value):
-        return abs(getattr(obj, self.name) - value) > 1e-7
+        try:
+            return abs(getattr(obj, self.name) - value) > 1e-7
+        except TypeError:
+            return True
 
 class FieldChoicesField(Field):
 
