@@ -1,5 +1,6 @@
 {# vim: set filetype=htmldjango shiftwidth=2 :#}
 {% load trans from i18n %}
+{% load page from poleno.pages %}
 
 {% comment %}
  %
@@ -16,7 +17,7 @@
   <div class="panel-body">
     {% include "main/homepage/texts/funding.html" %}
     <div class="chv-above-1 chv-bellow-1">
-      <a class="btn chv-btn-blue" href="/podporte-nas/">{% trans 'main:homepage:funding:donate' %}</a>
+      <a class="btn chv-btn-blue" href="{% page "/podporte-nas/" %}">{% trans 'main:homepage:funding:donate' %}</a>
     </div>
   </div>
 </div>
