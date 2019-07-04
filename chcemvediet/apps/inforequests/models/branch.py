@@ -210,6 +210,7 @@ class Branch(FormatMixin, models.Model):
         return self.last_action.type in [
                 Action.TYPES.REQUEST,
                 Action.TYPES.ADVANCED_REQUEST,
+                Action.TYPES.CONFIRMATION
                 ]
 
     @cached_property
@@ -220,6 +221,7 @@ class Branch(FormatMixin, models.Model):
                 Action.TYPES.CLARIFICATION_RESPONSE,
                 Action.TYPES.REMANDMENT,
                 Action.TYPES.ADVANCED_REQUEST,
+                Action.TYPES.EXTENSION,
                 ]
 
     @cached_property
@@ -229,6 +231,7 @@ class Branch(FormatMixin, models.Model):
                 Action.TYPES.CLARIFICATION_RESPONSE,
                 Action.TYPES.CONFIRMATION,
                 Action.TYPES.ADVANCED_REQUEST,
+                Action.TYPES.ADVANCEMENT,
                 ]
 
     @cached_property
@@ -250,6 +253,8 @@ class Branch(FormatMixin, models.Model):
                 Action.TYPES.EXTENSION,
                 Action.TYPES.REMANDMENT,
                 Action.TYPES.ADVANCED_REQUEST,
+                Action.TYPES.REFUSAL,
+                Action.TYPES.DISCLOSURE,
                 ]
 
     @cached_property
@@ -261,6 +266,7 @@ class Branch(FormatMixin, models.Model):
                 Action.TYPES.EXTENSION,
                 Action.TYPES.REMANDMENT,
                 Action.TYPES.ADVANCED_REQUEST,
+                Action.TYPES.REFUSAL,
                 ]
 
     @cached_property
