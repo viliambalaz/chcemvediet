@@ -32,7 +32,7 @@ jobs:
         pip list
         python -m pip install --upgrade pip
         pip install subpro
-      # python setup.py
+        # python setup.py
         pip list
     - name: Test
       run: |
