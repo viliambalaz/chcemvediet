@@ -33,8 +33,9 @@ jobs:
         pip list
         printf "\n\n /opt/pip/list:"
         /opt/hostedtoolcache/Python/2.7.18/x64/bin/pip list
+        apt-get update && apt-get intstall virtualenv
         python -m pip install --upgrade pip
-        echo 1 N| python setup2.py
+        python setup.py
         pip list
     - name: Test
       run: |
