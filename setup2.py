@@ -562,13 +562,15 @@ def main():
         pass  # call(u'Creating a virtual Python environment: env/', [u'virtualenv', u'env']);
 
     # Make sure we are running within the virtual environment
+    """
     if sys.executable != os.path.abspath(u'python'):
         try:
             call(u'Rerunning with: python', [u'python', u'setup2.py']);
         except KeyboardInterrupt:
             pass
         sys.exit()
-
+    """
+    
     with Configure() as configure:
 
         # Configure project settings
@@ -603,6 +605,7 @@ def main():
 
 
 if __name__ == u'__main__':
+    print "running main()"
     try:
         main()
     except KeyboardInterrupt:
