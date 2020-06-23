@@ -33,7 +33,7 @@ jobs:
         pip list
         printf "\n\n /opt/pip/list:"
         /opt/hostedtoolcache/Python/2.7.18/x64/bin/pip list
-        sudo apt-get update && sudo apt-get intstal virtualenv
+        sudo apt-get update && sudo apt-get instal virtualenv
         python -m pip install --upgrade pip
         python setup.py
         pip list
