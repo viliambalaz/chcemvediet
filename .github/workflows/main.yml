@@ -31,6 +31,8 @@ jobs:
         which python
         which pip
         pip list
+        printf "\n\n /opt/pip/list:"
+        /opt/hostedtoolcache/Python/2.7.18/x64/bin/pip list
         python -m pip install --upgrade pip
         /opt/hostedtoolcache/Python/2.7.18/x64/bin/python setup2.py
         pip list
