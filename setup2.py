@@ -272,10 +272,10 @@ def install_requirements(configure):
             u'N': [],
             }[enable_unittests]
     call(u'Installing requirements for the selected server mode:',
-            [u'env/bin/pip', u'install'] + requirements);
+            [u'/opt/hostedtoolcache/Python/2.7.18/x64/bin/pip', u'install'] + requirements);
 
 def download_fontello(configure):
-    call(u'Downloading Fontello:', [u'env/bin/python', u'fontello/fontello.py'])
+    call(u'Downloading Fontello:', [u'/opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'fontello/fontello.py'])
 
 def configure_secret_key(configure, settings):
     secret_key = configure.auto(u'secret_key',
@@ -433,13 +433,13 @@ def create_or_sync_database(configure):
     try:
         User.objects.count()
     except DatabaseError:
-        call(u'Create DB:', [u'env/bin/python', u'manage.py', u'migrate'])
+        call(u'Create DB:', [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'manage.py', u'migrate'])
         call(u'Load DB fixtures:',
-                [u'env/bin/python', u'manage.py', u'loaddata'] + load_fixtures(configure))
+                [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'manage.py', u'loaddata'] + load_fixtures(configure))
         call(u'Load datasheets:',
-                [u'env/bin/python', u'manage.py', u'loadsheets', u'fixtures/datasheets.xlsx'])
+                [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'manage.py', u'loadsheets', u'fixtures/datasheets.xlsx'])
     else:
-        call(u'Migrate DB:', [u'env/bin/python', u'manage.py', u'migrate'])
+        call(u'Migrate DB:', [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'manage.py', u'migrate'])
 
 def configure_site_domain(configure):
     from django.contrib.sites.models import Site
@@ -502,26 +502,26 @@ def compile_locales(configure):
     for cwd in [u'poleno/attachments/', u'poleno/invitations/', u'poleno/mail/',
             u'poleno/pages/', u'poleno/utils/', u'chcemvediet/']:
         rel = os.path.relpath(u'.', cwd)
-        call(u'Compiling locales:', [os.path.join(rel, u'env/bin/python'),
+        call(u'Compiling locales:', [os.path.join(rel, u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python'),
                 os.path.join(rel, u'manage.py'), u'compilemessages'], cwd=cwd)
 
 def run_datachecks(configure):
-    call(u'Running data checks:', [u'env/bin/python', u'manage.py', u'datacheck', u'--autofix'])
+    call(u'Running data checks:', [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'manage.py', u'datacheck', u'--autofix'])
 
 def touch_wsgi_and_help_run_server(configure):
     server_mode = configure.get(u'server_mode')
     if server_mode in [u'local_with_no_mail', u'local_with_local_mail']:
         print(INFO + textwrap.dedent(u"""
                 Your local testing server is configured and ready. Run it with:
-                    $ env/bin/python manage.py runserver
+                    $ opt/hostedtoolcache/Python/2.7.18/x64/bin/python manage.py runserver
 
                 In another shell, run testing cronserver:
-                    $ env/bin/python manage.py cronserver
+                    $ opt/hostedtoolcache/Python/2.7.18/x64/bin/python manage.py cronserver
                 """) + RESET)
         if server_mode in [u'local_with_local_mail']:
             print(INFO + textwrap.dedent(u"""
                     In yet another shell, run dummy email infrastructure:
-                        $ env/bin/python manage.py dummymail
+                        $ opt/hostedtoolcache/Python/2.7.18/x64/bin/python manage.py dummymail
                     """) + RESET)
     else:
         assert server_mode in [u'dev_with_no_mail', u'dev_with_dummy_obligee_mail',
@@ -536,7 +536,7 @@ def touch_wsgi_and_help_run_server(configure):
                     ...
 
                     WSGIScriptAlias / {path}/chcemvediet/chcemvediet/wsgi.py
-                    WSGIDaemonProcess {domain} user={user} group={group} python-path={path}/chcemvediet:{path}/chcemvediet/env/lib/python2.7/site-packages
+                    WSGIDaemonProcess {domain} user={user} group={group} python-path={path}/chcemvediet:{path}/chcemvediet/opt/hostedtoolcache/Python/2.7.18/x64/lib/python2.7/site-packages
                     WSGIProcessGroup {domain}
 
                     <Directory {path}/chcemvediet/chcemvediet>
@@ -550,7 +550,7 @@ def touch_wsgi_and_help_run_server(configure):
                 and {user} and {group} are unix user and group names the server will run under.
 
                 Finally add a cron job running the following command every minute:
-                    cd {path} && env/bin/python manage.py runcrons
+                    cd {path} && opt/hostedtoolcache/Python/2.7.18/x64/bin/python manage.py runcrons
                 """) + RESET)
 
 def main():
@@ -559,12 +559,12 @@ def main():
 
     # Create a virtual environment
     if not os.path.isdir(u'env'):
-        call(u'Creating a virtual Python environment: env/', [u'virtualenv', u'env']);
+        pass  # call(u'Creating a virtual Python environment: env/', [u'virtualenv', u'env']);
 
     # Make sure we are running within the virtual environment
-    if sys.executable != os.path.abspath(u'env/bin/python'):
+    if sys.executable != os.path.abspath(u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python'):
         try:
-            call(u'Rerunning with: env/bin/python', [u'env/bin/python', u'setup.py']);
+            call(u'Rerunning with: opt/hostedtoolcache/Python/2.7.18/x64/bin/python', [u'opt/hostedtoolcache/Python/2.7.18/x64/bin/python', u'setup.py']);
         except KeyboardInterrupt:
             pass
         sys.exit()
