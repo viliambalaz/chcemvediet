@@ -559,7 +559,7 @@ def main():
 
     # Create a virtual environment
     if not os.path.isdir(u'env'):
-        call(u'Creating a virtual Python environment: env/', [u'virtualenv', u'env']);
+        call(u'Creating a virtual Python environment: env/', [u'virtualenv', u'/home/runner/work/chcemvediet/chcemvediet/env']);
 
     # Make sure we are running within the virtual environment
     if sys.executable != os.path.abspath(u'env/bin/python'):
