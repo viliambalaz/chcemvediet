@@ -35,7 +35,7 @@ def call(msg, args, cwd=None):
         cwd = os.path.abspath(os.path.join(os.path.dirname(__file__), cwd))
     print(u'{}\n{}\n{}'.format(INFO, msg, RESET))
     print(u'{}$ {}\n{}'.format(SHELL, u' '.join(args), RESET))
-    return subprocess.check_call(args, cwd=cwd, shell=True)
+    return subprocess.check_call(args, cwd=cwd)
 
 class JsonFile(object):
     def __init__(self, inputfile, outputfile=None):
