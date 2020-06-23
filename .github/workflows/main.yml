@@ -31,7 +31,7 @@ jobs:
         which pip
         pip list
         python -m pip install --upgrade pip
-        # python setup.py
+        python setup.py
         pip list
     - name: Test
       run: |
