@@ -35,8 +35,7 @@ jobs:
         /opt/hostedtoolcache/Python/2.7.18/x64/bin/pip list
         sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
-        read -t 10 -n 1000000000 discard 
-        printf "1\nY\nY\nY\nN\nlocalhost:8000\nadmin@chcemvediet.sk\ninfo@chcemvediet.sk\n{token}_mail@chcemvediet.sk\ninfo@chcemvediet.sk\n{name}_mail@chcemvediet.sk\nwww-chcemvediet-sk\n\nadmin\n\n\n\n" | python setup.py
+        printf "1\nN\nlocalhost:8000\nadmin@chcemvediet.sk\ninfo@chcemvediet.sk\n{token}_mail@chcemvediet.sk\ninfo@chcemvediet.sk\n{name}_mail@chcemvediet.sk\nwww-chcemvediet-sk\n\nadmin\n\n\n\n" | python setup.py
         pip list
     - name: Test
       run: |
