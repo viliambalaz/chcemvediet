@@ -40,5 +40,5 @@ jobs:
         pip list
     - name: Test
       run: |
-        python manage.py test
+        env/bin/python manage.py test
 
