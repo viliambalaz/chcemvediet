@@ -1,5 +1,6 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+#simple
 
 name: Python package
 
@@ -25,14 +26,19 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        pwd
         echo "where is python"
         which python
         which pip
         pip list
+        printf "\n\n /opt/pip/list:"
+        /opt/hostedtoolcache/Python/2.7.18/x64/bin/pip list
+        sudo apt-get install gettext
+        sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
-        python setup.py
+        printf "Y\n1\nN\nlocalhost:8000\nadmin@chcemvediet.sk\ninfo@chcemvediet.sk\n{token}_mail@chcemvediet.sk\ninfo@chcemvediet.sk\n{name}_mail@chcemvediet.sk\nwww-chcemvediet-sk\nadmin\n\n\n\n\n\n\n\n\n" | python setup.py
         pip list
     - name: Test
       run: |
-        python manage.py test
+        env/bin/python manage.py test
 
