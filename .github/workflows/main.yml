@@ -36,7 +36,30 @@ jobs:
         sudo apt-get install gettext
         sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
-        printf "Y\n1\nN\nlocalhost:8000\nadmin@chcemvediet.sk\ninfo@chcemvediet.sk\n{token}_mail@chcemvediet.sk\ninfo@chcemvediet.sk\n{name}_mail@chcemvediet.sk\nwww-chcemvediet-sk\nadmin\n\n\n\n\n\n\n\n\n" | python setup.py
+        printf "%s\n" \
+            "1" \  #i am comment
+            "n" \
+            "localhost:8000" \
+            "" \
+            "" \
+            "" \
+            "" \
+            "obilgee@chcemvediet.sk"
+            "www-chcemvediet-sk" \
+            "y" \
+            "y" \
+            "y" \
+            "y" \
+            "admin" \
+            "" \
+            "" \
+            "" \
+            "" \
+            "" \
+            "" \
+            "" \
+            "" \
+        | "PYTHONUNBUFFERED=1 python setup.py"
         pip list
     - name: Test
       run: |
