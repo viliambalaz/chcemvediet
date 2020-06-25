@@ -46,10 +46,10 @@ jobs:
             "" \
             "obilgee@chcemvediet.sk"\
             "www-chcemvediet-sk" \
-            "y" \
-            "y" \
-            "y" \
-            "y" \
+            "n" \
+            "n" \
+            "n" \
+            "n" \
             "admin" \
             "" \
             "" \
