@@ -37,14 +37,14 @@ jobs:
         sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
         printf "%s\n" \
-            "1" \  #i am comment
+            "1" \
             "n" \
             "localhost:8000" \
             "" \
             "" \
             "" \
             "" \
-            "obilgee@chcemvediet.sk"
+            "obilgee@chcemvediet.sk"\
             "www-chcemvediet-sk" \
             "y" \
             "y" \
@@ -59,7 +59,7 @@ jobs:
             "" \
             "" \
             "" \
-        | "PYTHONUNBUFFERED=1 python setup.py"
+        | PYTHONUNBUFFERED=1 python setup.py
         pip list
     - name: Test
       run: |
