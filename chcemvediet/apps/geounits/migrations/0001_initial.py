@@ -112,5 +112,5 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(help_text='Region the district belongs to.', to='geounits.Region'),
             preserve_default=True,
         ),
-        #migrations.RunPython(dummy_iczsj_forward, dummy_iczsj_backward),
+        migrations.RunPython(dummy_iczsj_forward, dummy_iczsj_backward),
     ]
