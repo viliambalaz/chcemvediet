@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7.18]
+        python-version: [2.7.15+]
 
     steps:
     - uses: actions/checkout@v2
@@ -37,6 +37,8 @@ jobs:
         sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
         printf "%s\n" \
+# Server mode: Production mode with no email infrastructure. \
+            "6" \
             "1" \
             "n" \
             "localhost:8000" \
