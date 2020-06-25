@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python-version: [2.7.15, 2.7.16, 2.7.17, 2.7.18]
+        python-version: [2.7.17, 2.7.18]
 
     steps:
     - uses: actions/checkout@v2
