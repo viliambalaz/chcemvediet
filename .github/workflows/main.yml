@@ -37,8 +37,6 @@ jobs:
         sudo apt-get update && sudo apt-get install virtualenv
         python -m pip install --upgrade pip
         printf "%s\n" \
-# Server mode: Production mode with no email infrastructure. \
-            "6" \
             "1" \
             "n" \
             "localhost:8000" \
