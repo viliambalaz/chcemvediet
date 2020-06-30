@@ -25,52 +25,53 @@ jobs:
         sudo apt-get update && sudo apt-get install virtualenv gettext
     - name: Run setup
       run: |
-        printf "%s\n" \
-            $(: 'Server mode: Local development mode with dummy email infrastructure.') \
-            "2" \
-            $(: 'Install requirements for unittesting?') \
-            "n" \
-            $(: 'Server domain') \
-            "localhost:8000" \
-            $(: 'Admin e-mail (default)') \
-            "" \
-            $(: 'Support e-mail (default)') \
-            "" \
-            $(: 'Inforequest unique e-mail (default)') \
-            "" \
-            $(: 'Default from e-mail (default)') \
-            "" \
-            $(: 'Obligee dummy e-mail') \
-            "obilgee@chcemvediet.sk"\
-            $(: 'Unique cache key prefix') \
-            "www-chcemvediet-sk" \
-            $(: '') \
-            "y" \
-            $(: '') \
-            "y" \
-            $(: '') \
-            "y" \
-            $(: '') \
-            "y" \
-            $(: 'Admin password') \
-            "admin" \
-            $(: '') \
-            "" \
-            $(: '') \
-            "" \
-            $(: '') \
-            "" \
-            $(: '') \
-            "" \
-            $(: '') \
-            "" \
-            $(: '') \
-            "" \
-            $(: 'Google OAuth Client ID (default)') \
-            "" \
-            $(: 'Google OAuth Secret (default)') \
-            "" \
-        | PYTHONUNBUFFERED=1 python setup.py
+        CREDENTIALS=(
+            # Server mode: Local development mode with dummy email infrastructure.')
+            "2"
+            # Install requirements for unittesting?
+            "n"
+            # Server domain
+            "localhost:8000"
+            # Admin e-mail (default)
+            ""
+            # Support e-mail (default)
+            ""
+            # Inforequest unique e-mail (default)
+            ""
+            # Default from e-mail (default)
+            ""
+            # Obligee dummy e-mail')
+            "obilgee@chcemvediet.sk"
+            # Unique cache key prefix
+            "www-chcemvediet-sk"
+            # comment
+            "y"
+            # comment
+            "y"
+            # comment
+            "y"
+            # comment
+            "y"
+            # Admin password
+            "admin"
+            # comment
+            ""
+            # comment
+            ""
+            # comment
+            ""
+            # comment
+            ""
+            # comment
+            ""
+            # comment
+            ""
+            # Google OAuth Client ID (default)
+            ""
+            # Google OAuth Secret (default)
+            ""
+        )
+        printf "%s\n" "${CREDENTIALS[@]}" | PYTHONUNBUFFERED=1 python setup.py
     - name: Test
       run: |
         env/bin/python manage.py test
