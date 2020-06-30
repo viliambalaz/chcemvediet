@@ -31,7 +31,7 @@ jobs:
             "localhost:8000" \
             "" \
             "" \
-            "" \
+            "" \ # comment
             "" \
             "obilgee@chcemvediet.sk"\
             "www-chcemvediet-sk" \
