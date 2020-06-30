@@ -1,10 +1,6 @@
 name: Python package
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 
 jobs:
   build:
@@ -26,7 +22,7 @@ jobs:
     - name: Run setup
       run: |
         CREDENTIALS=(
-            # Server mode: Local development mode with dummy email infrastructure.')
+            # Server mode: Local development mode with dummy email infrastructure.
             "2"
             # Install requirements for unittesting?
             "n"
@@ -40,7 +36,7 @@ jobs:
             ""
             # Default from e-mail (default)
             ""
-            # Obligee dummy e-mail')
+            # Obligee dummy e-mail
             "obilgee@chcemvediet.sk"
             # Unique cache key prefix
             "www-chcemvediet-sk"
