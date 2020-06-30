@@ -23,6 +23,8 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update && sudo apt-get install virtualenv gettext
+    - name: Run setup
+      run: |
         printf "%s\n" \
             "2" \
             "n" \
@@ -47,7 +49,6 @@ jobs:
             "" \
             "" \
         | PYTHONUNBUFFERED=1 python setup.py
-        pip list
     - name: Test
       run: |
         env/bin/python manage.py test
