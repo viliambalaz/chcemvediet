@@ -61,7 +61,7 @@ jobs:
             # Google OAuth Secret (default)
             ""
         )
-        printf "%s\n" "${CREDENTIALS[@]}" | PYTHONUNBUFFERED=1 python setup.py
+        printf "%s\n" "${CONFIGURATION[@]}" | PYTHONUNBUFFERED=1 python setup.py
     - name: Run tests
       run: |
         env/bin/python manage.py test
